@@ -410,7 +410,7 @@ body.embed,body.bare{background:transparent}
           <nav class="tabbar hide" id="tabbar"></nav>
           <button class="tab-voice hide" id="tabvoice" data-voice aria-label="Saathi voice"></button>
           <button class="fab hide" id="fab" data-voice aria-label="Saathi voice"></button>
-          <div class="overlay" id="overlay"><div class="scrim" data-close></div><div class="modal" id="modal"></div></div>
+          <div class="overlay" id="overlay"><div class="scrim" data-act="closedlg"></div><div class="modal" id="modal"></div></div>
           <div class="voice" id="voice"></div>
           <div class="toast" id="toast"></div>
           <div class="homebar"></div>
@@ -544,9 +544,11 @@ const homeCards = () => {
 
 def("home", { g: "Ride", n: "Home", tab: "home", what: "The map is the home screen: you, the SAGA cars around you and the nearest car's real ETA. One search bar, four one-tap places, and a swipe row of what's coming up (flight found, scheduled rides, intercity, an offer). No greeting, no lists.", why: "Show, don't tell: the rider sees a live fleet and a ready-to-book flight instead of reading about them. One thing to do, everything else a swipe away.", fl: "Route <code>/</code>. Map: google_maps_flutter with the SAGA style. Cards from <code>GET /home/cards</code> (flight detected, series, offers); nearby from <code>GET /fleet/nearby</code>." }, () => `
   <div class="home">
-    <div class="home-map" data-go="options" data-dest="Office · Dwaraka Nagar">${S.map({ view: [10, 138, 380, 392], pulse: true, pickup: true, cars: [[140, 250, 20, "free"], [270, 350, -35, "free"], [110, 380, 0, "busy"], [280, 240, 0, "busy"]], tags: [[270, 350, L("3 min", "3 నిమి", "3 मिनट")]] })}</div>
+    <div class="home-hero" data-go="vehicle" role="button"><span class="hh-glow"></span><span class="hh-floor"></span>
+      <div class="hh-t"><small>${V.make} · ${V.colour}</small><b>${V.model}</b></div>
+      <div class="hh-car">${S.car({ cls: "car-in" })}</div>
+      <div class="hh-spec"><span>${I("leaf", "sm")}${L("100% electric", "100% ఎలక్ట్రిక్", "100% इलेक्ट्रिक")}</span><span>${I("quiet", "sm")}${L("Silent cabin", "నిశ్శబ్ద క్యాబిన్", "शांत केबिन")}</span><span>${I("snow", "sm")}${L("Pre-cooled", "ముందే చల్లగా", "पहले से ठंडी")}</span></div></div>
     <div class="home-top"><span class="hpill">${S.logo()}</span><div class="r"><span class="bellwrap">${hbtn("bell", 'data-go="notifications"', "Notifications")}<i></i></span><button class="avatar" data-tab="account" aria-label="Account">AR</button></div></div>
-    <button class="nearby2" data-go="vehicle"><span class="nb-car">${S.car({ reflect: false })}</span><span class="nb-tx"><b><span class="dotlive"></span>${L("2 SAGA cars nearby", "సమీపంలో 2 SAGA కార్లు", "पास में 2 SAGA गाड़ियाँ")}</b><small>${L("Nearest 3 min away · ", "దగ్గరిది 3 నిమిషాల్లో · ", "सबसे पास 3 मिनट में · ")}${V.short}</small></span>${I("chevr", "sm")}</button>
     <div class="home-sheet">
       <button class="search2 press" data-go="where"><span class="s-ic">${I("search")}</span><span class="ph">${L("Where to?", "ఎక్కడికి?", "कहाँ जाना है?")}</span><span class="s-now" data-go="schedule">${I("clock", "sm")}${L("Now", "ఇప్పుడే", "अभी")}</span><span class="s-mic" data-voice aria-label="${L("Speak to Saathi", "సాథీతో మాట్లాడండి", "साथी से बोलें")}">${I("mic")}</span></button>
       <div class="quick">
@@ -1143,7 +1145,7 @@ function build(id) {
 }
 function go(id, o = {}) {
   if (!SC[id]) return;
-  timers.forEach(clearTimeout); timers = [];
+  timers.forEach(clearTimeout); timers = []; $("#overlay")?.classList.remove("on");
   const prev = views.lastElementChild, el = build(id);
   const kind = o.instant || BARE ? "none" : o.back ? "back" : o.tab || o.replace ? "fade" : (SC[id].tab && !o.push) ? "fade" : "push";
   if (o.reset) stack = [];
@@ -1180,8 +1182,23 @@ function toast(msg, title) {
   t.classList.add("on"); clearTimeout(tt); tt = setTimeout(() => t.classList.remove("on"), 2600);
 }
 
+SC.nocars.mount = () => timers.push(setTimeout(() => { if (cur === "nocars") A.waitdlg(); }, 700));
+{ const fm = SC.finding.mount; SC.finding.mount = el => { fm(el); timers.push(setTimeout(() => { if (cur === "finding" && app.driverLive) A.waitdlg(); }, 8000)); }; }
 /* ---------- actions ---------- */
 const A = {
+  waitdlg() {
+    const m = $("#modal"); if (!m) return;
+    m.innerHTML = `<div class="grabber"></div><div class="dlg"><div class="dlg-car">${S.car({ reflect: false })}</div>
+      <h2 class="dlg-h">${L("We're a young fleet, growing every day.", "మేము కొత్త ఫ్లీట్, రోజురోజుకూ పెరుగుతున్నాం.", "हम नई फ्लीट हैं, और हर दिन बढ़ रहे हैं।")}</h2>
+      <p class="dlg-p">${L("Right now every SAGA is out on a ride, so yours is a few minutes away. Think of a great restaurant on a busy evening: a short wait, and the table is worth it. Stay with us. We'll make the ride count.", "ఇప్పుడు అన్ని SAGA కార్లు రైడ్‌లో ఉన్నాయి, మీ కారు కొన్ని నిమిషాల్లో వస్తుంది. రద్దీ సాయంత్రం మంచి రెస్టారెంట్‌లా: కొంచెం ఆగాలి, కానీ అది విలువైనదే. మాతో ఉండండి, ఈ ప్రయాణాన్ని మరచిపోలేనిదిగా చేస్తాం.", "अभी हमारी सारी SAGA सवारी पर हैं, आपकी गाड़ी कुछ मिनट में आएगी। जैसे व्यस्त शाम में अच्छा रेस्टोरेंट: थोड़ा इंतज़ार, पर मज़ा पूरा। हमारे साथ बने रहिए, सफ़र यादगार बनाएँगे।")}</p>
+      <div class="dlg-meta"><span>${I("clock", "sm")}${L("Next car in about 14 min", "తదుపరి కారు సుమారు 14 నిమిషాల్లో", "अगली गाड़ी लगभग 14 मिनट में")}</span><span>${I("gift", "sm")}${L("+50 SAGA points", "+50 SAGA పాయింట్లు", "+50 SAGA पॉइंट")}</span></div>
+      ${btn(L("Stay with us", "మాతో ఉంటాను", "साथ हूँ"), { act: "staydlg" })}
+      <button class="btn btn-text block" data-act="laterdlg">${L("Schedule it for later", "తర్వాతకి షెడ్యూల్ చేయండి", "बाद के लिए शेड्यूल करें")}</button></div>`;
+    $("#overlay").classList.add("on");
+  },
+  closedlg() { $("#overlay").classList.remove("on"); },
+  staydlg() { A.closedlg(); toast(L("You're first in line. We'll alert you the moment a car is free.", "మీరు మొదటి స్థానంలో. కారు ఖాళీ కాగానే తెలుపుతాం.", "आप पहले नंबर पर हैं। गाड़ी खाली होते ही बताएँगे।")); },
+  laterdlg() { A.closedlg(); go("schedule"); },
   addstop(e) { app.adding = e.dataset.v || "stop"; rerender(); },
   addtype(e) { app.adding = e.dataset.v; rerender(); },
   addstop2(e) { if (app.stops.length < 3) app.stops.push({ n: e.dataset.v, type: app.adding || "stop" }); app.adding = null; rerender(); },

@@ -268,3 +268,104 @@
 .rr .sn{width:24px;height:24px;border-radius:12px;background:#fff;color:var(--accent);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;margin:0 4px 0 -1px}
 .pad+.group,.group+.group,.card+.group,.group+.card,.pad+.pad>.group{margin-top:12px}
 [data-os=android] .pad>.card+.group,[data-os=android] .pad+.group{margin-top:12px}
+
+/* ======== COLOUR MEANING: white, black, neon blue ========
+   WHITE = room. Surfaces, reading, calm.
+   BLACK = who/what you can trust. Identity, the car, the fare, "you are here" (selected tab, selected chip), hero information.
+   BLUE  = move. The one thing to tap next, and anything live (route, tracking, code, countdown).
+   Green and red appear only where the real world demands them: the EV number plate, battery, SOS, errors. */
+:root{--ink:#0A0B0F}
+[data-theme=dark]{--ink:#F5F5F7}
+/* icon wells are neutral black-on-grey, never tinted */
+.row .lead,.row .lead.soft,.pico,.tile .tic,.qk-c,.pc-tag.soft,.ch-s,.act span.c,[data-os=android] .qk-c,[data-os=android] .pico,[data-os=android] .act span.c{background:var(--surface2);color:var(--fg)}
+.row .lead.ink,.qk-c.dark,[data-os=android] .qk-c.dark{background:var(--fg);color:var(--bg)}
+.ch-s i{background:var(--fg);color:var(--bg)}
+.ch-s{color:var(--fg)}
+/* selected = black */
+.tab.on,[data-os=ios] .tab.on,[data-os=android] .tab.on{background:var(--fg);color:var(--bg)}
+.pc-days span.on{background:var(--fg);color:var(--bg)}
+.rt-dot.s{background:var(--fg);color:var(--bg)}
+.rt-dot.s.pk{background:var(--surface);color:var(--fg);border-color:var(--fg)}
+.m-stop circle{fill:var(--fg)}.m-stop text{fill:var(--bg)}
+.m-stop-pick circle{fill:#fff;stroke:var(--fg)}.m-stop-pick text{fill:var(--fg)}
+/* live = blue */
+.dotlive,.eta-s .dotlive,.nearby2 b .dotlive{background:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 24%,transparent)}
+@keyframes livepulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 50%,transparent)}100%{box-shadow:0 0 0 9px transparent}}
+.steps4 .on i{background:var(--accent)}
+.eta-n b{color:var(--fg)}
+.tele span .ic{color:var(--accent-ink)}
+/* CO2 is information, not a state: black on grey */
+.co2{background:var(--surface2);color:var(--fg)}
+.co2 .ic{color:var(--fg)}
+.stars button.on,.stars button.on .ic{color:var(--fg)}.stars button.on .ic{fill:var(--fg)}
+.pc-tag.ok{background:rgba(255,255,255,.14);color:#fff}
+/* links and text buttons: blue means tappable action */
+.btn-text,.sh a,.sh button,.fare-more,.addstop{color:var(--accent-ink)}
+.btn-secondary{background:var(--surface2);color:var(--fg)}
+[data-os=android] .btn-secondary{background:var(--surface2);color:var(--fg)}
+/* the single primary action per screen is blue; confirmations of identity are black */
+.pc.brand{background:#0A0B0F;color:#fff}
+[data-theme=dark] .pc.brand{background:#17181D}
+.pc.brand .pc-code{border-color:var(--accent);color:#fff;background:color-mix(in srgb,var(--accent) 35%,transparent)}
+.pc.brand .pc-offer{color:#fff}
+.pc.brand .pc-offer::after{content:"";display:block;width:36px;height:4px;border-radius:2px;background:var(--accent);margin-top:8px}
+.pc.ink .pc-cta,.pc-cta{background:var(--accent);color:var(--on-accent)}
+.codecard2{background:#0A0B0F;color:#fff}
+[data-theme=dark] .codecard2{background:#17181D}
+.codecard2::after{background:radial-gradient(circle,color-mix(in srgb,var(--accent) 70%,transparent),transparent 70%)}
+.cc2-d span{background:rgba(255,255,255,.08);border:1.5px solid var(--accent);color:#fff}
+.seal{background:var(--fg);color:var(--bg);box-shadow:none}
+
+/* ======== iPhone: glass is the material ========
+   Cards, lists, chips, fields, buttons, sheets and bars are all one recipe: translucent fill, hairline highlight, blur, soft lift.
+   Black and blue stay solid on top of it (selected, action), so meaning never gets lost in the blur. */
+:root{--gl-blur:blur(26px) saturate(185%)}
+[data-os=ios] .card:not(.stage):not(.tint),[data-os=ios] .group,[data-os=ios] .tile,[data-os=ios] .permcard,[data-os=ios] .offer,[data-os=ios] .ticket,[data-os=ios] .drv,[data-os=ios] .amen div,[data-os=ios] .spec4 div,[data-os=ios] .field,[data-os=ios] .stepper,[data-os=ios] .route,[data-os=ios] .search2,[data-os=ios] .pcard.fare,[data-os=ios] .tipbar,[data-os=ios] .qk-c:not(.dark),[data-os=ios] .tele,[data-os=ios] .rb,[data-os=ios] .act span.c,[data-os=ios] .pc:not(.ink):not(.brand):not(.map){
+  background:var(--glass2);border:1px solid var(--glass-line);-webkit-backdrop-filter:var(--gl-blur);backdrop-filter:var(--gl-blur);
+  box-shadow:inset 0 1px 0 var(--glass-hi),0 10px 30px rgba(15,20,45,.08)}
+[data-os=ios] .pcard{background:color-mix(in srgb,var(--surface) 50%,transparent);border:1px solid var(--glass-line);-webkit-backdrop-filter:var(--gl-blur);backdrop-filter:var(--gl-blur);box-shadow:inset 0 1px 0 var(--glass-hi)}
+[data-os=ios] .chip:not(.on),[data-os=ios] .days button:not(.on),[data-os=ios] .ch-s,[data-os=ios] .ch-add,[data-os=ios] .addstop,[data-os=ios] .s-now,[data-os=ios] .perks .chip:not(.on){
+  background:var(--glass2);border:1px solid var(--glass-line);-webkit-backdrop-filter:var(--gl-blur);backdrop-filter:var(--gl-blur);box-shadow:inset 0 1px 0 var(--glass-hi)}
+[data-os=ios] .seg{background:var(--glass2);border:1px solid var(--glass-line);-webkit-backdrop-filter:var(--gl-blur);backdrop-filter:var(--gl-blur)}
+[data-os=ios] .seg button.on{background:var(--glass-hi);box-shadow:0 3px 12px rgba(0,0,0,.12),inset 0 1px 0 #fff}
+[data-theme=dark][data-os=ios] .seg button.on{background:rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.22)}
+[data-os=ios] .btn-secondary{background:var(--glass2);border:1px solid var(--glass-line);-webkit-backdrop-filter:var(--gl-blur);backdrop-filter:var(--gl-blur);box-shadow:inset 0 1px 0 var(--glass-hi)}
+[data-os=ios] .btn-primary{background-image:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0) 55%);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 10px 26px color-mix(in srgb,var(--accent) 36%,transparent)}
+[data-os=ios] .pc.ink,[data-os=ios] .pc.brand,[data-os=ios] .codecard2{box-shadow:inset 0 1px 0 rgba(255,255,255,.18),inset 0 0 0 1px rgba(255,255,255,.06),0 16px 36px rgba(10,12,25,.28)}
+[data-os=ios] .pc.ink{background:linear-gradient(160deg,rgba(40,44,54,.92),rgba(10,11,15,.94))}
+[data-os=ios] .rsheet,[data-os=ios] .home-sheet{background:color-mix(in srgb,var(--surface) 62%,transparent);-webkit-backdrop-filter:blur(40px) saturate(190%);backdrop-filter:blur(40px) saturate(190%);border-top:1px solid var(--glass-line);box-shadow:inset 0 1px 0 var(--glass-hi),0 -12px 40px rgba(10,15,30,.14)}
+[data-os=ios] .home-sheet{background:color-mix(in srgb,var(--bg) 58%,transparent)}
+[data-os=ios] .tabbar{background:color-mix(in srgb,var(--surface) 55%,transparent);-webkit-backdrop-filter:blur(34px) saturate(200%);backdrop-filter:blur(34px) saturate(200%);box-shadow:inset 0 1px 0 var(--glass-hi),0 12px 34px rgba(10,15,30,.18)}
+[data-os=ios] .foot{background:linear-gradient(to bottom,transparent,color-mix(in srgb,var(--bg) 60%,transparent) 35%);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+[data-os=ios] .row .lead:not(.ink){background:var(--glass-hi);box-shadow:inset 0 0 0 1px var(--glass-line)}
+[data-theme=dark][data-os=ios] .row .lead:not(.ink){background:rgba(255,255,255,.12)}
+/* a soft light field behind the glass so it has something to refract */
+[data-os=ios] .view{background:radial-gradient(90% 40% at 100% 0%,color-mix(in srgb,var(--accent) 16%,transparent),transparent 70%),radial-gradient(80% 36% at 0% 55%,color-mix(in srgb,var(--accent) 9%,transparent),transparent 70%),var(--bg)}
+[data-theme=dark][data-os=ios] .view{background:radial-gradient(90% 40% at 100% 0%,color-mix(in srgb,var(--accent) 30%,transparent),transparent 70%),radial-gradient(80% 36% at 0% 60%,color-mix(in srgb,var(--accent) 14%,transparent),transparent 70%),#000}
+[data-os=ios] .view.v-home,[data-os=ios] .view.v-options,[data-os=ios] .view.v-assigned,[data-os=ios] .view.v-onride,[data-os=ios] .view.v-finding{background:var(--bg)}
+
+/* ======== HOME HERO: the car is the screen ======== */
+.home-hero{position:absolute;left:0;right:0;top:0;height:440px;overflow:hidden;cursor:pointer;color:#fff;background:radial-gradient(120% 80% at 50% 38%,#232733 0%,#0B0C10 62%,#05060A 100%)}
+.hh-glow{position:absolute;left:50%;top:230px;width:380px;height:150px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(closest-side,color-mix(in srgb,var(--accent) 80%,transparent),transparent 72%);filter:blur(14px);opacity:.75;animation:hhglow 5s ease-in-out infinite}
+.hh-floor{position:absolute;left:0;right:0;top:318px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent)}
+.hh-t{position:absolute;left:24px;right:24px;top:124px}
+.hh-t small{display:block;font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#9EA3B0}
+.hh-t b{display:block;font-family:var(--display);font-size:38px;font-weight:600;letter-spacing:-.04em;line-height:1.05;margin-top:6px}
+.hh-car{position:absolute;left:8px;right:-18px;top:180px}
+.hh-spec{position:absolute;left:20px;right:20px;top:334px;display:flex;gap:8px}
+.hh-spec span{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:16px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);font-size:13.5px;font-weight:600;white-space:nowrap}
+.home-top .hpill,.home-top .gbtn,.home-top .ibtn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:#fff;box-shadow:none;-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+.home-top .hpill .wordmark,.home-top .hpill *{color:#fff;fill:#fff}
+.home-top .avatar{background:#fff;color:#0A0B0F}
+.bellwrap i{border-color:#0B0C10}
+.view.enter .hh-t{animation:rise .7s .1s both}.view.enter .hh-spec{animation:rise .7s .5s both}
+@keyframes hhglow{0%,100%{opacity:.55}50%{opacity:.9}}
+
+/* ======== dialog: "we're growing" ======== */
+.dlg{text-align:center;padding:2px 4px 6px}
+.dlg-car{width:168px;margin:0 auto -6px}
+.dlg-h{font-family:var(--display);font-size:25px;font-weight:600;letter-spacing:-.03em;line-height:1.15;margin-top:6px}
+.dlg-p{font-size:16px;line-height:1.5;color:var(--fg2);margin:10px 0 14px}
+.dlg-meta{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.dlg-meta span{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:17px;background:var(--surface2);font-size:14px;font-weight:600}
+.dlg .btn-text{margin-top:4px}
