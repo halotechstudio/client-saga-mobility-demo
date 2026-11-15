@@ -83,7 +83,7 @@ P.book = () => {
         <div class="fld"><label>Room</label><div class="in"><input value="220"></div></div>
         <div class="fld"><label>Guest mobile (WhatsApp)</label><div class="in"><b>+91</b><input value="98490 55210"></div></div>
         <div class="fld"><label>Riders and bags</label><div class="in"><input value="2 riders · 2 bags"></div></div>
-        ${air ? `<div class="fld"><label>Flight number or PNR</label><div class="in">${I("plane", "sm")}<input value="6E 2134" class="mono"></div></div>
+        ${air ? `<div class="fld"><label>Guest's flight</label><div class="in">${I("plane", "sm")}<input value="6E 2134" class="mono"><button class="btn btn-text sm" data-toast="Point the tablet camera at the guest's ticket or boarding pass">${I("scan", "sm")}Scan ticket</button></div></div>
         <div class="fld"><label>${st.type === "airdrop" ? "Pickup from hotel" : "Landing"}</label><div class="in">${I("clock", "sm")}<input value="${st.type === "airdrop" ? "Mon 16 Nov · 5:20 AM" : "Mon 16 Nov · lands 11:05 AM"}"></div></div>`
         : `<div class="fld"><label>Drop</label><div class="in">${I("pin", "sm")}<input value="${st.type === "inter" ? "Araku Valley" : "Railway Station"}"></div></div>
         <div class="fld"><label>Pickup time</label><div class="in">${I("clock", "sm")}<input value="Today · 1:30 PM"></div></div>`}

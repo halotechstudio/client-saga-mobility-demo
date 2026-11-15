@@ -96,7 +96,7 @@ tr:last-child td{border-bottom:0}
 <tr><td><b>Voice for chauffeurs</b></td><td>Not included. Chauffeurs get turn-by-turn navigation voice only, as agreed earlier.</td><td>Still correct?</td></tr>
 </tbody></table></div>
 
-<h2 id="s3"><span class="n">3</span>Airport rides: the simple plan</h2>
+<h2 id="s3"><span class="n">3</span>Airport rides: "Show us your ticket, we'll handle the rest"</h2>
 <div class="callout"><b>In one line</b>Don't look the PNR up. Ask for the two things SAGA can check instantly: <b>the ticket</b> (scan or upload it) or <b>the flight</b> (pick it from Vizag's short daily list). Then one flight-status service tracks it and moves the pickup.</div>
 <p>No Indian airline offers a public API to look up a booking from a PNR. A PNR also doesn't say which airline or flight it belongs to. So the app treats the PNR as optional, and finds the flight in one of two ways that work for every airline from day one:</p>
 <div class="tw"><table><thead><tr><th></th><th>1 · Scan or upload the ticket</th><th>2 · Pick your flight</th></tr></thead><tbody>
@@ -104,10 +104,20 @@ tr:last-child td{border-bottom:0}
 <tr><td><b>App does</b></td><td>On-device text recognition reads the PNR, flight, date and passenger names. A boarding-pass barcode (the IATA standard every airline uses) gives them exactly.</td><td>Shows that day's departures from Vizag to that city from the flight-schedule API. One airport means the list is short.</td></tr>
 <tr><td><b>Time</b></td><td>About a second</td><td>Three taps</td></tr>
 <tr><td><b>Cost</b></td><td>Free: runs on the phone (Google ML Kit on Android, Apple Vision on iPhone)</td><td>Included in the flight-status plan below</td></tr>
-<tr><td><b>PNR</b></td><td>Read from the ticket automatically</td><td>Optional field; kept for the chauffeur's name board</td></tr>
+<tr><td><b>PNR</b></td><td>Read from the ticket automatically</td><td>Not needed</td></tr>
 </tbody></table></div>
 <p>Both paths are in the demo: <a href="rider.html#airport">Airport rides</a> and <a href="rider.html#scan">Scan ticket</a>, and in onboarding as the last step ("Got a flight coming up?"). The automatic routes in §4 are add-ons for later; launch doesn't depend on them.</p>
 <p><b>Flutter packages:</b> <code>mobile_scanner</code> (boarding-pass barcodes), <code>google_mlkit_text_recognition</code> (e-tickets and screenshots), <code>file_picker</code> (PDFs). Only the extracted flight fields go to SAGA's server.</p>
+<h3>Why there is no "type your PNR" lookup</h3>
+<p>We checked what exists in India (November 2026). Every system that can open a booking from its PNR only opens bookings <b>made through that same seller</b>:</p>
+<ul>
+<li><b>GDS / agency systems</b> (Travelport, Amadeus) retrieve a PNR only with the credentials of the agency that created it.</li>
+<li><b>Indian B2B flight suppliers</b> such as TBO offer "get booking details by PNR", again for bookings made through them.</li>
+<li><b>IndiGo's developer portal</b> (6E NDC APIs) is open only to IATA/TIDS agents and approved partners, after certification. It is for selling and servicing their own bookings.</li>
+<li><b>Airline "check PNR" pages</b> are for passengers. Websites that "check any PNR" scrape them, which breaks the airlines' terms and handles exactly the data (phone, email) that leaked in a reported IndiGo case. Not suitable for a premium feature.</li>
+</ul>
+<p>So the premium version is not "type six letters". It is <b>"show us your ticket"</b>: one scan or one tap, and SAGA reads everything the PNR would have told it, from any airline.</p>
+<div class="callout"><b>Later, if SAGA wants a typed PNR to "just work"</b>SAGA can sell flights in its own app as a sub-agent of a B2B supplier (for example TBO) or, later, as an IndiGo partner. Every ticket bought through SAGA comes with its PNR and flight, so the airport ride books itself, and SAGA earns on the ticket. Suppliers don't publish prices: agents typically get net fares to mark up, register, often place a deposit, and integrate. It is a second business (ticketing, refunds, support), so it is SAGA's decision, not a build task.</div>
 <h3>Step B: track the flight and time the pickup</h3>
 <p><b>Pickup time = departure − airport buffer − drive time at that hour.</b> The default buffers are 90 minutes for domestic flights and 180 for international; SAGA sets them. Drive time comes from the Google Routes API with traffic for that time of day. The rule is stored, not the time, so every flight update recalculates the pickup. If a flight moves by 10 minutes or more, the pickup moves and the rider is told. A cancellation, or a delay over 60 minutes, asks the rider before reassigning. For arrivals, the chauffeur is at the kerb 10 minutes after landing, with 45 minutes of free waiting.</p>
 <div class="tw"><table><thead><tr><th>Flight-status provider</th><th>How it updates</th><th>Indicative list price</th><th>Fit</th></tr></thead><tbody>
@@ -318,6 +328,7 @@ tr:last-child td{border-bottom:0}
 <li>FlightAware AeroAPI: <a href="https://flightaware.com/commercial/aeroapi/">flightaware.com/commercial/aeroapi</a>; tier summary: <a href="https://geekflare.com/dev/flight-data-api/">Geekflare, Best Flight Data APIs 2026</a></li>
 <li>AeroDataBox: <a href="https://alternativeto.net/software/aerodatabox-api/about">AlternativeTo listing</a></li>
 <li>Gmail restricted scopes and CASA assessment: <a href="https://www.gmass.co/blog/google-oauth-verification-security-assessment/">GMass</a>, <a href="https://www.theregister.co.uk/2019/02/11/google_gmail_developer">The Register (2019 cost estimate)</a>, <a href="https://developer.nylas.com/docs/provider-guides/google/shared-gcp-app/">Nylas shared app</a></li>
+<li>PNR retrieval is seller-only: <a href="https://support.travelport.com/webhelp/uapi/Content/Booking/Retrieve/Retrieving_Universal_Records.htm">Travelport retrieve rules</a>, <a href="https://support.travelport.com/webhelp/uapi/Content/Air/ACH_CarrierFunctionality/Supplier_Requirements_IndiGo.htm">Travelport IndiGo requirements</a>, <a href="https://dealint.tboair.com/APIDocument/FlightFAQ.aspx">TBO Air API</a>, <a href="https://developer.goindigo.in/FAQs">IndiGo 6E NDC developer portal</a></li>
 <li>PNR lookup by third parties: <a href="https://www.thequint.com/tech-and-auto/tech-news/indigo-airline-hack-someone-can-get-your-personal-info-using-just-pnr-name">The Quint on PNR + surname lookups</a>, <a href="https://developer.sabre.com/pnr-management">Sabre PNR management</a></li>
 <li>Android AppFunctions and Gemini: <a href="https://9to5google.com/2026/02/25/android-appfunctions-gemini/">9to5Google</a>, <a href="https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html">Android Developers Blog</a></li>
 <li>Siri languages in India: <a href="https://support.apple.com/105012">Apple Support: speaking to Siri in multiple languages in India</a></li>
