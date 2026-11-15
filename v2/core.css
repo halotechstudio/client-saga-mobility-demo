@@ -45,20 +45,33 @@ a{color:inherit}
 
 /* ============ vehicle ============ */
 .carsvg{display:block;width:100%;height:auto;overflow:visible}
-.cg-b0{stop-color:#FFFFFF}.cg-b1{stop-color:#EDEFF2}.cg-b2{stop-color:#C4C9D1}
-.cb-body{stroke:#AEB4BE;stroke-width:1}
-.cb-roof{fill:#0C0E12}.cb-sheen{fill:#fff;opacity:.08}.cb-pillar{fill:#06070A}
-.cb-rail{stroke:#1D2026;stroke-width:3.2;fill:none;stroke-linecap:round}
-.cb-line{stroke:rgba(20,24,32,.2);stroke-width:1.2;fill:none}
-.cb-handle{fill:#D9DCE1;stroke:rgba(0,0,0,.22);stroke-width:.8}
-.cb-livery{stroke:var(--accent);stroke-width:3;fill:none;stroke-linecap:round}
-.cb-clad{stroke:#16181C;stroke-width:7;fill:none;stroke-linecap:round}
-.cb-mirror{fill:#0C0E12}
-.cb-drl{stroke:#fff;stroke-width:4;stroke-linecap:round;filter:drop-shadow(0 0 3px rgba(255,255,255,.9))}
-.cb-lamp{stroke:#DDE4EE;stroke-width:3;stroke-linecap:round}
-.cb-tail{stroke:#E0322C;stroke-width:4;stroke-linecap:round}
-.cb-tyre{fill:#111214}.cb-spoke{stroke:#4F555F;stroke-width:5;stroke-linecap:round}.cb-hub{fill:#25282E}
-.cb-shadow{fill:#000;opacity:.5}
+.cg-b0{stop-color:#FFFFFF}.cg-b1{stop-color:#F3F5F8}.cg-b2{stop-color:#DEE2E9}.cg-b3{stop-color:#BDC3CE}
+.cb-body{stroke:rgba(40,52,74,.32);stroke-width:.9}
+.cb-well{fill:#07080A}
+.cb-shoulder{stroke:#fff;stroke-width:2.6;fill:none;stroke-linecap:round;opacity:.95}
+.cb-crease{stroke:rgba(40,52,74,.2);stroke-width:1.1;fill:none;stroke-linecap:round}
+.cb-green{fill:#0B0D11}
+.cb-sheen{fill:#fff;opacity:.09}
+.cb-trim{stroke:#9AA1AD;stroke-width:1.6;fill:none;stroke-linecap:round}
+.cb-rail{stroke:#202329;stroke-width:3;fill:none;stroke-linecap:round}
+.cb-cut{stroke:rgba(30,40,60,.24);stroke-width:1.1;fill:none;stroke-linecap:round}
+.cb-handle{fill:#F4F6F9;stroke:rgba(30,40,60,.28);stroke-width:.8}
+.cb-mirror{fill:#0B0D11}
+.cb-sill{stroke:#15171B;stroke-width:6;fill:none;stroke-linecap:round}
+.cb-brandline{stroke:var(--accent);stroke-width:2.2;fill:none;stroke-linecap:round;opacity:.95}
+.cb-brand{font-family:"Inter",system-ui,sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.42em;fill:var(--accent);opacity:.9}
+.cb-grille{fill:#14171C;opacity:.92}
+.cb-head{fill:#10141B}
+.cb-drl{stroke:#fff;stroke-width:3.2;stroke-linecap:round;filter:drop-shadow(0 0 4px rgba(255,255,255,.95));animation:drl 3.6s ease-in-out infinite}
+.cb-tail{stroke:#FF3B30;stroke-width:3.4;stroke-linecap:round;filter:drop-shadow(0 0 3px rgba(255,59,48,.8))}
+.cb-tyre{fill:#101114}.cb-wall{fill:none;stroke:#24272D;stroke-width:1.2}.cb-dish{fill:#2A2E35}
+.cb-spoke{fill:#C9CED6}.cb-hub{fill:#1B1E24}.cb-cap{fill:var(--accent)}
+.cb-shadow{fill:#000;opacity:.42}
+.cb-sweep{animation:sweep 8s 1.2s cubic-bezier(.4,0,.2,1) infinite}
+@keyframes sweep{0%{transform:translateX(0)}22%{transform:translateX(700px)}100%{transform:translateX(700px)}}
+@keyframes drl{0%,100%{opacity:1}50%{opacity:.72}}
+@keyframes settle{from{opacity:0;transform:translateX(36px)}to{opacity:1;transform:none}}
+.car-in{animation:settle .9s .08s cubic-bezier(.2,.9,.2,1) both}
 .seatsvg{display:block;width:100%;height:auto}
 .seatsvg .shell{fill:var(--surface2);stroke:var(--hair);stroke-width:1.5}
 .seatsvg .wind{fill:var(--fg3);opacity:.35}

@@ -292,7 +292,9 @@
       }
     } else if (o.pickup) over += pin(rp(...S.PTS.home), "pick", o.labelPickup);
     if (o.pulse) { const p = rp(...S.PTS.home); over = `<circle cx="${p[0]}" cy="${p[1]}" r="26" class="m-pulse"/><circle cx="${p[0]}" cy="${p[1]}" r="52" class="m-pulse m-pulse2"/>` + over; }
+    (o.stops || []).forEach((s, i) => { over += stopPin(rp(s.p[0], s.p[1]), i + 1, s.type); });
     (o.cars || []).forEach(c => { over += carMark(rp(c[0], c[1]), (c[2] || 0) + ROT, c[3]); });
+    (o.tags || []).forEach(t => { const p = rp(t[0], t[1]); over += `<g class="m-tag" transform="translate(${p[0]} ${p[1] - 26})"><rect x="${-t[2].length * 3.6 - 11}" y="-13" width="${t[2].length * 7.2 + 22}" height="26" rx="13"/><text y="4.6" text-anchor="middle">${t[2]}</text></g>`; });
     if (o.car) over += carMark(rp(o.car[0], o.car[1]), (o.car[2] || 0) + ROT, "me");
     const labels = LABELS.map(([x, y, t, sea]) => { const p = rp(x, y); return `<text x="${p[0]}" y="${p[1]}" class="m-label ${sea ? "m-label-sea" : ""}">${t}</text>`; }).join("")
       + (() => { const p = rp(330, 600); return `<text x="${p[0]}" y="${p[1]}" class="m-label m-label-water" transform="rotate(-72 ${p[0]} ${p[1]})">Bay of Bengal</text>`; })();
@@ -306,9 +308,13 @@
       ? `<g class="m-pin-pick"><circle cx="${x}" cy="${y}" r="9"/><circle cx="${x}" cy="${y}" r="3.6" class="dot"/></g>${lab}`
       : `<g class="m-pin-drop"><rect x="${x - 8}" y="${y - 8}" width="16" height="16" rx="3"/><rect x="${x - 3}" y="${y - 3}" width="6" height="6" class="dot"/></g>${lab}`;
   }
+  function stopPin(p, n, type) {
+    const [x, y] = p;
+    return `<g class="m-stop ${type === "pickup" ? "m-stop-pick" : ""}"><circle cx="${x}" cy="${y}" r="12"/><text x="${x}" y="${y + 4.6}" text-anchor="middle">${n}</text></g>`;
+  }
   function carMark(p, ang, kind) {
     const [x, y] = p;
-    return `<g class="m-car ${kind === "me" ? "m-car-me" : ""} ${kind === "busy" ? "m-car-busy" : ""}" transform="translate(${x} ${y}) rotate(${ang})">
+    return `<g class="m-car ${kind === "me" || kind === "free" ? "m-car-me" : ""} ${kind === "busy" ? "m-car-busy" : ""}" transform="translate(${x} ${y}) rotate(${ang})">
       <rect x="-7.5" y="-13" width="15" height="26" rx="5" class="body"/><rect x="-5.5" y="-6.5" width="11" height="6" rx="1.6" class="glass"/><rect x="-5.5" y="5" width="11" height="4" rx="1.4" class="glass"/></g>`;
   }
 
@@ -332,40 +338,51 @@
   };
 
   /* ---------- vehicle illustration: compact electric SUV, side profile ----------
-     A neutral illustration, not a manufacturer drawing. Replace with SAGA's own fleet photography when supplied. */
+     Drawn to the XUV 3XO proportions (3,990 mm long, 2,600 mm wheelbase, 1,647 mm tall): pearl body, black floating roof,
+     graphite aero wheels, LED signature front and rear. A neutral illustration, not a manufacturer drawing. Replace with SAGA's own photography when supplied. */
   let carN = 0;
   S.car = function (o = {}) {
     const id = "c" + (++carN);
     const reflect = o.reflect !== false;
+    const SIL = "M50 206L46 198C42 188 41 172 41 156L43 132C45 104 57 70 74 49C79 42 86 36 98 34L296 31C308 31 316 36 324 43L386 99C390 103 395 105 402 106L494 118C508 121 517 129 519 143L520 180C520 192 517 200 509 206L482 206A50 50 0 1 0 388 206L170 206A50 50 0 1 0 76 206Z";
+    const spokes = [0, 72, 144, 216, 288].map(a => `<path d="M-2.6 -9L-4.4 -27Q0 -29.5 4.4 -27L2.6 -9Z" class="cb-spoke" transform="rotate(${a})"/>`).join("");
+    const wheel = cx => `<g transform="translate(${cx} 189)"><circle r="41" class="cb-tyre"/><circle r="37" class="cb-wall"/><circle r="29.5" fill="url(#${id}r)"/><circle r="26" class="cb-dish"/>${spokes}<circle r="7.5" class="cb-hub"/><circle r="2.8" class="cb-cap"/></g>`;
     const body = `
-      <path class="cb-body" fill="url(#${id}b)" d="M94 190C86 190 82 185 82 177V124C82 110 85 98 90 88L104 62C108 54 114 50 126 50L288 48C300 48 308 52 316 60L358 100C408 104 458 108 492 113C505 115 512 123 512 136V178C512 186 508 190 500 190H488A47 47 0 0 0 394 190H218A47 47 0 0 0 124 190Z"/>
-      <path class="cb-roof" d="M126 50C116 50 110 54 106 61L104 65C109 58 116 56 126 56L288 54C296 54 302 56 308 61L304 56C299 51 294 48 286 48Z"/>
-      <path class="cb-glass" fill="url(#${id}g)" d="M110 98L120 73C123 65 128 62 136 62L286 60C296 60 302 63 308 69L337 98C339 101 337 103 333 103H114C111 103 109 101 110 98Z"/>
-      <path class="cb-sheen" d="M196 62L226 62L186 103L156 103Z"/>
-      <path class="cb-pillar" d="M227 61h8v42h-8zM150 63l7 0-4 40-7 0z"/>
-      <path class="cb-rail" d="M142 45H282M158 45v5M268 45v4"/>
-      <path class="cb-line" d="M90 118C210 113 380 111 506 121"/>
-      <path class="cb-line" d="M231 105V185M350 104C357 128 360 154 356 184M147 105C144 118 144 132 147 142"/>
-      <rect class="cb-handle" x="196" y="121" width="20" height="4.5" rx="2.2"/><rect class="cb-handle" x="318" y="121" width="20" height="4.5" rx="2.2"/>
-      <path class="cb-livery" d="M220 160L392 158"/>
-      <path class="cb-clad" d="M218 190H394M124 190A47 47 0 0 1 218 190M394 190A47 47 0 0 1 488 190M82 168V178C82 185 87 190 94 190M500 190C507 190 512 185 512 178V166"/>
-      <path class="cb-mirror" d="M342 95l15-4c2 0 3 1 3 3l-1 6c0 1-1 2-3 2l-13 1z"/>
-      <path class="cb-drl" d="M474 112L509 119"/>
-      <path class="cb-lamp" d="M488 138H511"/>
-      <path class="cb-tail" d="M86 104L100 103"/>
-      ${[171, 441].map(cx => `<g transform="translate(${cx} 190)"><circle r="39" class="cb-tyre"/><circle r="27" fill="url(#${id}r)"/>${[0, 72, 144, 216, 288].map(a => `<path d="M0 0L0 -25" class="cb-spoke" transform="rotate(${a})"/>`).join("")}<circle r="6.5" class="cb-hub"/></g>`).join("")}`;
-    return `<svg class="carsvg ${o.cls || ""}" viewBox="40 20 510 ${reflect ? 300 : 220}" aria-hidden="true">
+      <circle cx="123" cy="189" r="51" class="cb-well"/><circle cx="435" cy="189" r="51" class="cb-well"/>
+      <path class="cb-body" fill="url(#${id}b)" d="${SIL}"/>
+      <path class="cb-shoulder" d="M52 128C170 119 330 117 505 132"/>
+      <path class="cb-crease" d="M52 132C170 123 330 121 505 136"/>
+      <path class="cb-green" d="M50 106C52 90 60 66 74 49C79 42 86 36 98 34L296 31C308 31 316 36 324 43L386 99C390 103 394 105 400 106Z"/>
+      <path class="cb-glass" fill="url(#${id}g)" d="M70 102L91 49C93 46 96 45 100 45L219 43L219 102ZM240 43L296 41C303 41 308 43 313 47L368 97C371 100 370 102 366 102L240 102Z"/>
+      <path class="cb-sheen" d="M118 45L150 44L110 102L78 102ZM266 42L292 41L254 102L228 102Z"/>
+      <path class="cb-trim" d="M70 104.5H368"/>
+      <path class="cb-rail" d="M110 27L292 24M122 27V31M280 24.5V30"/>
+      <path class="cb-cut" d="M240 106V204M152 108L150 148M376 108C379 130 381 150 384 162"/>
+      <rect class="cb-handle" x="186" y="121" width="22" height="4.6" rx="2.3"/><rect class="cb-handle" x="302" y="120" width="22" height="4.6" rx="2.3"/>
+      <path class="cb-mirror" d="M366 96L384 94C388 94 389 97 388 100L385 104L368 105Z"/>
+      <path class="cb-sill" d="M178 197H380"/>
+      <path class="cb-brandline" d="M178 192H380"/>
+      <text class="cb-brand" x="262" y="162" text-anchor="middle">SAGA</text>
+      <path class="cb-grille" d="M493 143L518 147L519 172L497 170Z"/>
+      <path class="cb-head" d="M474 121L507 126C513 127 516 130 516 134L515 138C500 134 486 132 468 130Z"/>
+      <path class="cb-drl" d="M478 124L510 129"/>
+      <path class="cb-tail" d="M44 118L48 150"/>
+      ${wheel(123)}${wheel(435)}`;
+    return `<svg class="carsvg ${o.cls || ""}" viewBox="26 14 508 ${reflect ? 300 : 228}" aria-hidden="true">
       <defs>
-        <linearGradient id="${id}b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="cg-b0"/><stop offset=".55" class="cg-b1"/><stop offset="1" class="cg-b2"/></linearGradient>
-        <linearGradient id="${id}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2A3442"/><stop offset="1" stop-color="#0B0E14"/></linearGradient>
-        <radialGradient id="${id}r"><stop offset="0" stop-color="#E7E9ED"/><stop offset=".7" stop-color="#A3A8B1"/><stop offset="1" stop-color="#5D626B"/></radialGradient>
-        <linearGradient id="${id}f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/></linearGradient>
-        <mask id="${id}m"><rect x="0" y="226" width="640" height="120" fill="url(#${id}f)"/></mask>
-        <filter id="${id}s" x="-20%" y="-200%" width="140%" height="500%"><feGaussianBlur stdDeviation="6"/></filter>
+        <linearGradient id="${id}b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="cg-b0"/><stop offset=".34" class="cg-b1"/><stop offset=".8" class="cg-b2"/><stop offset="1" class="cg-b3"/></linearGradient>
+        <linearGradient id="${id}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3A4658"/><stop offset=".55" stop-color="#151A23"/><stop offset="1" stop-color="#0A0D12"/></linearGradient>
+        <radialGradient id="${id}r" cx=".4" cy=".35"><stop offset="0" stop-color="#F1F3F6"/><stop offset=".6" stop-color="#9EA4AE"/><stop offset="1" stop-color="#4B515B"/></radialGradient>
+        <linearGradient id="${id}f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".2"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/></linearGradient>
+        <linearGradient id="${id}w" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+        <clipPath id="${id}c"><path d="${SIL}"/></clipPath>
+        <mask id="${id}m"><rect x="0" y="232" width="640" height="120" fill="url(#${id}f)"/></mask>
+        <filter id="${id}s" x="-20%" y="-300%" width="140%" height="700%"><feGaussianBlur stdDeviation="7"/></filter>
       </defs>
-      <ellipse cx="297" cy="229" rx="236" ry="9" class="cb-shadow" filter="url(#${id}s)"/>
-      <g>${body}</g>
-      ${reflect ? `<g mask="url(#${id}m)" transform="translate(0 458) scale(1 -1)" opacity=".9">${body}</g>` : ""}
+      <ellipse cx="282" cy="231" rx="244" ry="8" class="cb-shadow" filter="url(#${id}s)"/>
+      <g class="cb-all">${body}
+        <g clip-path="url(#${id}c)"><g class="cb-sweep"><rect x="-90" y="20" width="70" height="220" transform="skewX(-24)" fill="url(#${id}w)"/></g></g></g>
+      ${reflect ? `<g mask="url(#${id}m)" transform="translate(0 462) scale(1 -1)" opacity=".85">${body}</g>` : ""}
     </svg>`;
   };
 

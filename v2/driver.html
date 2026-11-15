@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>SAGA Chauffeur</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manjari:wght@400;700&family=Roboto+Flex:opsz,wght@8..144,400;8..144,500;8..144,600;8..144,700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Manjari:wght@400;700&family=Roboto+Flex:opsz,wght@8..144,400;8..144,500;8..144,600;8..144,700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="core.css">
 <style>
 body{background:#E4E4E8;color:var(--fg);overflow:hidden}
@@ -164,6 +164,7 @@ body.embed,body.bare{background:transparent}
 .nt.new .ni{background:var(--accent);color:var(--on-accent)}
 .nt b{font-size:16px;display:block}.nt p{font-size:14.5px;color:var(--fg2);margin-top:2px;line-height:1.4}.nt time{font-size:13px;color:var(--fg2);display:block;margin-top:4px}
 </style>
+<link rel="stylesheet" href="system.css">
 </head>
 <body>
 <div class="shell">
@@ -330,6 +331,7 @@ def("assigned", { g: "On duty", n: "Job assigned", what: "Full-screen brief in t
     <div class="rcard mt20"><div class="rr"><span style="width:46px;height:46px;border-radius:23px;background:#fff;color:var(--accent);font-weight:700;display:flex;align-items:center;justify-content:center">${st.job.ini}</span><div class="grow"><b style="font-size:18px">${st.job.rider}</b><div class="t-sub">★ 4.8 · ${L("prefers a quiet ride", "నిశ్శబ్ద ప్రయాణం ఇష్టం", "शांत सफ़र पसंद")}</div></div></div>
       <div class="hr" style="margin:6px 0"></div>
       <div class="rr">${I("pin")}<div class="grow"><b>${st.job.pick}</b><div class="t-sub">${L("Pickup · 1.6 km away", "పికప్ · 1.6 కి.మీ", "पिकअप · 1.6 किमी")}</div></div></div>
+      ${(st.job.stops || []).map((x, i) => `<div class="rr"><span class="sn">${i + 1}</span><div class="grow"><b>${x.n}</b><div class="t-sub">${x.type === "pickup" ? L("Pick up another passenger", "మరో ప్రయాణికుడిని ఎక్కించుకోండి", "दूसरे यात्री को लें") : L("Stop · wait up to 5 min", "స్టాప్ · 5 నిమి వరకు వేచి ఉండండి", "स्टॉप · 5 मिनट तक रुकें")}</div></div></div>`).join("")}
       <div class="rr">${I("flag")}<div class="grow"><b>${st.job.drop}</b><div class="t-sub">${st.job.km} km · ${L("fixed fare, prepaid", "స్థిర ఛార్జీ, ముందే చెల్లింపు", "तय किराया, पहले से भुगतान")}</div></div></div>
     </div>
     <div style="margin-top:auto">${btn(L("Start navigation", "నావిగేషన్ ప్రారంభించండి", "नेविगेशन शुरू करें"), { act: "ack", kind: "btn-stage", cls: "lg", icon: "nav" })}<button class="btn btn-text block mt8" style="color:#fff" data-toast="${esc(L("Ops will call you in 1 minute", "ఆప్స్ 1 నిమిషంలో కాల్ చేస్తారు", "ऑप्स 1 मिनट में कॉल करेंगे"))}">${L("Report a problem", "సమస్య తెలపండి", "समस्या बताएँ")}</button></div>
@@ -511,7 +513,7 @@ S.initSliders(tr => {
 });
 /* live link with the rider app */
 S.live.on(d => {
-  if (d.t === "book") { st.riderLive = true; st.job = { rider: "Ananya Rao", ini: "AR", pick: "MVP Colony, Sector 4", drop: d.dest || "Dwaraka Nagar", km: 12.4 }; S.live.send("got"); notify("car", L("New job assigned", "కొత్త పని కేటాయించబడింది", "नया काम मिला"), `${st.job.rider} · ${st.job.pick} → ${st.job.drop}`); go("assigned"); }
+  if (d.t === "book") { st.riderLive = true; st.job = { rider: "Ananya Rao", ini: "AR", pick: "MVP Colony, Sector 4", drop: d.dest || "Dwaraka Nagar", km: 12.4, stops: d.stops || [] }; S.live.send("got"); notify("car", L("New job assigned", "కొత్త పని కేటాయించబడింది", "नया काम मिला"), `${st.job.rider} · ${st.job.pick} → ${st.job.drop}`); go("assigned"); }
   if (d.t === "msg") { notify("chat", st.job.rider, S.msg(d.k)); if (cur === "chat") rerender(); }
   if (d.t === "rated") notify("star", L(`${st.job.rider} rated you ${d.n}★`, `${st.job.rider} మీకు ${d.n}★ ఇచ్చారు`, `${st.job.rider} ने ${d.n}★ दिए`), L("Thank you for a great ride.", "మంచి ప్రయాణానికి ధన్యవాదాలు.", "बढ़िया सफ़र के लिए धन्यवाद।"));
   if (d.t === "tip") { st.tips += d.amt; notify("heart", L(`${st.job.rider} tipped you ₹${d.amt}`, `${st.job.rider} మీకు ₹${d.amt} టిప్ ఇచ్చారు`, `${st.job.rider} ने ₹${d.amt} टिप दी`), L("Added to your wallet.", "మీ వాలెట్‌లో జమ.", "आपके वॉलेट में जुड़ गया।")); }
