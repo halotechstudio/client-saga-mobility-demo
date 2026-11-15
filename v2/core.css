@@ -308,3 +308,14 @@ a{color:inherit}
 .hscroll::-webkit-scrollbar{display:none}
 .hscroll>*{scroll-snap-align:start;flex:none}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ============ editorial pieces shared by every app (v2.1) ============ */
+.promo{position:relative;overflow:hidden;padding:22px 22px 24px;border-radius:34px;background:var(--ink);color:var(--on-ink)}
+.promo[role=button]{cursor:pointer}
+.promo-wm{position:absolute;right:-14px;bottom:-34px;font-family:"Inter",sans-serif;font-weight:800;font-size:120px;letter-spacing:.02em;color:rgba(255,255,255,.045);line-height:1;pointer-events:none}
+.promo-k .wordmark{font-size:12px;color:var(--on-ink2)}.promo-k .logo-img{height:16px}
+.promo-h{font-family:var(--display);font-size:34px;line-height:1.04;font-weight:700;letter-spacing:-.03em;margin-top:14px;position:relative}
+.promo-h mark{background:var(--accent);color:var(--on-accent);padding:0 .16em;border-radius:.22em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.promo-s{font-size:15px;line-height:1.45;color:var(--on-ink2);margin-top:12px;max-width:300px;position:relative}
+[data-theme=dark] .promo{border:1px solid rgba(255,255,255,.08)}
+.darkmap{background:#14161A}

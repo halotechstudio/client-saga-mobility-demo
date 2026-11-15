@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SAGA Ops Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Telugu:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manjari:wght@400;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Telugu:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="core.css">
 <link rel="stylesheet" href="web.css">
 <style>
@@ -60,13 +60,13 @@ P.command = () => {
   const c = k => FLEET.filter(f => f[2] === k).length;
   return `${head("Command", "Sunday 15 November · 10:02 AM · Visakhapatnam", `<button class="btn btn-secondary" data-toast="Broadcast sent to all on-shift chauffeurs">${I("chat")}Message chauffeurs</button>`)}
   <div class="grid g4">
-    <div class="kpi"><div class="l">${I("car")}Fleet now</div><div class="v">${c("trip") + c("pick")} / 16</div><div class="s">${c("free")} free · ${c("chg")} charging · ${c("off")} off</div></div>
+    <div class="kpi acc"><div class="l">${I("car")}Fleet now</div><div class="v">${c("trip") + c("pick")} / 16</div><div class="s">${c("free")} free · ${c("chg")} charging · ${c("off")} off</div></div>
     <div class="kpi"><div class="l">${I("clock")}Waitlist</div><div class="v" style="color:var(--warning)">2</div><div class="s">Siripuram · next free car 11 min</div></div>
     <div class="kpi"><div class="l">${I("plane")}Flights tracked</div><div class="v">24</div><div class="s">1 delayed · pickups auto-moved</div></div>
     <div class="kpi dark"><div class="l">${I("trend")}Today so far</div><div class="v">${inr(48650)}</div><div class="s">96 rides · 58 scheduled · 11 hotel</div></div>
   </div>
   <div class="grid g21" style="margin-top:14px">
-    <div class="panel" style="padding:0;overflow:hidden"><div class="mapbox cmdmap" style="border-radius:0">${S.map({ view: [0, 40, 400, 700], cars: CARS.map(c => [c[0], c[1], c[2], c[3] || "me"]) })}<div class="mapover"><span>${I("car", "sm")} 16 cars</span><span style="color:var(--accent-ink)">● 4 free</span><span>● 12 busy or charging</span></div></div></div>
+    <div class="panel" style="padding:0;overflow:hidden"><div class="mapbox cmdmap darkmap" style="border-radius:0;${S.darkMap()}">${S.map({ view: [0, 40, 400, 700], cars: CARS.map(c => [c[0], c[1], c[2], c[3] || "me"]) })}<div class="mapover"><span>${I("car", "sm")} 16 cars</span><span style="color:var(--accent-ink)">● 4 free</span><span>● 12 busy or charging</span></div></div></div>
     <div class="panel"><h2>Needs attention <small>3 open</small></h2>
       <div class="alert"><span class="li" style="padding:0;border:0"><span class="ico warn">${I("clock")}</span></span><div style="flex:1"><b>2 riders waiting at Siripuram</b><div class="note">No free car within 10 min. SG-09 is at the hub at 82%.</div><div class="acts"><button class="btn btn-primary sm" data-toast="SG-09 released from charging and assigned">Release SG-09</button><button class="btn btn-secondary sm" data-toast="Riders offered 100 points and a scheduled slot">Offer to schedule</button></div></div></div>
       <div class="alert"><span class="li" style="padding:0;border:0"><span class="ico">${I("plane")}</span></span><div style="flex:1"><b>6E 6402 delayed 25 min</b><div class="note">Arrival pickup moved 12:40 → 13:05 automatically. Rider notified. SG-10 keeps the job.</div><div class="acts"><button class="btn btn-secondary sm" data-toast="Opened flight watch">View flight</button></div></div></div>
@@ -112,7 +112,7 @@ P.fleet = () => `${head("Fleet and chauffeurs", `16 × ${S.VEHICLE.make} ${S.VEH
   </tbody></table></div></div>`;
 
 P.hotels = () => `${head("Hotel partners", "Bookings and commission by property, November to date.", `<button class="btn btn-primary" data-toast="Partner invite created">${I("plus")}Add hotel</button>`)}
-  <div class="grid g4"><div class="kpi"><div class="l">${I("hotel")}Partners</div><div class="v">6</div><div class="s">2 onboarding</div></div><div class="kpi"><div class="l">${I("car")}Hotel rides</div><div class="v">418</div><div class="s">22% of all rides</div></div><div class="kpi"><div class="l">${I("percent")}Commission accrued</div><div class="v">${inr(52180)}</div><div class="s">Paid in Dec statements</div></div><div class="kpi"><div class="l">${I("wallet")}Receivable</div><div class="v">${inr(268400)}</div><div class="s">Room-bill fares, due 7 Dec</div></div></div>
+  <div class="grid g4"><div class="kpi acc"><div class="l">${I("hotel")}Partners</div><div class="v">6</div><div class="s">2 onboarding</div></div><div class="kpi"><div class="l">${I("car")}Hotel rides</div><div class="v">418</div><div class="s">22% of all rides</div></div><div class="kpi"><div class="l">${I("percent")}Commission accrued</div><div class="v">${inr(52180)}</div><div class="s">Paid in Dec statements</div></div><div class="kpi"><div class="l">${I("wallet")}Receivable</div><div class="v">${inr(268400)}</div><div class="s">Room-bill fares, due 7 Dec</div></div></div>
   <div class="panel" style="margin-top:14px"><div class="tablewrap"><table class="tb"><thead><tr><th>Hotel</th><th class="r">Rides</th><th class="r">Gross</th><th class="r">Rate</th><th class="r">Commission</th><th>Mostly paid by</th><th>Status</th></tr></thead><tbody>
     <tr><td>Bay Pavilion Hotel<span class="sub">Beach Road</span></td><td class="r">142</td><td class="r">${inr(184200)}</td><td class="r">10%</td><td class="r">${inr(18420)}</td><td>Room bill</td><td>${stt("Active", "ok")}</td></tr>
     <tr><td>Harbour View Suites<span class="sub">Siripuram</span></td><td class="r">96</td><td class="r">${inr(121700)}</td><td class="r">10%</td><td class="r">${inr(12170)}</td><td>Guest pays SAGA</td><td>${stt("Active", "ok")}</td></tr>

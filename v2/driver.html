@@ -71,7 +71,16 @@ body.embed,body.bare{background:transparent}
 .keys{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:24px}
 .keys button{height:66px;border-radius:20px;background:var(--surface2);font-size:28px;font-weight:500;color:var(--fg)}
 .batt{display:flex;align-items:flex-end;gap:16px}
-.batt .big{font-size:64px;font-weight:600;line-height:1;letter-spacing:-.02em}
+.batt .big{font-family:var(--display);font-size:72px;font-weight:400;line-height:.9;letter-spacing:-.05em}
+.kpis div{border-radius:26px;padding:16px}
+.kpis div:first-child{background:var(--ink);color:var(--on-ink2)}.kpis div:first-child b{color:#fff}
+.kpis b{font-family:var(--display);font-size:38px;font-weight:400;letter-spacing:-.04em;line-height:1;margin-top:10px}
+.online{border-radius:32px;padding:22px}
+.online .t-h3{font-family:var(--display);font-size:24px;font-weight:700;letter-spacing:-.02em}
+.job{border-radius:28px}
+.job time{font-family:var(--display);font-size:26px;font-weight:400;letter-spacing:-.03em}
+.job.next{background:var(--ink);color:var(--on-ink);box-shadow:none}.job.next .t-sub{color:var(--on-ink2)}
+.timer{font-family:var(--display);font-size:64px;font-weight:400;letter-spacing:-.04em}
 .cell{height:24px;border-radius:8px;background:var(--surface3);overflow:hidden;position:relative}
 .cell i{position:absolute;inset:0 auto 0 0;background:var(--success);border-radius:8px}
 .chk{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--surface);border-radius:6px;font-size:16.5px}
@@ -138,7 +147,8 @@ def("duty", { n: "Duty", tab: "duty", what: "Online switch, today's numbers, and
     <button class="job" data-go="waiting"><time>11:20</time><div class="grow"><span class="ty">${I("landing", "sm")}${L("Airport pickup", "ఎయిర్‌పోర్ట్ పికప్", "एयरपोर्ट पिकअप")}</span><div class="t-h3 mt8">Mr. S. Sharma</div><div class="t-sub">AI 1912 ${L("lands", "ల్యాండింగ్", "लैंडिंग")} 11:05 · ${L("on time", "సమయానికి", "समय पर")}</div></div>${I("chevr")}</button>
     <button class="job" data-toast="${esc(L("Hotel booking: guest at the lobby, bill to room", "హోటల్ బుకింగ్: లాబీలో అతిథి, రూమ్ బిల్", "होटल बुकिंग: लॉबी में मेहमान, रूम बिल"))}"><time>13:30</time><div class="grow"><span class="ty">${I("hotel", "sm")}${L("Hotel", "హోటల్", "होटल")}</span><div class="t-h3 mt8">${L("Guest · Room 412", "అతిథి · రూమ్ 412", "मेहमान · रूम 412")}</div><div class="t-sub">Bay Pavilion Hotel → Railway Station</div></div>${I("chevr")}</button>
   </div>
-  <div class="pad mt16"><div class="card pad0" style="height:150px;overflow:hidden;border-radius:28px">${S.map({ view: [100, 160, 260, 160], car: [260, 180, 90] })}</div></div>
+  <div class="pad mt16"><div class="card pad0 darkmap" style="height:170px;overflow:hidden;border-radius:30px;${S.darkMap()}">${S.map({ view: [90, 100, 260, 170], car: [260, 180, 90] })}</div></div>
+  <div class="pad mt16"><div class="promo"><span class="promo-wm" aria-hidden="true">SAGA</span><span class="promo-k">${S.logo()}</span><div class="promo-h">${L("Every ride,<br><mark>on time.</mark>", "ప్రతి రైడ్,<br><mark>సమయానికి.</mark>", "हर राइड,<br><mark>समय पर।</mark>")}</div><p class="promo-s">${L("You're 100% on time this week. Thank you, Ravi.", "ఈ వారం మీరు 100% సమయానికి ఉన్నారు. ధన్యవాదాలు, రవి.", "इस हफ़्ते आप 100% समय पर रहे। धन्यवाद, रवि।")}</p></div></div>
   </div>`);
 
 def("request", { n: "Job offered", tabs: 0, what: "Full-screen job card with a 15-second ring: pickup distance, rider, trip type, drop. Accept, or decline with a reason.", why: "Big targets and big type so it can be read at a glance in a parked car.", fl: "High-priority FCM data message → full-screen intent (Android <code>USE_FULL_SCREEN_INTENT</code>, allowed for ride-hailing). Response: <code>POST /jobs/{id}/accept</code>." }, () => `

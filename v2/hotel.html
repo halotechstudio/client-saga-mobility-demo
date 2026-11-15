@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SAGA for Hotels</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manjari:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="core.css">
 <link rel="stylesheet" href="web.css">
 </head>
@@ -48,7 +48,7 @@ const status = s => `<span class="st ${s[1]}">${s[0]}</span>`;
 const P = {};
 P.today = () => `${head("Good morning, Lakshmi", "Sunday 15 November · 7 guest rides today", `<a class="btn btn-primary" href="#book">${I("plus")}Book a ride for a guest</a>`)}
   <div class="grid g4">
-    <div class="kpi"><div class="l">${I("car")}Rides today</div><div class="v">7</div><div class="s">2 done · 2 live · 3 scheduled</div></div>
+    <div class="kpi acc"><div class="l">${I("car")}Rides today</div><div class="v">7</div><div class="s">2 done · 2 live · 3 scheduled</div></div>
     <div class="kpi"><div class="l">${I("plane")}Airport, next 3 h</div><div class="v">2</div><div class="s">Both flights on time</div></div>
     <div class="kpi"><div class="l">${I("clock")}Avg. wait at porch</div><div class="v">3.8 min</div><div class="s">Last 30 days</div></div>
     <div class="kpi dark"><div class="l">${I("wallet")}Commission, November</div><div class="v">${inr(18420)}</div><div class="s">142 rides · ${RATE * 100}% of fares</div></div>
@@ -60,10 +60,11 @@ P.today = () => `${head("Good morning, Lakshmi", "Sunday 15 November · 7 guest 
       </tbody></table></div></div>
     <div class="grid" style="align-content:start">
       <div class="panel"><h2>Live <small>updated now</small></h2>
-        <div class="mapbox" style="height:220px">${S.map({ view: [120, 300, 240, 200], cars: [[260, 420, 180, "me"], [180, 440, 0, "busy"]], pickup: false })}</div>
+        <div class="mapbox darkmap" style="height:220px;${S.darkMap()}">${S.map({ view: [120, 300, 240, 200], cars: [[260, 420, 180, "me"], [180, 440, 0, "busy"]], pickup: false })}</div>
         <div class="li" style="margin-top:8px"><span class="ico">${I("takeoff")}</span><div style="flex:1"><b>Mr. A. Mehta · Room 318</b><span class="s">Kiran arriving at the porch in 4 min · AI 1913</span></div></div>
         <div class="li"><span class="ico">${I("landing")}</span><div style="flex:1"><b>Mr. S. Sharma</b><span class="s">Ravi is at Arrivals with a name board</span></div></div>
       </div>
+      <div class="promo"><span class="promo-wm" aria-hidden="true">SAGA</span><span class="promo-k">${S.logo()}</span><div class="promo-h">Your guests ride<br><mark>electric.</mark></div><p class="promo-s">Chauffeur-driven, fixed fares, and 10% back to you on every ride you book.</p></div>
       <div class="panel"><h2>Guests flying tomorrow</h2><p class="note">3 guests have flights before 9 AM tomorrow. Book their drops now so SAGA can plan cars tonight.</p><a class="btn btn-secondary sm" style="margin-top:12px" href="#book">Book airport drops</a></div>
     </div>
   </div>`;
@@ -119,7 +120,7 @@ P.bookings = () => {
 P.earnings = () => `${head("Commission and statements", "November 2026 so far. Sample figures; rates and tax treatment are set in your partner agreement.", `<button class="btn btn-secondary" data-toast="Statement PDF downloaded">${I("download")}Download statement</button>`)}
   <div class="grid g4">
     <div class="kpi"><div class="l">${I("car")}Guest rides</div><div class="v">142</div><div class="s">Gross fares ${inr(184200)}</div></div>
-    <div class="kpi"><div class="l">${I("percent")}Commission earned</div><div class="v">${inr(18420)}</div><div class="s">${RATE * 100}% of gross fares</div></div>
+    <div class="kpi acc"><div class="l">${I("percent")}Commission earned</div><div class="v">${inr(18420)}</div><div class="s">${RATE * 100}% of gross fares</div></div>
     <div class="kpi"><div class="l">${I("receipt")}Owed to SAGA</div><div class="v">${inr(112800)}</div><div class="s">Room bill + hotel account rides</div></div>
     <div class="kpi dark"><div class="l">${I("wallet")}Net to pay SAGA</div><div class="v">${inr(91432)}</div><div class="s">Due 7 Dec · after commission</div></div>
   </div>
@@ -163,7 +164,7 @@ function drawer(i) {
   const b = BK[i]; const d = $("#drawer");
   d.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center"><h2 style="font-size:22px">${b.g}</h2><button class="ibtn" data-close>${I("close")}</button></div>
   <p class="note">Room ${b.rm} · ${b.ty} · ${b.d}</p>
-  <div class="mapbox" style="height:220px;margin-top:14px">${S.map({ route: b.ty === "Airport drop" ? "airport" : "trip", car: [140, 300, 180], view: [40, 160, 320, 360] })}</div>
+  <div class="mapbox darkmap" style="height:220px;margin-top:14px;${S.darkMap()}">${S.map({ route: b.ty === "Airport drop" ? "airport" : "trip", car: [140, 300, 180], view: [40, 160, 320, 360] })}</div>
   <div style="margin-top:14px">${status(b.s)}</div>
   <div class="li" style="margin-top:8px"><span class="ico">${I("user")}</span><div style="flex:1"><b>${b.ch}</b><span class="s">${S.VEHICLE.model} · ${S.VEHICLE.plate}</span></div></div>
   <div class="li"><span class="ico">${I("wallet")}</span><div style="flex:1"><b>${inr(b.f)} · ${b.pay}</b><span class="s">Commission ${inr(Math.round(b.f * RATE))}</span></div></div>

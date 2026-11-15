@@ -312,6 +312,9 @@
       <rect x="-7.5" y="-13" width="15" height="26" rx="5" class="body"/><rect x="-5.5" y="-6.5" width="11" height="6" rx="1.6" class="glass"/><rect x="-5.5" y="5" width="11" height="4" rx="1.4" class="glass"/></g>`;
   }
 
+  /* the map in SAGA's dark style, whatever the app theme (for hero map cards) */
+  S.darkMap = () => { const d = S.tokens(S.state.os === "android" ? "android" : "ios", "dark", S.state.hex); return ["mapLand", "mapBlock", "mapWater", "mapPark", "mapRoad", "mapCase", "mapMajor", "mapMajorCase", "mapLabel", "mapSand"].map(k => "--" + k.replace(/[A-Z]/g, m => "-" + m.toLowerCase()) + ":" + d[k]).join(";") + ";--bg:#0B0C0F;--fg:#F5F5F7"; };
+
   /* regional schematic for intercity trips */
   S.region = function (dest) {
     const C = { Visakhapatnam: [250, 330], Vizianagaram: [292, 236], Srikakulam: [380, 150], "Araku Valley": [168, 200], Kakinada: [118, 470], Rajahmundry: [52, 470] };
