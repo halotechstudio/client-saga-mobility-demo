@@ -98,13 +98,15 @@ tr:last-child td{border-bottom:0}
 
 <h2 id="s3"><span class="n">3</span>Airport rides from a PNR</h2>
 <div class="callout warn"><b>The honest version</b>No Indian airline offers a public API that lets a third party look up a booking from a PNR and surname. Airline "Manage booking" pages accept PNR and surname from the passenger, and travel-agency (GDS) access only covers bookings that agency made. So "type the PNR and it schedules itself" has to be built in two steps: <b>identify the flight</b>, then <b>track it</b>.</div>
-<h3>Step A: turn the PNR into a flight</h3>
+<h3>Step A: find the flight, ideally without the rider typing anything</h3>
 <ol class="steps">
-<li><b>Ticket parsing</b> (recommended for launch). The rider shares the e-ticket PDF or forwards the confirmation email (§4). We read the PNR, airline, flight number, date and passenger names from it. This works for every airline and travel site.</li>
-<li><b>Calendar match.</b> Most airline and Gmail confirmations create a calendar event. If the rider allows calendar access, SAGA finds the flight before they ask.</li>
-<li><b>PNR plus one tap.</b> If the rider only types a PNR, we ask for the travel date and show that day's departures from the airport (from the flight-status API). The rider taps their flight, and we store the PNR with it.</li>
-<li><b>Partnerships</b> (later). An airline or travel site can add a "Book your SAGA" button that sends us the PNR and flight details. This is a business-development deal, not an API we can call today.</li>
+<li><b>Catch the booking as it arrives</b> (§4). Android reads the airline's SMS or app alert through notification access. iPhone passes airline messages to SAGA through a Shortcuts automation. On both, a personal SAGA travel address receives every airline email through a one-time mail filter. Each route delivers the full ticket text: PNR, airline, flight, date and passenger names.</li>
+<li><b>WhatsApp forward.</b> Many Indian airlines and travel sites now send tickets on WhatsApp. The rider forwards the message or PDF to SAGA's WhatsApp number, and the chat replies with the pickup time and a Book button.</li>
+<li><b>Calendar match.</b> Gmail and the airlines add flights to the calendar, so SAGA finds them with calendar permission alone.</li>
+<li><b>PNR typed by hand.</b> We ask for the airline and date. SAGA serves one airport, so one airline's departures on one day is a short list of about 5–15 flights. The rider taps theirs and the PNR is stored with it.</li>
+<li><b>Partnerships</b> (later). An airline or travel site adds a "Book your SAGA" button that sends us the PNR and flight details. This is a business-development deal, not an API we can call today.</li>
 </ol>
+<div class="callout warn"><b>Not recommended: looking the PNR up on airline websites</b>Automating airline "Manage booking" pages with a PNR and surname breaks their terms of use and runs into CAPTCHAs. It also handles exactly the data that exposed passengers' contact details in past airline incidents. Every route above uses data the rider chose to share.</div>
 <h3>Step B: track the flight and time the pickup</h3>
 <p><b>Pickup time = departure − airport buffer − drive time at that hour.</b> The default buffers are 90 minutes for domestic flights and 180 for international; SAGA sets them. Drive time comes from the Google Routes API with traffic for that time of day. The rule is stored, not the time, so every flight update recalculates the pickup. If a flight moves by 10 minutes or more, the pickup moves and the rider is told. A cancellation, or a delay over 60 minutes, asks the rider before reassigning. For arrivals, the chauffeur is at the kerb 10 minutes after landing, with 45 minutes of free waiting.</p>
 <div class="tw"><table><thead><tr><th>Flight-status provider</th><th>How it updates</th><th>Indicative list price</th><th>Fit</th></tr></thead><tbody>
@@ -116,27 +118,63 @@ tr:last-child td{border-bottom:0}
 <p><b>Cost per airport booking:</b> 5–15 status checks per flight, which works out to well under ₹1 per booking at these prices. Expect <b>₹8,500–₹13,000 a month</b> ($100–150) at launch. We'll put the provider behind SAGA's own <code>/flights</code> service so it can be swapped without an app update. Prices are vendors' published list prices as of November 2026; confirm when signing up.</p>
 <p><b>Privacy:</b> a PNR plus a surname opens the booking on the airline's website. Store them encrypted, show them masked, and delete them after the trip.</p>
 
-<h2 id="s4"><span class="n">4</span>Spotting flight tickets automatically</h2>
-<p>The client asked whether the app can read the airline's confirmation email or SMS and suggest a ride. Here is what each route allows:</p>
-<div class="tw"><table><thead><tr><th>Route</th><th>iPhone</th><th>Android</th><th>Verdict</th></tr></thead><tbody>
-<tr><td>Read the airline's <b>SMS</b></td><td class="no">Not possible. iOS gives apps no access to messages.</td><td class="no">Google Play only allows SMS read access for default SMS apps and a short list of exceptions. Ride-hailing isn't one, so the app risks rejection.</td><td class="no">Not allowed</td></tr>
-<tr><td>Read the <b>Gmail inbox</b> (Gmail API)</td><td colspan="2">Possible with the rider's consent. The read scope is "restricted", so Google requires app verification plus an <b>annual CASA security assessment</b> by an approved lab. Reported costs range from about $8k to $75k a year; get a current quote.</td><td class="mid">Later, if volume justifies it, or through a pre-verified email provider.</td></tr>
-<tr><td>Read <b>WhatsApp</b> messages</td><td class="no">Not possible</td><td class="no">Not possible</td><td class="no">No</td></tr>
-<tr><td><b>Calendar</b></td><td class="yes">Yes, read access with permission</td><td class="yes">Yes, read access with permission</td><td class="yes">Launch. Gmail and airlines add flights to the calendar.</td></tr>
-<tr><td><b>Forward the email</b> to trips@sagamobility.com</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Launch. Works for any airline or travel site.</td></tr>
-<tr><td><b>Share</b> the ticket PDF, email or boarding pass to SAGA</td><td class="yes">Share Extension</td><td class="yes">Share intent</td><td class="yes">Launch</td></tr>
-<tr><td><b>Copied PNR</b> noticed when SAGA opens</td><td class="yes">With the iOS paste prompt</td><td class="yes">Yes (Android shows a notice)</td><td class="yes">Launch</td></tr>
-<tr><td><b>"Book SAGA" button</b> from an airline or travel site</td><td colspan="2">Deep link carrying the PNR and flight details</td><td class="mid">Partnership</td></tr>
+<h2 id="s4"><span class="n">4</span>Catching flight bookings automatically</h2>
+<p>The client wants SAGA to notice a flight booking as soon as it's made and schedule the ride. Neither phone lets an app read SMS or email directly. But three routes get the same result <b>automatically after a one-time set-up</b>, and two more need only one tap.</p>
+<div class="callout"><b>Recommended set-up</b>
+<b style="display:inline">Android:</b> flight alerts through notification access (one toggle). <b style="display:inline">iPhone:</b> a Shortcuts automation for airline messages (1-minute guided set-up). <b style="display:inline">Both:</b> a personal SAGA travel address with a mail filter, calendar matching, and WhatsApp forwarding. Riders who opt in to <b style="display:inline">auto-book</b> get their airport ride booked with nothing to do.</div>
+<div class="tw"><table><thead><tr><th>Route</th><th>iPhone</th><th>Android</th><th>Rider effort</th></tr></thead><tbody>
+<tr><td><b>Flight alerts</b> (notification access)</td><td class="no">No equivalent on iOS</td><td class="yes">Reads airline SMS, airline-app and WhatsApp notifications as they arrive, filtered on the phone</td><td><span class="yes">Automatic</span> after one toggle</td></tr>
+<tr><td><b>Shortcuts automation</b> on airline messages</td><td class="yes">iOS 17+: "When a message containing PNR arrives → send to SAGA". Same for Mail.</td><td>Not needed</td><td><span class="yes">Automatic</span> after a 1-minute set-up</td></tr>
+<tr><td><b>Personal travel address</b> + mail filter</td><td class="yes">Yes</td><td class="yes">Yes</td><td><span class="yes">Automatic</span> after a one-time Gmail/Outlook filter</td></tr>
+<tr><td><b>Calendar</b> (device, or Google Calendar API)</td><td class="yes">Yes</td><td class="yes">Yes</td><td><span class="yes">Automatic</span> with permission</td></tr>
+<tr><td><b>Forward on WhatsApp</b> to SAGA's number</td><td class="yes">Yes</td><td class="yes">Yes</td><td><span class="mid">One tap</span>; can book entirely in the chat</td></tr>
+<tr><td><b>Share</b> a ticket, or a <b>copied PNR</b></td><td class="yes">Share Extension, paste prompt</td><td class="yes">Share intent, clipboard</td><td><span class="mid">One tap</span></td></tr>
+<tr><td>Read SMS directly</td><td class="no">Not possible</td><td class="no">Play allows it only for default SMS apps and a few exceptions</td><td class="no">Not allowed</td></tr>
+<tr><td>Read the Gmail inbox (Gmail API)</td><td colspan="2">Restricted scope: Google verification plus an annual CASA security assessment (reported $8k–$75k a year)</td><td class="mid">Not needed now: the filter route gets the same emails</td></tr>
 </tbody></table></div>
-<h3>How the forwarding route works</h3>
+
+<h3>A · Android: flight alerts through notification access</h3>
+<p>Airline SMS, airline-app alerts and WhatsApp messages all appear as notifications. With the rider's permission, SAGA's notification listener sees them as they arrive. Unlike SMS read access, this isn't one of Google Play's restricted permissions.</p>
 <ol class="steps">
-<li>The rider forwards any flight confirmation to <code>trips@sagamobility.com</code> from the email address on their SAGA account.</li>
-<li>An inbound-email service (for example Amazon SES or Postmark) hands the email to SAGA's backend.</li>
-<li>A parser extracts the PNR, airline, flight number, date, time and passenger names. Template rules handle the common airlines; an AI model (for example Claude Haiku) handles everything else, for a fraction of a rupee per email.</li>
-<li>The sender address is matched to the rider, and the flight is checked against the flight-status API.</li>
-<li>The rider gets a push notification: "We found 6E 2134 on Fri 20 Nov. Book a pickup at 5:20 AM?" One tap opens the plan.</li>
-<li>The email is deleted once the flight details are saved.</li>
+<li>In onboarding (and in Settings), the rider turns on "Flight alerts". SAGA first explains, in plain words, exactly what it reads. Then Android's own Notification access screen opens.</li>
+<li>On the phone, SAGA ignores every notification except those from airline SMS senders, airline and travel apps, and WhatsApp messages that match a ticket pattern (PNR + flight number + date).</li>
+<li>Only the extracted flight fields go to SAGA's server. The notification text never leaves the phone.</li>
+<li>The flight is checked with the flight-status API, and the rider gets "Book a pickup at 5:20 AM?", or an automatic booking if they chose auto-book.</li>
 </ol>
+<p class="note"><b>Conditions:</b> Play's User Data policy requires the in-app disclosure and consent above, and use of the access for this feature only. Google can still ask about it at review, so the other routes remain as a fallback. Android 15 and later hide one-time-password notifications from listeners; flight alerts aren't affected. Some phone brands stop background listeners to save battery, so SAGA guides the rider through excluding it once.</p>
+
+<h3>B · iPhone: a Shortcuts automation</h3>
+<p>iOS gives apps no access to messages, but the rider's own Shortcuts app can pass a message to SAGA. SAGA ships an App Intent, "Find a flight in this text", and a 1-minute guided set-up:</p>
+<ol class="steps">
+<li>Shortcuts → Automation → <b>Message</b> → "Message contains: <b>PNR</b>" → Run immediately.</li>
+<li>Action: <b>SAGA · Find a flight in this text</b>, with the message as input. SAGA provides a ready-made shortcut link, so this is one tap.</li>
+<li>The same set-up with the <b>Email</b> trigger catches tickets in Apple Mail.</li>
+</ol>
+<p class="note">Apps can't create automations themselves, so the rider does this once with on-screen steps. It runs on iOS 17 and later without asking each time.</p>
+
+<h3>C · Both phones: a personal travel address</h3>
+<ol class="steps">
+<li>Every rider gets a private address, for example <code>ananya.7q2@trips.sagamobility.com</code>. Mail sent there is matched to that rider, whichever account it was forwarded from.</li>
+<li>A one-time Gmail or Outlook filter forwards mail from airlines and travel sites (IndiGo, Air India, Akasa, SpiceJet, MakeMyTrip, ixigo, and others) to that address. Gmail asks to confirm a new forwarding address; SAGA's server confirms it automatically. Gmail filters are set up in a browser, and SAGA shows a 1-minute guide.</li>
+<li>From then on every booking reaches SAGA on its own, including bookings made for family members, which SAGA asks about before booking.</li>
+</ol>
+<p class="note">This gets the same emails as the Gmail API without Google's restricted-scope review or the yearly security assessment.</p>
+
+<h3>D · Both phones: forward on WhatsApp</h3>
+<p>The rider forwards the ticket message or PDF to SAGA's WhatsApp Business number. A bot reads it and replies in the same chat, in the rider's language: "6E 2134, Fri 20 Nov, 7:40 AM. Pickup from Home at 5:20 AM, ₹1,140. [Book] [Change time]". It works even before the rider installs the app. Under Meta's current pricing, replies within 24 hours of the rider's message aren't charged by Meta; the WhatsApp provider's platform fee applies.</p>
+
+<h3>E · Calendar, on the phone or from Google</h3>
+<p>Device calendar access finds flights when the app opens. For background updates, the Google Calendar API can watch the rider's calendar for flight events Gmail adds. Calendar is a "sensitive" scope, not a restricted one, so it needs Google's app verification but no paid yearly assessment. Gmail adds these events only when its smart features are on, so this route complements the others.</p>
+
+<h3>From a found flight to a booked ride</h3>
+<ol class="steps">
+<li><b>One parser</b> handles every source: SMS text, email, PDF, WhatsApp message. Template rules cover the common airlines; an AI model (for example Claude Haiku) handles the rest for a fraction of a rupee. It extracts PNR, airline, flight, date and time, route and passenger names, with a confidence score. Low-confidence results are shown to the rider rather than booked.</li>
+<li><b>Both legs:</b> a departure from Vizag becomes a drop to the airport; an arrival into Vizag becomes a pickup at Arrivals.</li>
+<li><b>Whose trip?</b> If the passenger isn't the account holder, for example tickets booked for parents, SAGA asks "Book this ride for Mr. Rao?" and sends the chauffeur details to the traveller.</li>
+<li><b>Auto-book</b> (opt-in): SAGA books with the usual pickup rule and sends a confirmation with a one-tap cancel, free until a chauffeur is assigned. Without auto-book, the rider gets a one-tap suggestion.</li>
+<li>The original message or email is deleted once the flight is saved, and the PNR is stored encrypted until the trip ends.</li>
+</ol>
+<p><b>Cost:</b> notification access, Shortcuts and calendar are free. Inbound email and AI parsing cost a fraction of a rupee per ticket. WhatsApp costs the provider's platform fee.</p>
 
 <h2 id="s5"><span class="n">5</span>Scheduled rides on repeat</h2>
 <ul>
@@ -319,11 +357,11 @@ const NEEDS = [
   ["Google Maps Platform", "Billing-enabled project, or confirmation of the current provider. Keys restricted per app (Android SHA-1, iOS bundle ID). Maps SDK, Places, Routes, and the Navigation SDK for the chauffeur app.", "d"],
   ["Flights and travel detection"],
   ["Flight-status provider", "Account in SAGA's name (we recommend FlightAware AeroAPI Standard, or aviationstack to start), API key.", "d"],
-  ["Inbound email", "DNS access to add MX records for trips@sagamobility.com; choice of inbound-email service.", "d"],
-  ["Gmail integration decision", "We recommend deferring it (annual security assessment). Calendar, forwarding and share cover launch.", "d"],
+  ["Inbound email", "DNS access to add MX records for a trips.sagamobility.com subdomain (one private travel address per rider); choice of inbound-email service.", "d"],
+  ["Flight detection approvals", "Sign-off on the Android flight-alerts disclosure text (Play User Data policy), the iPhone Shortcuts guide, and the auto-book cancellation rule. Gmail API not needed.", "d"],
   ["Notifications and messaging"],
   ["Firebase and APNs", "Firebase project with owner access; an APNs auth key (.p8) from SAGA's Apple developer account.", "b"],
-  ["WhatsApp Business", "Meta Business verification, provider (BSP) choice, sender number, template approvals.", "l"],
+  ["WhatsApp Business", "Meta Business verification, provider (BSP) choice, sender number, template approvals. The same number runs the ticket-forwarding bot.", "d"],
   ["SMS (DLT)", "DLT entity registration, sender header (for example SAGAEV), approved templates, SMS provider.", "l"],
   ["Email sending", "Sender domain with SPF/DKIM for receipts and statements.", "l"],
   ["Masked calling", "Provider (for example Exotel) so rider and chauffeur numbers stay private.", "d"],

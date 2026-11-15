@@ -93,10 +93,10 @@ P.bookings = () => {
 
 P.flights = () => `${head("Flight watch", "Every flight linked to a booking, polled and pushed by the flight-status provider. Pickups move by rule; ops only handles exceptions.")}
   <div class="panel"><div class="tablewrap"><table class="tb"><thead><tr><th>Flight</th><th>Route</th><th>Scheduled</th><th>Status</th><th>Linked ride</th><th>Pickup</th><th>Found via</th></tr></thead><tbody>
-    <tr><td class="m">6E 6402</td><td>BLR → VTZ</td><td>12:35</td><td>${stt("Delayed 25 min", "warn")}</td><td>Priya M. · arrival</td><td><s style="color:var(--fg2)">12:40</s> <b>13:05</b> <span class="sub">auto-moved, rider told</span></td><td>PNR in app</td></tr>
+    <tr><td class="m">6E 6402</td><td>BLR → VTZ</td><td>12:35</td><td>${stt("Delayed 25 min", "warn")}</td><td>Priya M. · arrival</td><td><s style="color:var(--fg2)">12:40</s> <b>13:05</b> <span class="sub">auto-moved, rider told</span></td><td>Airline SMS (Android)</td></tr>
     <tr><td class="m">AI 1912</td><td>DEL → VTZ</td><td>11:05</td><td>${stt("Landed 11:02", "ok")}</td><td>Mr. S. Sharma · hotel</td><td>At Arrivals · SG-01</td><td>Hotel booking</td></tr>
     <tr><td class="m">AI 1913</td><td>VTZ → DEL</td><td>13:10</td><td>${stt("On time", "ok")}</td><td>Mr. A. Mehta · hotel</td><td>11:40</td><td>Hotel booking</td></tr>
-    <tr><td class="m">6E 1427</td><td>VTZ → MAA</td><td>15:20</td><td>${stt("On time", "ok")}</td><td>K. Srinivas</td><td>13:05</td><td>Forwarded email</td></tr>
+    <tr><td class="m">6E 1427</td><td>VTZ → MAA</td><td>15:20</td><td>${stt("On time", "ok")}</td><td>K. Srinivas</td><td>13:05</td><td>Mail filter (auto)</td></tr>
     <tr><td class="m">6E 2134</td><td>VTZ → HYD</td><td>Fri 07:40</td><td>${stt("Scheduled")}</td><td>Ananya Rao</td><td>Fri 05:20</td><td>Calendar</td></tr>
     <tr><td class="m">6E 571</td><td>VTZ → CCU</td><td>07:45</td><td>${stt("Departed", "ok")}</td><td>Mr. R. Iyer · hotel</td><td>Completed</td><td>Hotel booking</td></tr>
   </tbody></table></div></div>
