@@ -94,6 +94,8 @@
       stage: "#0B0C0F", stage2: "#17191E", onStage: "#F4F4F6", onStage2: "#A9ABB3",
       glass: dark ? "rgba(36,36,40,.62)" : "rgba(255,255,255,.66)",
       glassLine: dark ? "rgba(255,255,255,.12)" : "rgba(255,255,255,.85)",
+      glass2: dark ? "rgba(40,40,46,.52)" : "rgba(255,255,255,.56)", glassHi: dark ? "rgba(255,255,255,.14)" : "rgba(255,255,255,.95)",
+      ink: dark ? "#1A1B20" : "#0B0C0F", onInk: "#F5F5F7", onInk2: "#9A9CA5",
       shadow: dark ? "0 10px 30px rgba(0,0,0,.5)" : "0 10px 30px rgba(15,18,30,.10)",
       mapLand: dark ? "#14161A" : (os === "android" ? T(.965, .006) : "#F3F2EF"),
       mapBlock: dark ? "#191C21" : (os === "android" ? T(.945, .008) : "#ECEAE6"),

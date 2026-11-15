@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>SAGA Rider</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Flex:opsz,wght@8..144,400;8..144,500;8..144,600;8..144,700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manjari:wght@400;700&family=Roboto+Flex:opsz,wght@8..144,400;8..144,500;8..144,600;8..144,700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="core.css">
 <style>
 body{background:#E4E4E8;color:var(--fg);overflow:hidden}
@@ -272,6 +272,61 @@ body.embed,body.bare{background:transparent}
 .scan-res{position:absolute;z-index:4;left:8px;right:8px;bottom:8px;border-radius:44px;background:var(--surface);color:var(--fg);padding:24px 22px 30px;transform:translateY(115%);transition:transform .55s cubic-bezier(.2,1,.3,1)}
 [data-os=android] .scan-res{left:0;right:0;bottom:0;border-radius:28px 28px 0 0;padding-bottom:44px}
 .found .scan-res{transform:none}
+/* ---- v2.1 editorial look (after Pilo), in SAGA's colours ---- */
+.greet2{padding:10px 20px 4px}
+.greet2 h1{font-family:var(--display);font-size:52px;line-height:.98;font-weight:400;letter-spacing:-.04em}
+.greet2 p{font-size:15px;font-weight:600;color:var(--fg2);margin-top:12px}
+[data-os=android] .greet2 h1{font-size:50px}
+.sugmap{position:relative;margin:14px 20px 0;height:250px;border-radius:34px;overflow:hidden;background:#14161A;cursor:pointer;box-shadow:0 18px 40px rgba(10,12,20,.18)}
+.sugmap .map{position:absolute;inset:0}
+.sm-chip{position:absolute;left:14px;top:14px;display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 14px 0 10px;border-radius:17px;font-size:13.5px;font-weight:600;color:#fff;background:rgba(20,22,26,.55);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.sm-bar{position:absolute;left:10px;right:10px;bottom:10px;display:flex;align-items:center;gap:10px;padding:12px 12px 12px 18px;border-radius:26px;color:#fff;background:rgba(18,20,24,.62);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%)}
+.sm-k{font-size:15px;font-weight:600}.sm-v{font-size:13.5px;color:#B4B7C0;margin-top:2px}
+.sm-go{height:44px;padding:0 18px;border-radius:22px;background:#fff;color:#0B0C0F;font-weight:700;font-size:15px;display:flex;align-items:center}
+.duo{display:grid;grid-template-columns:1.35fr 1fr;gap:12px;margin:12px 20px 0}
+.bookc{position:relative;display:flex;flex-direction:column;align-items:flex-start;text-align:left;min-height:158px;padding:16px 18px 18px;border-radius:32px;background:var(--accent);color:var(--on-accent);overflow:hidden}
+.bookc::after{content:"";position:absolute;right:-40px;bottom:-60px;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.22),transparent 65%)}
+.bc-top{display:flex;width:100%;justify-content:space-between}
+.bc-ic,.bc-mic{width:44px;height:44px;border-radius:22px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.18)}
+.bc-mic{background:rgba(0,0,0,.18)}
+.bookc b{font-family:var(--display);font-size:30px;line-height:1;font-weight:700;letter-spacing:-.03em;margin-top:auto}
+.bc-s{font-size:14.5px;opacity:.85;margin-top:6px}
+.statc{display:flex;flex-direction:column;padding:18px;border-radius:32px;background:var(--ink);color:var(--on-ink);cursor:pointer}
+.statc b{font-family:var(--display);font-size:60px;line-height:.9;font-weight:400;letter-spacing:-.05em}
+.statc span{font-size:14px;color:var(--on-ink2);margin-top:6px}
+.statc .st-pts{margin-top:auto;display:inline-flex;align-items:center;gap:6px;color:#fff;font-weight:600}
+.promo{position:relative;overflow:hidden;margin:28px 20px 0;padding:22px 22px 24px;border-radius:34px;background:var(--ink);color:var(--on-ink);cursor:default}
+.promo[role=button]{cursor:pointer}
+.promo-wm{position:absolute;right:-14px;bottom:-34px;font-family:"Inter",sans-serif;font-weight:800;font-size:120px;letter-spacing:.02em;color:rgba(255,255,255,.045);line-height:1;pointer-events:none}
+.promo-k .wordmark{font-size:12px;color:var(--on-ink2)}.promo-k .logo-img{height:16px}
+.promo-h{font-family:var(--display);font-size:34px;line-height:1.04;font-weight:700;letter-spacing:-.03em;margin-top:14px;position:relative}
+.promo-h mark{background:var(--accent);color:var(--on-accent);padding:0 .16em;border-radius:.22em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.promo-s{font-size:15px;line-height:1.45;color:var(--on-ink2);margin-top:12px;max-width:250px;position:relative}
+.promo-go{position:absolute;right:18px;bottom:18px;width:48px;height:48px;border-radius:24px;background:#fff;color:#0B0C0F;display:flex;align-items:center;justify-content:center}
+[data-theme=dark] .promo,[data-theme=dark] .statc{border:1px solid rgba(255,255,255,.08)}
+
+/* ---- iOS: Liquid Glass. Frosted layers over soft brand light ---- */
+[data-os=ios] .view::before{content:"";position:absolute;inset:-10% -20% auto -20%;height:120%;z-index:0;pointer-events:none;background:
+  radial-gradient(42% 26% at 92% 4%,color-mix(in srgb,var(--accent) 30%,transparent),transparent 72%),
+  radial-gradient(40% 24% at 4% 34%,color-mix(in srgb,var(--accent) 18%,transparent),transparent 72%),
+  radial-gradient(46% 26% at 82% 66%,color-mix(in srgb,#8FD3FF 26%,transparent),transparent 72%),
+  radial-gradient(40% 22% at 12% 96%,color-mix(in srgb,var(--accent) 16%,transparent),transparent 72%)}
+[data-os=ios] .view>.content,[data-os=ios] .view>.nav,[data-os=ios] .view>.wl{position:relative;z-index:1}
+[data-os=ios] .view>.wl{position:absolute}
+[data-os=ios] .card:not(.stage):not(.tint),[data-os=ios] .group,[data-os=ios] .tile,[data-os=ios] .permcard,[data-os=ios] .offer,[data-os=ios] .ticket,[data-os=ios] .amen div,[data-os=ios] .spec4 div,[data-os=ios] .chip:not(.on),[data-os=ios] .days button:not(.on),[data-os=ios] .drv,[data-os=ios] .field,[data-os=ios] .boxes span,[data-os=ios] .stepper,[data-os=ios] .act span.c{
+  background:var(--glass2);border:1px solid var(--glass-line);backdrop-filter:blur(28px) saturate(185%);-webkit-backdrop-filter:blur(28px) saturate(185%);
+  box-shadow:inset 0 1px 0 var(--glass-hi),inset 0 -1px 0 rgba(0,0,0,.03),0 10px 30px rgba(15,20,45,.07)}
+[data-os=ios] .card.tint{background:color-mix(in srgb,var(--accent-soft) 70%,transparent);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--glass-line)}
+[data-os=ios] .seg{background:var(--glass2);border:1px solid var(--glass-line);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%)}
+[data-os=ios] .seg button.on{background:var(--glass-hi);box-shadow:0 4px 14px rgba(0,0,0,.1),inset 0 1px 0 #fff}
+[data-theme=dark][data-os=ios] .seg button.on{background:rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
+[data-os=ios] .sheet,[data-os=ios] .modal,[data-os=ios] .scan-res{background:color-mix(in srgb,var(--surface) 74%,transparent);backdrop-filter:blur(40px) saturate(190%);-webkit-backdrop-filter:blur(40px) saturate(190%);border:1px solid var(--glass-line);box-shadow:inset 0 1px 0 var(--glass-hi),0 -10px 40px rgba(0,0,0,.14)}
+[data-os=ios] .btn-primary{background-image:linear-gradient(180deg,rgba(255,255,255,.26),rgba(255,255,255,0) 55%);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 24px color-mix(in srgb,var(--accent) 34%,transparent)}
+[data-os=ios] .btn-secondary{background:var(--glass2);border:1px solid var(--glass-line);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:inset 0 1px 0 var(--glass-hi)}
+[data-os=ios] .stage,[data-os=ios] .promo,[data-os=ios] .statc{box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 18px 40px rgba(10,12,25,.22)}
+[data-os=ios] .bookc{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 18px 40px color-mix(in srgb,var(--accent) 38%,transparent);background-image:linear-gradient(160deg,rgba(255,255,255,.22),rgba(255,255,255,0) 45%)}
+[data-os=ios] .ticket .tk-cut::before,[data-os=ios] .ticket .tk-cut::after{background:color-mix(in srgb,var(--bg) 80%,transparent)}
+[data-os=ios] .foot{background:linear-gradient(to bottom,color-mix(in srgb,var(--bg) 0%,transparent),color-mix(in srgb,var(--bg) 70%,transparent) 30%);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);-webkit-mask:linear-gradient(to bottom,transparent,#000 24px);mask:linear-gradient(to bottom,transparent,#000 24px)}
 .vnote{font-size:13.5px;color:var(--fg2);max-width:230px;line-height:1.35}
 </style>
 </head>
@@ -334,6 +389,16 @@ const sh = (t, link) => `<div class="sh"><h2>${t}</h2>${link || ""}</div>`;
 const foot = (inner) => `<div class="foot">${inner}</div>`;
 const mapBtns = (right = "") => `<div class="mapbtns">${hbtn(ios() ? "chevl" : "arrowl", "data-back", "Back")}${right}</div>`;
 
+const PROMOS = {
+  arrive: [["No surge.<br>No stress.<br><mark>Just arrive.</mark>", "సర్జ్ లేదు.<br>టెన్షన్ లేదు.<br><mark>హాయిగా చేరుకోండి.</mark>", "सर्ज नहीं।<br>टेंशन नहीं।<br><mark>बस पहुँचिए।</mark>"], ["Fixed fares, our own chauffeurs, every car electric.", "స్థిర ఛార్జీలు, మా సొంత డ్రైవర్లు, ప్రతి కారు ఎలక్ట్రిక్.", "तय किराया, हमारे अपने ड्राइवर, हर गाड़ी इलेक्ट्रिक।"], "vehicle"],
+  electric: [["Every SAGA is<br><mark>100% electric.</mark>", "ప్రతి SAGA<br><mark>100% ఎలక్ట్రిక్.</mark>", "हर SAGA<br><mark>100% इलेक्ट्रिक।</mark>"], ["Our riders saved 1.6 tonnes of CO₂ this month.", "ఈ నెల మా రైడర్లు 1.6 టన్నుల CO₂ ఆదా చేశారు.", "इस महीने हमारे राइडर्स ने 1.6 टन CO₂ बचाया।"], "vehicle"],
+  hotels: [["In Vizag for work?<br><mark>Ask your hotel</mark><br>for SAGA.", "పనిపై విశాఖకి వచ్చారా?<br>SAGA కోసం<br><mark>హోటల్‌ను అడగండి.</mark>", "काम से विज़ाग आए हैं?<br>SAGA के लिए<br><mark>होटल से कहिए।</mark>"], ["Partner hotels book SAGA for you, billed to your room.", "భాగస్వామి హోటళ్లు మీ కోసం SAGA బుక్ చేస్తాయి, రూమ్ బిల్‌లో.", "पार्टनर होटल आपके लिए SAGA बुक करते हैं, रूम बिल में।"], ""],
+  made: [["Made in Vizag.<br><mark>Driven by people.</mark>", "విశాఖలో పుట్టింది.<br><mark>మనుషులే నడుపుతారు.</mark>", "विज़ाग में बना।<br><mark>इंसान चलाते हैं।</mark>"], ["Our own fleet and salaried chauffeurs, with one promise: on time, every time.", "మా సొంత ఫ్లీట్, జీతం తీసుకునే డ్రైవర్లు, ఒకే మాట: ప్రతిసారీ సమయానికి.", "अपनी गाड़ियाँ, वेतनभोगी ड्राइवर, एक वादा: हर बार समय पर।"], "vehicle"],
+  back: [["Flying back?<br><mark>We'll be at Arrivals.</mark>", "తిరిగి వస్తున్నారా?<br><mark>అరైవల్స్‌లో ఉంటాం.</mark>", "वापस आ रहे हैं?<br><mark>हम अराइवल पर होंगे।</mark>"], ["Book your ride home now. We'll track your return flight.", "ఇప్పుడే ఇంటికి రైడ్ బుక్ చేయండి. మీ తిరుగు ఫ్లైట్‌ను ట్రాక్ చేస్తాం.", "घर की राइड अभी बुक करें। हम वापसी की फ़्लाइट ट्रैक करेंगे।"], "airport"],
+  friend: [["Loved the ride?<br><mark>Pass it on.</mark>", "రైడ్ నచ్చిందా?<br><mark>స్నేహితులకు చెప్పండి.</mark>", "राइड पसंद आई?<br><mark>दोस्तों को बताइए।</mark>"], ["Invite a friend. You both get ₹150.", "స్నేహితుడిని ఆహ్వానించండి. ఇద్దరికీ ₹150.", "दोस्त को बुलाइए। दोनों को ₹150।"], "offers"]
+};
+const promo = k => { const [h, sub, to] = PROMOS[k]; return `<div class="promo" ${to ? `data-go="${to}" role="button"` : ""}><span class="promo-wm" aria-hidden="true">SAGA</span><span class="promo-k">${S.logo()}</span><div class="promo-h">${L(...h)}</div><p class="promo-s">${L(...sub)}</p>${to ? `<span class="promo-go">${I("arrowr")}</span>` : ""}</div>`; };
+
 /* ---------- screens ---------- */
 const SC = {};
 const def = (id, meta, render, mount) => (SC[id] = Object.assign({ id, render, mount }, meta));
@@ -394,8 +459,15 @@ def("home", { g: "Ride", n: "Home", tab: "home", what: "Greeting, one search bar
     </div>` : "";
   return `<div class="content">
     <div class="home-head">${S.logo()}<div class="r"><span class="bellwrap">${hbtn("bell", 'data-go="notifications"', "Notifications")}<i></i></span><button class="avatar" data-tab="account">AR</button></div></div>
-    <div class="greet"><div class="t-label">${greet()}, Ananya</div><h1 class="t-title mt4">${L("Where are you going?", "ఎక్కడికి వెళ్తున్నారు?", "आज कहाँ जाना है?")}</h1></div>
-    <button class="search" data-go="where">${I("search")}<span class="ph">${L("Where to?", "ఎక్కడికి?", "कहाँ?")}</span><span class="mic" data-voice>${I("mic")}</span></button>
+    <div class="greet2"><h1>${greet()},<br>Ananya</h1><p>${L("Today's suggestion", "ఈ రోజు సూచన", "आज का सुझाव")}</p></div>
+    ${(() => { const d = S.tokens(S.state.os, "dark", S.state.hex), v = ["mapLand", "mapBlock", "mapWater", "mapPark", "mapRoad", "mapCase", "mapMajor", "mapMajorCase", "mapLabel", "mapSand"].map(k => "--" + k.replace(/[A-Z]/g, m => "-" + m.toLowerCase()) + ":" + d[k]).join(";");
+      return `<div class="sugmap" data-go="options" data-dest="Office · Dwaraka Nagar" role="button" style="${v};--bg:#0B0C0F;--fg:#F5F5F7">${S.map({ route: "trip", view: [-60, 262, 480, 372], labelDrop: L("Office", "ఆఫీస్", "ऑफ़िस") })}
+        <span class="sm-chip"><span class="dotlive"></span>${L("2 cars free · 6 min", "2 కార్లు ఖాళీ · 6 నిమి", "2 गाड़ियाँ खाली · 6 मिनट")}</span>
+        <div class="sm-bar"><div class="grow"><div class="sm-k">${L("Office · Dwaraka Nagar", "ఆఫీస్ · ద్వారకా నగర్", "ऑफ़िस · द्वारका नगर")}</div><div class="sm-v">18 min · ${S.inr(FARE)}</div></div><span class="sm-go">${L("Confirm", "నిర్ధారించు", "पक्का करें")}</span></div></div>`; })()}
+    <div class="duo">
+      <button class="bookc" data-go="where"><span class="bc-top"><span class="bc-ic">${I("search")}</span><span class="bc-mic" data-voice aria-label="Saathi">${I("mic")}</span></span><b>${L("Where to?", "ఎక్కడికి?", "कहाँ?")}</b><span class="bc-s">${L("Book a ride", "రైడ్ బుక్ చేయండి", "राइड बुक करें")}</span></button>
+      <div class="statc" data-tab="rides" role="button"><b class="t-num">12</b><span>${L("rides this month", "ఈ నెల రైడ్‌లు", "इस महीने की राइड")}</span><span class="st-pts">${I("leaf", "sm")}19 kg CO₂</span></div>
+    </div>
     <div class="chips places">
       <button class="chip" data-go="options" data-dest="Office · Dwaraka Nagar">${I("building")}${L("Office", "ఆఫీస్", "ऑफ़िस")}</button>
       <button class="chip" data-go="options" data-dest="RK Beach">${I("pin")}RK Beach</button>
@@ -419,11 +491,7 @@ def("home", { g: "Ride", n: "Home", tab: "home", what: "Greeting, one search bar
       <div class="sc-car">${S.car()}</div>
       <div class="specs">${pill("users", `${RIDERS} ${L("riders", "మంది", "सवारी")}`, "dark")}${pill("bag", `${V.bags} ${L("bags", "బ్యాగులు", "बैग")}`, "dark")}${pill("leaf", L("Zero tailpipe", "పొగ లేదు", "शून्य धुआँ"), "dark")}${pill("quiet", L("Quiet cabin", "నిశ్శబ్దం", "शांत केबिन"), "dark")}</div>
     </div>
-    ${sh(L("Near you", "మీ దగ్గర", "आपके पास"))}
-    <div class="card pad0 nearby" data-go="where" role="button">
-      <div class="nb-map">${S.map({ view: [90, 210, 230, 130], cars: [[260, 180, 90], [180, 440, 0, "busy"], [60, 260, 0, "busy"]], pickup: true })}</div>
-      <div class="nb-tx row-flex"><span class="dotlive"></span><div class="grow"><b style="font-size:17px">${L("2 cars free near you", "మీ దగ్గర 2 కార్లు ఖాళీ", "आपके पास 2 गाड़ियाँ खाली")}</b><div class="t-sub">${L("Pickup in about 6 min", "సుమారు 6 నిమిషాల్లో పికప్", "करीब 6 मिनट में पिकअप")}</div></div>${I("chevr")}</div>
-    </div>
+    ${promo("arrive")}
     ${upc}
   </div>`;
 });
@@ -574,7 +642,7 @@ def("arrived", { g: "Ride", n: "Arrived", tabs: 0, foot: 1, what: "A clear finis
   <div class="center mt24"><div class="t-h3">${L("How was your ride with Ravi?", "రవితో మీ ప్రయాణం ఎలా ఉంది?", "रवि के साथ सफ़र कैसा रहा?")}</div>
   <div class="stars mt12">${[1, 2, 3, 4, 5].map(n => `<button class="${n <= app.rating ? "on" : ""}" data-act="rate" data-v="${n}" aria-label="${n}">${I("star")}</button>`).join("")}</div></div>
   <div class="perks mt16" style="justify-content:center">${[L("Smooth driving", "సాఫీ డ్రైవింగ్", "आरामदायक ड्राइविंग"), L("Spotless car", "శుభ్రమైన కారు", "साफ़ गाड़ी"), L("Helped with bags", "బ్యాగులకు సాయం", "बैग में मदद")].map(t => `<button class="chip" data-act="pick">${t}</button>`).join("")}</div>
-  </div></div>
+  </div>${promo("friend")}</div>
   ${foot(btn(L("Done", "పూర్తయింది", "हो गया"), { go: "home", attr: 'data-reset="1"' }))}`);
 
 /* ---------- airport: scan the ticket, or pick the flight from Vizag's short daily list ---------- */
@@ -687,7 +755,7 @@ def("booked", { g: "Airport", n: "Pickup booked", tabs: 0, foot: 1, what: "Confi
     <div class="tli on"><time>${t12(p - 20).replace(/ [AP]M/, "")}</time><span class="d"></span><div class="x"><b>${L("Chauffeur on the way", "డ్రైవర్ బయలుదేరారు", "ड्राइवर रवाना")}</b><span>${L("Track live, share your code", "లైవ్ ట్రాక్, కోడ్ షేర్", "लाइव ट्रैक करें, कोड बताएँ")}</span></div></div>
     <div class="tli"><time>${L("Delays", "ఆలస్యం", "देरी")}</time><span class="d"></span><div class="x"><b>${L(`Pickup moves with ${f.no}`, `${f.no}తో పాటు పికప్ మారుతుంది`, `पिकअप ${f.no} के साथ बदलेगा`)}</b><span>${L("You get a notification, nothing to do", "నోటిఫికేషన్ వస్తుంది, మీరేమీ చేయక్కర్లేదు", "नोटिफ़िकेशन आएगा, कुछ करना नहीं")}</span></div></div>
     ${dep ? `<div class="tli"><time>${L("Return", "తిరుగు", "वापसी")}</time><span class="d"></span><div class="x"><b>${L("Book the ride home in one tap", "ఒక్క ట్యాప్‌తో ఇంటికి రైడ్", "एक टैप में घर की राइड")}</b><span>${L("We'll ask when you've landed", "మీరు ల్యాండ్ అయ్యాక అడుగుతాం", "लैंड होने पर पूछेंगे")}</span></div></div>` : ""}
-  </div></div></div></div>
+  </div></div></div>${dep ? promo("back") : ""}</div>
   ${foot(`<div class="btnrow">${btn(L("Add to calendar", "క్యాలెండర్‌లో", "कैलेंडर में जोड़ें"), { kind: "btn-secondary", toast: L("Added to your calendar", "మీ క్యాలెండర్‌లో జోడించాం", "कैलेंडर में जोड़ दिया") })}${btn(L("Done", "పూర్తయింది", "हो गया"), { act: "totrips" })}</div>`)}`;
 });
 
@@ -791,7 +859,7 @@ def("rides", { g: "Tabs", n: "Trips", tab: "rides", what: "Upcoming (airport pic
     ${row({ icon: "receipt", lc: "grey", t: "RK Beach", s: "2 Nov · ₹164", toast: L("Receipt emailed", "రసీదు ఇమెయిల్ చేశాం", "रसीद ईमेल की") })}
   </div>`;
   return `${bar(L("Trips", "ప్రయాణాలు", "यात्राएँ"), { large: true, back: false })}
-  <div class="content"><div class="pad">${seg([["up", L("Upcoming", "రాబోయేవి", "आने वाली")], ["past", L("Past", "గతం", "पिछली")]], app.tripSeg, "tripseg")}<div class="mt16">${app.tripSeg === "up" ? up : past}</div></div></div>`;
+  <div class="content"><div class="pad">${seg([["up", L("Upcoming", "రాబోయేవి", "आने वाली")], ["past", L("Past", "గతం", "पिछली")]], app.tripSeg, "tripseg")}<div class="mt16">${app.tripSeg === "up" ? up : past}</div></div>${promo("electric")}</div>`;
 });
 
 def("offers", { g: "Tabs", n: "Offers", tab: "offers", what: "SAGA points, a promo code field, and offers targeted by trip type: first airport ride, weekday plans, referrals, partner hotels.", why: "Offers drive the behaviour SAGA wants: airport bookings, scheduled series, referrals. Ops run them from the dashboard.", fl: "<code>GET /offers?user=</code> (eligibility computed server-side). Auto-applied at quote time. See brief §8." }, () => `
@@ -808,7 +876,7 @@ def("offers", { g: "Tabs", n: "Offers", tab: "offers", what: "SAGA points, a pro
     <div class="offer"><span class="oi">${I("gift")}</span><div class="grow"><b style="font-size:17px">${L("Give ₹150, get ₹150", "₹150 ఇవ్వండి, ₹150 పొందండి", "₹150 दें, ₹150 पाएँ")}</b><p class="t-sub mt4">${L("When a friend takes their first SAGA ride.", "మీ స్నేహితుడు మొదటి SAGA రైడ్ చేసినప్పుడు.", "जब दोस्त पहली SAGA राइड ले।")}</p><button class="btn btn-secondary sm mt12" style="width:auto" data-toast="${esc(L("Invite link copied", "ఆహ్వాన లింక్ కాపీ అయింది", "इनवाइट लिंक कॉपी हुआ"))}">${I("share")}${L("Invite", "ఆహ్వానించు", "बुलाएँ")}</button></div></div>
     <div class="offer"><span class="oi">${I("hotel")}</span><div class="grow"><b style="font-size:17px">${L("Staying at a partner hotel?", "భాగస్వామి హోటల్‌లో ఉన్నారా?", "पार्टनर होटल में रुके हैं?")}</b><p class="t-sub mt4">${L("Free waiting up to 30 minutes on rides booked by the front desk.", "ఫ్రంట్ డెస్క్ బుక్ చేసిన రైడ్‌లపై 30 నిమిషాల వరకు ఉచిత వెయిటింగ్.", "फ़्रंट डेस्क की बुकिंग पर 30 मिनट तक मुफ़्त इंतज़ार।")}</p></div></div>
     <p class="t-sub mt16 center">${L("Eligible offers apply automatically at checkout.", "అర్హత ఉన్న ఆఫర్లు ఆటోమేటిక్‌గా వర్తిస్తాయి.", "योग्य ऑफ़र चेकआउट पर अपने-आप लगते हैं।")}</p>
-  </div></div>`);
+  </div>${promo("hotels")}</div>`);
 
 def("account", { g: "Tabs", n: "Account & settings", tab: "account", what: "Profile, then everything a rider controls: places, payments, flight detection, appearance (light/dark/system), language, voice, text size and notifications.", why: "Appearance and language are one tap away, not buried. Text size helps older riders.", fl: "Theme: <code>ThemeMode</code> + <code>SagaTokens</code> extension. Language: <code>flutter_localizations</code> + ARB files. Text size: <code>MediaQuery.textScaler</code> override." }, () => `
   ${bar(L("Account", "ఖాతా", "खाता"), { large: true, back: false })}
@@ -832,6 +900,7 @@ def("account", { g: "Tabs", n: "Account & settings", tab: "account", what: "Prof
       ${row({ icon: "lock", t: L("Privacy", "గోప్యత", "निजता"), go: "travel" })}
       ${row({ icon: "logout", lc: "grey", t: L("Sign out", "సైన్ అవుట్", "साइन आउट"), go: "welcome", attr: 'data-reset="1"' })}
     </div>
+    ${promo("made")}
   </div>`);
 
 def("language", { g: "Settings", n: "Language", tabs: 0, nav: 1, what: "English, Telugu and Hindi, each written in its own script. Changes the whole app, notifications and Saathi's voice at once.", why: "Vizag riders and many chauffeurs are more comfortable in Telugu; Hindi covers visitors and many airport travellers.", fl: "ARB files per locale; server sends notification templates per user locale. Odia, Tamil, Kannada can be added without code changes." }, () => `
