@@ -1,0 +1,78 @@
+/* SAGA v2.5 · 3D car, separation of white surfaces, iPhone gradient depth. Loaded after system.css. */
+
+/* ======== 3D car (rider only) ======== */
+.c3box{position:relative;touch-action:none;cursor:grab;-webkit-user-select:none;user-select:none}
+.c3box.c3-drag{cursor:grabbing}
+.c3-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .9s}
+.c3-ready .c3-canvas{opacity:1}
+.c3-fallback{position:absolute;inset:0;display:flex;align-items:center;transition:opacity .7s;pointer-events:none}
+.c3-ready .c3-fallback{opacity:0}
+.c3-load{position:absolute;left:50%;top:50%;width:26px;height:26px;margin:-13px;border-radius:50%;border:3px solid rgba(255,255,255,.25);border-top-color:var(--accent);animation:c3spin .9s linear infinite}
+@keyframes c3spin{to{transform:rotate(360deg)}}
+.c3-hint{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);padding:6px 12px;border-radius:14px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:13px;font-weight:600;white-space:nowrap;pointer-events:none;transition:opacity .5s;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.c3-touched .c3-hint{opacity:0}
+.c3-tag{position:absolute;left:0;top:0;margin:-12px 0 0 -8px;display:flex;align-items:center;gap:7px;opacity:0;pointer-events:none;transition:opacity .3s;color:#fff;z-index:3}
+.c3-tag.on{opacity:1;pointer-events:auto}
+.c3-tag i{width:16px;height:16px;border-radius:8px;background:var(--accent);border:2px solid #fff;box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 40%,transparent);animation:livepulse 1.8s ease-out infinite;flex:none}
+.c3-tag span{padding:6px 11px;border-radius:14px;background:rgba(10,11,15,.7);border:1px solid rgba(255,255,255,.18);font-size:13px;font-weight:600;white-space:nowrap;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.home-hero .hh-car.c3box{left:0;right:0;top:132px;height:246px}
+.hh-car .c3-hint{bottom:70px}
+.home-hero{cursor:default}
+.hh-look{position:absolute;right:20px;top:128px;height:36px;padding:0 10px 0 14px;border-radius:18px;display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:14px;font-weight:600;z-index:4;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.home-hero>.c3-paint{position:absolute;right:20px;top:196px;flex-direction:column;z-index:4}
+.c3-paint{display:flex;gap:10px}
+.c3-sw{width:32px;height:32px;border-radius:16px;background:var(--c);border:2px solid rgba(255,255,255,.35);box-shadow:inset 0 -6px 10px rgba(0,0,0,.25),inset 0 3px 5px rgba(255,255,255,.4);transition:transform .2s}
+.c3-sw.on{box-shadow:0 0 0 2px #0B0C10,0 0 0 4px var(--accent),inset 0 -6px 10px rgba(0,0,0,.25);transform:scale(1.08)}
+.vhero .vstage{margin:6px 0 0}
+.vhero .vstage .vcar{height:290px;margin:0}
+.c3-ctl{padding:0 20px 22px}
+.c3-views{display:flex;gap:4px;padding:4px;border-radius:22px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
+.c3-views button{flex:1;height:38px;border-radius:19px;color:#C9CCD6;font-size:14.5px;font-weight:600;transition:background .25s,color .25s}
+.c3-views button.on{background:#fff;color:#0A0B0F}
+.c3-row{display:flex;align-items:center;gap:14px;margin-top:14px}
+.c3-row .c3-paint{flex:1}
+.c3-lt{height:40px;padding:0 14px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);color:#fff;font-size:14.5px;font-weight:600;border:1px solid rgba(255,255,255,.16)}
+.c3-lt.on{background:var(--accent);border-color:transparent}
+.c3-zm{display:flex;gap:6px}.c3-zm button{width:40px;height:40px;border-radius:20px;background:rgba(255,255,255,.1);color:#fff;font-size:20px;font-weight:600;border:1px solid rgba(255,255,255,.16)}
+
+/* ======== tab icons must always be visible (Android used a tinted icon well) ======== */
+.tab .ico,[data-os=android] .tab .ico,[data-os=android] .tab.on .ico{color:inherit!important;background:none!important}
+.tab .ic{stroke:currentColor}
+.tab.on,[data-os=ios] .tab.on,[data-os=android] .tab.on{color:var(--bg)}
+[data-theme=dark] .tab.on{color:#0A0B0F}
+
+/* ======== separation: white never sits on white ======== */
+.card,.group,.tile,.permcard,.offer,.ticket,.drv,.route,.tipbar,.pcard.fare{border:1px solid var(--hair)}
+[data-os=android] .card:not(.stage):not(.tint):not(.line),[data-os=android] .tile,[data-os=android] .offer,[data-os=android] .ticket,[data-os=android] .drv,[data-os=android] .route,[data-os=android] .search2,[data-os=android] .group,[data-os=android] .tipbar,[data-os=android] .pcard.fare,[data-os=android] .pc:not(.ink):not(.brand):not(.map):not(.blue){background:var(--surface);border:1px solid var(--hair);box-shadow:0 1px 2px rgba(18,24,46,.08),0 6px 16px rgba(18,24,46,.08)}
+[data-os=android] .qk-c:not(.dark){background:var(--surface);border:1px solid var(--hair);box-shadow:0 1px 2px rgba(18,24,46,.08),0 4px 10px rgba(18,24,46,.06);color:var(--fg)}
+[data-os=android] .chip:not(.on){background:var(--surface);border:1px solid var(--fg3)}
+[data-os=android] .home-sheet{background:var(--bg);box-shadow:0 -10px 30px rgba(18,24,46,.14)}
+[data-os=android] .rsheet{box-shadow:0 -10px 34px rgba(18,24,46,.2)}
+[data-os=android] .pcard{background:var(--surface2);border:1px solid var(--hair)}
+[data-os=android] .rb{background:var(--surface);border:1px solid var(--hair)}
+[data-os=android] .tabbar{border:1px solid var(--hair);box-shadow:0 2px 4px rgba(18,24,46,.1),0 12px 28px rgba(18,24,46,.18)}
+.group .row+.row::before{background:var(--hair);transform:none;height:1px}
+
+/* ======== iPhone: gradient depth, so surfaces feel like material not paint ======== */
+[data-theme=light][data-os=ios] .view{background:radial-gradient(90% 42% at 100% 0%,color-mix(in srgb,var(--accent) 14%,transparent),transparent 70%),radial-gradient(80% 36% at 0% 58%,color-mix(in srgb,var(--accent) 8%,transparent),transparent 70%),linear-gradient(180deg,#F0F1F6 0%,#E4E5EC 55%,#D9DBE4 100%)}
+[data-theme=light][data-os=ios] .card:not(.stage):not(.tint),[data-theme=light][data-os=ios] .group,[data-theme=light][data-os=ios] .tile,[data-theme=light][data-os=ios] .permcard,[data-theme=light][data-os=ios] .offer,[data-theme=light][data-os=ios] .ticket,[data-theme=light][data-os=ios] .drv,[data-theme=light][data-os=ios] .route,[data-theme=light][data-os=ios] .search2,[data-theme=light][data-os=ios] .pcard.fare,[data-theme=light][data-os=ios] .tipbar,[data-theme=light][data-os=ios] .tele,[data-theme=light][data-os=ios] .field{
+  background:linear-gradient(180deg,rgba(255,255,255,.96) 0%,rgba(255,255,255,.74) 55%,rgba(244,245,249,.7) 100%);border:1px solid rgba(255,255,255,.9);
+  box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(20,26,50,.06),0 1px 2px rgba(20,26,50,.08),0 12px 28px rgba(20,26,50,.12)}
+[data-theme=light][data-os=ios] .pc:not(.ink):not(.brand):not(.map):not(.blue),[data-theme=light][data-os=ios] .qk-c:not(.dark),[data-theme=light][data-os=ios] .rb{
+  background:linear-gradient(180deg,#fff 0%,rgba(250,250,253,.8) 60%,rgba(236,238,244,.8) 100%);border:1px solid rgba(255,255,255,.95);box-shadow:inset 0 1px 0 #fff,inset 0 -2px 4px rgba(20,26,50,.06),0 2px 3px rgba(20,26,50,.1),0 10px 22px rgba(20,26,50,.14)}
+[data-theme=light][data-os=ios] .chip:not(.on),[data-theme=light][data-os=ios] .ch-add,[data-theme=light][data-os=ios] .addstop,[data-theme=light][data-os=ios] .s-now,[data-theme=light][data-os=ios] .btn-secondary{background:linear-gradient(180deg,#fff,rgba(238,240,246,.9));border:1px solid rgba(255,255,255,.95);box-shadow:inset 0 1px 0 #fff,0 1px 2px rgba(20,26,50,.12),0 5px 12px rgba(20,26,50,.08)}
+[data-theme=light][data-os=ios] .row .lead:not(.ink){background:linear-gradient(180deg,#fff,#E9EBF2);box-shadow:inset 0 1px 0 #fff,0 1px 2px rgba(20,26,50,.14)}
+[data-theme=light][data-os=ios] .seg{background:linear-gradient(180deg,rgba(205,208,218,.7),rgba(222,224,232,.7));box-shadow:inset 0 2px 4px rgba(20,26,50,.12);border:1px solid rgba(255,255,255,.7)}
+[data-theme=light][data-os=ios] .seg button.on{background:linear-gradient(180deg,#fff,#F1F2F7);box-shadow:0 2px 6px rgba(20,26,50,.2),inset 0 1px 0 #fff}
+[data-theme=light][data-os=ios] .rsheet,[data-theme=light][data-os=ios] .home-sheet{background:linear-gradient(180deg,rgba(250,250,253,.9),rgba(232,234,241,.82));box-shadow:inset 0 1px 0 #fff,0 -14px 40px rgba(20,26,50,.18)}
+[data-theme=light][data-os=ios] .pcard:not(.fare){background:linear-gradient(180deg,rgba(214,217,227,.6),rgba(228,230,238,.6));box-shadow:inset 0 1px 3px rgba(20,26,50,.1);border:1px solid rgba(255,255,255,.6)}
+[data-theme=light][data-os=ios] .tabbar{background:linear-gradient(180deg,rgba(255,255,255,.88),rgba(240,241,247,.7));box-shadow:inset 0 1px 0 #fff,0 2px 4px rgba(20,26,50,.1),0 16px 34px rgba(20,26,50,.22)}
+[data-os=ios] .btn-primary,[data-os=ios] .search2 .s-mic,[data-os=ios] .pc-cta,[data-os=ios] .sl-knob{background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 100%,#fff 24%) 0%,var(--accent) 48%,color-mix(in srgb,var(--accent) 80%,#000 20%) 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -2px 3px rgba(0,0,0,.25),0 10px 24px color-mix(in srgb,var(--accent) 40%,transparent)}
+[data-os=ios] .pc-cta{color:#fff}
+[data-os=ios] .tab.on,[data-os=ios] .qk-c.dark,[data-os=ios] .chip.on,[data-os=ios] .pc-days span.on,[data-os=ios] .rt-dot.s,[data-os=ios] .ch-s i{background:linear-gradient(180deg,#3A3D47 0%,#14161B 50%,#050608 100%);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 4px 10px rgba(0,0,0,.3)}
+[data-theme=dark][data-os=ios] .tab.on{background:linear-gradient(180deg,#fff,#D8DAE2);color:#0A0B0F}
+[data-os=ios] .pc.ink{background:radial-gradient(120% 90% at 85% -10%,rgba(80,100,255,.28),transparent 55%),linear-gradient(165deg,#2B2E38 0%,#101218 55%,#050608 100%)}
+[data-os=ios] .pc.brand{background:radial-gradient(110% 80% at 90% -10%,color-mix(in srgb,var(--accent) 85%,#fff 15%),transparent 60%),linear-gradient(165deg,#22252E,#07080B)}
+[data-os=ios] .codecard2{background:radial-gradient(110% 100% at 100% 0%,color-mix(in srgb,var(--accent) 70%,transparent),transparent 60%),linear-gradient(165deg,#272A34,#07080B)}
+[data-os=ios] .home-hero{background:radial-gradient(90% 60% at 50% 55%,#2C3244 0%,#0E1016 62%,#040508 100%)}
+[data-theme=dark][data-os=ios] .card:not(.stage):not(.tint),[data-theme=dark][data-os=ios] .group,[data-theme=dark][data-os=ios] .tile,[data-theme=dark][data-os=ios] .route,[data-theme=dark][data-os=ios] .search2,[data-theme=dark][data-os=ios] .pc:not(.ink):not(.brand):not(.map):not(.blue),[data-theme=dark][data-os=ios] .qk-c:not(.dark){background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 12px 28px rgba(0,0,0,.5)}

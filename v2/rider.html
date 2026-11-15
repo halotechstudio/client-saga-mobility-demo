@@ -395,7 +395,9 @@ body.embed,body.bare{background:transparent}
 .bub small{display:block;font-size:12px;opacity:.7;margin-top:4px}
 .vnote{font-size:13.5px;color:var(--fg2);max-width:230px;line-height:1.35}
 </style>
-<link rel="stylesheet" href="system.css">
+<link rel="stylesheet" href="system.css"><link rel="stylesheet" href="system3.css"><link rel="stylesheet" href="system4.css">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module" src="car3d.js"></script>
 </head>
 <body>
 <div class="shell">
@@ -513,20 +515,42 @@ def("setup", { g: "Start", n: "Permissions", tabs: 0, nav: 1, foot: 1, what: "Ex
   ${foot(btn(L("Continue", "కొనసాగండి", "आगे बढ़ें"), { go: "flysoon" }))}`;
 });
 
+const paints = () => [["#F4F5F7", L("Pearl white", "పెర్ల్ వైట్", "पर्ल व्हाइट")], ["#16181D", L("Obsidian black", "ఆబ్సిడియన్ బ్లాక్", "ऑब्सीडियन ब्लैक")], [S.state.hex, L("SAGA blue", "SAGA బ్లూ", "SAGA ब्लू")]];
+const paintRow = () => `<div class="c3-paint">${paints().map(([h, n], i) => `<button class="c3-sw ${i === 0 ? "on" : ""}" data-c3paint="${h}" style="--c:${h}" aria-label="${n}"></button>`).join("")}</div>`;
+const c3hot = () => [
+  { id: "lamp", at: [0.98, 0.5, 0.35], n: [1, 0, 0.25], label: L("LED light signature", "LED లైట్ సిగ్నేచర్", "LED लाइट सिग्नेचर") },
+  { id: "wheel", at: [0.62, 0.22, 1.02], n: [0.2, 0, 1], label: L("Silent electric drive", "నిశ్శబ్ద ఎలక్ట్రిక్ డ్రైవ్", "शांत इलेक्ट्रिक ड्राइव") },
+  { id: "boot", at: [-1.0, 0.62, 0], n: [-1, 0.2, 0], label: L("Boot: 2 bags", "బూట్: 2 బ్యాగులు", "बूट: 2 बैग") }
+];
+const c3mount = (el, mode) => {
+  const box = el && el.querySelector("[data-car3d]"); if (!box) return;
+  const go = () => {
+    const api = window.SagaCar3D.mount(box, { mode, hot: mode === "full" ? c3hot() : [], onTap: on => toast(on ? L("Lights on", "లైట్లు ఆన్", "लाइट चालू") : L("Lights off", "లైట్లు ఆఫ్", "लाइट बंद")) });
+    if (!api || box.__wired) return; box.__wired = 1;
+  };
+  if (window.SagaCar3D) go(); else window.addEventListener("saga-car3d", go, { once: true });
+};
+document.addEventListener("click", e => {
+  const root = e.target.closest(".c3root"); if (!root) return; const box = root.querySelector("[data-car3d]"), api = box && box.__c3;
+  const p = e.target.closest("[data-c3paint]"); if (p) { if (api) api.paint(p.dataset.c3paint); root.querySelectorAll(".c3-sw").forEach(b => b.classList.toggle("on", b === p)); return; }
+  const v = e.target.closest("[data-c3view]"); if (v) { if (api) api.view(v.dataset.c3view); root.querySelectorAll("[data-c3view]").forEach(b => b.classList.toggle("on", b === v)); return; }
+  if (e.target.closest("[data-c3light]")) { if (api) { const on = api.toggleLights(); e.target.closest("[data-c3light]").classList.toggle("on", on); } return; }
+  const z = e.target.closest("[data-c3zoom]"); if (z && api) api.zoom(+z.dataset.c3zoom);
+}, true);
 const arcSvg = () => `<svg class="pc-arc" viewBox="0 0 150 40" aria-hidden="true"><path d="M8 34C42 -4 108 -4 142 34" class="pc-arc-bg"/><path d="M8 34C42 -4 108 -4 142 34" class="pc-arc-fg" pathLength="1"/><circle cx="8" cy="34" r="4"/><circle cx="142" cy="34" r="4"/></svg><span class="pc-plane">${I("plane")}</span>`;
 const homeCards = () => {
   const out = [];
   const fl = F();
   if (app.booked) {
-    out.push(`<div class="pc ink" data-go="booked" role="button"><div class="pc-top"><span class="pc-tag ok">${L("Booked", "బుక్ అయింది", "बुक")}</span><span class="pc-when">${fDate(fl)}</span></div>
+    out.push(`<div class="pc blue" data-go="booked" role="button"><div class="pc-top"><span class="pc-tag ok">${L("Booked", "బుక్ అయింది", "बुक")}</span><span class="pc-when">${fDate(fl)}</span></div>
       <div class="pc-flight"><div><b>VTZ</b><small>Vizag</small></div><div class="pc-mid">${arcSvg()}</div><div class="r"><b>${fl.code}</b><small>${cityName(fl.code)}</small></div></div>
       <div class="pc-foot"><span>${fl.no} · ${L("pickup", "పికప్", "पिकअप")} ${t12(pickupMin(fl))}</span>${I("chevr", "sm")}</div></div>`);
   } else if (app.sugg && app.travel.cal) {
-    out.push(`<div class="pc ink" role="button" data-go="flight"><div class="pc-top"><span class="pc-tag">${I("cal", "sm")}${L("From your calendar", "మీ క్యాలెండర్ నుండి", "आपके कैलेंडर से")}</span><button class="pc-x" data-act="nosugg" aria-label="${L("Dismiss", "తొలగించు", "हटाएँ")}">${I("close", "sm")}</button></div>
+    out.push(`<div class="pc blue" role="button" data-go="flight"><div class="pc-top"><span class="pc-tag">${I("cal", "sm")}${L("From your calendar", "మీ క్యాలెండర్ నుండి", "आपके कैलेंडर से")}</span><button class="pc-x" data-act="nosugg" aria-label="${L("Dismiss", "తొలగించు", "हटाएँ")}">${I("close", "sm")}</button></div>
       <div class="pc-flight"><div><b>VTZ</b><small>${L("Fri 20 Nov", "శుక్ర 20 నవం", "शुक्र 20 नवं")}</small></div><div class="pc-mid">${arcSvg()}</div><div class="r"><b>HYD</b><small>7:40 ${L("AM", "ఉ.", "सुबह")}</small></div></div>
       <div class="pc-foot"><span class="pc-cta">${L("Book pickup · 5:20 AM", "పికప్ బుక్ · ఉ. 5:20", "पिकअप बुक · सुबह 5:20")}</span></div></div>`);
   } else {
-    out.push(`<div class="pc ink" role="button" data-go="scan"><div class="pc-top"><span class="pc-tag">${I("plane", "sm")}${L("Airport rides", "ఎయిర్‌పోర్ట్ రైడ్‌లు", "एयरपोर्ट राइड")}</span></div>
+    out.push(`<div class="pc blue" role="button" data-go="scan"><div class="pc-top"><span class="pc-tag">${I("plane", "sm")}${L("Airport rides", "ఎయిర్‌పోర్ట్ రైడ్‌లు", "एयरपोर्ट राइड")}</span></div>
       <div class="pc-scan"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="scanline"></span>${I("ticket", "xl")}</div>
       <div class="pc-foot"><span class="pc-cta">${L("Scan your ticket", "టికెట్ స్కాన్ చేయండి", "टिकट स्कैन करें")}</span></div></div>`);
   }
@@ -536,7 +560,7 @@ const homeCards = () => {
     <div class="pc-foot"><span class="pc-t">${app.series ? L("Home → Office, every weekday", "ఇల్లు → ఆఫీస్, ప్రతి వారపు రోజు", "घर → ऑफ़िस, हर कार्यदिवस") : L("Repeat a ride on your calendar", "మీ క్యాలెండర్‌లో రైడ్ రిపీట్", "राइड को कैलेंडर पर दोहराएँ")}</span>${I("chevr", "sm")}</div></div>`);
   out.push(`<div class="pc map" data-go="intercity" data-idest="Araku Valley" role="button" style="${S.darkMap()}"><div class="pc-region">${S.region("Araku Valley")}</div><div class="pc-top"><span class="pc-tag glass">${I("route", "sm")}${L("Intercity", "ఇంటర్‌సిటీ", "इंटरसिटी")}</span></div>
     <div class="pc-foot"><span class="pc-t w">Araku Valley<small>115 km · 2 h 40</small></span>${I("chevr", "sm")}</div></div>`);
-  out.push(`<div class="pc brand" data-go="offers" role="button"><span class="pc-wm" aria-hidden="true">SAGA</span><div class="pc-top"><span class="pc-tag glass">${I("tag", "sm")}${L("Offer", "ఆఫర్", "ऑफ़र")}</span></div>
+  out.push(`<div class="pc offer-l" data-go="offers" role="button"><span class="pc-wm" aria-hidden="true">SAGA</span><div class="pc-top"><span class="pc-tag glass">${I("tag", "sm")}${L("Offer", "ఆఫర్", "ऑफ़र")}</span></div>
     <div class="pc-offer">20%<small>${L("off your first airport ride", "మొదటి ఎయిర్‌పోర్ట్ రైడ్‌పై", "पहली एयरपोर्ट राइड पर")}</small></div>
     <div class="pc-foot"><span class="pc-code">FLYSAGA</span>${I("chevr", "sm")}</div></div>`);
   return out.join("");
@@ -544,9 +568,10 @@ const homeCards = () => {
 
 def("home", { g: "Ride", n: "Home", tab: "home", what: "The map is the home screen: you, the SAGA cars around you and the nearest car's real ETA. One search bar, four one-tap places, and a swipe row of what's coming up (flight found, scheduled rides, intercity, an offer). No greeting, no lists.", why: "Show, don't tell: the rider sees a live fleet and a ready-to-book flight instead of reading about them. One thing to do, everything else a swipe away.", fl: "Route <code>/</code>. Map: google_maps_flutter with the SAGA style. Cards from <code>GET /home/cards</code> (flight detected, series, offers); nearby from <code>GET /fleet/nearby</code>." }, () => `
   <div class="home">
-    <div class="home-hero" data-go="vehicle" role="button"><span class="hh-glow"></span><span class="hh-floor"></span>
+    <div class="home-hero c3root"><span class="hh-glow"></span><span class="hh-floor"></span>
       <div class="hh-t"><small>${V.make} · ${V.colour}</small><b>${V.model}</b></div>
-      <div class="hh-car">${S.car({ cls: "car-in" })}</div>
+      <div class="hh-car c3box" data-car3d><div class="c3-fallback">${S.car({ cls: "car-in" })}</div><span class="c3-hint">${L("Drag to turn", "తిప్పడానికి లాగండి", "घुमाने के लिए खींचें")}</span></div>
+      ${paintRow()}<button class="hh-look" data-go="vehicle">${L("Look inside", "లోపల చూడండి", "अंदर देखें")}${I("chevr", "sm")}</button>
       <div class="hh-spec"><span>${I("leaf", "sm")}${L("100% electric", "100% ఎలక్ట్రిక్", "100% इलेक्ट्रिक")}</span><span>${I("quiet", "sm")}${L("Silent cabin", "నిశ్శబ్ద క్యాబిన్", "शांत केबिन")}</span><span>${I("snow", "sm")}${L("Pre-cooled", "ముందే చల్లగా", "पहले से ठंडी")}</span></div></div>
     <div class="home-top"><span class="hpill">${S.logo()}</span><div class="r"><span class="bellwrap">${hbtn("bell", 'data-go="notifications"', "Notifications")}<i></i></span><button class="avatar" data-tab="account" aria-label="Account">AR</button></div></div>
     <div class="home-sheet">
@@ -918,7 +943,9 @@ def("vehicle", { g: "Ride", n: "The car", tabs: 0, sb: "light", foot: 1, what: "
   <div class="content" style="padding-top:0">
     <div class="vhero stage">
       <div class="vt">${pill("spark", L("Every SAGA ride", "ప్రతి SAGA రైడ్", "हर SAGA राइड"), "dark")}<h1 class="t-hero mt12">${V.make}<br>${V.model}</h1><p class="t-sub mt8">${L(`${V.colour} · SAGA livery · chauffeur-driven`, `${V.colour} · SAGA రంగుల్లో · డ్రైవర్‌తో`, `${V.colour} · SAGA लिवरी · ड्राइवर के साथ`)}</p></div>
-      <div class="vcar">${S.car()}</div>
+      <div class="vstage c3root"><div class="vcar c3box full" data-car3d><div class="c3-fallback">${S.car()}</div><span class="c3-hint">${L("Drag to turn · pinch to zoom · tap for lights", "తిప్పడానికి లాగండి · జూమ్ చేయండి · లైట్లకు నొక్కండి", "घुमाने के लिए खींचें · ज़ूम करें · लाइट के लिए टैप")}</span></div>
+        <div class="c3-ctl"><div class="c3-views">${[["three", L("3/4", "3/4", "3/4")], ["side", L("Side", "పక్కన", "साइड")], ["front", L("Front", "ముందు", "आगे")], ["rear", L("Rear", "వెనుక", "पीछे")], ["top", L("Top", "పైన", "ऊपर")]].map(([k, n], i) => `<button class="${i === 0 ? "on" : ""}" data-c3view="${k}">${n}</button>`).join("")}</div>
+        <div class="c3-row">${paintRow()}<button class="c3-lt on" data-c3light>${I("bolt", "sm")}${L("Lights", "లైట్లు", "लाइट")}</button><span class="c3-zm"><button data-c3zoom="-0.8" aria-label="Zoom in">+</button><button data-c3zoom="0.8" aria-label="Zoom out">−</button></span></div></div></div>
     </div>
     <div class="pad mt16"><div class="spec4">
       <div>${I("users")}<b>${RIDERS}</b>${L("riders", "మంది", "यात्री")}</div><div>${I("bag")}<b>${V.bags}</b>${L("bags", "బ్యాగులు", "बैग")}</div><div>${I("bolt")}<b>EV</b>${L("electric", "ఎలక్ట్రిక్", "इलेक्ट्रिक")}</div><div>${I("quiet")}<b>${L("Quiet", "నిశ్శబ్దం", "शांत")}</b>${L("cabin", "క్యాబిన్", "केबिन")}</div>
@@ -1172,7 +1199,7 @@ function go(id, o = {}) {
   try { if (parent !== window) parent.postMessage({ saga: "nav", app: "rider", os: S.state.os, id }, "*"); } catch (e) {}
 }
 const back = () => { const p = stack.pop(); go(p || "home", { back: true }); };
-const rerender = () => { const v = views.lastElementChild; if (!v) return; const st = v.querySelector(".content")?.scrollTop || 0; const n = build(cur); views.replaceChild(n, v); const c = n.querySelector(".content"); if (c) c.scrollTop = st; chrome(); syncPanel(); };
+const rerender = () => { const v = views.lastElementChild; if (!v) return; const st = v.querySelector(".content")?.scrollTop || 0; const n = build(cur); views.replaceChild(n, v); const c = n.querySelector(".content"); if (c) c.scrollTop = st; chrome(); syncPanel(); if (SC[cur].mount && (cur === "home" || cur === "vehicle")) SC[cur].mount(n); };
 
 /* ---------- toast ---------- */
 let tt;
@@ -1182,6 +1209,8 @@ function toast(msg, title) {
   t.classList.add("on"); clearTimeout(tt); tt = setTimeout(() => t.classList.remove("on"), 2600);
 }
 
+SC.home.mount = el => c3mount(el, "hero");
+SC.vehicle.mount = el => c3mount(el, "full");
 SC.nocars.mount = () => timers.push(setTimeout(() => { if (cur === "nocars") A.waitdlg(); }, 700));
 { const fm = SC.finding.mount; SC.finding.mount = el => { fm(el); timers.push(setTimeout(() => { if (cur === "finding" && app.driverLive) A.waitdlg(); }, 8000)); }; }
 /* ---------- actions ---------- */

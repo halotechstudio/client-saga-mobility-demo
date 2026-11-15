@@ -1,0 +1,41 @@
+/* SAGA v2.6 · card colours on home, polished iPhone glass. Loaded last. */
+
+/* ---- home cards: blue = the flight (action), white = scheduled (calm), black = intercity (place) ---- */
+[data-os] .pc.blue{background:radial-gradient(120% 90% at 100% -10%,color-mix(in srgb,var(--accent) 60%,#fff 40%),transparent 55%),linear-gradient(165deg,color-mix(in srgb,var(--accent) 100%,#fff 14%),var(--accent) 50%,color-mix(in srgb,var(--accent) 72%,#000 28%));color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 16px 34px color-mix(in srgb,var(--accent) 45%,transparent)}
+.pc.blue .pc-tag{background:rgba(255,255,255,.18);color:#fff}
+.pc.blue .pc-when,.pc.blue small{color:rgba(255,255,255,.8)}
+.pc.blue .pc-arc-bg{stroke:rgba(255,255,255,.4)}
+.pc.blue .pc-cta,[data-os=ios] .pc.blue .pc-cta,[data-os=android] .pc.blue .pc-cta{background:#fff;color:var(--accent);box-shadow:0 6px 16px rgba(0,0,0,.2)}
+.pc.blue .pc-x{background:rgba(255,255,255,.2)}
+.pc.offer-l{background:var(--surface);color:var(--fg)}
+.pc.offer-l .pc-offer{color:var(--accent-ink)}
+.pc.offer-l .pc-offer small{color:var(--fg2)}
+.pc.offer-l .pc-wm{color:rgba(10,11,15,.05)}
+.pc.offer-l .pc-code{background:var(--accent-soft);color:var(--on-accent-soft);border-color:var(--accent)}
+.pc.offer-l .pc-tag{background:var(--surface2);color:var(--fg)}
+.pc.offer-l .pc-foot>.ic{color:var(--fg2)}
+.pc.map{background:#07080B}
+.hh-car .c3-hint{left:20px;top:58px;bottom:auto;transform:none}
+
+/* ---- iPhone glass, one polished recipe ----
+   fill = tinted gradient, specular sheen on the top-left, a bright top edge and a faint dark bottom edge, soft contact shadow */
+:root{--sheen:radial-gradient(120% 70% at 18% -6%,rgba(255,255,255,.7),rgba(255,255,255,0) 58%)}
+[data-theme=light][data-os=ios] .card:not(.stage):not(.tint),[data-theme=light][data-os=ios] .group,[data-theme=light][data-os=ios] .tile,[data-theme=light][data-os=ios] .permcard,[data-theme=light][data-os=ios] .offer,[data-theme=light][data-os=ios] .ticket,[data-theme=light][data-os=ios] .drv,[data-theme=light][data-os=ios] .route,[data-theme=light][data-os=ios] .search2,[data-theme=light][data-os=ios] .pcard.fare,[data-theme=light][data-os=ios] .tipbar,[data-theme=light][data-os=ios] .tele,[data-theme=light][data-os=ios] .field,[data-theme=light][data-os=ios] .pc.offer-l,[data-theme=light][data-os=ios] .pc:not(.ink):not(.blue):not(.map):not(.brand){
+  background:var(--sheen),linear-gradient(180deg,rgba(255,255,255,.72) 0%,rgba(255,255,255,.5) 100%);
+  -webkit-backdrop-filter:blur(30px) saturate(190%) brightness(1.04);backdrop-filter:blur(30px) saturate(190%) brightness(1.04);
+  border:1px solid rgba(255,255,255,.75);
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,.95),inset 0 0 0 1px rgba(255,255,255,.28),inset 0 -1px 0 rgba(20,26,50,.07),0 1px 2px rgba(20,26,50,.1),0 14px 30px rgba(20,26,50,.13)}
+[data-theme=light][data-os=ios] .qk-c:not(.dark),[data-theme=light][data-os=ios] .rb,[data-theme=light][data-os=ios] .chip:not(.on),[data-theme=light][data-os=ios] .ch-add,[data-theme=light][data-os=ios] .addstop,[data-theme=light][data-os=ios] .s-now,[data-theme=light][data-os=ios] .btn-secondary{
+  background:var(--sheen),linear-gradient(180deg,rgba(255,255,255,.8),rgba(236,238,245,.6));
+  -webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);
+  border:1px solid rgba(255,255,255,.85);box-shadow:inset 0 1.5px 0 #fff,inset 0 -1px 0 rgba(20,26,50,.08),0 1px 2px rgba(20,26,50,.12),0 8px 18px rgba(20,26,50,.12)}
+[data-theme=light][data-os=ios] .rsheet,[data-theme=light][data-os=ios] .home-sheet{background:radial-gradient(100% 38% at 20% 0%,rgba(255,255,255,.75),rgba(255,255,255,0) 70%),linear-gradient(180deg,rgba(247,248,252,.8),rgba(228,230,238,.72));-webkit-backdrop-filter:blur(44px) saturate(200%);backdrop-filter:blur(44px) saturate(200%);border-top:1px solid rgba(255,255,255,.9);box-shadow:inset 0 1.5px 0 #fff,0 -16px 44px rgba(20,26,50,.2)}
+[data-theme=light][data-os=ios] .tabbar{background:var(--sheen),linear-gradient(180deg,rgba(255,255,255,.78),rgba(238,240,247,.6));-webkit-backdrop-filter:blur(40px) saturate(210%);backdrop-filter:blur(40px) saturate(210%);border:1px solid rgba(255,255,255,.85);box-shadow:inset 0 1.5px 0 #fff,inset 0 -1px 0 rgba(20,26,50,.08),0 2px 4px rgba(20,26,50,.1),0 18px 36px rgba(20,26,50,.22)}
+[data-theme=light][data-os=ios] .gbtn,[data-theme=light][data-os=ios] .mapbtns .gbtn{background:var(--sheen),linear-gradient(180deg,rgba(255,255,255,.8),rgba(236,238,245,.6));border:1px solid rgba(255,255,255,.9);box-shadow:inset 0 1.5px 0 #fff,0 6px 16px rgba(20,26,50,.16)}
+/* dark glass: smoky, lit from the top edge */
+:root{--sheen-d:radial-gradient(120% 70% at 18% -6%,rgba(255,255,255,.2),rgba(255,255,255,0) 58%)}
+[data-theme=dark][data-os=ios] .card:not(.stage):not(.tint),[data-theme=dark][data-os=ios] .group,[data-theme=dark][data-os=ios] .tile,[data-theme=dark][data-os=ios] .route,[data-theme=dark][data-os=ios] .search2,[data-theme=dark][data-os=ios] .pcard,[data-theme=dark][data-os=ios] .tipbar,[data-theme=dark][data-os=ios] .tele,[data-theme=dark][data-os=ios] .pc.offer-l,[data-theme=dark][data-os=ios] .pc:not(.ink):not(.blue):not(.map):not(.brand),[data-theme=dark][data-os=ios] .qk-c:not(.dark),[data-theme=dark][data-os=ios] .rb,[data-theme=dark][data-os=ios] .chip:not(.on){
+  background:var(--sheen-d),linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.04));-webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);
+  border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.28),inset 0 -1px 0 rgba(0,0,0,.4),0 14px 30px rgba(0,0,0,.5)}
+[data-theme=dark][data-os=ios] .rsheet,[data-theme=dark][data-os=ios] .home-sheet,[data-theme=dark][data-os=ios] .tabbar{background:var(--sheen-d),linear-gradient(180deg,rgba(40,42,52,.7),rgba(14,15,20,.72));-webkit-backdrop-filter:blur(44px) saturate(190%);backdrop-filter:blur(44px) saturate(190%);border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.26),0 -16px 44px rgba(0,0,0,.5)}
+[data-theme=dark][data-os=ios] .tabbar{box-shadow:inset 0 1.5px 0 rgba(255,255,255,.26),0 18px 36px rgba(0,0,0,.55)}

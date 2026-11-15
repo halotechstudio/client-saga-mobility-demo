@@ -78,11 +78,11 @@
     if (os === "android") {
       t = dark
         ? { bg: T(.16, .012), surface: T(.205, .015), surface2: T(.25, .018), surface3: T(.295, .02), fg: T(.94, .008), fg2: T(.8, .014), fg3: T(.62, .014), hair: T(.33, .014) }
-        : { bg: T(.968, .01), surface: "#FFFFFF", surface2: T(.945, .016), surface3: T(.905, .022), fg: T(.18, .012), fg2: T(.42, .016), fg3: T(.62, .016), hair: T(.9, .012) };
+        : { bg: T(.925, .012), surface: "#FFFFFF", surface2: T(.895, .016), surface3: T(.85, .02), fg: T(.18, .012), fg2: T(.4, .016), fg3: T(.58, .016), hair: T(.83, .012) };
     } else {
       t = dark
         ? { bg: "#000000", surface: "#1C1C1E", surface2: "#2C2C2E", surface3: "#3A3A3C", fg: "#F5F5F7", fg2: "#AEAEB2", fg3: "#6E6E73", hair: "#38383A" }
-        : { bg: "#F2F2F7", surface: "#FFFFFF", surface2: "#E9E9EE", surface3: "#DCDCE1", fg: "#0A0A0C", fg2: "#5C5C64", fg3: "#9A9AA2", hair: "#DADADF" };
+        : { bg: "#E7E8EE", surface: "#FFFFFF", surface2: "#DFE0E7", surface3: "#D0D2DB", fg: "#0A0A0C", fg2: "#55575F", fg3: "#8E909A", hair: "#C8CAD3" };
     }
     const accent = dark ? okHex(Math.min(Math.max(L, .6), .78), C, H) : hex;
     Object.assign(t, {

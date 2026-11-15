@@ -198,7 +198,7 @@
 .pc-tag.soft{background:var(--accent-soft);color:var(--on-accent-soft)}
 .pc-tag.glass{background:rgba(255,255,255,.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .pc-when{font-size:13.5px;font-weight:500;color:rgba(255,255,255,.7)}
-.pc:not(.ink):not(.brand):not(.map) .pc-when{color:var(--fg2)}
+.pc:not(.ink):not(.brand):not(.map):not(.blue) .pc-when{color:var(--fg2)}
 .pc-x{width:30px;height:30px;border-radius:15px;background:rgba(255,255,255,.12);color:#fff;display:flex;align-items:center;justify-content:center}
 .pc-flight{display:flex;align-items:flex-end;justify-content:space-between;gap:4px;position:relative}
 .pc-flight b{display:block;font-family:var(--display);font-size:34px;font-weight:600;letter-spacing:-.03em;line-height:1}
@@ -320,7 +320,7 @@
    Cards, lists, chips, fields, buttons, sheets and bars are all one recipe: translucent fill, hairline highlight, blur, soft lift.
    Black and blue stay solid on top of it (selected, action), so meaning never gets lost in the blur. */
 :root{--gl-blur:blur(26px) saturate(185%)}
-[data-os=ios] .card:not(.stage):not(.tint),[data-os=ios] .group,[data-os=ios] .tile,[data-os=ios] .permcard,[data-os=ios] .offer,[data-os=ios] .ticket,[data-os=ios] .drv,[data-os=ios] .amen div,[data-os=ios] .spec4 div,[data-os=ios] .field,[data-os=ios] .stepper,[data-os=ios] .route,[data-os=ios] .search2,[data-os=ios] .pcard.fare,[data-os=ios] .tipbar,[data-os=ios] .qk-c:not(.dark),[data-os=ios] .tele,[data-os=ios] .rb,[data-os=ios] .act span.c,[data-os=ios] .pc:not(.ink):not(.brand):not(.map){
+[data-os=ios] .card:not(.stage):not(.tint),[data-os=ios] .group,[data-os=ios] .tile,[data-os=ios] .permcard,[data-os=ios] .offer,[data-os=ios] .ticket,[data-os=ios] .drv,[data-os=ios] .amen div,[data-os=ios] .spec4 div,[data-os=ios] .field,[data-os=ios] .stepper,[data-os=ios] .route,[data-os=ios] .search2,[data-os=ios] .pcard.fare,[data-os=ios] .tipbar,[data-os=ios] .qk-c:not(.dark),[data-os=ios] .tele,[data-os=ios] .rb,[data-os=ios] .act span.c,[data-os=ios] .pc:not(.ink):not(.brand):not(.map):not(.blue){
   background:var(--glass2);border:1px solid var(--glass-line);-webkit-backdrop-filter:var(--gl-blur);backdrop-filter:var(--gl-blur);
   box-shadow:inset 0 1px 0 var(--glass-hi),0 10px 30px rgba(15,20,45,.08)}
 [data-os=ios] .pcard{background:color-mix(in srgb,var(--surface) 50%,transparent);border:1px solid var(--glass-line);-webkit-backdrop-filter:var(--gl-blur);backdrop-filter:var(--gl-blur);box-shadow:inset 0 1px 0 var(--glass-hi)}
