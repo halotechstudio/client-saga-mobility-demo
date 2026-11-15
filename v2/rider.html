@@ -238,6 +238,40 @@ body.embed,body.bare{background:transparent}
 .vmic{width:64px;height:64px;border-radius:32px;background:var(--accent);color:var(--on-accent);display:flex;align-items:center;justify-content:center}
 .voice.listening .vmic{animation:pulse 1.4s ease-in-out infinite}
 @keyframes pulse{50%{box-shadow:0 0 0 12px color-mix(in srgb,var(--accent) 18%,transparent)}}
+.destin{width:100%;border:0;outline:0;background:none;font-size:17px;font-weight:600;color:var(--fg);padding:2px 0}
+.destin::placeholder,.field input::placeholder{color:var(--fg2);font-weight:500}
+.field input{font-size:17px}
+.otpfill span{animation:otp .35s cubic-bezier(.3,1.5,.5,1) both}
+@keyframes otp{from{opacity:0;transform:scale(.5)}}
+.btn-stage2{background:rgba(255,255,255,.12);color:#fff}
+.scico{width:48px;height:48px;border-radius:15px;background:rgba(255,255,255,.12);color:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+.scanv{position:absolute;inset:0;background:radial-gradient(90% 70% at 50% 40%,#3A3F48 0%,#16181C 60%,#0A0B0D 100%);overflow:hidden}
+.tkt{position:absolute;left:50%;top:40%;width:300px;transform:translate(-50%,-50%) rotate(-3deg);background:#FBFAF6;color:#16181C;border-radius:16px;padding:18px;font-family:var(--mono);font-size:11.5px;box-shadow:0 30px 60px rgba(0,0,0,.55)}
+.tkt-h{display:flex;justify-content:space-between;align-items:center;border-bottom:1px dashed #C9C6BE;padding-bottom:10px;font-size:12px}
+.tkt-h b{font-size:15px;letter-spacing:.12em}
+.tkt-g{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px}
+.tkt span{display:block;color:#7A776F;font-size:10px;letter-spacing:.08em}
+.tkt-g b{font-size:13px}
+.tkt-r{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.tkt-r b{font-size:24px;letter-spacing:.02em}
+.tkt-l{font-size:11px;color:#55524B}
+.tkt-p{margin-top:12px;font-size:11px}
+.tkt-bc{height:40px;margin-top:12px;background:repeating-linear-gradient(90deg,#16181C 0 2px,transparent 2px 4px,#16181C 4px 5px,transparent 5px 8px,#16181C 8px 11px,transparent 11px 12px)}
+.vf{position:absolute;left:34px;right:34px;top:21%;height:41%}
+.vf i{position:absolute;width:38px;height:38px;border:4px solid #fff;transition:border-color .3s}
+.vf i:nth-child(1){top:0;left:0;border-right:0;border-bottom:0;border-top-left-radius:16px}
+.vf i:nth-child(2){top:0;right:0;border-left:0;border-bottom:0;border-top-right-radius:16px}
+.vf i:nth-child(3){bottom:0;left:0;border-right:0;border-top:0;border-bottom-left-radius:16px}
+.vf i:nth-child(4){bottom:0;right:0;border-left:0;border-top:0;border-bottom-right-radius:16px}
+.beam{position:absolute;left:8px;right:8px;height:2px;border-radius:1px;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:beam 1.4s ease-in-out infinite alternate}
+@keyframes beam{from{top:8%}to{top:92%}}
+.found .beam{display:none}.found .vf i{border-color:var(--success)}
+.scan-top{position:absolute;top:62px;left:16px;right:16px;display:flex;gap:10px;align-items:center;z-index:3}
+[data-os=android] .scan-top{top:52px}
+.scan-hint{transition:opacity .3s}.found .scan-hint{opacity:0}
+.scan-res{position:absolute;z-index:4;left:8px;right:8px;bottom:8px;border-radius:44px;background:var(--surface);color:var(--fg);padding:24px 22px 30px;transform:translateY(115%);transition:transform .55s cubic-bezier(.2,1,.3,1)}
+[data-os=android] .scan-res{left:0;right:0;bottom:0;border-radius:28px 28px 0 0;padding-bottom:44px}
+.found .scan-res{transform:none}
 .vnote{font-size:13.5px;color:var(--fg2);max-width:230px;line-height:1.35}
 </style>
 </head>
@@ -292,7 +326,7 @@ function bar(title, o = {}) {
   if (ios()) return `<header class="nav"><div class="nav-row">${back ? `<button class="gbtn" data-back aria-label="${bl}">${I("chevl")}</button>` : "<span></span>"}<div class="nav-title">${o.large ? "" : title}</div><div class="nav-actions">${o.actions || ""}</div></div>${o.large ? `<h1 class="large-title">${title}</h1>` : ""}</header>`;
   return `<header class="topbar"><div class="tb-row">${back ? `<button class="ibtn" data-back aria-label="${bl}">${I("arrowl")}</button>` : `<span style="width:10px"></span>`}<div class="tb-title">${o.large ? "" : title}</div><div class="tb-actions">${o.actions || ""}</div></div>${o.large ? `<h1 class="tb-headline">${title}</h1>` : ""}</header>`;
 }
-const row = (o) => `<button class="row" ${o.go ? `data-go="${o.go}"` : ""} ${o.act ? `data-act="${o.act}"` : ""} ${o.toast ? `data-toast="${esc(o.toast)}"` : ""} ${o.attr || ""}>${o.icon ? `<span class="lead ${o.lc || ""}">${I(o.icon)}</span>` : ""}<span class="tx"><span class="t1" style="display:block">${o.t}</span>${o.s ? `<span class="t2" style="display:block">${o.s}</span>` : ""}</span><span class="trail">${o.trail || ""}${o.chev === false ? "" : I(ios() ? "chevr" : "chevr")}</span></button>`;
+const row = (o) => { const live = o.go || o.act || o.toast || o.attr; const tag = live ? "button" : "div"; return `<${tag} class="row" ${o.go ? `data-go="${o.go}"` : ""} ${o.act ? `data-act="${o.act}"` : ""} ${o.toast ? `data-toast="${esc(o.toast)}"` : ""} ${o.attr || ""}>${o.icon ? `<span class="lead ${o.lc || ""}">${I(o.icon)}</span>` : ""}<span class="tx"><span class="t1" style="display:block">${o.t}</span>${o.s ? `<span class="t2" style="display:block">${o.s}</span>` : ""}</span><span class="trail">${o.trail || ""}${o.chev === false || !live ? "" : I("chevr")}</span></${tag}>`; };
 const tgl = (on, attr = "") => `<span class="tgl ${on ? "on" : ""}" role="switch" aria-checked="${on}" ${attr}></span>`;
 const seg = (opts, cur, act) => `<div class="seg" role="tablist">${opts.map(([v, l]) => `<button class="${v === cur ? "on" : ""}" data-act="${act}" data-v="${v}">${!ios() && v === cur ? I("check", "sm") : ""}${l}</button>`).join("")}</div>`;
 const pill = (icon, t, k = "") => `<span class="pill ${k}">${icon ? I(icon) : ""}${t}</span>`;
@@ -304,7 +338,7 @@ const mapBtns = (right = "") => `<div class="mapbtns">${hbtn(ios() ? "chevl" : "
 const SC = {};
 const def = (id, meta, render, mount) => (SC[id] = Object.assign({ id, render, mount }, meta));
 
-def("welcome", { g: "Start", n: "Welcome", tabs: 0, sb: "light", what: "Full-bleed dark stage with the SUV, one promise, one button. Language can be chosen before anything else.", why: "Sets the premium tone in the first second and lets Telugu and Hindi speakers switch before reading a word.", fl: "Route <code>/welcome</code>. Logo is the client's SVG asset; colours from <code>SagaTokens</code>." }, () => `
+def("welcome", { g: "Start", n: "Welcome", tabs: 0, sb: "light", mount: () => { app.otp = 0; }, what: "Full-bleed dark stage with the SUV, one promise, one button. Language can be chosen before anything else.", why: "Sets the premium tone in the first second and lets Telugu and Hindi speakers switch before reading a word.", fl: "Route <code>/welcome</code>. Logo is the client's SVG asset; colours from <code>SagaTokens</code>." }, () => `
   <div class="view-in stage wl">
     <div class="wl-top">${S.logo()}</div>
     <div class="wl-car">${S.car()}</div>
@@ -313,21 +347,22 @@ def("welcome", { g: "Start", n: "Welcome", tabs: 0, sb: "light", what: "Full-ble
       <h1 class="t-hero mt16">${L("Arrive in quiet comfort.", "నిశ్శబ్దంగా, హాయిగా చేరుకోండి.", "सुकून से, आराम से पहुँचिए।")}</h1>
       <p class="t-body mt12">${L("Airport rides that follow your flight, rides on repeat, and trips across the city and beyond. In an electric SUV, with our own chauffeur.", "మీ ఫ్లైట్‌ను అనుసరించే ఎయిర్‌పోర్ట్ రైడ్‌లు, రోజూ వచ్చే రైడ్‌లు, నగరంలో మరియు బయట ప్రయాణాలు. ఎలక్ట్రిక్ SUVలో, మా సొంత డ్రైవర్‌తో.", "आपकी फ़्लाइट के हिसाब से एयरपोर्ट राइड, रोज़ की राइड, और शहर के अंदर-बाहर के सफ़र। इलेक्ट्रिक SUV में, हमारे अपने ड्राइवर के साथ।")}</p>
       <div class="mt24">${btn(L("Continue with phone number", "ఫోన్ నంబర్‌తో కొనసాగండి", "फ़ोन नंबर से आगे बढ़ें"), { go: "signin", kind: "btn-stage", cls: "lg" })}</div>
-      <div class="wl-langs mt16">${S.LANGS.map(l => `<button class="${S.state.lang === l.id ? "on" : ""}" data-lang="${l.id}">${l.native}</button>`).join("")}</div>
+      <div class="wl-langs mt16">${S.LANGS.map(l => `<button class="${S.state.lang === l.id ? "on" : ""}" data-setlang="${l.id}">${l.native}</button>`).join("")}</div>
     </div>
   </div>`);
 
-def("signin", { g: "Start", n: "Sign in", tabs: 0, nav: 1, foot: 1, what: "Mobile number and a 6-digit SMS code, auto-filled from the SMS on both platforms.", why: "No passwords. Matches how the existing app signs people in.", fl: "Android: SMS Retriever API (no SMS permission). iOS: <code>oneTimeCode</code> autofill. Backend OTP endpoint from the client." }, () => `
+def("signin", { g: "Start", n: "Sign in", tabs: 0, nav: 1, foot: 1, what: "Type a mobile number, tap Send code, and the 6-digit code fills itself in from the SMS.", why: "No passwords. Matches how the existing app signs people in.", fl: "Android: SMS Retriever API (no SMS permission). iOS: <code>oneTimeCode</code> autofill. Backend OTP endpoint from the client." }, () => `
   ${bar(L("Sign in", "సైన్ ఇన్", "साइन इन"))}
   <div class="content"><div class="pad">
     <h1 class="t-title">${L("Your mobile number", "మీ మొబైల్ నంబర్", "आपका मोबाइल नंबर")}</h1>
     <p class="t-sub mt8">${L("We'll send a 6-digit code by SMS.", "SMS ద్వారా 6 అంకెల కోడ్ పంపుతాం.", "हम SMS से 6 अंकों का कोड भेजेंगे।")}</p>
-    <div class="field mt24"><b>+91</b><span class="vline"></span><span class="t-num" style="font-size:19px;letter-spacing:.04em">98480 12345</span></div>
-    <p class="t-label mt24">${L("Code from SMS", "SMS లోని కోడ్", "SMS वाला कोड")}</p>
-    <div class="boxes mt8">${"427190".split("").map(d => `<span class="f">${d}</span>`).join("")}</div>
-    <p class="t-sub mt12">${L("Filled in automatically from your SMS.", "మీ SMS నుండి ఆటోమేటిక్‌గా నింపబడింది.", "आपके SMS से अपने-आप भर गया।")}</p>
+    <div class="field mt24"><b>+91</b><span class="vline"></span><input id="phone" type="tel" inputmode="numeric" maxlength="11" autocomplete="tel-national" value="${app.phone}" aria-label="Mobile number" style="font-size:19px;letter-spacing:.04em"></div>
+    ${app.otp ? `<p class="t-label mt24">${L("Code from SMS", "SMS లోని కోడ్", "SMS वाला कोड")}</p>
+    <div class="boxes otpfill mt8">${"427190".split("").map((d, i) => `<span class="f" style="animation-delay:${200 + i * 110}ms">${d}</span>`).join("")}</div>
+    <p class="t-sub mt12">${L("Filled in automatically from your SMS.", "మీ SMS నుండి ఆటోమేటిక్‌గా నింపబడింది.", "आपके SMS से अपने-आप भर गया।")}</p>`
+    : `<p class="t-sub mt16">${L("Any 10-digit number works in this demo.", "ఈ డెమోలో ఏ 10 అంకెల నంబర్ అయినా సరిపోతుంది.", "इस डेमो में कोई भी 10 अंकों का नंबर चलेगा।")}</p>`}
   </div></div>
-  ${foot(btn(L("Verify and continue", "ధృవీకరించి కొనసాగండి", "पुष्टि करें और आगे बढ़ें"), { go: "setup" }))}`);
+  ${foot(app.otp ? btn(L("Verify and continue", "ధృవీకరించి కొనసాగండి", "पुष्टि करें और आगे बढ़ें"), { go: "setup" }) : btn(L("Send code", "కోడ్ పంపండి", "कोड भेजें"), { act: "sendotp" }))}`);
 
 def("setup", { g: "Start", n: "Permissions", tabs: 0, nav: 1, foot: 1, what: "Explains each permission in one plain sentence before the system prompt appears.", why: "Asking with a reason raises opt-in for notifications and calendar, which the flight features depend on.", fl: "<code>permission_handler</code>. Calendar: EventKit (iOS) / CalendarContract (Android), read-only." }, () => {
   const p = (k, icon, t, s) => `<div class="permrow"><span class="pico">${I(icon)}</span><div class="grow"><div class="t1">${t}</div><div class="t2">${s}</div></div>${tgl(app.perms[k], `data-act="perm" data-k="${k}"`)}</div>`;
@@ -343,7 +378,7 @@ def("setup", { g: "Start", n: "Permissions", tabs: 0, nav: 1, foot: 1, what: "Ex
     </div>
     <div class="group mt16">${row({ icon: "globe", t: L("Language", "భాష", "भाषा"), trail: S.LANGS.find(l => l.id === S.state.lang).native, go: "language" })}</div>
   </div>
-  ${foot(btn(L("Continue", "కొనసాగండి", "आगे बढ़ें"), { go: "home", attr: 'data-reset="1"' }))}`;
+  ${foot(btn(L("Continue", "కొనసాగండి", "आगे बढ़ें"), { go: "flysoon" }))}`;
 });
 
 def("home", { g: "Ride", n: "Home", tab: "home", what: "Greeting, one search bar with a voice button, a flight we found, the airport card (PNR first), scheduled and intercity tiles, the car you'll ride in, and honest nearby availability.", why: "Airport rides are the core business, so they sit above the fold. The SUV showcase sells the premium before price is ever shown.", fl: "Route <code>/</code>. Flight suggestion comes from <code>GET /trips/detected</code>; nearby count from <code>GET /fleet/nearby</code>." }, () => {
@@ -354,7 +389,7 @@ def("home", { g: "Ride", n: "Home", tab: "home", what: "Greeting, one search bar
       <div class="btnrow mt16">${btn(L("Not now", "ఇప్పుడు వద్దు", "अभी नहीं"), { kind: "btn-secondary", act: "nosugg" })}${btn(L("Book pickup", "పికప్ బుక్", "पिकअप बुक करें"), { go: "flight" })}</div>
     </div>` : "";
   const upc = (app.booked || app.series) ? `${sh(L("Coming up", "రాబోయేవి", "आने वाली"), `<button data-tab="rides">${L("All", "అన్నీ", "सभी")}</button>`)}<div class="group upc" style="margin:0 16px">
-      ${app.booked ? row({ icon: "plane", t: L("Airport pickup · Fri 5:20 AM", "ఎయిర్‌పోర్ట్ పికప్ · శుక్ర ఉ. 5:20", "एयरपोर्ट पिकअप · शुक्र सुबह 5:20"), s: L("6E 2134 on time · tracking", "6E 2134 సమయానికి · ట్రాకింగ్", "6E 2134 समय पर · ट्रैकिंग चालू"), go: "booked" }) : ""}
+      ${app.booked ? row({ icon: "plane", t: `${L("Airport ride", "ఎయిర్‌పోర్ట్ రైడ్", "एयरपोर्ट राइड")} · ${fDate(F())}, ${t12(pickupMin(F()))}`, s: `${F().no} · ${L("on time, tracking", "సమయానికి, ట్రాకింగ్", "समय पर, ट्रैकिंग")}`, go: "booked" }) : ""}
       ${app.series ? row({ icon: "repeat", lc: "soft", t: L("Weekdays · 9:00 AM", "వారపు రోజులు · ఉ. 9:00", "सोम–शुक्र · सुबह 9:00"), s: L("Home → Office · next Mon 16 Nov", "ఇల్లు → ఆఫీస్ · తదుపరి సోమ 16 నవం", "घर → ऑफ़िस · अगली सोम 16 नवं"), tab: "rides", attr: 'data-tab="rides"' }) : ""}
     </div>` : "";
   return `<div class="content">
@@ -392,15 +427,17 @@ def("home", { g: "Ride", n: "Home", tab: "home", what: "Greeting, one search bar
   </div>`;
 });
 
-def("where", { g: "Ride", n: "Where to", tabs: 0, nav: 1, what: "Pickup and drop, Now or Later, saved places and suggestions. Picking the airport or a far town hands over to the right flow.", why: "The same search box leads to all three business models without the rider needing to know which is which.", fl: "Google Places Autocomplete (session tokens to keep cost down). Airport and intercity detection by place type and distance." }, () => `
+def("where", { g: "Ride", n: "Where to", tabs: 0, nav: 1, what: "Type a place: suggestions filter as you type, and anything you type can be booked. Picking the airport or a far town hands over to the right flow.", why: "The same search box leads to all three business models without the rider needing to know which is which.", fl: "Google Places Autocomplete (session tokens to keep cost down). Airport and intercity detection by place type and distance." }, () => `
   ${bar(L("Plan your ride", "రైడ్ ప్లాన్", "राइड प्लान करें"))}
   <div class="content">
     <div class="pad"><div class="card" style="padding:6px 18px">
       <div class="row-flex" style="min-height:62px"><span style="width:14px;height:14px;border-radius:7px;border:4px solid var(--accent);flex:none"></span><div class="grow"><div class="t-label">${L("Pickup", "పికప్", "पिकअप")}</div><div class="t-body">${L("Current location", "ప్రస్తుత స్థానం", "मौजूदा जगह")} · MVP Colony</div></div></div>
       <div class="hr" style="margin:0 0 0 28px"></div>
-      <div class="row-flex" style="min-height:62px"><span style="width:14px;height:14px;border-radius:3px;background:var(--fg);flex:none"></span><div class="grow"><div class="t-label">${L("Drop", "డ్రాప్", "ड्रॉप")}</div><div class="t-body" style="font-weight:600">${app.dest}<span style="display:inline-block;width:2px;height:20px;background:var(--accent);vertical-align:-4px;margin-left:2px;animation:blink 1s steps(1) infinite"></span></div></div>${hbtn("mic", "data-voice", "Voice")}</div>
+      <div class="row-flex" style="min-height:62px"><span style="width:14px;height:14px;border-radius:3px;background:var(--fg);flex:none"></span><div class="grow"><div class="t-label">${L("Drop", "డ్రాప్", "ड्रॉप")}</div><input id="destin" class="destin" autocomplete="off" spellcheck="false" placeholder="${L("Search a place", "ప్రదేశం వెతకండి", "जगह खोजें")}" aria-label="Drop"></div>${hbtn("mic", "data-voice", "Voice")}</div>
     </div>
     <div class="mt16">${seg([["now", L("Now", "ఇప్పుడే", "अभी")], ["later", L("Later", "తర్వాత", "बाद में")]], "now", "when")}</div></div>
+    <div class="group mt16" id="typedgrp" hidden><button class="row" id="typedrow" data-go="options" data-dest=""><span class="lead">${I("search")}</span><span class="tx"><span class="t1" style="display:block" id="typedtxt"></span><span class="t2" style="display:block">${L("Book a ride here", "ఇక్కడికి రైడ్ బుక్ చేయండి", "यहाँ के लिए राइड बुक करें")}</span></span><span class="trail">${I("chevr")}</span></button></div>
+    <div id="sugg">
     ${sh(L("Saved", "సేవ్ చేసినవి", "सेव की गई"))}
     <div class="group">
       ${row({ icon: "home", t: L("Home", "ఇల్లు", "घर"), s: "MVP Colony, Sector 4", go: "options", attr: 'data-dest="Home"' })}
@@ -410,10 +447,29 @@ def("where", { g: "Ride", n: "Where to", tabs: 0, nav: 1, what: "Pickup and drop
     <div class="group">
       ${row({ icon: "pin", lc: "grey", t: "Dwaraka Nagar", s: "4.8 km", go: "options", attr: 'data-dest="Dwaraka Nagar"' })}
       ${row({ icon: "pin", lc: "grey", t: L("Visakhapatnam Railway Station", "విశాఖపట్నం రైల్వే స్టేషన్", "विशाखापत्तनम रेलवे स्टेशन"), s: "6.1 km", go: "options", attr: 'data-dest="Railway Station"' })}
-      ${row({ icon: "plane", lc: "ink", t: L("Bhogapuram International Airport", "భోగాపురం అంతర్జాతీయ విమానాశ్రయం", "भोगापुरम अंतरराष्ट्रीय हवाई अड्डा"), s: L("41 km · we'll ask for your flight", "41 కి.మీ · మీ ఫ్లైట్ వివరాలు అడుగుతాం", "41 किमी · हम आपकी फ़्लाइट पूछेंगे"), go: "airport" })}
+      ${row({ icon: "pin", lc: "grey", t: "RK Beach", s: "3.2 km", go: "options", attr: 'data-dest="RK Beach"' })}
+      ${row({ icon: "pin", lc: "grey", t: "Rushikonda Beach", s: "9.4 km", go: "options", attr: 'data-dest="Rushikonda"' })}
+      ${row({ icon: "plane", lc: "ink", t: L("Bhogapuram International Airport", "భోగాపురం అంతర్జాతీయ విమానాశ్రయం", "भोगापुरम अंतरराष्ट्रीय हवाई अड्डा"), s: L("41 km · airport ride", "41 కి.మీ · ఎయిర్‌పోర్ట్ రైడ్", "41 किमी · एयरपोर्ट राइड"), go: "airport" })}
       ${row({ icon: "route", lc: "soft", t: "Araku Valley", s: L("115 km · intercity fare", "115 కి.మీ · ఇంటర్‌సిటీ ఛార్జీ", "115 किमी · इंटरसिटी किराया"), go: "intercity", attr: 'data-idest="Araku Valley"' })}
+      ${row({ icon: "route", lc: "soft", t: "Vizianagaram", s: L("60 km · intercity fare", "60 కి.మీ · ఇంటర్‌సిటీ ఛార్జీ", "60 किमी · इंटरसिटी किराया"), go: "intercity", attr: 'data-idest="Vizianagaram"' })}
     </div>
-  </div>`);
+    </div>
+  </div>`, (el) => { const i = el.querySelector("#destin"); if (i && !BARE && !EMBED) setTimeout(() => { try { i.focus({ preventScroll: true }); } catch (e) {} }, 450); });
+
+def("flysoon", { g: "Start", n: "Flying soon?", tabs: 0, nav: 1, foot: 1, what: "The last onboarding step: add the next flight now by scanning the ticket or picking the flight, or skip. Also offers to catch future bookings automatically.", why: "Airport rides are SAGA's core business, so the first session ends with an airport ride ready to book.", fl: "Same scan and pick components as the Airport screen; the auto-catch toggle maps to notification access (Android) or the Shortcuts guide (iPhone)." }, () => `
+  ${bar(L("One last thing", "చివరిగా ఒక్కటి", "आख़िरी एक बात"))}
+  <div class="content"><div class="pad">
+    <div class="center" style="padding-top:6px"><span class="pico" style="width:84px;height:84px;border-radius:42px;margin:0 auto;display:flex;align-items:center;justify-content:center;background:var(--accent);color:var(--on-accent)">${I("plane", "xl")}</span></div>
+    <h1 class="t-title center mt16">${L("Got a flight coming up?", "త్వరలో ఫ్లైట్ ఉందా?", "जल्द कोई फ़्लाइट है?")}</h1>
+    <p class="t-body muted center mt8">${L("Add it now and your airport ride is planned around it. If the flight moves, your pickup moves too.", "ఇప్పుడే జోడించండి, మీ ఎయిర్‌పోర్ట్ రైడ్ దానికి తగ్గట్టు ప్లాన్ అవుతుంది. ఫ్లైట్ మారితే పికప్ కూడా మారుతుంది.", "अभी जोड़ें, आपकी एयरपोर्ट राइड उसी के हिसाब से तय होगी। फ़्लाइट बदली तो पिकअप भी बदलेगा।")}</p>
+  </div>
+  <div class="group mt24">
+    ${row({ icon: "scan", t: L("Scan or upload the ticket", "టికెట్ స్కాన్ లేదా అప్‌లోడ్", "टिकट स्कैन या अपलोड करें"), s: L("Screenshot, PDF or boarding pass", "స్క్రీన్‌షాట్, PDF లేదా బోర్డింగ్ పాస్", "स्क्रीनशॉट, PDF या बोर्डिंग पास"), go: "scan" })}
+    ${row({ icon: "plane", t: L("Pick my flight", "నా ఫ్లైట్ ఎంచుకోండి", "मेरी फ़्लाइट चुनें"), s: L("Choose the date and city, then tap your flight", "తేదీ, నగరం ఎంచుకుని మీ ఫ్లైట్ నొక్కండి", "तारीख़ और शहर चुनें, फिर अपनी फ़्लाइट दबाएँ"), go: "airport" })}
+  </div>
+  <div class="pad mt16"><div class="card tint row-flex"><span class="grow"><b style="display:block;font-size:16.5px">${L("Catch my future bookings", "నా తదుపరి బుకింగ్‌లను గుర్తించు", "आगे की बुकिंग अपने-आप पकड़ें")}</b><span style="font-size:14.5px">${ios() ? L("Uses a 1-minute Shortcuts set-up", "1 నిమిషం Shortcuts సెటప్‌తో", "1 मिनट के Shortcuts सेटअप से") : L("Reads only airline SMS and app alerts", "ఎయిర్‌లైన్ SMS, యాప్ అలర్ట్‌లు మాత్రమే చదువుతుంది", "सिर्फ़ एयरलाइन SMS और ऐप अलर्ट पढ़ता है")}</span></span>${tgl(app.travel.notif, 'data-act="tnotif"')}</div></div>
+  </div>
+  ${foot(btn(L("Skip for now", "ఇప్పటికి వద్దు", "अभी छोड़ें"), { kind: "btn-secondary", go: "home", attr: 'data-reset="1"' }))}`);
 
 def("options", { g: "Ride", n: "Confirm ride", tabs: 0, map: 1, what: "Branded map with the route, then the SUV itself, a fixed fare, what's included, payment and one Confirm button.", why: "One vehicle class means no menu to compare. The sheet sells the ride instead: the car, the cabin, the chauffeur.", fl: "<code>google_maps_flutter</code> + cloud map style. Fare from <code>POST /quotes</code>. iOS sheet: <code>CupertinoSheetRoute</code>; Android: <code>showModalBottomSheet</code>." }, () => `
   <div class="mapwrap">${S.map({ route: "trip", view: [-20, 232, 441, 960], labelPickup: "MVP Colony", labelDrop: app.dest.split(" · ").pop() })}</div>
@@ -520,71 +576,121 @@ def("arrived", { g: "Ride", n: "Arrived", tabs: 0, foot: 1, what: "A clear finis
   </div></div>
   ${foot(btn(L("Done", "పూర్తయింది", "हो गया"), { go: "home", attr: 'data-reset="1"' }))}`);
 
-def("airport", { g: "Airport", n: "Airport rides", tabs: 0, nav: 1, what: "Going to or coming from the airport. Enter PNR and last name, or tap a flight SAGA already found in your calendar or forwarded email.", why: "The core business. The rider types six characters and SAGA works out the rest.", fl: "PNR → flight via ticket parsing or partner lookup (see brief §3). Flight status: aviationstack / FlightAware AeroAPI webhook." }, () => `
-  ${bar(L("Airport rides", "ఎయిర్‌పోర్ట్ రైడ్‌లు", "एयरपोर्ट राइड"), { large: true })}
+/* ---------- airport: scan the ticket, or pick the flight from Vizag's short daily list ---------- */
+const AL = { "6E": "IndiGo", AI: "Air India", QP: "Akasa Air", IX: "Air India Express" };
+const CITIES = [["HYD", "Hyderabad", "హైదరాబాద్", "हैदराबाद"], ["BLR", "Bengaluru", "బెంగళూరు", "बेंगलुरु"], ["DEL", "Delhi", "ఢిల్లీ", "दिल्ली"], ["MAA", "Chennai", "చెన్నై", "चेन्नई"], ["BOM", "Mumbai", "ముంబై", "मुंबई"], ["CCU", "Kolkata", "కోల్‌కతా", "कोलकाता"]];
+const BOARD = { HYD: [["6E 2134", "07:40"], ["QP 1381", "13:15"], ["6E 6517", "19:05"]], BLR: [["6E 6402", "06:20"], ["IX 2961", "11:50"], ["6E 532", "18:30"]], DEL: [["AI 1913", "13:10"], ["6E 2047", "16:45"]], MAA: [["6E 1427", "15:20"], ["6E 7051", "20:10"]], BOM: [["6E 5218", "09:30"], ["AI 2655", "17:55"]], CCU: [["6E 571", "07:45"], ["6E 6955", "14:40"]] };
+const ARR = { HYD: [["6E 2135", "11:25"], ["QP 1382", "16:40"]], BLR: [["6E 6403", "10:05"], ["6E 533", "22:15"]], DEL: [["AI 1912", "11:05"], ["6E 2048", "21:30"]], MAA: [["6E 1428", "13:00"]], BOM: [["6E 5219", "08:50"], ["AI 2656", "21:20"]], CCU: [["6E 572", "12:10"]] };
+const ADAYS = [15, 16, 17, 18, 19, 20, 21];
+const dayName = d => [L("Sun", "ఆది", "रवि"), L("Mon", "సోమ", "सोम"), L("Tue", "మంగళ", "मंगल"), L("Wed", "బుధ", "बुध"), L("Thu", "గురు", "गुरु"), L("Fri", "శుక్ర", "शुक्र"), L("Sat", "శని", "शनि")][new Date(2026, 10, d).getDay()];
+const dayLabel = d => d === 15 ? L("Today", "ఈ రోజు", "आज") : d === 16 ? L("Tomorrow", "రేపు", "कल") : `${dayName(d)} ${d}`;
+const cityName = c => { const x = CITIES.find(k => k[0] === c); return x ? L(x[1], x[2], x[3]) : c; };
+const mins = t => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+const t12 = m => hhmm(0, m);
+Object.assign(app, { aday: 20, acity: "HYD", pnrIn: "", phone: "98480 12345", otp: 0, flight: { no: "6E 2134", t: "07:40", code: "HYD", day: 20, dir: "dep", pnr: "K7QX2M" } });
+const F = () => app.flight;
+const fDate = f => `${dayName(f.day)} ${f.day} ${L("Nov", "నవం", "नवं")}`;
+const pickupMin = f => f.dir === "dep" ? mins(f.t) - 140 + app.shift : mins(f.t) + 10;
+const pickBtn = (no, t, day, city, dir, pnr, inner) => `<button class="row" data-act="pickf" data-no="${no}" data-t="${t}" data-day="${day}" data-city="${city}" data-dir="${dir}" data-pnr="${pnr || ""}">${inner}</button>`;
+
+def("airport", { g: "Airport", n: "Airport rides", tabs: 0, nav: 1, what: "Two simple ways in. Scan or upload the ticket and the app reads the flight; or pick the date and city and tap your flight from Vizag's short daily list. PNR is optional.", why: "No airline lets apps look a PNR up, so SAGA asks for what it can check instantly: the ticket itself, or the flight. Both take seconds and work for every airline.", fl: "Scan: <code>mobile_scanner</code> (boarding-pass barcode, IATA BCBP) + <code>google_mlkit_text_recognition</code>, on device. Pick: <code>GET /flights/board?airport=VTZ&amp;date=</code> from the flight-schedule API." }, () => {
+  const dep = app.dir === "dep", list = (dep ? BOARD : ARR)[app.acity] || [];
+  const foundSrc = ios() ? L("Found in your calendar", "మీ క్యాలెండర్‌లో కనిపించింది", "आपके कैलेंडर में मिली") : L("Found in an IndiGo SMS", "IndiGo SMSలో కనిపించింది", "IndiGo SMS में मिली");
+  return `${bar(L("Airport rides", "ఎయిర్‌పోర్ట్ రైడ్‌లు", "एयरपोर्ट राइड"), { large: true })}
   <div class="content">
     <div class="pad">${seg([["dep", L("To the airport", "ఎయిర్‌పోర్ట్‌కి", "एयरपोर्ट जाना")], ["arr", L("From the airport", "ఎయిర్‌పోర్ట్ నుండి", "एयरपोर्ट से आना")]], app.dir, "dir")}</div>
-    <div class="pad mt16"><div class="card">
-      <div class="t-label">${L("Your PNR (booking reference)", "మీ PNR (బుకింగ్ నంబర్)", "आपका PNR (बुकिंग नंबर)")}</div>
-      <div class="boxes mt8">${"K7QX2M".split("").map((c, i) => `<span class="${i < 6 ? "f" : ""}">${c}</span>`).join("")}</div>
-      <div class="field mt12"><span class="ph" style="flex:1">${L("Last name on ticket", "టికెట్‌లోని ఇంటిపేరు", "टिकट पर सरनेम")}</span><b>Rao</b></div>
-      <p class="t-sub mt12">${app.dir === "dep" ? L("We match your PNR to the flight, plan the pickup, and keep tracking until you take off.", "మీ PNRను ఫ్లైట్‌తో సరిపోల్చి, పికప్ ప్లాన్ చేసి, టేకాఫ్ వరకు ట్రాక్ చేస్తాం.", "हम PNR से फ़्लाइट मिलाकर पिकअप तय करेंगे और उड़ान तक ट्रैक करेंगे।") : L("Your chauffeur meets you at Arrivals with a name board, and waits free for up to 45 minutes after landing.", "మీ డ్రైవర్ అరైవల్స్ వద్ద పేరు బోర్డుతో కలుస్తారు, ల్యాండింగ్ తర్వాత 45 నిమిషాల వరకు ఉచితంగా వేచి ఉంటారు.", "आपका ड्राइवर अराइवल पर नाम की तख्ती के साथ मिलेगा और लैंडिंग के बाद 45 मिनट तक मुफ़्त इंतज़ार करेगा।")}</p>
-      <div class="mt16">${btn(L("Find my flight", "నా ఫ్లైట్ కనుగొనండి", "मेरी फ़्लाइट ढूँढें"), { go: "flight" })}</div>
+    <div class="pad mt16"><div class="card stage" style="padding:20px">
+      <div class="row-flex" style="align-items:flex-start"><span class="scico">${I("scan")}</span><div class="grow"><div class="t-h3" style="color:#fff">${L("Scan your ticket", "మీ టికెట్ స్కాన్ చేయండి", "अपना टिकट स्कैन करें")}</div><div class="t-sub mt4">${L("E-ticket, screenshot, PDF or boarding pass. We read the flight in a second.", "ఈ-టికెట్, స్క్రీన్‌షాట్, PDF లేదా బోర్డింగ్ పాస్. ఒక్క క్షణంలో ఫ్లైట్ చదువుతాం.", "ई-टिकट, स्क्रीनशॉट, PDF या बोर्डिंग पास। एक पल में फ़्लाइट पढ़ लेते हैं।")}</div></div></div>
+      <div class="btnrow mt16">${btn(L("Scan", "స్కాన్", "स्कैन"), { kind: "btn-stage", go: "scan", icon: "scan" })}${btn(L("Upload", "అప్‌లోడ్", "अपलोड"), { kind: "btn-stage2", go: "scan", icon: "upload" })}</div>
     </div></div>
-    ${sh(L("Flights we found", "మేము కనుగొన్న ఫ్లైట్లు", "हमें मिली फ़्लाइट"))}
-    <div class="group">
-      ${row({ icon: "plane", t: L("6E 2134 · Fri 20 Nov · 7:40 AM", "6E 2134 · శుక్ర 20 నవం · ఉ. 7:40", "6E 2134 · शुक्र 20 नवं · सुबह 7:40"), s: ios() ? L("To Hyderabad · from your calendar", "హైదరాబాద్‌కి · మీ క్యాలెండర్ నుండి", "हैदराबाद · आपके कैलेंडर से") : L("To Hyderabad · from an IndiGo SMS", "హైదరాబాద్‌కి · IndiGo SMS నుండి", "हैदराबाद · IndiGo SMS से"), go: "flight" })}
-      ${row({ icon: "chat", lc: "soft", t: L("AI 1912 · Thu 3 Dec · 9:15 PM", "AI 1912 · గురు 3 డిసెం · రా. 9:15", "AI 1912 · गुरु 3 दिसं · रात 9:15"), s: L("From Delhi · forwarded on WhatsApp", "ఢిల్లీ నుండి · WhatsAppలో ఫార్వర్డ్", "दिल्ली से · WhatsApp पर फ़ॉरवर्ड"), go: "flight" })}
-    </div>
-    <div class="group mt12">${row({ icon: "spark", lc: "ink", t: L("Find my flights automatically", "నా ఫ్లైట్లను ఆటోమేటిక్‌గా కనుగొనండి", "मेरी फ़्लाइट अपने-आप ढूँढें"), s: L("Catch every booking automatically, or forward it on WhatsApp", "ప్రతి బుకింగ్‌ను ఆటోమేటిక్‌గా పట్టుకోండి, లేదా WhatsAppలో ఫార్వర్డ్ చేయండి", "हर बुकिंग अपने-आप पकड़ें, या WhatsApp पर फ़ॉरवर्ड करें"), go: "travel" })}</div>
-  </div>`);
+    ${dep && app.travel.cal ? `${sh(L("Found for you", "మీ కోసం కనుగొన్నది", "आपके लिए मिली"))}<div class="group">${pickBtn("6E 2134", "07:40", 20, "HYD", "dep", "K7QX2M", `<span class="lead">${I("spark")}</span><span class="tx"><span class="t1" style="display:block"><b>7:40 AM</b> · 6E 2134 · ${L("Fri 20 Nov", "శుక్ర 20 నవం", "शुक्र 20 नवं")}</span><span class="t2" style="display:block">${foundSrc} · VTZ → HYD</span></span><span class="trail">${I("chevr")}</span>`)}</div>` : ""}
+    ${sh(L("Or pick your flight", "లేదా మీ ఫ్లైట్ ఎంచుకోండి", "या अपनी फ़्लाइट चुनें"))}
+    <div class="pad"><div class="t-label">${dep ? L("When do you fly?", "ఎప్పుడు ప్రయాణం?", "उड़ान कब है?") : L("When do you land?", "ఎప్పుడు ల్యాండింగ్?", "कब लैंड करेंगे?")}</div></div>
+    <div class="chips mt8">${ADAYS.map(d => `<button class="chip ${app.aday === d ? "on" : ""}" data-act="aday" data-v="${d}">${dayLabel(d)}</button>`).join("")}</div>
+    <div class="pad mt16"><div class="t-label">${dep ? L("Flying to", "ఎక్కడికి", "कहाँ जा रहे हैं") : L("Flying in from", "ఎక్కడి నుండి", "कहाँ से आ रहे हैं")}</div></div>
+    <div class="chips mt8">${CITIES.map(c => `<button class="chip ${app.acity === c[0] ? "on" : ""}" data-act="acity" data-v="${c[0]}">${L(c[1], c[2], c[3])}</button>`).join("")}</div>
+    <div class="group mt16">${list.map(([no, t]) => pickBtn(no, t, app.aday, app.acity, app.dir, "", `<span class="lead soft">${I(dep ? "takeoff" : "landing")}</span><span class="tx"><span class="t1" style="display:block"><b class="t-num">${t12(mins(t))}</b> · ${no}</span><span class="t2" style="display:block">${AL[no.split(" ")[0]]} · ${dep ? "VTZ → " + app.acity : app.acity + " → VTZ"}</span></span><span class="trail">${I("chevr")}</span>`)).join("")}</div>
+    <p class="t-sub pad mt8">${L("Vizag has one airport, so the day's list is short. Tap yours.", "విశాఖలో ఒకే ఎయిర్‌పోర్ట్, అందుకే రోజు జాబితా చిన్నది. మీ ఫ్లైట్ నొక్కండి.", "विज़ाग में एक ही एयरपोर्ट है, इसलिए दिन की सूची छोटी है। अपनी फ़्लाइट चुनें।")}</p>
+    ${sh(L("PNR (optional)", "PNR (ఐచ్ఛికం)", "PNR (वैकल्पिक)"))}
+    <div class="pad"><div class="field"><input id="pnrin" class="mono" maxlength="6" autocomplete="off" spellcheck="false" placeholder="K7QX2M" value="${app.pnrIn}" aria-label="PNR" style="text-transform:uppercase;letter-spacing:.22em;font-size:19px"></div>
+    <p class="t-sub mt8">${L("Saved with your flight for the chauffeur's name board. Not needed to find the flight.", "డ్రైవర్ పేరు బోర్డు కోసం మీ ఫ్లైట్‌తో సేవ్ అవుతుంది. ఫ్లైట్ కనుగొనడానికి అవసరం లేదు.", "ड्राइवर की नाम-तख्ती के लिए फ़्लाइट के साथ सेव होता है। फ़्लाइट ढूँढने के लिए ज़रूरी नहीं।")}</p></div>
+  </div>`;
+});
 
-def("flight", { g: "Airport", n: "Pickup plan", tabs: 0, nav: 1, foot: 1, what: "The flight as a boarding pass, then a plain timeline: pickup, airport arrival, check-in close, departure. The pickup can be nudged ±5 min. Flight tracking is on by default.", why: "Shows the working, so riders trust an automatic time. Delays move the pickup without the rider doing anything.", fl: "Pickup = departure − buffer (domestic 90 min, intl 180 min) − drive time (Routes API, traffic for that hour). Stored as a rule, recomputed on every flight update." }, () => {
-  const s = app.shift, p = hhmm(5, 20 + s);
+def("scan", { g: "Airport", n: "Scan ticket", tabs: 0, sb: "light", what: "Camera view (or a picked screenshot or PDF). On-device text recognition reads the PNR, flight, date and names; a boarding-pass barcode is read exactly. The found flight appears for one-tap confirmation.", why: "Works for every airline and travel site, offline, in about a second, with nothing to type.", fl: "<code>mobile_scanner</code> for PDF417 / Aztec boarding-pass barcodes (IATA BCBP); <code>google_mlkit_text_recognition</code> for e-tickets and screenshots; <code>file_picker</code> for PDFs. All on device; only the flight fields go to the server." }, () => `
+  <div class="scanv">
+    <div class="tkt">
+      <div class="tkt-h"><b>E-TICKET</b><span>${L("Booking confirmed", "బుకింగ్ నిర్ధారించబడింది", "बुकिंग पक्की")}</span></div>
+      <div class="tkt-g"><div><span>PNR</span><b>K7QX2M</b></div><div><span>FLIGHT</span><b>6E 2134</b></div><div><span>DATE</span><b>20 NOV 2026</b></div></div>
+      <div class="tkt-r"><div><b>VTZ</b><span>Visakhapatnam</span></div><div class="tkt-l">07:40 → 08:55</div><div style="text-align:right"><b>HYD</b><span>Hyderabad</span></div></div>
+      <div class="tkt-p"><span>PASSENGERS</span>RAO/ANANYA MS · RAO/SURESH MR</div>
+      <div class="tkt-bc"></div>
+    </div>
+    <div class="vf"><i></i><i></i><i></i><i></i><span class="beam"></span></div>
+    <div class="scan-top">${hbtn("close", "data-back", "Close")}<span class="pill dark scan-hint">${L("Hold your ticket inside the frame", "టికెట్‌ను ఫ్రేమ్‌లో ఉంచండి", "टिकट को फ़्रेम के अंदर रखें")}</span></div>
+    <div class="scan-res">
+      <div class="row-flex">${pill("check", L("Ticket read", "టికెట్ చదివాం", "टिकट पढ़ लिया"), "ok")}<span class="t-sub">${L("2 passengers", "2 ప్రయాణికులు", "2 यात्री")}</span></div>
+      <div class="t-title mt12">6E 2134 · IndiGo</div>
+      <div class="t-body mt4">VTZ → HYD · ${L("Fri 20 Nov", "శుక్ర 20 నవం", "शुक्र 20 नवं")} · 7:40 AM</div>
+      <div class="t-sub mt4">PNR K7QX2M · Ananya Rao, Suresh Rao</div>
+      <div class="mt16"><button class="btn btn-primary block lg" data-act="pickf" data-no="6E 2134" data-t="07:40" data-day="20" data-city="HYD" data-dir="dep" data-pnr="K7QX2M"><span>${L("Plan my pickup", "నా పికప్ ప్లాన్ చేయండి", "मेरा पिकअप प्लान करें")}</span></button></div>
+      <button class="btn btn-text block" data-act="rescan">${L("Scan again", "మళ్ళీ స్కాన్", "फिर से स्कैन करें")}</button>
+    </div>
+  </div>`, (el) => { const t = setTimeout(() => { const v = el.querySelector(".scanv"); if (v) v.classList.add("found"); }, 1900); timers.push(t); });
+
+def("flight", { g: "Airport", n: "Pickup plan", tabs: 0, nav: 1, foot: 1, what: "The flight as a boarding pass, then a plain timeline. Departures: pickup, airport arrival, check-in close, take-off, with the pickup adjustable ±5 min. Arrivals: landing, chauffeur at the kerb, free wait. Flight tracking is on by default.", why: "Shows the working, so riders trust an automatic time. Delays move the pickup without the rider doing anything.", fl: "Pickup = departure − buffer (domestic 90 min, intl 180 min) − drive time (Routes API, traffic for that hour). Stored as a rule, recomputed on every flight-status update." }, () => {
+  const f = F(), dep = f.dir === "dep", p = pickupMin(f), dm = mins(f.t), al = AL[f.no.split(" ")[0]] || "";
+  const from = dep ? "VTZ" : f.code, to = dep ? f.code : "VTZ", fromN = dep ? "Visakhapatnam" : cityName(f.code), toN = dep ? cityName(f.code) : "Visakhapatnam";
+  const tl = dep
+    ? `<div class="tli on"><time>${t12(p).replace(/ [AP]M/, "")}</time><span class="d"></span><div class="x"><b>${L("Pickup at Home", "ఇంటి వద్ద పికప్", "घर से पिकअप")}</b><span>MVP Colony</span></div></div>
+       <div class="tli"><time>${t12(dm - 90).replace(/ [AP]M/, "")}</time><span class="d"></span><div class="x"><b>${L("Reach the airport", "ఎయిర్‌పోర్ట్ చేరుకోవడం", "एयरपोर्ट पहुँचना")}</b><span>${L("90 min before departure", "బయలుదేరడానికి 90 నిమి. ముందు", "उड़ान से 90 मिनट पहले")}</span></div></div>
+       <div class="tli mut"><time>${t12(dm - 45).replace(/ [AP]M/, "")}</time><span class="d"></span><div class="x"><b>${L("Check-in closes", "చెక్-ఇన్ ముగుస్తుంది", "चेक-इन बंद")}</b></div></div>
+       <div class="tli mut"><time>${t12(dm).replace(/ [AP]M/, "")}</time><span class="d"></span><div class="x"><b>${L("Departure", "బయలుదేరే సమయం", "उड़ान")}</b></div></div>`
+    : `<div class="tli mut"><time>${t12(dm).replace(/ [AP]M/, "")}</time><span class="d"></span><div class="x"><b>${L("Lands", "ల్యాండింగ్", "लैंडिंग")}</b><span>${f.no}</span></div></div>
+       <div class="tli on"><time>${t12(dm + 10).replace(/ [AP]M/, "")}</time><span class="d"></span><div class="x"><b>${L("Chauffeur at Arrivals", "అరైవల్స్ వద్ద డ్రైవర్", "अराइवल पर ड्राइवर")}</b><span>${L("With a name board", "పేరు బోర్డుతో", "नाम की तख्ती के साथ")}</span></div></div>
+       <div class="tli"><time>${t12(dm + 55).replace(/ [AP]M/, "")}</time><span class="d"></span><div class="x"><b>${L("Free waiting until", "ఉచిత వెయిటింగ్ వరకు", "मुफ़्त इंतज़ार तक")}</b><span>${L("45 min after landing", "ల్యాండింగ్ తర్వాత 45 నిమి.", "लैंडिंग के 45 मिनट बाद तक")}</span></div></div>`;
   return `${bar(L("Your flight", "మీ ఫ్లైట్", "आपकी फ़्लाइट"))}
   <div class="content"><div class="pad">
     <div class="ticket">
-      <div class="tk-top"><div class="row-flex"><span class="grow t-label">6E 2134 · ${L("Fri 20 Nov", "శుక్ర 20 నవం", "शुक्र 20 नवं")}</span>${pill("check", L("On time", "సమయానికి", "समय पर"), "ok")}</div>
-        <div class="tk-mid"><div><div class="iata">VTZ</div><div class="t-sub">Visakhapatnam</div></div><div class="tk-line"><i></i>${I("plane")}<i></i></div><div style="text-align:right"><div class="iata">HYD</div><div class="t-sub">Hyderabad</div></div></div></div>
+      <div class="tk-top"><div class="row-flex"><span class="grow t-label">${f.no} · ${al} · ${fDate(f)}</span>${pill("check", L("On time", "సమయానికి", "समय पर"), "ok")}</div>
+        <div class="tk-mid"><div><div class="iata">${from}</div><div class="t-sub">${fromN}</div></div><div class="tk-line"><i></i>${I("plane")}<i></i></div><div style="text-align:right"><div class="iata">${to}</div><div class="t-sub">${toN}</div></div></div></div>
       <div class="tk-cut"></div>
-      <div class="tk-bot"><div><span class="t-label">${L("Departs", "బయలుదేరు", "रवाना")}</span><b class="t-num">7:40 AM</b></div><div><span class="t-label">PNR</span><b class="mono">K7QX2M</b></div><div><span class="t-label">${L("Riders", "ప్రయాణికులు", "यात्री")}</span><b>2</b></div></div>
+      <div class="tk-bot"><div><span class="t-label">${dep ? L("Departs", "బయలుదేరు", "रवाना") : L("Lands", "ల్యాండింగ్", "लैंडिंग")}</span><b class="t-num">${t12(dm)}</b></div><div><span class="t-label">PNR</span><b class="mono">${f.pnr || "—"}</b></div><div><span class="t-label">${L("Riders", "ప్రయాణికులు", "यात्री")}</span><b>2</b></div></div>
     </div>
   </div>
-  ${sh(L("Your pickup plan", "మీ పికప్ ప్లాన్", "आपका पिकअप प्लान"))}
+  ${sh(dep ? L("Your pickup plan", "మీ పికప్ ప్లాన్", "आपका पिकअप प्लान") : L("Your arrival plan", "మీ అరైవల్ ప్లాన్", "आपका अराइवल प्लान"))}
   <div class="pad"><div class="card">
-    <div class="tl">
-      <div class="tli on"><time>${p.replace(" AM", "")}</time><span class="d"></span><div class="x"><b>${L("Pickup at Home", "ఇంటి వద్ద పికప్", "घर से पिकअप")}</b><span>MVP Colony</span></div></div>
-      <div class="tli"><time>${hhmm(6, 10 + s).replace(" AM", "")}</time><span class="d"></span><div class="x"><b>${L("Reach the airport", "ఎయిర్‌పోర్ట్ చేరుకోవడం", "एयरपोर्ट पहुँचना")}</b><span>${L(`${90 - s} min before departure`, `బయలుదేరడానికి ${90 - s} నిమి. ముందు`, `उड़ान से ${90 - s} मिनट पहले`)}</span></div></div>
-      <div class="tli mut"><time>6:55</time><span class="d"></span><div class="x"><b>${L("Check-in closes", "చెక్-ఇన్ ముగుస్తుంది", "चेक-इन बंद")}</b></div></div>
-      <div class="tli mut"><time>7:40</time><span class="d"></span><div class="x"><b>${L("Departure", "బయలుదేరే సమయం", "उड़ान")}</b></div></div>
-    </div>
-    <div class="row-flex mt12"><span class="t-sub grow">${L("Pickup time", "పికప్ సమయం", "पिकअप समय")}</span><span class="stepper"><button data-act="shift" data-v="-5" aria-label="5 min earlier">${I("minus")}</button><b class="t-num">${p}</b><button data-act="shift" data-v="5" aria-label="5 min later">${I("plus")}</button></span></div>
-    <p class="t-sub mt12">${L("Why this time: a 50-minute drive at that hour, plus 90 minutes at the airport for check-in and security.", "ఈ సమయం ఎందుకు: ఆ సమయంలో 50 నిమిషాల ప్రయాణం, చెక్-ఇన్ మరియు సెక్యూరిటీకి 90 నిమిషాలు.", "यह समय क्यों: उस वक़्त 50 मिनट की ड्राइव, और चेक-इन व सिक्योरिटी के लिए 90 मिनट।")}</p>
+    <div class="tl">${tl}</div>
+    ${dep ? `<div class="row-flex mt12"><span class="t-sub grow">${L("Pickup time", "పికప్ సమయం", "पिकअप समय")}</span><span class="stepper"><button data-act="shift" data-v="-5" aria-label="5 min earlier">${I("minus")}</button><b class="t-num">${t12(p)}</b><button data-act="shift" data-v="5" aria-label="5 min later">${I("plus")}</button></span></div>
+    <p class="t-sub mt12">${L("Why this time: a 50-minute drive at that hour, plus 90 minutes at the airport for check-in and security.", "ఈ సమయం ఎందుకు: ఆ సమయంలో 50 నిమిషాల ప్రయాణం, చెక్-ఇన్ మరియు సెక్యూరిటీకి 90 నిమిషాలు.", "यह समय क्यों: उस वक़्त 50 मिनट की ड्राइव, और चेक-इन व सिक्योरिटी के लिए 90 मिनट।")}</p>`
+    : `<p class="t-sub mt12">${L("We watch the flight. If it lands early or late, your chauffeur's time moves with it.", "మేము ఫ్లైట్‌ను గమనిస్తాం. ముందు లేదా ఆలస్యంగా ల్యాండ్ అయితే, డ్రైవర్ సమయం కూడా మారుతుంది.", "हम फ़्लाइट पर नज़र रखते हैं। जल्दी या देर से लैंड हो तो ड्राइवर का समय भी बदल जाएगा।")}</p>`}
   </div></div>
   <div class="group mt12">
-    ${row({ icon: "home", t: L("Pickup", "పికప్", "पिकअप"), s: L("Home · MVP Colony", "ఇల్లు · MVP కాలనీ", "घर · MVP कॉलोनी"), go: "where" })}
+    ${row({ icon: "home", t: dep ? L("Pickup", "పికప్", "पिकअप") : L("Drop", "డ్రాప్", "ड्रॉप"), s: L("Home · MVP Colony", "ఇల్లు · MVP కాలనీ", "घर · MVP कॉलोनी"), go: "where" })}
     ${row({ icon: "bag", t: L("2 riders · 2 bags", "2 మంది · 2 బ్యాగులు", "2 यात्री · 2 बैग"), s: L(`Fits comfortably · up to ${RIDERS} riders`, `సౌకర్యంగా సరిపోతుంది · ${RIDERS} మంది వరకు`, `आराम से · ${RIDERS} यात्री तक`), chev: false })}
     <div class="row"><span class="lead">${I("refresh")}</span><span class="tx"><span class="t1" style="display:block">${L("Move pickup if the flight changes", "ఫ్లైట్ మారితే పికప్ మార్చండి", "फ़्लाइट बदले तो पिकअप बदलें")}</span><span class="t2" style="display:block">${L("We'll tell you before we do", "మార్చే ముందు మీకు చెబుతాం", "बदलने से पहले बताएँगे")}</span></span>${tgl(true, 'data-act="tg"')}</div>
   </div>
-  <div class="pad mt12"><div class="row-flex" style="font-size:17px"><span class="grow muted">${L("Fixed fare to the airport", "ఎయిర్‌పోర్ట్‌కి స్థిర ఛార్జీ", "एयरपोर्ट तक तय किराया")}</span><b class="t-num">${S.inr(AIRFARE)}</b></div></div>
+  <div class="pad mt12"><div class="row-flex" style="font-size:17px"><span class="grow muted">${L("Fixed fare", "స్థిర ఛార్జీ", "तय किराया")}</span><b class="t-num">${S.inr(AIRFARE)}</b></div></div>
   </div>
-  ${foot(btn(L(`Book pickup for ${p}`, `${p}కి పికప్ బుక్ చేయండి`, `${p} का पिकअप बुक करें`), { act: "bookflight", cls: "lg" }))}`;
+  ${foot(btn(dep ? L(`Book pickup for ${t12(p)}`, `${t12(p)}కి పికప్ బుక్ చేయండి`, `${t12(p)} का पिकअप बुक करें`) : L("Book pickup at Arrivals", "అరైవల్స్ వద్ద పికప్ బుక్", "अराइवल पर पिकअप बुक करें"), { act: "bookflight", cls: "lg" }))}`;
 });
 
-def("booked", { g: "Airport", n: "Pickup booked", tabs: 0, foot: 1, what: "Confirmation and a plain 'what happens next' list, including what SAGA does if the flight is delayed.", why: "Takes away the 4 AM worry. Nothing else to do until the reminder.", fl: "Calendar export via <code>add_2_calendar</code>. Reminders are server-scheduled pushes, not local timers." }, () => `
-  <div class="content"><div class="pad center" style="padding-top:30px">
+def("booked", { g: "Airport", n: "Pickup booked", tabs: 0, foot: 1, what: "Confirmation and a plain 'what happens next' list, including what SAGA does if the flight is delayed.", why: "Takes away the 4 AM worry. Nothing else to do until the reminder.", fl: "Calendar export via <code>add_2_calendar</code>. Reminders are server-scheduled pushes, not local timers." }, () => {
+  const f = F(), dep = f.dir === "dep", p = pickupMin(f);
+  return `<div class="content"><div class="pad center" style="padding-top:30px">
     <div class="seal">${I("check")}</div>
     <h1 class="t-title mt20">${L("Pickup booked", "పికప్ బుక్ అయింది", "पिकअप बुक हो गया")}</h1>
-    <p class="t-body muted mt8">${L(`Fri 20 Nov · ${hhmm(5, 20 + app.shift)} · Home → Airport`, `శుక్ర 20 నవం · ${hhmm(5, 20 + app.shift)} · ఇల్లు → ఎయిర్‌పోర్ట్`, `शुक्र 20 नवं · ${hhmm(5, 20 + app.shift)} · घर → एयरपोर्ट`)}</p>
+    <p class="t-body muted mt8">${fDate(f)} · ${t12(p)} · ${dep ? L("Home → Airport", "ఇల్లు → ఎయిర్‌పోర్ట్", "घर → एयरपोर्ट") : L("Airport → Home", "ఎయిర్‌పోర్ట్ → ఇల్లు", "एयरपोर्ट → घर")}</p>
   </div>
   ${sh(L("What happens next", "తర్వాత ఏమవుతుంది", "आगे क्या होगा"))}
   <div class="pad"><div class="card"><div class="tl">
-    <div class="tli"><time>Thu 9 PM</time><span class="d"></span><div class="x"><b>${L("Reminder", "రిమైండర్", "रिमाइंडर")}</b><span>${L("Your chauffeur's name, photo and car", "మీ డ్రైవర్ పేరు, ఫోటో, కారు", "ड्राइवर का नाम, फ़ोटो और गाड़ी")}</span></div></div>
-    <div class="tli on"><time>${hhmm(5, 0 + app.shift).replace(" AM", "")}</time><span class="d"></span><div class="x"><b>${L("Chauffeur on the way", "డ్రైవర్ బయలుదేరారు", "ड्राइवर रवाना")}</b><span>${L("Track live, share your code", "లైవ్ ట్రాక్, కోడ్ షేర్", "लाइव ट्रैक करें, कोड बताएँ")}</span></div></div>
-    <div class="tli"><time>${L("Delays", "ఆలస్యం", "देरी")}</time><span class="d"></span><div class="x"><b>${L("Pickup moves with the flight", "ఫ్లైట్‌తో పాటు పికప్ మారుతుంది", "पिकअप फ़्लाइट के साथ बदलेगा")}</b><span>${L("You get a notification, nothing to do", "నోటిఫికేషన్ వస్తుంది, మీరేమీ చేయక్కర్లేదు", "नोटिफ़िकेशन आएगा, कुछ करना नहीं")}</span></div></div>
-    <div class="tli"><time>${L("Return", "తిరుగు", "वापसी")}</time><span class="d"></span><div class="x"><b>${L("Book the ride home in one tap", "ఒక్క ట్యాప్‌తో ఇంటికి రైడ్", "एक टैप में घर की राइड")}</b><span>${L("We'll ask when you've landed", "మీరు ల్యాండ్ అయ్యాక అడుగుతాం", "लैंड होने पर पूछेंगे")}</span></div></div>
+    <div class="tli"><time>${L("9 PM", "రా. 9", "रात 9")}</time><span class="d"></span><div class="x"><b>${L("Reminder the evening before", "ముందు రోజు సాయంత్రం రిమైండర్", "एक दिन पहले शाम को रिमाइंडर")}</b><span>${L("Your chauffeur's name, photo and car", "మీ డ్రైవర్ పేరు, ఫోటో, కారు", "ड्राइवर का नाम, फ़ोटो और गाड़ी")}</span></div></div>
+    <div class="tli on"><time>${t12(p - 20).replace(/ [AP]M/, "")}</time><span class="d"></span><div class="x"><b>${L("Chauffeur on the way", "డ్రైవర్ బయలుదేరారు", "ड्राइवर रवाना")}</b><span>${L("Track live, share your code", "లైవ్ ట్రాక్, కోడ్ షేర్", "लाइव ट्रैक करें, कोड बताएँ")}</span></div></div>
+    <div class="tli"><time>${L("Delays", "ఆలస్యం", "देरी")}</time><span class="d"></span><div class="x"><b>${L(`Pickup moves with ${f.no}`, `${f.no}తో పాటు పికప్ మారుతుంది`, `पिकअप ${f.no} के साथ बदलेगा`)}</b><span>${L("You get a notification, nothing to do", "నోటిఫికేషన్ వస్తుంది, మీరేమీ చేయక్కర్లేదు", "नोटिफ़िकेशन आएगा, कुछ करना नहीं")}</span></div></div>
+    ${dep ? `<div class="tli"><time>${L("Return", "తిరుగు", "वापसी")}</time><span class="d"></span><div class="x"><b>${L("Book the ride home in one tap", "ఒక్క ట్యాప్‌తో ఇంటికి రైడ్", "एक टैप में घर की राइड")}</b><span>${L("We'll ask when you've landed", "మీరు ల్యాండ్ అయ్యాక అడుగుతాం", "लैंड होने पर पूछेंगे")}</span></div></div>` : ""}
   </div></div></div></div>
-  ${foot(`<div class="btnrow">${btn(L("Add to calendar", "క్యాలెండర్‌లో", "कैलेंडर में जोड़ें"), { kind: "btn-secondary", toast: L("Added to your calendar", "మీ క్యాలెండర్‌లో జోడించాం", "कैलेंडर में जोड़ दिया") })}${btn(L("Done", "పూర్తయింది", "हो गया"), { act: "totrips" })}</div>`)}`);
+  ${foot(`<div class="btnrow">${btn(L("Add to calendar", "క్యాలెండర్‌లో", "कैलेंडर में जोड़ें"), { kind: "btn-secondary", toast: L("Added to your calendar", "మీ క్యాలెండర్‌లో జోడించాం", "कैलेंडर में जोड़ दिया") })}${btn(L("Done", "పూర్తయింది", "हो गया"), { act: "totrips" })}</div>`)}`;
+});
 
 def("schedule", { g: "Scheduled", n: "Scheduled rides", tabs: 0, nav: 1, foot: 1, what: "Pickup and drop, time, repeat days, a calendar that shows every ride (tap a date to skip it), return ride and same-chauffeur preference, and the price with the weekday-plan discount.", why: "Office and school runs are steady revenue for a small fleet, and they're planned days ahead, which helps dispatch.", fl: "Stored as an RRULE (RFC 5545) + exceptions. Server expands it 14 days ahead into real bookings so dispatch can plan." }, () => {
   const base = new Date(2026, 10, 15), Y = 2026, M = 10, first = new Date(Y, M, 1).getDay(), dim = 30;
@@ -597,7 +703,7 @@ def("schedule", { g: "Scheduled", n: "Scheduled rides", tabs: 0, nav: 1, foot: 1
     const dt = new Date(Y, M, d), wd = dt.getDay(), past = dt < base, sk = app.skips.includes(d);
     const on = !past && app.days.includes(wd);
     if (on && !sk) n++;
-    cells += `<button class="cd ${past ? "past" : ""} ${on ? "on" : ""} ${sk ? "skip" : ""} ${d === 15 ? "today" : ""}" ${on ? `data-act="skip" data-v="${d}"` : ""}>${d}</button>`;
+    cells += on ? `<button class="cd on ${sk ? "skip" : ""}" data-act="skip" data-v="${d}">${d}</button>` : `<span class="cd ${past ? "past" : ""} ${d === 15 ? "today" : ""}">${d}</span>`;
   }
   let dec = 0; for (let d = 1; d <= 12; d++) if (app.days.includes(new Date(2026, 11, d).getDay())) dec++;
   const rides = (n + dec) * (app.ret ? 2 : 1), per = 252, total = Math.round(rides * per * .9);
@@ -618,7 +724,7 @@ def("schedule", { g: "Scheduled", n: "Scheduled rides", tabs: 0, nav: 1, foot: 1
     <div class="group mt12">
       <div class="row"><span class="lead">${I("repeat")}</span><span class="tx"><span class="t1" style="display:block">${L("Return ride at 6:30 PM", "సా. 6:30కి తిరుగు రైడ్", "शाम 6:30 वापसी राइड")}</span></span>${tgl(app.ret, 'data-act="ret"')}</div>
       <div class="row"><span class="lead">${I("user")}</span><span class="tx"><span class="t1" style="display:block">${L("Prefer the same chauffeur", "అదే డ్రైవర్ కావాలి", "वही ड्राइवर चाहिए")}</span><span class="t2" style="display:block">${L("We'll try every day", "ప్రతి రోజు ప్రయత్నిస్తాం", "हर दिन कोशिश करेंगे")}</span></span>${tgl(app.same, 'data-act="same"')}</div>
-      ${row({ icon: "cal", t: L("Ends", "ముగింపు", "खत्म"), trail: L("Sat 12 Dec", "శని 12 డిసెం", "शनि 12 दिसं") })}
+      ${row({ icon: "cal", t: L("Ends", "ముగింపు", "खत्म"), trail: L("Sat 12 Dec", "శని 12 డిసెం", "शनि 12 दिसं"), toast: L("Pick any end date, or keep it running until you stop it", "ఏ ముగింపు తేదీ అయినా ఎంచుకోండి, లేదా మీరు ఆపే వరకు కొనసాగించండి", "कोई भी आख़िरी तारीख़ चुनें, या रोकने तक चालू रखें") })}
     </div>
     <div class="pad mt12"><div class="card tint">
       <div class="row-flex"><span class="grow" style="font-weight:600;font-size:17px">${L(`${rides} rides · ₹${per} each`, `${rides} రైడ్‌లు · ఒక్కొక్కటి ₹${per}`, `${rides} राइड · ₹${per} प्रति राइड`)}</span>${pill("percent", "−10%", "")}</div>
@@ -674,7 +780,7 @@ def("vehicle", { g: "Ride", n: "The car", tabs: 0, sb: "light", foot: 1, what: "
 
 def("rides", { g: "Tabs", n: "Trips", tab: "rides", what: "Upcoming (airport pickups with live flight status, repeat series with skip/manage, intercity) and past trips with receipts.", why: "Scheduled and airport rides live here, so riders can check them days ahead.", fl: "<code>GET /rides?status=upcoming|past</code>. Series shown as one card, expanded server-side." }, () => {
   const up = `
-    ${app.booked ? `<div class="card" data-go="booked" role="button"><div class="row-flex"><span class="sq" style="width:46px;height:46px;border-radius:14px;background:var(--accent);color:var(--on-accent);display:flex;align-items:center;justify-content:center">${I("plane")}</span><div class="grow"><div class="t-h3">${L("Airport pickup", "ఎయిర్‌పోర్ట్ పికప్", "एयरपोर्ट पिकअप")}</div><div class="t-sub">${L(`Fri 20 Nov · ${hhmm(5, 20 + app.shift)}`, `శుక్ర 20 నవం · ${hhmm(5, 20 + app.shift)}`, `शुक्र 20 नवं · ${hhmm(5, 20 + app.shift)}`)}</div></div>${pill("check", L("On time", "సమయానికి", "समय पर"), "ok")}</div><div class="hr"></div><div class="row-flex t-sub">${I("refresh", "sm")}<span>${L("Tracking 6E 2134 · pickup moves if it does", "6E 2134 ట్రాకింగ్ · అది మారితే పికప్ మారుతుంది", "6E 2134 ट्रैक हो रही · बदली तो पिकअप भी बदलेगा")}</span></div></div>`
+    ${app.booked ? `<div class="card" data-go="booked" role="button"><div class="row-flex"><span class="sq" style="width:46px;height:46px;border-radius:14px;background:var(--accent);color:var(--on-accent);display:flex;align-items:center;justify-content:center">${I("plane")}</span><div class="grow"><div class="t-h3">${L("Airport pickup", "ఎయిర్‌పోర్ట్ పికప్", "एयरपोर्ट पिकअप")}</div><div class="t-sub">${`${fDate(F())} · ${t12(pickupMin(F()))}`}</div></div>${pill("check", L("On time", "సమయానికి", "समय पर"), "ok")}</div><div class="hr"></div><div class="row-flex t-sub">${I("refresh", "sm")}<span>${L(`Tracking ${F().no} · pickup moves if it does`, `${F().no} ట్రాకింగ్ · అది మారితే పికప్ మారుతుంది`, `${F().no} ट्रैक हो रही · बदली तो पिकअप भी बदलेगा`)}</span></div></div>`
       : `<div class="card line" data-go="airport" role="button"><div class="row-flex"><span class="pico">${I("plane")}</span><div class="grow"><b style="font-size:17px">${L("Flying soon?", "త్వరలో ప్రయాణమా?", "जल्द उड़ान है?")}</b><div class="t-sub">${L("Add your PNR and we'll plan the pickup", "మీ PNR ఇవ్వండి, పికప్ ప్లాన్ చేస్తాం", "PNR डालें, हम पिकअप तय करेंगे")}</div></div>${I("chevr")}</div></div>`}
     <div class="card mt12"><div class="row-flex"><span class="pico">${I("repeat")}</span><div class="grow"><div class="t-h3">${L("Weekdays · 9:00 AM", "వారపు రోజులు · ఉ. 9:00", "सोम–शुक्र · सुबह 9:00")}</div><div class="t-sub">${L("Home → Office · same chauffeur", "ఇల్లు → ఆఫీస్ · అదే డ్రైవర్", "घर → ऑफ़िस · वही ड्राइवर")}</div></div></div>
       <div class="t-sub mt12">${L("Next: Mon 16 Nov · Ravi Kumar", "తదుపరి: సోమ 16 నవం · రవి కుమార్", "अगली: सोम 16 नवं · रवि कुमार")}</div>
@@ -694,7 +800,7 @@ def("offers", { g: "Tabs", n: "Offers", tab: "offers", what: "SAGA points, a pro
   <div class="content"><div class="pad">
     <div class="card stage"><div class="t-label" style="color:var(--on-stage2)">${L("SAGA points", "SAGA పాయింట్లు", "SAGA पॉइंट")}</div><div class="row-flex mt8"><span class="pts t-num grow">1,240</span>${pill("gift", L("Worth ₹124", "₹124 విలువ", "₹124 के बराबर"), "dark")}</div>
     <div class="progress mt16" style="background:rgba(255,255,255,.14)"><i style="width:62%"></i></div><p class="t-sub mt8">${L("760 more for a free city ride", "ఉచిత సిటీ రైడ్‌కు ఇంకా 760", "मुफ़्त सिटी राइड के लिए 760 और")}</p></div>
-    <div class="field mt16"><span class="ph" style="flex:1">${L("Have a code?", "కోడ్ ఉందా?", "कोड है?")}</span><button class="btn btn-text sm" data-toast="${esc(L("Code applied to your next ride", "తదుపరి రైడ్‌కు కోడ్ వర్తించింది", "कोड अगली राइड पर लग गया"))}">${L("Apply", "వర్తించు", "लगाएँ")}</button></div>
+    <div class="field mt16"><input id="promo" autocomplete="off" spellcheck="false" placeholder="${L("Have a code? e.g. FLYSAGA", "కోడ్ ఉందా? ఉదా. FLYSAGA", "कोड है? जैसे FLYSAGA")}" style="text-transform:uppercase"><button class="btn btn-text sm" data-act="promo">${L("Apply", "వర్తించు", "लगाएँ")}</button></div>
   </div>
   ${sh(L("For you", "మీ కోసం", "आपके लिए"))}
   <div class="pad">
@@ -732,7 +838,7 @@ def("account", { g: "Tabs", n: "Account & settings", tab: "account", what: "Prof
 def("language", { g: "Settings", n: "Language", tabs: 0, nav: 1, what: "English, Telugu and Hindi, each written in its own script. Changes the whole app, notifications and Saathi's voice at once.", why: "Vizag riders and many chauffeurs are more comfortable in Telugu; Hindi covers visitors and many airport travellers.", fl: "ARB files per locale; server sends notification templates per user locale. Odia, Tamil, Kannada can be added without code changes." }, () => `
   ${bar(L("Language", "భాష", "भाषा"))}
   <div class="content">
-    <div class="group">${S.LANGS.map(l => `<button class="row" data-lang="${l.id}"><span class="tx"><span class="t1" style="display:block;font-size:19px">${l.native}</span><span class="t2" style="display:block">${l.name}</span></span><span class="trail">${S.state.lang === l.id ? `<span style="color:var(--accent-ink)">${I("check")}</span>` : ""}</span></button>`).join("")}</div>
+    <div class="group">${S.LANGS.map(l => `<button class="row" data-setlang="${l.id}"><span class="tx"><span class="t1" style="display:block;font-size:19px">${l.native}</span><span class="t2" style="display:block">${l.name}</span></span><span class="trail">${S.state.lang === l.id ? `<span style="color:var(--accent-ink)">${I("check")}</span>` : ""}</span></button>`).join("")}</div>
     <p class="t-sub pad mt12">${L("Saathi listens and replies in the language you choose. Notifications follow it too.", "మీరు ఎంచుకున్న భాషలో సాథీ వింటుంది, జవాబిస్తుంది. నోటిఫికేషన్లు కూడా.", "साथी आपकी चुनी भाषा में सुनता और जवाब देता है। नोटिफ़िकेशन भी।")}</p>
     ${sh(L("Coming next", "త్వరలో", "जल्द आ रही"))}
     <div class="group">${[["ଓଡ଼ିଆ", "Odia"], ["தமிழ்", "Tamil"], ["ಕನ್ನಡ", "Kannada"]].map(([n, e]) => `<div class="row" style="opacity:.55"><span class="tx"><span class="t1" style="display:block">${n}</span><span class="t2" style="display:block">${e}</span></span></div>`).join("")}</div>
@@ -903,6 +1009,11 @@ const A = {
   shift(e) { app.shift = Math.max(-30, Math.min(30, app.shift + +e.dataset.v)); rerender(); },
   tg(e) { e.classList.toggle("on"); },
   bookflight() { app.booked = true; go("booked"); },
+  pickf(e) { const d = e.dataset; app.flight = { no: d.no, t: d.t, code: d.city, day: +d.day, dir: d.dir, pnr: d.pnr || app.pnrIn || "" }; app.dir = d.dir; app.shift = 0; go("flight"); },
+  aday(e) { app.aday = +e.dataset.v; rerender(); }, acity(e) { app.acity = e.dataset.v; rerender(); },
+  rescan() { rerender(); SC.scan.mount(views.lastElementChild); },
+  sendotp() { const v = ($("#phone")?.value || "").replace(/\D/g, ""); if (v.length !== 10) { toast(L("Enter a 10-digit mobile number", "10 అంకెల మొబైల్ నంబర్ ఇవ్వండి", "10 अंकों का मोबाइल नंबर डालें")); return; } app.phone = v.slice(0, 5) + " " + v.slice(5); app.otp = 1; rerender(); },
+  promo() { const v = ($("#promo")?.value || "").trim().toUpperCase(); if (!v) { toast(L("Type a code first", "ముందు కోడ్ టైప్ చేయండి", "पहले कोड लिखें")); return; } if (["FLYSAGA", "REFER150", "WEEKDAY10"].includes(v)) toast(L(`${v} applied to your next ride`, `${v} తదుపరి రైడ్‌కు వర్తించింది`, `${v} अगली राइड पर लग गया`), L("Offer applied", "ఆఫర్ వర్తించింది", "ऑफ़र लग गया")); else toast(L(`${v} isn't a valid code`, `${v} సరైన కోడ్ కాదు`, `${v} सही कोड नहीं है`)); },
   totrips() { app.tripSeg = "up"; go("rides", { tab: 1 }); },
   day(e) { const d = +e.dataset.v; app.days = app.days.includes(d) ? app.days.filter(x => x !== d) : [...app.days, d]; rerender(); },
   skip(e) { const d = +e.dataset.v; app.skips = app.skips.includes(d) ? app.skips.filter(x => x !== d) : [...app.skips, d]; rerender(); },
@@ -982,7 +1093,7 @@ document.addEventListener("click", e => {
   const say = T.closest("[data-say]"); if (say) { sayChip(say.dataset.say); return; }
   if (T.closest("[data-vclose]")) { closeVoice(); return; }
   if (T.closest("[data-vlisten]")) { voiceUI("", "", true); listen(); return; }
-  const lg = T.closest("[data-lang]"); if (lg) { S.set({ lang: lg.dataset.lang }); return; }
+  const lg = T.closest("[data-setlang]"); if (lg) { S.set({ lang: lg.dataset.setlang }); return; }
   const a = T.closest("[data-act]"); if (a && A[a.dataset.act]) { A[a.dataset.act](a); return; }
   const tb = T.closest("[data-tab]"); if (tb) { go(tb.dataset.tab, { tab: 1 }); return; }
   if (T.closest("[data-back]")) { back(); return; }
@@ -991,6 +1102,22 @@ document.addEventListener("click", e => {
   const ts = T.closest("[data-toast]"); if (ts) { toast(ts.dataset.toast); return; }
   const sl = T.closest(".sl[data-screen]"); if (sl) { go(sl.dataset.screen, { tab: !!SC[sl.dataset.screen].tab }); return; }
   const pp = T.closest("[data-panel]"); if (pp) { const [k, val] = pp.dataset.panel.split(":"); if (k === "os") { location.search = "?os=" + val; } else S.set({ [k]: val }); }
+});
+document.addEventListener("input", e => {
+  const t = e.target;
+  if (t.id === "pnrin") { const v = t.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6); t.value = v; app.pnrIn = v; }
+  if (t.id === "destin") {
+    const q = t.value.trim().toLowerCase(), grp = $("#typedgrp");
+    $$("#sugg .row").forEach(r => { r.hidden = !!q && !r.textContent.toLowerCase().includes(q); });
+    $$("#sugg .sh").forEach(h => { h.hidden = !!q; });
+    grp.hidden = !q; $("#typedtxt").textContent = t.value.trim(); $("#typedrow").dataset.dest = t.value.trim();
+  }
+});
+document.addEventListener("keydown", e => {
+  if (e.key !== "Enter") return;
+  if (e.target.id === "destin" && e.target.value.trim()) $("#typedrow").click();
+  if (e.target.id === "phone") A.sendotp();
+  if (e.target.id === "promo") A.promo();
 });
 document.addEventListener("pointerdown", e => {
   if (!ios()) { const b = e.target.closest(".btn,.row,.ibtn,.tab,.chip,.tile,.act"); if (!b) return; const r = b.getBoundingClientRect(), z = r.width / b.offsetWidth || 1, d = Math.max(b.offsetWidth, b.offsetHeight) * 2.2; const s = document.createElement("span"); s.className = "ripple"; s.style.cssText = `width:${d}px;height:${d}px;left:${(e.clientX - r.left) / z - d / 2}px;top:${(e.clientY - r.top) / z - d / 2}px`; if (getComputedStyle(b).position === "static") b.style.position = "relative"; b.style.overflow = "hidden"; b.append(s); setTimeout(() => s.remove(), 600); }
@@ -1022,8 +1149,8 @@ function fit() {
 }
 addEventListener("resize", fit); fit();
 
-const start = S.qs.get("screen") || location.hash.slice(1) || "home";
-go(SC[start] ? start : "home", { instant: true, tab: !!(SC[start] || SC.home).tab });
+const start = S.qs.get("screen") || location.hash.slice(1) || "welcome";
+go(SC[start] ? start : "welcome", { instant: true, tab: !!(SC[start] || SC.welcome).tab });
 if (S.qs.has("voice")) setTimeout(BARE ? () => voiceUI("", "", true) : openVoice, 300);
 })();
 </script>

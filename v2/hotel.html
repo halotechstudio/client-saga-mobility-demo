@@ -39,7 +39,7 @@ function side() {
   $("#side").innerHTML = `<div class="brand">${S.logo()}<small>for Hotels</small></div>
     <div class="prop"><b>Bay Pavilion Hotel</b>Beach Road, Visakhapatnam<br><span style="color:var(--fg2)">Front desk · Lakshmi</span></div>
     ${n("today", "grid", "Today")}${n("book", "plus", "Book a ride")}${n("bookings", "cal", "Bookings", 2)}${n("earnings", "wallet", "Commission & statements")}${n("settings", "gear", "Settings")}
-    <div class="bottom"><div class="tw">${["light", "dark"].map(t => `<button class="${S.resolvedTheme() === t ? "on" : ""}" data-theme="${t}">${t[0].toUpperCase() + t.slice(1)}</button>`).join("")}</div>
+    <div class="bottom"><div class="tw">${["light", "dark"].map(t => `<button class="${S.resolvedTheme() === t ? "on" : ""}" data-settheme="${t}">${t[0].toUpperCase() + t.slice(1)}</button>`).join("")}</div>
     <a class="nv" href="index.html">${I("arrowl")}Back to suite</a></div>`;
 }
 const head = (h, p, right = "") => `<div class="hd"><div><button class="ibtn menu-btn" data-menu>${I("more")}</button><h1>${h}</h1>${p ? `<p>${p}</p>` : ""}</div><div style="display:flex;gap:10px;flex-wrap:wrap">${right}</div></div>`;
@@ -175,7 +175,7 @@ function render() { side(); $("#main").innerHTML = (P[st.page] || P.today)(); }
 addEventListener("hashchange", () => { st.page = location.hash.slice(1) || "today"; $("#side").classList.remove("open"); render(); scrollTo(0, 0); });
 document.addEventListener("click", e => {
   const T = e.target, q = s => T.closest(s);
-  if (q("[data-theme]")) S.set({ theme: q("[data-theme]").dataset.theme });
+  if (q("[data-settheme]")) S.set({ theme: q("[data-settheme]").dataset.settheme });
   else if (q("[data-type]")) { st.type = q("[data-type]").dataset.type; render(); }
   else if (q("[data-pay]")) { st.pay = q("[data-pay]").dataset.pay; render(); }
   else if (q("[data-filter]")) { st.filter = q("[data-filter]").dataset.filter; render(); }

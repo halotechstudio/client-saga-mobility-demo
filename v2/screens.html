@@ -67,21 +67,21 @@ const S = SAGA; let os = S.qs.get("os") || "ios"; S.state.os = "web"; S.apply();
 const $ = q => document.querySelector(q), I = S.icon;
 $("#logo").innerHTML = S.logo();
 const R = {
-  welcome: ["Welcome", "/welcome", "—"], signin: ["Sign in", "/signin", "POST /auth/otp, /auth/verify"], setup: ["Permissions", "/setup", "PATCH /me/prefs"],
+  welcome: ["Welcome", "/welcome", "—"], signin: ["Sign in", "/signin", "POST /auth/otp, /auth/verify"], setup: ["Permissions", "/setup", "PATCH /me/prefs"], flysoon: ["Flying soon?", "/welcome/flight", "—"],
   home: ["Home", "/", "GET /trips/detected, /fleet/nearby, /rides?upcoming"], where: ["Where to", "/ride/where", "Places Autocomplete"], options: ["Confirm ride", "/ride/confirm", "POST /quotes"],
   finding: ["Finding a car", "/ride/finding", "POST /rides, WS ride.{id}"], nocars: ["No cars nearby", "/ride/waitlist", "POST /rides/{id}/waitlist"], assigned: ["Chauffeur on the way", "/ride/:id", "WS ride.{id} (position, ETA)"],
   onride: ["On the ride", "/ride/:id/live", "WS ride.{id}, POST /rides/{id}/requests"], arrived: ["Arrived", "/ride/:id/done", "GET /rides/{id}/receipt, POST rating"],
-  airport: ["Airport rides", "/airport", "POST /flights/resolve {pnr, lastName}"], flight: ["Pickup plan", "/airport/:flight", "GET /flights/{id}, POST /quotes"], booked: ["Pickup booked", "/airport/:id/booked", "POST /rides (scheduled, flight-linked)"],
+  airport: ["Airport rides", "/airport", "GET /flights/board?airport=VTZ&date="], scan: ["Scan ticket", "/airport/scan", "on-device OCR + barcode → POST /flights/match"], flight: ["Pickup plan", "/airport/:flight", "GET /flights/{id}, POST /quotes"], booked: ["Pickup booked", "/airport/:id/booked", "POST /rides (scheduled, flight-linked)"],
   schedule: ["Scheduled rides", "/scheduled/new", "POST /series {rrule, exdates}"], intercity: ["Intercity", "/intercity", "POST /quotes {type: intercity}"], vehicle: ["The car", "/vehicle", "GET /fleet/profile (CMS)"],
   rides: ["Trips", "/trips", "GET /rides, GET /series"], offers: ["Offers", "/offers", "GET /offers, POST /promo/apply"], account: ["Account", "/account", "GET /me"],
   language: ["Language", "/settings/language", "PATCH /me {locale}"], voicecfg: ["Voice", "/settings/voice", "POST /voice/intent"], travel: ["Find my flights", "/settings/flights", "Calendar (device), inbound email"],
   notifications: ["Notifications", "/inbox", "GET /notifications"], lock: ["Lock screen", "(system)", "ActivityKit push / FCM Live Update"]
 };
 const LANES = [
-  ["Start", "first launch", ["welcome", "signin", "setup", "home"]],
+  ["Start", "first launch", ["welcome", "signin", "setup", "flysoon", "home"]],
   ["Ride now", "city and on-demand", ["home", "where", "options", "finding", "assigned", "onride", "arrived"]],
   ["When no car is free", "honest wait", ["finding", "nocars", "assigned"]],
-  ["Airport", "PNR → flight → pickup", ["home", "airport", "flight", "booked", "rides"]],
+  ["Airport", "scan the ticket or pick the flight → pickup", ["home", "airport", "scan", "flight", "booked", "rides"]],
   ["Scheduled rides", "repeat on a calendar", ["home", "schedule", "rides"]],
   ["Intercity", "fixed fare, charging planned", ["home", "intercity", "rides"]],
   ["The car", "premium showcase", ["home", "vehicle", "where"]],
@@ -93,13 +93,13 @@ const DN = { shift: "Start of shift", duty: "Duty", request: "Job offered", topi
 const node = (app, id, name, route) => `<a class="node" href="${app}.html?os=${os}#${id}"><div class="thumb"><iframe loading="lazy" tabindex="-1" title="${name}" src="${app}.html?os=${os}&bare=1&screen=${id}"></iframe></div><b>${name}</b><code>${route}</code></a>`;
 const arrow = `<span class="arr">${I("arrowr")}</span>`;
 function draw() {
-  $("#os").innerHTML = ["ios", "android"].map(o => `<button class="${os === o ? "on" : ""}" data-os="${o}">${o === "ios" ? "iPhone" : "Android"}</button>`).join("");
-  $("#rider").innerHTML = `<h2>Rider app</h2><p>${os === "ios" ? "iPhone build" : "Android build"} · 25 screens plus the Saathi voice layer, which opens over any screen.</p>` + LANES.map(([t, s, ids]) => `<div class="lane"><h3>${t}<span>${s}</span></h3><div class="flow">${ids.map((id, i) => (i ? arrow : "") + node("rider", id, R[id][0], R[id][1])).join("")}${t === "Account and settings" ? "" : ""}</div></div>`).join("")
+  $("#os").innerHTML = ["ios", "android"].map(o => `<button class="${os === o ? "on" : ""}" data-setos="${o}">${o === "ios" ? "iPhone" : "Android"}</button>`).join("");
+  $("#rider").innerHTML = `<h2>Rider app</h2><p>${os === "ios" ? "iPhone build" : "Android build"} · 27 screens plus the Saathi voice layer, which opens over any screen.</p>` + LANES.map(([t, s, ids]) => `<div class="lane"><h3>${t}<span>${s}</span></h3><div class="flow">${ids.map((id, i) => (i ? arrow : "") + node("rider", id, R[id][0], R[id][1])).join("")}${t === "Account and settings" ? "" : ""}</div></div>`).join("")
     + `<div class="lane"><h3>Saathi voice<span>over any screen, in English, Telugu or Hindi</span></h3><div class="flow"><a class="node" href="rider.html?os=${os}&voice=1#home"><div class="thumb"><iframe loading="lazy" tabindex="-1" title="Voice" src="rider.html?os=${os}&bare=1&screen=home&voice=1"></iframe></div><b>Saathi listening</b><code>overlay</code></a>${arrow}<span class="branch">intent →<br>screen</span>${arrow}${node("rider", "flight", "Opens the right screen", "/airport/:flight")}</div></div>`;
   $("#driver").innerHTML = DL.map(([t, s, ids]) => `<div class="lane"><h3>${t}<span>${s}</span></h3><div class="flow">${ids.map((id, i) => (i ? arrow : "") + node("driver", id, DN[id], "/driver/" + id)).join("")}</div></div>`).join("");
   $("#routes").innerHTML = `<thead><tr><th>Screen</th><th>Route</th><th>Needs from backend</th></tr></thead><tbody>${Object.entries(R).map(([id, [n, r, api]]) => `<tr><td><a href="rider.html?os=${os}#${id}" style="color:inherit;font-weight:600">${n}</a></td><td><code>${r}</code></td><td><code>${api}</code></td></tr>`).join("")}</tbody>`;
 }
-document.addEventListener("click", e => { const b = e.target.closest("[data-os]"); if (b) { os = b.dataset.os; draw(); } });
+document.addEventListener("click", e => { const b = e.target.closest("[data-setos]"); if (b) { os = b.dataset.setos; draw(); } });
 S.onChange(() => { S.state.os = "web"; S.apply(); $("#logo").innerHTML = S.logo(); });
 draw();
 })();

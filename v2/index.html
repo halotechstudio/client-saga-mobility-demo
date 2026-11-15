@@ -71,7 +71,7 @@ footer{padding:48px 0 60px;color:var(--fg2);font-size:14px}
   <section class="hero">
     <div>
       <h1>Four apps for SAGA, one design system.</h1>
-      <p>Rider apps for iPhone and Android, the chauffeur app, a booking app for partner hotels, and the ops dashboard. Airport rides start from a PNR, scheduled rides repeat on a calendar, and city and intercity rides are always in the same chauffeur-driven electric SUV. Everything below is live: tap through it.</p>
+      <p>Rider apps for iPhone and Android, the chauffeur app, a booking app for partner hotels, and the ops dashboard. Airport rides start from a PNR, scheduled rides repeat on a calendar, and city and intercity rides are always in the same chauffeur-driven electric SUV. Everything below is live, starting from onboarding: tap through it.</p>
     </div>
     <div class="ctrl">
       <div class="r"><label>Brand colour</label><div class="hex"><input type="color" id="hexc"><input type="text" id="hext" spellcheck="false" aria-label="Client hex code"><span class="ok" id="hexok"></span></div></div>
@@ -130,7 +130,7 @@ footer{padding:48px 0 60px;color:var(--fg2);font-size:14px}
 const S = SAGA; S.state.os = "web"; S.apply();
 const $ = q => document.querySelector(q), I = S.icon;
 $("#i1").innerHTML = I("map"); $("#i2").innerHTML = I("receipt"); $("#i3").innerHTML = I("refresh");
-const SCREENS = [["home", "Home"], ["airport", "Airport PNR"], ["flight", "Pickup plan"], ["schedule", "Scheduled"], ["intercity", "Intercity"], ["options", "Confirm ride"], ["nocars", "No cars nearby"], ["assigned", "Chauffeur on the way"], ["onride", "On the ride"], ["vehicle", "The car"], ["lock", "Lock screen"], ["voicecfg", "Voice"], ["account", "Settings"], ["welcome", "Welcome"]];
+const SCREENS = [["welcome", "Onboarding"], ["home", "Home"], ["airport", "Airport"], ["scan", "Scan ticket"], ["flight", "Pickup plan"], ["schedule", "Scheduled"], ["intercity", "Intercity"], ["options", "Confirm ride"], ["nocars", "No cars nearby"], ["assigned", "Chauffeur on the way"], ["onride", "On the ride"], ["vehicle", "The car"], ["lock", "Lock screen"], ["voicecfg", "Voice"], ["account", "Settings"]];
 $("#jump").innerHTML = SCREENS.map(([id, t]) => `<button data-j="${id}">${t}</button>`).join("");
 const fi = $("#f-ios"), fa = $("#f-and");
 const send = (f, msg) => { try { f.contentWindow.postMessage(msg, "*"); } catch (e) {} };

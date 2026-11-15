@@ -96,17 +96,18 @@ tr:last-child td{border-bottom:0}
 <tr><td><b>Voice for chauffeurs</b></td><td>Not included. Chauffeurs get turn-by-turn navigation voice only, as agreed earlier.</td><td>Still correct?</td></tr>
 </tbody></table></div>
 
-<h2 id="s3"><span class="n">3</span>Airport rides from a PNR</h2>
-<div class="callout warn"><b>The honest version</b>No Indian airline offers a public API that lets a third party look up a booking from a PNR and surname. Airline "Manage booking" pages accept PNR and surname from the passenger, and travel-agency (GDS) access only covers bookings that agency made. So "type the PNR and it schedules itself" has to be built in two steps: <b>identify the flight</b>, then <b>track it</b>.</div>
-<h3>Step A: find the flight, ideally without the rider typing anything</h3>
-<ol class="steps">
-<li><b>Catch the booking as it arrives</b> (§4). Android reads the airline's SMS or app alert through notification access. iPhone passes airline messages to SAGA through a Shortcuts automation. On both, a personal SAGA travel address receives every airline email through a one-time mail filter. Each route delivers the full ticket text: PNR, airline, flight, date and passenger names.</li>
-<li><b>WhatsApp forward.</b> Many Indian airlines and travel sites now send tickets on WhatsApp. The rider forwards the message or PDF to SAGA's WhatsApp number, and the chat replies with the pickup time and a Book button.</li>
-<li><b>Calendar match.</b> Gmail and the airlines add flights to the calendar, so SAGA finds them with calendar permission alone.</li>
-<li><b>PNR typed by hand.</b> We ask for the airline and date. SAGA serves one airport, so one airline's departures on one day is a short list of about 5–15 flights. The rider taps theirs and the PNR is stored with it.</li>
-<li><b>Partnerships</b> (later). An airline or travel site adds a "Book your SAGA" button that sends us the PNR and flight details. This is a business-development deal, not an API we can call today.</li>
-</ol>
-<div class="callout warn"><b>Not recommended: looking the PNR up on airline websites</b>Automating airline "Manage booking" pages with a PNR and surname breaks their terms of use and runs into CAPTCHAs. It also handles exactly the data that exposed passengers' contact details in past airline incidents. Every route above uses data the rider chose to share.</div>
+<h2 id="s3"><span class="n">3</span>Airport rides: the simple plan</h2>
+<div class="callout"><b>In one line</b>Don't look the PNR up. Ask for the two things SAGA can check instantly: <b>the ticket</b> (scan or upload it) or <b>the flight</b> (pick it from Vizag's short daily list). Then one flight-status service tracks it and moves the pickup.</div>
+<p>No Indian airline offers a public API to look up a booking from a PNR. A PNR also doesn't say which airline or flight it belongs to. So the app treats the PNR as optional, and finds the flight in one of two ways that work for every airline from day one:</p>
+<div class="tw"><table><thead><tr><th></th><th>1 · Scan or upload the ticket</th><th>2 · Pick your flight</th></tr></thead><tbody>
+<tr><td><b>Rider does</b></td><td>Taps Scan and points the camera at the e-ticket or boarding pass, or picks a screenshot or PDF</td><td>Taps the date and the city, then taps their flight in a list of about 2–3</td></tr>
+<tr><td><b>App does</b></td><td>On-device text recognition reads the PNR, flight, date and passenger names. A boarding-pass barcode (the IATA standard every airline uses) gives them exactly.</td><td>Shows that day's departures from Vizag to that city from the flight-schedule API. One airport means the list is short.</td></tr>
+<tr><td><b>Time</b></td><td>About a second</td><td>Three taps</td></tr>
+<tr><td><b>Cost</b></td><td>Free: runs on the phone (Google ML Kit on Android, Apple Vision on iPhone)</td><td>Included in the flight-status plan below</td></tr>
+<tr><td><b>PNR</b></td><td>Read from the ticket automatically</td><td>Optional field; kept for the chauffeur's name board</td></tr>
+</tbody></table></div>
+<p>Both paths are in the demo: <a href="rider.html#airport">Airport rides</a> and <a href="rider.html#scan">Scan ticket</a>, and in onboarding as the last step ("Got a flight coming up?"). The automatic routes in §4 are add-ons for later; launch doesn't depend on them.</p>
+<p><b>Flutter packages:</b> <code>mobile_scanner</code> (boarding-pass barcodes), <code>google_mlkit_text_recognition</code> (e-tickets and screenshots), <code>file_picker</code> (PDFs). Only the extracted flight fields go to SAGA's server.</p>
 <h3>Step B: track the flight and time the pickup</h3>
 <p><b>Pickup time = departure − airport buffer − drive time at that hour.</b> The default buffers are 90 minutes for domestic flights and 180 for international; SAGA sets them. Drive time comes from the Google Routes API with traffic for that time of day. The rule is stored, not the time, so every flight update recalculates the pickup. If a flight moves by 10 minutes or more, the pickup moves and the rider is told. A cancellation, or a delay over 60 minutes, asks the rider before reassigning. For arrivals, the chauffeur is at the kerb 10 minutes after landing, with 45 minutes of free waiting.</p>
 <div class="tw"><table><thead><tr><th>Flight-status provider</th><th>How it updates</th><th>Indicative list price</th><th>Fit</th></tr></thead><tbody>
@@ -118,8 +119,8 @@ tr:last-child td{border-bottom:0}
 <p><b>Cost per airport booking:</b> 5–15 status checks per flight, which works out to well under ₹1 per booking at these prices. Expect <b>₹8,500–₹13,000 a month</b> ($100–150) at launch. We'll put the provider behind SAGA's own <code>/flights</code> service so it can be swapped without an app update. Prices are vendors' published list prices as of November 2026; confirm when signing up.</p>
 <p><b>Privacy:</b> a PNR plus a surname opens the booking on the airline's website. Store them encrypted, show them masked, and delete them after the trip.</p>
 
-<h2 id="s4"><span class="n">4</span>Catching flight bookings automatically</h2>
-<p>The client wants SAGA to notice a flight booking as soon as it's made and schedule the ride. Neither phone lets an app read SMS or email directly. But three routes get the same result <b>automatically after a one-time set-up</b>, and two more need only one tap.</p>
+<h2 id="s4"><span class="n">4</span>Later: catching bookings automatically</h2>
+<p><b>Optional, after launch.</b> The client also wants SAGA to notice a flight booking as soon as it's made and schedule the ride. Neither phone lets an app read SMS or email directly. But three routes get the same result <b>automatically after a one-time set-up</b>, and two more need only one tap.</p>
 <div class="callout"><b>Recommended set-up</b>
 <b style="display:inline">Android:</b> flight alerts through notification access (one toggle). <b style="display:inline">iPhone:</b> a Shortcuts automation for airline messages (1-minute guided set-up). <b style="display:inline">Both:</b> a personal SAGA travel address with a mail filter, calendar matching, and WhatsApp forwarding. Riders who opt in to <b style="display:inline">auto-book</b> get their airport ride booked with nothing to do.</div>
 <div class="tw"><table><thead><tr><th>Route</th><th>iPhone</th><th>Android</th><th>Rider effort</th></tr></thead><tbody>

@@ -49,7 +49,7 @@ function side() {
   const n = (id, ic, t, b) => `<a class="nv ${st.page === id ? "on" : ""}" href="#${id}">${I(ic)}${t}${b ? `<span class="badge">${b}</span>` : ""}</a>`;
   $("#side").innerHTML = `<div class="brand">${S.logo()}<small>Ops</small></div>
     ${n("command", "grid", "Command", 3)}${n("bookings", "cal", "Bookings")}${n("flights", "plane", "Flight watch", 1)}${n("fleet", "car", "Fleet & chauffeurs")}${n("hotels", "hotel", "Hotel partners")}${n("offers", "tag", "Offers")}${n("notifications", "bell", "Notifications")}
-    <div class="bottom"><div class="tw">${["light", "dark"].map(t => `<button class="${S.resolvedTheme() === t ? "on" : ""}" data-theme="${t}">${t[0].toUpperCase() + t.slice(1)}</button>`).join("")}</div><a class="nv" href="index.html">${I("arrowl")}Back to suite</a></div>`;
+    <div class="bottom"><div class="tw">${["light", "dark"].map(t => `<button class="${S.resolvedTheme() === t ? "on" : ""}" data-settheme="${t}">${t[0].toUpperCase() + t.slice(1)}</button>`).join("")}</div><a class="nv" href="index.html">${I("arrowl")}Back to suite</a></div>`;
 }
 const head = (h, p, right = "") => `<div class="hd"><div><button class="ibtn menu-btn" data-menu>${I("more")}</button><h1>${h}</h1>${p ? `<p>${p}</p>` : ""}</div><div style="display:flex;gap:10px;flex-wrap:wrap">${right}</div></div>`;
 const stt = (t, k = "") => `<span class="st ${k}">${t}</span>`;
@@ -170,7 +170,7 @@ function render() { side(); $("#main").innerHTML = (P[st.page] || P.command)(); 
 addEventListener("hashchange", () => { st.page = location.hash.slice(1) || "command"; $("#side").classList.remove("open"); render(); scrollTo(0, 0); });
 document.addEventListener("click", e => {
   const q = s => e.target.closest(s);
-  if (q("[data-theme]")) S.set({ theme: q("[data-theme]").dataset.theme });
+  if (q("[data-settheme]")) S.set({ theme: q("[data-settheme]").dataset.settheme });
   else if (q("[data-btab]")) { st.btab = q("[data-btab]").dataset.btab; render(); }
   else if (q("[data-ntab]")) { st.ntab = q("[data-ntab]").dataset.ntab; render(); }
   else if (q("[data-menu]")) $("#side").classList.toggle("open");
