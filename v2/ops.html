@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SAGA Ops Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Telugu:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="core.css">
+<link rel="stylesheet" href="web.css">
+<style>
+.cmdmap{height:520px}
+.mapover{position:absolute;left:14px;top:14px;display:flex;gap:8px;flex-wrap:wrap}
+.mapover span{background:var(--surface);border-radius:12px;padding:8px 12px;font-size:13.5px;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+.alert{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--hair)}
+.alert:last-child{border-bottom:0}
+.alert .acts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.tpl{font-size:13.5px;line-height:1.45;color:var(--fg2);max-width:420px}
+.ch{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:600;background:var(--surface2);margin:2px 4px 2px 0}
+.ch.p{background:var(--accent-soft);color:var(--on-accent-soft)}.ch.w{background:#DFF5DA;color:#14532D}.ch.s{background:#FCEFD9;color:#7C4A03}.ch.e{background:#E6E8F0;color:#30374A}
+[data-theme=dark] .ch.w{background:#1C3A22;color:#BDF0C4}[data-theme=dark] .ch.s{background:#3B2C12;color:#F7D9A1}[data-theme=dark] .ch.e{background:#2A2E3A;color:#D4D8E4}
+.form2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:820px){.cmdmap{height:360px}.form2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side" id="side"></aside>
+  <main class="mn" id="main"></main>
+</div>
+<div class="toastw" id="toast"></div>
+<script src="core.js"></script>
+<script>
+(function () {
+const S = SAGA; S.state.os = "web"; S.apply();
+const I = S.icon, $ = q => document.querySelector(q), inr = S.inr;
+const st = { page: location.hash.slice(1) || "command", btab: "live", ntab: "en" };
+const ST = { trip: ["On trip", ""], free: ["Free", "ok"], pick: ["To pickup", "acc"], chg: ["Charging", "warn"], off: ["Off shift", ""] };
+const FLEET = [
+  ["SG-01", "Ravi Kumar", "pick", 64, "MVP Colony", "Ananya Rao · 09:00"], ["SG-02", "Suresh P.", "trip", 71, "NH16, Maddilapalem", "Drop 10:05"], ["SG-03", "Kiran B.", "pick", 58, "Beach Road", "Bay Pavilion · 11:40"],
+  ["SG-04", "Anil R.", "free", 88, "Siripuram", "—"], ["SG-05", "Mahesh T.", "trip", 46, "Gajuwaka", "Drop 10:20"], ["SG-06", "Prasad V.", "chg", 31, "SAGA hub", "Ready 10:40"],
+  ["SG-07", "Ramesh G.", "trip", 18, "Dwaraka Nagar", "Charge after drop"], ["SG-08", "Sai Teja", "free", 92, "Rushikonda", "—"], ["SG-09", "Naveen K.", "chg", 82, "SAGA hub", "Can leave now"],
+  ["SG-10", "Vamsi M.", "trip", 67, "Airport road", "Arrivals 12:35"], ["SG-11", "Ganesh D.", "trip", 55, "Seethammadhara", "Drop 10:12"], ["SG-12", "Harsha L.", "pick", 73, "Siripuram", "Scheduled 10:15"],
+  ["SG-13", "Srinu A.", "trip", 61, "RK Beach", "Drop 10:30"], ["SG-14", "Kumar S.", "off", 100, "SAGA hub", "Shift 14:00"], ["SG-15", "Venkat R.", "trip", 49, "Jagadamba", "Drop 10:25"], ["SG-16", "Ajay N.", "free", 77, "MVP Colony", "—"]
+];
+const CARS = [[260, 180, 90], [120, 300, 0, "busy"], [220, 420, 180, "busy"], [190, 430, 0], [40, 700, 0, "busy"], [300, 500, 0, "busy"], [100, 560, 90, "busy"], [270, 70, 0], [330, 260, 0, "busy"], [140, 640, 180, "busy"], [180, 380, 90, "busy"], [160, 460, 0, "busy"], [250, 520, 0, "busy"], [220, 300, 0]];
+
+function side() {
+  const n = (id, ic, t, b) => `<a class="nv ${st.page === id ? "on" : ""}" href="#${id}">${I(ic)}${t}${b ? `<span class="badge">${b}</span>` : ""}</a>`;
+  $("#side").innerHTML = `<div class="brand">${S.logo()}<small>Ops</small></div>
+    ${n("command", "grid", "Command", 3)}${n("bookings", "cal", "Bookings")}${n("flights", "plane", "Flight watch", 1)}${n("fleet", "car", "Fleet & chauffeurs")}${n("hotels", "hotel", "Hotel partners")}${n("offers", "tag", "Offers")}${n("notifications", "bell", "Notifications")}
+    <div class="bottom"><div class="tw">${["light", "dark"].map(t => `<button class="${S.resolvedTheme() === t ? "on" : ""}" data-theme="${t}">${t[0].toUpperCase() + t.slice(1)}</button>`).join("")}</div><a class="nv" href="index.html">${I("arrowl")}Back to suite</a></div>`;
+}
+const head = (h, p, right = "") => `<div class="hd"><div><button class="ibtn menu-btn" data-menu>${I("more")}</button><h1>${h}</h1>${p ? `<p>${p}</p>` : ""}</div><div style="display:flex;gap:10px;flex-wrap:wrap">${right}</div></div>`;
+const stt = (t, k = "") => `<span class="st ${k}">${t}</span>`;
+const bar = (v, k) => `<div style="display:flex;align-items:center;gap:8px"><div class="bar ${k}" style="flex:1"><i style="width:${v}%"></i></div><span class="t-num" style="font-size:13px;min-width:34px">${v}%</span></div>`;
+const P = {};
+
+P.command = () => {
+  const c = k => FLEET.filter(f => f[2] === k).length;
+  return `${head("Command", "Sunday 15 November · 10:02 AM · Visakhapatnam", `<button class="btn btn-secondary" data-toast="Broadcast sent to all on-shift chauffeurs">${I("chat")}Message chauffeurs</button>`)}
+  <div class="grid g4">
+    <div class="kpi"><div class="l">${I("car")}Fleet now</div><div class="v">${c("trip") + c("pick")} / 16</div><div class="s">${c("free")} free · ${c("chg")} charging · ${c("off")} off</div></div>
+    <div class="kpi"><div class="l">${I("clock")}Waitlist</div><div class="v" style="color:var(--warning)">2</div><div class="s">Siripuram · next free car 11 min</div></div>
+    <div class="kpi"><div class="l">${I("plane")}Flights tracked</div><div class="v">24</div><div class="s">1 delayed · pickups auto-moved</div></div>
+    <div class="kpi dark"><div class="l">${I("trend")}Today so far</div><div class="v">${inr(48650)}</div><div class="s">96 rides · 58 scheduled · 11 hotel</div></div>
+  </div>
+  <div class="grid g21" style="margin-top:14px">
+    <div class="panel" style="padding:0;overflow:hidden"><div class="mapbox cmdmap" style="border-radius:0">${S.map({ view: [0, 40, 400, 700], cars: CARS.map(c => [c[0], c[1], c[2], c[3] || "me"]) })}<div class="mapover"><span>${I("car", "sm")} 16 cars</span><span style="color:var(--accent-ink)">● 4 free</span><span>● 12 busy or charging</span></div></div></div>
+    <div class="panel"><h2>Needs attention <small>3 open</small></h2>
+      <div class="alert"><span class="li" style="padding:0;border:0"><span class="ico warn">${I("clock")}</span></span><div style="flex:1"><b>2 riders waiting at Siripuram</b><div class="note">No free car within 10 min. SG-09 is at the hub at 82%.</div><div class="acts"><button class="btn btn-primary sm" data-toast="SG-09 released from charging and assigned">Release SG-09</button><button class="btn btn-secondary sm" data-toast="Riders offered 100 points and a scheduled slot">Offer to schedule</button></div></div></div>
+      <div class="alert"><span class="li" style="padding:0;border:0"><span class="ico">${I("plane")}</span></span><div style="flex:1"><b>6E 6402 delayed 25 min</b><div class="note">Arrival pickup moved 12:40 → 13:05 automatically. Rider notified. SG-10 keeps the job.</div><div class="acts"><button class="btn btn-secondary sm" data-toast="Opened flight watch">View flight</button></div></div></div>
+      <div class="alert"><span class="li" style="padding:0;border:0"><span class="ico bad">${I("battery")}</span></span><div style="flex:1"><b>SG-07 at 18%</b><div class="note">Charging slot booked at 10:45 after the current drop. Next job reassigned to SG-16.</div><div class="acts"><button class="btn btn-secondary sm" data-toast="Plan confirmed">Confirm plan</button></div></div></div>
+    </div>
+  </div>
+  <div class="grid g3" style="margin-top:14px">
+    <div class="panel"><h2>Next 2 hours</h2><div class="li"><span class="ico">${I("takeoff")}</span><div style="flex:1"><b>9 airport drops</b><span class="s">all flights on time</span></div></div><div class="li"><span class="ico">${I("landing")}</span><div style="flex:1"><b>4 airport pickups</b><span class="s">1 delayed, adjusted</span></div></div><div class="li"><span class="ico">${I("repeat")}</span><div style="flex:1"><b>14 scheduled rides</b><span class="s">12 same-chauffeur matches</span></div></div></div>
+    <div class="panel"><h2>Demand vs. fleet</h2><p class="note">Peak forecast 17:30–19:30: 31 requests for 14 cars on shift. Suggest moving SG-14's shift to start at 16:00.</p><button class="btn btn-secondary sm" style="margin-top:12px" data-toast="Shift change sent to Kumar S.">Propose shift change</button></div>
+    <div class="panel"><h2>Service today</h2><div class="li"><div style="flex:1"><b>On-time pickups</b></div><b>97%</b></div><div class="li"><div style="flex:1"><b>Avg. rating</b></div><b>4.86</b></div><div class="li"><div style="flex:1"><b>Waitlist kept (not lost)</b></div><b>8 of 9</b></div></div>
+  </div>`;
+};
+
+P.bookings = () => {
+  const T = { live: [["10:01", "Ananya Rao", "City · MVP Colony → Dwaraka Nagar", "SG-01 Ravi", ["To pickup", "acc"], "App · UPI", 287], ["09:52", "Rahul Verma", "City · Siripuram → Railway Station", "SG-02 Suresh", ["On trip", ""], "App · UPI", 214], ["09:40", "Mr. A. Mehta", "Airport drop · AI 1913", "SG-03 Kiran", ["To pickup", "acc"], "Hotel · room bill", 1140]],
+    sched: [["10:15", "Divya S.", "Weekdays 10:15 · Home → Campus", "SG-12 Harsha", ["Assigned", "ok"], "Series 6/20", 198], ["13:30", "Guest 412", "City · Bay Pavilion → Railway Stn", "—", ["Assign 13:00", ""], "Hotel · guest pays", 232], ["16:00", "Dr. K. Rao", "Intercity · Araku Valley", "—", ["Assign 15:00", ""], "Hotel · room bill", 2070]],
+    wait: [["10:00", "Pooja R.", "City · Siripuram → Gajuwaka", "Next: SG-09 (11 min)", ["Waitlist #1", "warn"], "App · fare locked", 312], ["10:01", "Imran K.", "City · Siripuram → RK Beach", "Next: SG-04 (14 min)", ["Waitlist #2", "warn"], "App · fare locked", 176]] };
+  return `${head("Bookings", "Live, scheduled and waitlisted rides across app, hotel and phone bookings.", `<button class="btn btn-primary" data-toast="Phone booking form opened">${I("plus")}Phone booking</button>`)}
+  <div class="tabs">${[["live", "Live"], ["sched", "Scheduled"], ["wait", "Waitlist · 2"]].map(([v, t]) => `<button class="${st.btab === v ? "on" : ""}" data-btab="${v}">${t}</button>`).join("")}</div>
+  <div class="panel" style="margin-top:14px"><div class="tablewrap"><table class="tb"><thead><tr><th>Time</th><th>Rider</th><th>Trip</th><th>Car</th><th>Status</th><th>Source</th><th class="r">Fare</th></tr></thead><tbody>
+  ${T[st.btab].map(r => `<tr><td><b class="t-num">${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${stt(...r[4])}</td><td>${r[5]}</td><td class="r">${inr(r[6])}</td></tr>`).join("")}
+  </tbody></table></div>${st.btab === "wait" ? `<p class="note" style="margin-top:12px">Waitlisted riders saw the honest "we're growing our fleet" screen, kept their locked fare and earn 50 points. Release a charging car or offer a scheduled slot from Command.</p>` : ""}</div>`;
+};
+
+P.flights = () => `${head("Flight watch", "Every flight linked to a booking, polled and pushed by the flight-status provider. Pickups move by rule; ops only handles exceptions.")}
+  <div class="panel"><div class="tablewrap"><table class="tb"><thead><tr><th>Flight</th><th>Route</th><th>Scheduled</th><th>Status</th><th>Linked ride</th><th>Pickup</th><th>Found via</th></tr></thead><tbody>
+    <tr><td class="m">6E 6402</td><td>BLR → VTZ</td><td>12:35</td><td>${stt("Delayed 25 min", "warn")}</td><td>Priya M. · arrival</td><td><s style="color:var(--fg2)">12:40</s> <b>13:05</b> <span class="sub">auto-moved, rider told</span></td><td>PNR in app</td></tr>
+    <tr><td class="m">AI 1912</td><td>DEL → VTZ</td><td>11:05</td><td>${stt("Landed 11:02", "ok")}</td><td>Mr. S. Sharma · hotel</td><td>At Arrivals · SG-01</td><td>Hotel booking</td></tr>
+    <tr><td class="m">AI 1913</td><td>VTZ → DEL</td><td>13:10</td><td>${stt("On time", "ok")}</td><td>Mr. A. Mehta · hotel</td><td>11:40</td><td>Hotel booking</td></tr>
+    <tr><td class="m">6E 1427</td><td>VTZ → MAA</td><td>15:20</td><td>${stt("On time", "ok")}</td><td>K. Srinivas</td><td>13:05</td><td>Forwarded email</td></tr>
+    <tr><td class="m">6E 2134</td><td>VTZ → HYD</td><td>Fri 07:40</td><td>${stt("Scheduled")}</td><td>Ananya Rao</td><td>Fri 05:20</td><td>Calendar</td></tr>
+    <tr><td class="m">6E 571</td><td>VTZ → CCU</td><td>07:45</td><td>${stt("Departed", "ok")}</td><td>Mr. R. Iyer · hotel</td><td>Completed</td><td>Hotel booking</td></tr>
+  </tbody></table></div></div>
+  <div class="grid g3" style="margin-top:14px">
+    <div class="panel"><h2>Pickup rule</h2><p class="note">Departure − buffer (domestic 90 min, international 180 min) − drive time at that hour. Arrivals: chauffeur at the kerb 10 min after landing, free wait 45 min.</p></div>
+    <div class="panel"><h2>When a flight moves</h2><p class="note">Delay ≥ 10 min: recompute and notify the rider. Delay ≥ 60 min or cancellation: ask the rider to confirm before reassigning.</p></div>
+    <div class="panel"><h2>Provider</h2><p class="note">Flight status via aviationstack or FlightAware AeroAPI alerts. See the client brief, §3, for cost per booking.</p></div>
+  </div>`;
+
+P.fleet = () => `${head("Fleet and chauffeurs", `16 × ${S.VEHICLE.make} ${S.VEHICLE.model} · charge and shift planning`)}
+  <div class="panel"><div class="tablewrap"><table class="tb"><thead><tr><th>Car</th><th>Chauffeur</th><th>Status</th><th style="min-width:150px">Charge</th><th>Where</th><th>Next</th></tr></thead><tbody>
+  ${FLEET.map(f => `<tr><td class="m">${f[0]}</td><td>${f[1]}</td><td>${stt(...ST[f[2]])}</td><td>${bar(f[3], f[3] < 25 ? "b" : f[3] < 50 ? "w" : "g")}</td><td>${f[4]}</td><td>${f[5]}</td></tr>`).join("")}
+  </tbody></table></div></div>`;
+
+P.hotels = () => `${head("Hotel partners", "Bookings and commission by property, November to date.", `<button class="btn btn-primary" data-toast="Partner invite created">${I("plus")}Add hotel</button>`)}
+  <div class="grid g4"><div class="kpi"><div class="l">${I("hotel")}Partners</div><div class="v">6</div><div class="s">2 onboarding</div></div><div class="kpi"><div class="l">${I("car")}Hotel rides</div><div class="v">418</div><div class="s">22% of all rides</div></div><div class="kpi"><div class="l">${I("percent")}Commission accrued</div><div class="v">${inr(52180)}</div><div class="s">Paid in Dec statements</div></div><div class="kpi"><div class="l">${I("wallet")}Receivable</div><div class="v">${inr(268400)}</div><div class="s">Room-bill fares, due 7 Dec</div></div></div>
+  <div class="panel" style="margin-top:14px"><div class="tablewrap"><table class="tb"><thead><tr><th>Hotel</th><th class="r">Rides</th><th class="r">Gross</th><th class="r">Rate</th><th class="r">Commission</th><th>Mostly paid by</th><th>Status</th></tr></thead><tbody>
+    <tr><td>Bay Pavilion Hotel<span class="sub">Beach Road</span></td><td class="r">142</td><td class="r">${inr(184200)}</td><td class="r">10%</td><td class="r">${inr(18420)}</td><td>Room bill</td><td>${stt("Active", "ok")}</td></tr>
+    <tr><td>Harbour View Suites<span class="sub">Siripuram</span></td><td class="r">96</td><td class="r">${inr(121700)}</td><td class="r">10%</td><td class="r">${inr(12170)}</td><td>Guest pays SAGA</td><td>${stt("Active", "ok")}</td></tr>
+    <tr><td>Kailasa Grand<span class="sub">MVP Colony</span></td><td class="r">88</td><td class="r">${inr(102300)}</td><td class="r">12%</td><td class="r">${inr(12276)}</td><td>Room bill</td><td>${stt("Active", "ok")}</td></tr>
+    <tr><td>Rushikonda Bay Resort<span class="sub">Rushikonda</span></td><td class="r">71</td><td class="r">${inr(73400)}</td><td class="r">8%</td><td class="r">${inr(5872)}</td><td>Hotel account</td><td>${stt("Active", "ok")}</td></tr>
+    <tr><td>Airport Residency<span class="sub">Bhogapuram</span></td><td class="r">21</td><td class="r">${inr(34440)}</td><td class="r">10%</td><td class="r">${inr(3444)}</td><td>Guest pays SAGA</td><td>${stt("Onboarding", "acc")}</td></tr>
+  </tbody></table></div><p class="note" style="margin-top:12px">Names are sample data. Commission rate is per partner; statements are generated on the 1st and netted against room-bill fares the hotel collected.</p></div>`;
+
+P.offers = () => `${head("Offers", "Create, target and cap offers. Riders see eligible offers automatically at checkout.")}
+  <div class="grid g21">
+    <div class="panel"><h2>Running offers</h2><div class="tablewrap"><table class="tb"><thead><tr><th>Offer</th><th>Who</th><th style="min-width:140px">Budget used</th><th class="r">Uses</th><th>Status</th></tr></thead><tbody>
+      <tr><td><b>20% off first airport ride</b><span class="sub m">FLYSAGA · max ₹250</span></td><td>New riders with a flight found</td><td>${bar(38)}<span class="sub">${inr(19000)} of ${inr(50000)}</span></td><td class="r">76</td><td>${stt("Live", "ok")}</td></tr>
+      <tr><td><b>10% off weekday plans</b><span class="sub m">auto · 20+ rides/month</span></td><td>Scheduled-series riders</td><td>${bar(52)}<span class="sub">${inr(15600)} of ${inr(30000)}</span></td><td class="r">41</td><td>${stt("Live", "ok")}</td></tr>
+      <tr><td><b>Give ₹150, get ₹150</b><span class="sub m">REFER150</span></td><td>All riders</td><td>${bar(21)}<span class="sub">${inr(8400)} of ${inr(40000)}</span></td><td class="r">28</td><td>${stt("Live", "ok")}</td></tr>
+      <tr><td><b>50 points for waiting</b><span class="sub m">auto · waitlist</span></td><td>Riders who wait for the next car</td><td>${bar(9)}<span class="sub">points</span></td><td class="r">63</td><td>${stt("Live", "ok")}</td></tr>
+      <tr><td><b>₹100 off, we miss you</b><span class="sub m">COMEBACK</span></td><td>No ride in 30 days</td><td>${bar(0)}<span class="sub">${inr(0)} of ${inr(20000)}</span></td><td class="r">0</td><td>${stt("Starts 1 Dec", "acc")}</td></tr>
+    </tbody></table></div></div>
+    <div class="panel"><h2>New offer</h2>
+      <div class="grid" style="gap:12px">
+        <div class="fld"><label>Type</label><div class="chipr">${["% off", "Flat ₹ off", "Points", "Free waiting"].map((t, i) => `<button class="${i === 0 ? "on" : ""}">${t}</button>`).join("")}</div></div>
+        <div class="form2"><div class="fld"><label>Value</label><div class="in"><input value="15%"></div></div><div class="fld"><label>Max per ride</label><div class="in"><input value="₹200"></div></div></div>
+        <div class="fld"><label>Applies to</label><div class="chipr">${["Airport", "Scheduled", "City", "Intercity", "Hotel"].map((t, i) => `<button class="${i === 0 ? "on" : ""}">${t}</button>`).join("")}</div></div>
+        <div class="fld"><label>Audience</label><div class="in"><select><option>Riders with a flight in the next 14 days</option><option>New riders (no completed ride)</option><option>Scheduled-series riders</option><option>Inactive 30+ days</option><option>Everyone</option></select></div></div>
+        <div class="form2"><div class="fld"><label>Total budget</label><div class="in"><input value="₹25,000"></div></div><div class="fld"><label>Uses per rider</label><div class="in"><input value="1"></div></div></div>
+        <div class="form2"><div class="fld"><label>Starts</label><div class="in"><input value="1 Dec 2026"></div></div><div class="fld"><label>Ends</label><div class="in"><input value="31 Dec 2026"></div></div></div>
+        <div class="fld"><label>Tell riders via</label><div class="chipr">${["Push", "WhatsApp", "In-app banner", "SMS"].map((t, i) => `<button class="${i < 3 ? "on" : ""}">${t}</button>`).join("")}</div></div>
+        <button class="btn btn-primary" data-toast="Offer scheduled. Budget cap and abuse checks are on.">Schedule offer</button>
+        <p class="note">Guardrails: one offer per ride (best one wins), device + phone + UPI ID de-duplication, budget auto-stops at 100%.</p>
+      </div></div>
+  </div>`;
+
+P.notifications = () => {
+  const N = [
+    ["Pickup moved (flight change)", "Rider", "p,w,s", "Time-sensitive", { en: "Pickup moved to 5:50 AM. 6E 2134 is delayed 30 min. Nothing to do.", te: "పికప్ ఉ. 5:50కి మారింది. 6E 2134 30 నిమిషాలు ఆలస్యం. మీరేమీ చేయనక్కర్లేదు.", hi: "पिकअप सुबह 5:50 हुआ। 6E 2134 में 30 मिनट देरी। आपको कुछ नहीं करना।" }],
+    ["Chauffeur assigned", "Rider", "p,w", "High", { en: "Ravi Kumar will pick you up in a white XUV 3XO EV, AP 39 EV 2041. Code 4827.", te: "రవి కుమార్ తెల్ల XUV 3XO EV, AP 39 EV 2041లో వస్తారు. కోడ్ 4827.", hi: "रवि कुमार सफ़ेद XUV 3XO EV, AP 39 EV 2041 में आएँगे। कोड 4827।" }],
+    ["Chauffeur 2 min away / arrived", "Rider", "p", "Time-sensitive", { en: "Ravi has arrived at Gate 2. Free waiting until 9:10 AM.", te: "రవి గేట్ 2 వద్దకు వచ్చారు. ఉ. 9:10 వరకు ఉచిత వెయిటింగ్.", hi: "रवि गेट 2 पर पहुँच गए। सुबह 9:10 तक मुफ़्त इंतज़ार।" }],
+    ["Flight found", "Rider", "p", "Normal", { en: "We found 6E 2134 on Fri 20 Nov. Book a pickup at 5:20 AM?", te: "శుక్ర 20 నవం 6E 2134 దొరికింది. ఉ. 5:20కి పికప్ బుక్ చేయాలా?", hi: "शुक्र 20 नवं को 6E 2134 मिली। सुबह 5:20 का पिकअप बुक करें?" }],
+    ["Scheduled ride reminder", "Rider", "p", "Normal", { en: "Tomorrow 9:00 AM to Office with Ravi. Skip by 8 PM at no charge.", te: "రేపు ఉ. 9:00కి రవితో ఆఫీస్‌కి. రా. 8లోపు ఉచితంగా దాటవేయండి.", hi: "कल सुबह 9:00 रवि के साथ ऑफ़िस। रात 8 तक मुफ़्त में छोड़ें।" }],
+    ["Car free (waitlist)", "Rider", "p,s", "Time-sensitive", { en: "A SAGA car is free now. Confirm in 2 minutes to keep your place.", te: "ఇప్పుడు SAGA కారు ఖాళీ. మీ స్థానం కోసం 2 నిమిషాల్లో నిర్ధారించండి.", hi: "SAGA गाड़ी अब खाली है। जगह बनाए रखने के लिए 2 मिनट में पक्का करें।" }],
+    ["Receipt", "Rider", "p,e", "Normal", { en: "₹287 paid with UPI. MVP Colony → Dwaraka Nagar.", te: "UPI ద్వారా ₹287 చెల్లించారు. MVP కాలనీ → ద్వారకా నగర్.", hi: "UPI से ₹287 भुगतान। MVP कॉलोनी → द्वारका नगर।" }],
+    ["Hotel booking confirmation", "Guest (no app)", "w,s", "High", { en: "Your ride from Bay Pavilion Hotel is booked for Mon 5:20 AM. Track: saga.link/t/…", te: "బే పెవిలియన్ హోటల్ నుండి సోమ ఉ. 5:20కి మీ రైడ్ బుక్ అయింది.", hi: "बे पवेलियन होटल से सोम सुबह 5:20 की राइड बुक हुई।" }],
+    ["New job / job changed", "Chauffeur", "p", "Time-sensitive", { en: "New job 09:00 · Ananya Rao · MVP Colony.", te: "కొత్త పని 09:00 · అనన్య రావు · MVP కాలనీ.", hi: "नया काम 09:00 · अनन्या राव · MVP कॉलोनी।" }],
+    ["Offer", "Rider (opted in)", "p,w", "Marketing", { en: "20% off your first airport ride with FLYSAGA, until 31 Dec.", te: "FLYSAGAతో మొదటి ఎయిర్‌పోర్ట్ రైడ్‌పై 20% తగ్గింపు, 31 డిసెం వరకు.", hi: "FLYSAGA से पहली एयरपोर्ट राइड पर 20% छूट, 31 दिसं तक।" }]
+  ];
+  const chn = { p: '<span class="ch p">Push</span>', w: '<span class="ch w">WhatsApp</span>', s: '<span class="ch s">SMS</span>', e: '<span class="ch e">Email</span>' };
+  return `${head("Notifications", "Every message SAGA sends, by event. Templates exist in each supported language; the user's language picks the template.")}
+  <div class="tabs">${S.LANGS.map(l => `<button class="${st.ntab === l.id ? "on" : ""}" data-ntab="${l.id}">${l.native}</button>`).join("")}</div>
+  <div class="panel" style="margin-top:14px"><div class="tablewrap"><table class="tb"><thead><tr><th>Event</th><th>To</th><th>Channels</th><th>Priority</th><th>Template</th></tr></thead><tbody>
+  ${N.map(n => `<tr><td><b>${n[0]}</b></td><td>${n[1]}</td><td>${n[2].split(",").map(c => chn[c]).join("")}</td><td>${stt(n[3], n[3] === "Time-sensitive" ? "warn" : n[3] === "Marketing" ? "acc" : "")}</td><td><div class="tpl">${n[4][st.ntab]}</div></td></tr>`).join("")}
+  </tbody></table></div><p class="note" style="margin-top:12px">Push via Firebase Cloud Messaging (APNs for iPhone). WhatsApp and SMS templates need Meta approval and DLT registration in India before launch. Marketing messages only to riders who opted in.</p></div>`;
+};
+
+let tt; const toast = m => { const t = $("#toast"); t.textContent = m; t.classList.add("on"); clearTimeout(tt); tt = setTimeout(() => t.classList.remove("on"), 2400); };
+function render() { side(); $("#main").innerHTML = (P[st.page] || P.command)(); }
+addEventListener("hashchange", () => { st.page = location.hash.slice(1) || "command"; $("#side").classList.remove("open"); render(); scrollTo(0, 0); });
+document.addEventListener("click", e => {
+  const q = s => e.target.closest(s);
+  if (q("[data-theme]")) S.set({ theme: q("[data-theme]").dataset.theme });
+  else if (q("[data-btab]")) { st.btab = q("[data-btab]").dataset.btab; render(); }
+  else if (q("[data-ntab]")) { st.ntab = q("[data-ntab]").dataset.ntab; render(); }
+  else if (q("[data-menu]")) $("#side").classList.toggle("open");
+  else if (q("[data-toast]")) toast(q("[data-toast]").dataset.toast);
+  else if (q(".chipr button")) q(".chipr button").classList.toggle("on");
+});
+S.onChange(() => { S.state.os = "web"; S.apply(); render(); });
+render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SAGA App Suite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="core.css">
+<style>
+body{background:var(--bg);color:var(--fg);font-family:"Inter",system-ui,sans-serif;font-size:15.5px;line-height:1.5}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:14px 32px;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--hair)}
+.top nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+.top nav a{padding:8px 12px;border-radius:10px;text-decoration:none;font-weight:600;font-size:14.5px;color:var(--fg2)}
+.top nav a:hover{background:var(--surface);color:var(--fg)}
+.wrap{max-width:1440px;margin:0 auto;padding:0 32px}
+.hero{padding:48px 0 24px;display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:end}
+.hero h1{font-size:52px;line-height:1.04;font-weight:700;letter-spacing:-.035em}
+.hero p{font-size:18px;color:var(--fg2);margin-top:14px;max-width:620px}
+.ctrl{background:var(--surface);border:1px solid var(--hair);border-radius:22px;padding:18px;display:grid;gap:14px}
+.ctrl .r{display:grid;grid-template-columns:110px 1fr;align-items:center;gap:12px}
+.ctrl label{font-size:13.5px;font-weight:600;color:var(--fg2)}
+.sw{display:flex;gap:4px;padding:3px;background:var(--bg);border-radius:12px}
+.sw button{flex:1;height:36px;border-radius:9px;font-size:14px;font-weight:600;color:var(--fg2)}
+.sw button.on{background:var(--surface2);color:var(--fg)}
+[data-theme=light] .sw button.on{background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.hex{display:flex;gap:8px;align-items:center}
+.hex input[type=color]{width:44px;height:40px;border:0;border-radius:10px;background:none;padding:0;cursor:pointer}
+.hex input[type=text]{flex:1;height:40px;border-radius:10px;border:1px solid var(--hair);background:var(--bg);padding:0 12px;font-family:var(--mono);font-size:14.5px;min-width:0}
+.hex .ok{font-size:12.5px;color:var(--fg2);white-space:nowrap}
+.file{display:flex;gap:8px;align-items:center}
+.file .pv{height:40px;min-width:90px;padding:0 12px;border-radius:10px;background:var(--stage);color:#fff;display:flex;align-items:center;justify-content:center}
+.file .pv .logo-img{height:22px}.file .pv .wordmark{font-size:14px;color:#fff}
+.file button,.file label.up{height:40px;padding:0 14px;border-radius:10px;border:1px solid var(--hair);font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:var(--fg)}
+.stage3{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;padding:24px 0 10px;align-items:start}
+.ph{display:flex;flex-direction:column;align-items:center;gap:14px}
+.ph iframe{border:0;width:100%;max-width:360px;aspect-ratio:430/902;background:transparent}
+.ph .cap{text-align:center}
+.ph .cap b{display:block;font-size:16px}.ph .cap span{font-size:14px;color:var(--fg2)}
+.jump{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:6px 0 4px}
+.jump button{height:38px;padding:0 14px;border-radius:19px;border:1px solid var(--hair);font-size:14px;font-weight:600;background:var(--surface)}
+.jump button:hover{border-color:var(--accent);color:var(--accent-ink)}
+.mirror{display:flex;align-items:center;gap:10px;justify-content:center;font-size:14px;color:var(--fg2);margin-top:6px}
+.sec{padding:56px 0 8px}
+.sec h2{font-size:32px;font-weight:700;letter-spacing:-.025em}
+.sec>p{color:var(--fg2);font-size:17px;margin-top:8px;max-width:780px}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:22px}
+.app{background:var(--surface);border:1px solid var(--hair);border-radius:26px;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;color:inherit}
+.app .shot{position:relative;height:300px;overflow:hidden;background:var(--bg);border-bottom:1px solid var(--hair)}
+.app .shot iframe{position:absolute;left:0;top:0;width:1280px;height:820px;border:0;transform:scale(.46);transform-origin:0 0;pointer-events:none}
+.app .tx{padding:20px 22px}
+.app .tx b{font-size:20px;display:block}.app .tx span{color:var(--fg2);font-size:15px}
+.diff{width:100%;border-collapse:collapse;margin-top:20px;font-size:15px;background:var(--surface);border-radius:20px;overflow:hidden}
+.diff th,.diff td{text-align:left;padding:14px 16px;border-bottom:1px solid var(--hair);vertical-align:top}
+.diff th{font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--fg2)}
+.diff td:first-child{font-weight:600;width:20%}
+.docs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+.doc{padding:22px;border-radius:22px;border:1px solid var(--hair);background:var(--surface);text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:6px}
+.doc .ic{color:var(--accent-ink);width:28px;height:28px}
+.doc b{font-size:18px;margin-top:8px}.doc span{color:var(--fg2);font-size:15px}
+footer{padding:48px 0 60px;color:var(--fg2);font-size:14px}
+@media (max-width:1100px){.stage3{grid-template-columns:1fr 1fr}.hero{grid-template-columns:1fr}.docs{grid-template-columns:1fr}}
+@media (max-width:760px){.wrap{padding:0 16px}.top{padding:12px 16px}.top nav{display:none}.hero h1{font-size:36px}.stage3,.cards{grid-template-columns:1fr}.ctrl .r{grid-template-columns:1fr}.diff{font-size:14px}.diff td,.diff th{padding:10px}}
+</style>
+</head>
+<body>
+<header class="top"><span id="logo"></span><b style="font-size:15px">App suite v2</b>
+  <nav><a href="rider.html">Rider</a><a href="driver.html">Driver</a><a href="hotel.html">Hotels</a><a href="ops.html">Ops</a><a href="screens.html">Screen map</a><a href="brief.html">Client brief</a></nav>
+</header>
+<div class="wrap">
+  <section class="hero">
+    <div>
+      <h1>Four apps for SAGA, one design system.</h1>
+      <p>Rider apps for iPhone and Android, the chauffeur app, a booking app for partner hotels, and the ops dashboard. Airport rides start from a PNR, scheduled rides repeat on a calendar, and city and intercity rides are always in the same chauffeur-driven electric SUV. Everything below is live: tap through it.</p>
+    </div>
+    <div class="ctrl">
+      <div class="r"><label>Brand colour</label><div class="hex"><input type="color" id="hexc"><input type="text" id="hext" spellcheck="false" aria-label="Client hex code"><span class="ok" id="hexok"></span></div></div>
+      <div class="r"><label>Client logo</label><div class="file"><span class="pv" id="logopv"></span><label class="up">Upload SVG/PNG<input type="file" id="logof" accept="image/svg+xml,image/png,image/webp" hidden></label><button id="logox">Reset</button></div></div>
+      <div class="r"><label>Appearance</label><div class="sw" id="sw-theme"></div></div>
+      <div class="r"><label>Language</label><div class="sw" id="sw-lang"></div></div>
+      <p style="font-size:13px;color:var(--fg2)">Paste SAGA's hex code and upload their logo: every app re-themes itself, in light and dark, with contrast checked. Placeholder until supplied: neutral wordmark and #092EC9.</p>
+    </div>
+  </section>
+
+  <div class="jump" id="jump"></div>
+  <label class="mirror"><input type="checkbox" id="mirror" checked> Keep iPhone and Android on the same screen</label>
+  <section class="stage3">
+    <div class="ph"><iframe id="f-ios" title="Rider app on iPhone" src="rider.html?os=ios&embed=1"></iframe><div class="cap"><b>Rider · iPhone</b><span>iOS 26 look: Liquid Glass tab bar, large titles, floating sheets, Dynamic Island</span></div></div>
+    <div class="ph"><iframe id="f-and" title="Rider app on Android" src="rider.html?os=android&embed=1"></iframe><div class="cap"><b>Rider · Android</b><span>Material 3 Expressive: dynamic colour, navigation bar, FAB, Live Updates</span></div></div>
+    <div class="ph"><iframe id="f-drv" title="Driver app" src="driver.html?embed=1"></iframe><div class="cap"><b>Chauffeur · Android</b><span>Company phones. Shift check, jobs, navigation, start-by-code</span></div></div>
+  </section>
+
+  <section class="sec">
+    <h2>Partner hotels and operations</h2>
+    <p>Hotels book for guests and earn commission; ops sees every car, flight and waitlisted rider in one place.</p>
+    <div class="cards">
+      <a class="app" href="hotel.html"><div class="shot"><iframe title="Hotel app preview" src="hotel.html" loading="lazy" tabindex="-1"></iframe></div><div class="tx"><b>SAGA for Hotels</b><span>Tablet and web. Book for a guest in under a minute: room bill, guest-pays or complimentary. Monthly commission statements.</span></div></a>
+      <a class="app" href="ops.html"><div class="shot"><iframe title="Ops dashboard preview" src="ops.html" loading="lazy" tabindex="-1"></iframe></div><div class="tx"><b>Ops dashboard</b><span>Live fleet and charge, waitlist, flight watch with automatic pickup moves, hotel partners, offers and notification templates.</span></div></a>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>Same app, two native feels</h2>
+    <p>One Flutter codebase and one set of design tokens. The platform layer changes, so each build feels made for its phone.</p>
+    <table class="diff"><thead><tr><th></th><th>iPhone</th><th>Android</th></tr></thead><tbody>
+      <tr><td>Navigation</td><td>Floating glass tab bar with a separate Saathi button, swipe-back, large titles</td><td>Navigation bar with pill indicators, Saathi as a FAB, predictive back</td></tr>
+      <tr><td>Type</td><td>SF Pro (system), tighter tracking, bold titles</td><td>Roboto Flex, Material type scale, medium-weight headlines</td></tr>
+      <tr><td>Colour</td><td>Neutral greys; brand colour used only as the tint</td><td>Surfaces tinted from the brand colour (dynamic colour)</td></tr>
+      <tr><td>Sheets & lists</td><td>Inset grouped lists, floating sheets with large corner radii</td><td>Segmented list items, attached bottom sheets with drag handle</td></tr>
+      <tr><td>Controls</td><td>iOS switches, segmented control, haptics</td><td>M3 switches with thumb icon, connected button groups, ripples</td></tr>
+      <tr><td>Ride outside the app</td><td>Live Activity on the lock screen and in the Dynamic Island</td><td>Live Update notification with progress and a status-bar chip</td></tr>
+      <tr><td>Voice</td><td>Siri shortcuts (App Intents) + Saathi in-app</td><td>Gemini / Assistant app actions + Saathi in-app</td></tr>
+      <tr><td>Transitions</td><td>Push from the right, parallax on the previous screen</td><td>Shared-axis fade and slide</td></tr>
+    </tbody></table>
+  </section>
+
+  <section class="sec">
+    <h2>For the build team</h2>
+    <div class="docs">
+      <a class="doc" href="screens.html"><span id="i1"></span><b>Screen map</b><span>Every screen, end to end, using the live screens above, with Flutter route names and the API each one needs.</span></a>
+      <a class="doc" href="brief.html"><span id="i2"></span><b>Client brief</b><span>PNR and flight APIs with costs, reading flight emails, notifications, offers, hotel money flow, voice, and everything we need from SAGA.</span></a>
+      <a class="doc" href="../index.html"><span id="i3"></span><b>Previous concept (v1)</b><span>The first simulation and brand manual, kept for reference. v2 replaces its logo, colours and 3D ride.</span></a>
+    </div>
+  </section>
+  <footer>Design demo by HALO Studio for SAGA Mobility. All names, flights and figures are sample data. The vehicle is shown as a neutral illustration until SAGA supplies fleet photography.</footer>
+</div>
+<script src="core.js"></script>
+<script>
+(function () {
+const S = SAGA; S.state.os = "web"; S.apply();
+const $ = q => document.querySelector(q), I = S.icon;
+$("#i1").innerHTML = I("map"); $("#i2").innerHTML = I("receipt"); $("#i3").innerHTML = I("refresh");
+const SCREENS = [["home", "Home"], ["airport", "Airport PNR"], ["flight", "Pickup plan"], ["schedule", "Scheduled"], ["intercity", "Intercity"], ["options", "Confirm ride"], ["nocars", "No cars nearby"], ["assigned", "Chauffeur on the way"], ["onride", "On the ride"], ["vehicle", "The car"], ["lock", "Lock screen"], ["voicecfg", "Voice"], ["account", "Settings"], ["welcome", "Welcome"]];
+$("#jump").innerHTML = SCREENS.map(([id, t]) => `<button data-j="${id}">${t}</button>`).join("");
+const fi = $("#f-ios"), fa = $("#f-and");
+const send = (f, msg) => { try { f.contentWindow.postMessage(msg, "*"); } catch (e) {} };
+document.addEventListener("click", e => { const j = e.target.closest("[data-j]"); if (j) { send(fi, { saga: "go", id: j.dataset.j }); send(fa, { saga: "go", id: j.dataset.j }); } });
+const last = { ios: null, android: null };
+addEventListener("message", e => {
+  const d = e.data || {};
+  if (d.saga === "nav" && d.app === "rider") {
+    last[d.os] = d.id;
+    if ($("#mirror").checked) { const other = d.os === "ios" ? "android" : "ios"; if (last[other] !== d.id) { last[other] = d.id; send(other === "ios" ? fi : fa, { saga: "go", id: d.id, instant: false }); } }
+  }
+  if (d.saga === "state") S.set(d.patch, true);
+});
+function controls() {
+  $("#logo").innerHTML = S.logo();
+  $("#logopv").innerHTML = S.logo();
+  $("#hexc").value = S.state.hex; $("#hext").value = S.state.hex.toUpperCase();
+  const t = S.tokens("ios", "light", S.state.hex), c = S.contrast(t.accent, t.onAccent).toFixed(1);
+  $("#hexok").textContent = `text ${c}:1 ${c >= 4.5 ? "✓" : "· low"}`;
+  $("#sw-theme").innerHTML = ["light", "dark", "system"].map(v => `<button class="${S.state.theme === v ? "on" : ""}" data-t="${v}">${v === "system" ? "Auto" : v[0].toUpperCase() + v.slice(1)}</button>`).join("");
+  $("#sw-lang").innerHTML = S.LANGS.map(l => `<button class="${S.state.lang === l.id ? "on" : ""}" data-l="${l.id}">${l.native}</button>`).join("");
+}
+document.addEventListener("click", e => { const t = e.target.closest("[data-t]"), l = e.target.closest("[data-l]"); if (t) S.set({ theme: t.dataset.t }); if (l) S.set({ lang: l.dataset.l }); });
+const setHex = v => { v = v.trim(); if (!v.startsWith("#")) v = "#" + v; if (/^#[0-9a-f]{6}$/i.test(v)) S.set({ hex: v.toUpperCase() }); };
+$("#hexc").addEventListener("input", e => setHex(e.target.value));
+$("#hext").addEventListener("change", e => setHex(e.target.value));
+$("#logof").addEventListener("change", e => { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => S.set({ logo: r.result }); r.readAsDataURL(f); });
+$("#logox").addEventListener("click", () => S.set({ logo: null }));
+S.onChange(() => { S.state.os = "web"; S.apply(); controls(); });
+controls();
+})();
+</script>
+</body>
+</html>

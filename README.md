@@ -7,3 +7,4 @@ Rider app, driver app and ops command centre for SAGA Mobility, Visakhapatnam. A
 - `saga-driver.html`: driver app
 - `saga-ops.html#command`: ops console and AI command centre
 - `saga-brand-manual.html`: brand manual
+- `v2/`: app suite v2 (rider for iPhone and Android, chauffeur, hotels, ops, screen map, client brief)

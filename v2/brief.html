@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SAGA Client Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="core.css">
+<style>
+body{background:var(--bg);color:var(--fg);font-family:"Inter",system-ui,sans-serif;font-size:16px;line-height:1.6}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:16px;padding:14px 32px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--hair)}
+.top a{color:var(--fg2);text-decoration:none;font-weight:600;font-size:14.5px}
+.top .r{margin-left:auto;display:flex;gap:14px;align-items:center}
+.layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:48px;max-width:1280px;margin:0 auto;padding:0 32px}
+.toc{position:sticky;top:70px;align-self:start;max-height:calc(100vh - 90px);overflow:auto;padding:28px 0;font-size:14px}
+.toc a{display:block;padding:6px 10px;border-radius:8px;color:var(--fg2);text-decoration:none;font-weight:500}
+.toc a:hover{background:var(--surface);color:var(--fg)}
+article{padding:36px 0 100px;max-width:900px}
+.kick{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
+h1{font-size:46px;line-height:1.08;font-weight:700;letter-spacing:-.03em;margin-top:8px}
+.meta{color:var(--fg2);margin-top:10px}
+h2{font-size:28px;font-weight:700;letter-spacing:-.02em;margin-top:64px;padding-top:12px;scroll-margin-top:80px;line-height:1.2}
+h2 .n{color:var(--fg3);margin-right:10px;font-feature-settings:"tnum" 1}
+h3{font-size:19px;font-weight:700;margin-top:28px;letter-spacing:-.01em}
+p,ul,ol{margin-top:12px}
+ul,ol{padding-left:22px}li{margin:6px 0}
+a{color:var(--accent-ink)}
+code{font-family:var(--mono);font-size:.88em;background:var(--surface);padding:1px 6px;border-radius:6px}
+.callout{margin-top:18px;padding:18px 20px;border-radius:18px;background:var(--surface);border-left:4px solid var(--accent)}
+.callout.warn{border-left-color:var(--warning)}
+.callout b{display:block;margin-bottom:4px}
+table{width:100%;border-collapse:collapse;margin-top:16px;font-size:14.5px;line-height:1.5;background:var(--surface);border-radius:16px;overflow:hidden}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--hair);vertical-align:top}
+th{font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--fg2);background:var(--surface2)}
+tr:last-child td{border-bottom:0}
+.tw{overflow-x:auto;margin-top:16px}.tw table{margin-top:0;min-width:640px}
+.yes{color:var(--success);font-weight:700}.no{color:var(--danger);font-weight:700}.mid{color:var(--warning);font-weight:700}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:6px;white-space:nowrap}
+.tag.b{background:color-mix(in srgb,var(--danger) 14%,transparent);color:var(--danger)}
+.tag.d{background:var(--accent-soft);color:var(--on-accent-soft)}
+.tag.l{background:color-mix(in srgb,var(--warning) 16%,transparent);color:var(--warning)}
+.grp td{background:var(--bg);font-weight:700;font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--fg2)}
+.steps{counter-reset:s;list-style:none;padding:0}
+.steps li{counter-increment:s;position:relative;padding-left:44px;margin:14px 0}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:15px;background:var(--accent);color:var(--on-accent);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center}
+.tok{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+.tok .col{border-radius:16px;overflow:hidden;border:1px solid var(--hair)}
+.tok .hd{padding:10px 12px;font-size:13px;font-weight:700}
+.tok .sw{display:flex;align-items:center;gap:10px;padding:8px 12px;font-size:12.5px;font-family:var(--mono)}
+.tok .sw i{width:26px;height:26px;border-radius:8px;flex:none;box-shadow:inset 0 0 0 1px rgba(127,127,127,.25)}
+.tok .sw span{display:block;font-family:"Inter",sans-serif;font-size:12px;opacity:.75}
+.hexin{display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap}
+.hexin input{height:42px;border-radius:10px;border:1px solid var(--hair);background:var(--surface);padding:0 12px;font-family:var(--mono);width:150px}
+.src li{font-size:14px}
+@media (max-width:980px){.layout{grid-template-columns:1fr;padding:0 18px}.toc{display:none}.tok{grid-template-columns:1fr 1fr}h1{font-size:34px}.top{padding:12px 16px}}
+@media print{.top,.toc{display:none}.layout{display:block;padding:0}article{max-width:none;padding:0}h2{break-before:page;margin-top:0}table,.callout{break-inside:avoid}body{font-size:12pt}}
+</style>
+</head>
+<body>
+<header class="top"><span id="logo"></span><b>Client brief</b><span class="r"><a href="index.html">Suite</a><a href="screens.html">Screen map</a><a href="#" onclick="print();return false">Print / PDF</a></span></header>
+<div class="layout">
+<nav class="toc" id="toc"></nav>
+<article id="art">
+<div class="kick">SAGA Mobility · App programme v2</div>
+<h1>Client brief and build handbook</h1>
+<p class="meta">HALO Studio · 15 November 2026 · for SAGA Mobility and the Flutter build team</p>
+
+<h2 id="s1"><span class="n">1</span>What's in this release</h2>
+<p>An interactive simulation of the four apps SAGA asked for, built on one design system that will drop into SAGA's existing Flutter app:</p>
+<ul>
+<li><a href="rider.html">Rider app</a>, in an <b>iPhone</b> build and an <b>Android</b> build, with light and dark mode, English / తెలుగు / हिन्दी, and the <b>Saathi</b> voice assistant on every screen.</li>
+<li><a href="driver.html">Chauffeur app</a> (Android, company phones).</li>
+<li><a href="hotel.html">SAGA for Hotels</a>, a tablet and web app for partner hotels to book for guests and see their commission.</li>
+<li><a href="ops.html">Ops dashboard</a>: fleet, waitlist, flight watch, hotel partners, offers and notification templates.</li>
+<li>The <a href="screens.html">screen map</a>, the end-to-end schema drawn with the live screens, and this brief.</li>
+</ul>
+<h3>What changed since the first concept</h3>
+<ul>
+<li><b>Logo and colour are SAGA's own.</b> Our earlier logo is gone. Until the files arrive, the apps use a neutral wordmark and a placeholder blue. Paste SAGA's hex code and upload the logo on the <a href="index.html">suite page</a> and every app re-themes, in light and dark, with text contrast checked.</li>
+<li><b>No 3D ride animation.</b> During a ride the rider sees a regular map in SAGA's colours: the route, the car marker and the ETA.</li>
+<li><b>The car is the Mahindra XUV 3XO EV</b>, presented as the premium product it is: on the welcome screen, on Home, in the ride sheet and on its own "The car" page.</li>
+<li><b>An honest message when no car is free</b>, offering a place in line, a scheduled ride or a notification.</li>
+<li><b>Different iPhone and Android builds</b>, a hotel partner app, dark mode, three languages and voice.</li>
+</ul>
+
+<h2 id="s2"><span class="n">2</span>Assumptions to confirm</h2>
+<div class="tw"><table><thead><tr><th>Topic</th><th>What we assumed</th><th>Please confirm</th></tr></thead><tbody>
+<tr><td><b>Seats</b></td><td>The brief says 6-seater. Every published spec for the <b>XUV 3XO EV lists 5 seats</b>, which is the chauffeur plus 4 riders. The demo shows 4 riders. The seat plan, capacity checks and copy all come from one setting.</td><td>Which model and seating does the fleet actually have? If it's a 3-row model, we change one value.</td></tr>
+<tr><td><b>"Intercity regular ride hailing"</b></td><td>Built as two products: on-demand rides within the city, plus fixed-fare intercity trips (Araku, Vizianagaram, Srikakulam, Kakinada, Rajahmundry) with charging stops planned.</td><td>Is that the split you meant?</td></tr>
+<tr><td><b>Vehicle images</b></td><td>A neutral illustration of a compact electric SUV stands in for photos.</td><td>Official photos of SAGA's cars (see §13).</td></tr>
+<tr><td><b>Airport</b></td><td>Samples show Visakhapatnam (VTZ) and name the new airport "Bhogapuram International".</td><td>Which airport name and code should riders see?</td></tr>
+<tr><td><b>Fares</b></td><td>₹18/km, ₹50 base, 5% GST, fixed at booking, no surge. Airport ₹1,140. Weekday plan 10% off.</td><td>The real fare rules (see §13).</td></tr>
+<tr><td><b>Free waiting</b></td><td>10 min in the city, 45 min after landing at the airport, 30 min for hotel bookings.</td><td>Your waiting policy and charges.</td></tr>
+<tr><td><b>Hotel commission</b></td><td>10% of fare, settled monthly (sample).</td><td>Rates per partner and the settlement terms.</td></tr>
+<tr><td><b>Voice for chauffeurs</b></td><td>Not included. Chauffeurs get turn-by-turn navigation voice only, as agreed earlier.</td><td>Still correct?</td></tr>
+</tbody></table></div>
+
+<h2 id="s3"><span class="n">3</span>Airport rides from a PNR</h2>
+<div class="callout warn"><b>The honest version</b>No Indian airline offers a public API that lets a third party look up a booking from a PNR and surname. Airline "Manage booking" pages accept PNR and surname from the passenger, and travel-agency (GDS) access only covers bookings that agency made. So "type the PNR and it schedules itself" has to be built in two steps: <b>identify the flight</b>, then <b>track it</b>.</div>
+<h3>Step A: turn the PNR into a flight</h3>
+<ol class="steps">
+<li><b>Ticket parsing</b> (recommended for launch). The rider shares the e-ticket PDF or forwards the confirmation email (§4). We read the PNR, airline, flight number, date and passenger names from it. This works for every airline and travel site.</li>
+<li><b>Calendar match.</b> Most airline and Gmail confirmations create a calendar event. If the rider allows calendar access, SAGA finds the flight before they ask.</li>
+<li><b>PNR plus one tap.</b> If the rider only types a PNR, we ask for the travel date and show that day's departures from the airport (from the flight-status API). The rider taps their flight, and we store the PNR with it.</li>
+<li><b>Partnerships</b> (later). An airline or travel site can add a "Book your SAGA" button that sends us the PNR and flight details. This is a business-development deal, not an API we can call today.</li>
+</ol>
+<h3>Step B: track the flight and time the pickup</h3>
+<p><b>Pickup time = departure − airport buffer − drive time at that hour.</b> The default buffers are 90 minutes for domestic flights and 180 for international; SAGA sets them. Drive time comes from the Google Routes API with traffic for that time of day. The rule is stored, not the time, so every flight update recalculates the pickup. If a flight moves by 10 minutes or more, the pickup moves and the rider is told. A cancellation, or a delay over 60 minutes, asks the rider before reassigning. For arrivals, the chauffeur is at the kerb 10 minutes after landing, with 45 minutes of free waiting.</p>
+<div class="tw"><table><thead><tr><th>Flight-status provider</th><th>How it updates</th><th>Indicative list price</th><th>Fit</th></tr></thead><tbody>
+<tr><td><b>FlightAware AeroAPI</b></td><td>Queries plus <b>push alerts</b> on the Standard tier</td><td>Personal: pay per query with $5 free a month. Standard: $100/month minimum. About $0.002–0.05 per query, depending on the endpoint.</td><td><span class="yes">Recommended.</span> Alerts mean cost grows with flights, not with polling.</td></tr>
+<tr><td><b>aviationstack</b></td><td>Polling (REST)</td><td>Free: 100 requests/month. Basic: $49.99/month for 10k. Professional: $149.99/month for 50k. Business: $499.99/month for 250k.</td><td><span class="mid">Good starter.</span> Simple, cheap, but no push.</td></tr>
+<tr><td><b>AeroDataBox</b> (RapidAPI)</td><td>Polling</td><td>Free tier of about 700 requests/month; paid plans up to about $150/month.</td><td><span class="mid">Budget fallback.</span></td></tr>
+<tr><td><b>Cirium / OAG</b></td><td>Enterprise feeds</td><td>Quote on request</td><td>Later, at scale</td></tr>
+</tbody></table></div>
+<p><b>Cost per airport booking:</b> 5–15 status checks per flight, which works out to well under ₹1 per booking at these prices. Expect <b>₹8,500–₹13,000 a month</b> ($100–150) at launch. We'll put the provider behind SAGA's own <code>/flights</code> service so it can be swapped without an app update. Prices are vendors' published list prices as of November 2026; confirm when signing up.</p>
+<p><b>Privacy:</b> a PNR plus a surname opens the booking on the airline's website. Store them encrypted, show them masked, and delete them after the trip.</p>
+
+<h2 id="s4"><span class="n">4</span>Spotting flight tickets automatically</h2>
+<p>The client asked whether the app can read the airline's confirmation email or SMS and suggest a ride. Here is what each route allows:</p>
+<div class="tw"><table><thead><tr><th>Route</th><th>iPhone</th><th>Android</th><th>Verdict</th></tr></thead><tbody>
+<tr><td>Read the airline's <b>SMS</b></td><td class="no">Not possible. iOS gives apps no access to messages.</td><td class="no">Google Play only allows SMS read access for default SMS apps and a short list of exceptions. Ride-hailing isn't one, so the app risks rejection.</td><td class="no">Not allowed</td></tr>
+<tr><td>Read the <b>Gmail inbox</b> (Gmail API)</td><td colspan="2">Possible with the rider's consent. The read scope is "restricted", so Google requires app verification plus an <b>annual CASA security assessment</b> by an approved lab. Reported costs range from about $8k to $75k a year; get a current quote.</td><td class="mid">Later, if volume justifies it, or through a pre-verified email provider.</td></tr>
+<tr><td>Read <b>WhatsApp</b> messages</td><td class="no">Not possible</td><td class="no">Not possible</td><td class="no">No</td></tr>
+<tr><td><b>Calendar</b></td><td class="yes">Yes, read access with permission</td><td class="yes">Yes, read access with permission</td><td class="yes">Launch. Gmail and airlines add flights to the calendar.</td></tr>
+<tr><td><b>Forward the email</b> to trips@sagamobility.com</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Launch. Works for any airline or travel site.</td></tr>
+<tr><td><b>Share</b> the ticket PDF, email or boarding pass to SAGA</td><td class="yes">Share Extension</td><td class="yes">Share intent</td><td class="yes">Launch</td></tr>
+<tr><td><b>Copied PNR</b> noticed when SAGA opens</td><td class="yes">With the iOS paste prompt</td><td class="yes">Yes (Android shows a notice)</td><td class="yes">Launch</td></tr>
+<tr><td><b>"Book SAGA" button</b> from an airline or travel site</td><td colspan="2">Deep link carrying the PNR and flight details</td><td class="mid">Partnership</td></tr>
+</tbody></table></div>
+<h3>How the forwarding route works</h3>
+<ol class="steps">
+<li>The rider forwards any flight confirmation to <code>trips@sagamobility.com</code> from the email address on their SAGA account.</li>
+<li>An inbound-email service (for example Amazon SES or Postmark) hands the email to SAGA's backend.</li>
+<li>A parser extracts the PNR, airline, flight number, date, time and passenger names. Template rules handle the common airlines; an AI model (for example Claude Haiku) handles everything else, for a fraction of a rupee per email.</li>
+<li>The sender address is matched to the rider, and the flight is checked against the flight-status API.</li>
+<li>The rider gets a push notification: "We found 6E 2134 on Fri 20 Nov. Book a pickup at 5:20 AM?" One tap opens the plan.</li>
+<li>The email is deleted once the flight details are saved.</li>
+</ol>
+
+<h2 id="s5"><span class="n">5</span>Scheduled rides on repeat</h2>
+<ul>
+<li>A series is stored as a calendar rule (RFC 5545 RRULE: days, time, end date) plus skipped dates. The backend creates real bookings 14 days ahead so dispatch can plan cars and charging.</li>
+<li>Riders can skip a day free of charge until 8 PM the evening before (configurable), add a return ride, and ask for the same chauffeur. Dispatch tries to honour that every day.</li>
+<li>Pricing: per ride, or as a weekday plan with a discount. Plans can be paid monthly through a UPI Autopay mandate from the payment gateway.</li>
+<li>Reminders go out the evening before. Each series appears in Trips as one card, with Skip next and Manage.</li>
+</ul>
+
+<h2 id="s6"><span class="n">6</span>When no car is free</h2>
+<ol class="steps">
+<li>When a rider books, the backend looks for free cars and for cars about to become free: those finishing a trip, and those charged enough to leave the hub.</li>
+<li>If the best pickup ETA is above a threshold (suggested: 8 minutes), the rider sees the honest screen. It says SAGA is a young company growing its fleet, gives the real wait, and promises a premium ride that makes it worth it. It's written in all three languages.</li>
+<li>The rider can <b>wait in line</b>, which locks the fare and earns 50 points. They can also <b>schedule</b>, or ask to be <b>notified</b> when a car is free.</li>
+<li>Ops sees the waitlist on Command and can release a car from charging or offer a scheduled slot.</li>
+<li>Measure how many waitlisted riders still ride. This tells SAGA when to add cars and in which areas.</li>
+</ol>
+
+<h2 id="s7"><span class="n">7</span>Notifications</h2>
+<p>The full catalogue, with templates in English, Telugu and Hindi, is on the <a href="ops.html#notifications">ops Notifications page</a>. In summary:</p>
+<div class="tw"><table><thead><tr><th>Group</th><th>Events</th><th>Channels</th></tr></thead><tbody>
+<tr><td><b>Ride</b></td><td>Chauffeur assigned · 2 min away · arrived (free wait started) · ride started · arrived · receipt · rate your ride</td><td>Push, plus a Live Activity on iPhone and a Live Update on Android. WhatsApp backup for assignment.</td></tr>
+<tr><td><b>Airport</b></td><td>Flight found · pickup booked · reminder the evening before · pickup moved (delay) · flight cancelled, confirm? · landed, chauffeur at Arrivals</td><td>Push (time-sensitive), WhatsApp, SMS for pickup changes</td></tr>
+<tr><td><b>Scheduled</b></td><td>Series created · tomorrow's ride, skip by 8 PM · same chauffeur not available · plan renewing</td><td>Push</td></tr>
+<tr><td><b>Waitlist</b></td><td>You're in line · a car is free, confirm in 2 min</td><td>Push (time-sensitive), SMS</td></tr>
+<tr><td><b>Payments</b></td><td>Payment failed · refund issued · Autopay mandate · monthly plan invoice</td><td>Push, email</td></tr>
+<tr><td><b>Offers</b></td><td>New offer for you · points earned · points expiring · referral credited</td><td>Push, WhatsApp, in-app banner (opted-in riders only)</td></tr>
+<tr><td><b>Safety and account</b></td><td>Trip shared · SOS raised · new sign-in · account deletion</td><td>Push, SMS</td></tr>
+<tr><td><b>Hotel guests</b> (no app)</td><td>Booked by the hotel · chauffeur details · tracking link · receipt or room-bill note</td><td>WhatsApp with SMS fallback</td></tr>
+<tr><td><b>Chauffeur</b></td><td>New job (full-screen) · job changed · charging slot · shift reminder · ops message</td><td>Push</td></tr>
+</tbody></table></div>
+<ul>
+<li><b>Push:</b> Firebase Cloud Messaging for both platforms (iPhone through APNs). Free.</li>
+<li><b>WhatsApp:</b> Meta's WhatsApp Business Platform through a provider (BSP). Templates must be approved by Meta, and pricing is per message by category (utility vs marketing).</li>
+<li><b>SMS:</b> India requires DLT registration of the business, the sender header and every template before messages are delivered.</li>
+<li>iPhone pickup alerts use the "time-sensitive" level; Android uses separate notification channels. Marketing messages respect quiet hours and opt-in.</li>
+</ul>
+
+<h2 id="s8"><span class="n">8</span>Running offers</h2>
+<ul>
+<li><b>Offer types:</b> % off with a cap, flat ₹ off, SAGA points, free waiting time.</li>
+<li><b>Triggers</b> SAGA can target: first airport ride · a flight detected in the next 14 days · scheduled plans with 20+ rides · referrals · partner-hotel guests · riders who waited for a car · riders inactive for 30 days · festivals.</li>
+<li><b>Guardrails:</b> one offer per ride (the best one wins), a uses-per-rider limit, a total budget that auto-stops at 100%, and de-duplication by device, phone number and UPI ID to stop abuse.</li>
+<li><b>Process:</b> ops drafts an offer in the dashboard, finance approves the budget, and it goes live on schedule. Results show redemptions, budget used and repeat rides. Keep a small holdout group to measure real lift.</li>
+<li>Eligible offers apply automatically at quote time, so riders don't hunt for codes. Codes stay available for campaigns. GST on discounted fares to be confirmed by SAGA's CA.</li>
+</ul>
+
+<h2 id="s9"><span class="n">9</span>Hotel partners and how the money moves</h2>
+<p>A hotel books a ride for a guest from <a href="hotel.html">SAGA for Hotels</a>. The guest doesn't need the app: they get the chauffeur's details and a tracking link on WhatsApp. The hotel earns a commission on every ride it books. There are three ways a ride can be paid for:</p>
+<div class="tw"><table><thead><tr><th>Mode</th><th>Who collects the fare</th><th>How commission is paid</th><th>Good for</th></tr></thead><tbody>
+<tr><td><b>A · Room bill</b></td><td>The hotel, on the guest's folio</td><td>Netted off in the monthly statement</td><td>Most hotel guests</td></tr>
+<tr><td><b>B · Guest pays SAGA</b></td><td>SAGA, via a UPI link sent to the guest on WhatsApp</td><td>Netted off, or paid out monthly</td><td>Walk-in requests, budget hotels</td></tr>
+<tr><td><b>C · Hotel account</b></td><td>Billed to the hotel (VIPs, packages)</td><td>Netted off in the monthly statement</td><td>Complimentary transfers</td></tr>
+<tr><td><b>Optional · Split at source</b></td><td>SAGA, through the payment gateway's split-payment product</td><td>The gateway transfers the commission per ride</td><td>Hotels that want daily settlement</td></tr>
+</tbody></table></div>
+<h3>Recommended: one monthly statement that nets everything</h3>
+<p>On the 1st, SAGA issues each hotel a statement: fares the hotel collected (A + C), minus commission on all rides (A + B + C), with GST on the commission and TDS. The hotel pays the net amount by the 7th. In a month where commission exceeds what the hotel collected, SAGA pays the difference. Example from the demo, Bay Pavilion, November:</p>
+<div class="tw"><table><tbody>
+<tr><td>Fares collected by hotel (room bill ₹96,300 + hotel account ₹16,500)</td><td style="text-align:right">₹1,12,800</td></tr>
+<tr><td>Commission, 10% of all 142 rides (₹1,84,200)</td><td style="text-align:right">− ₹18,420</td></tr>
+<tr><td>GST on commission, 18%, from the hotel's commission invoice</td><td style="text-align:right">− ₹3,316</td></tr>
+<tr><td>TDS deducted by SAGA on commission, 2%</td><td style="text-align:right">+ ₹368</td></tr>
+<tr><td><b>Hotel pays SAGA by 7 December</b></td><td style="text-align:right"><b>₹91,432</b></td></tr>
+</tbody></table></div>
+<div class="callout warn"><b>Tax and legal points for SAGA's CA</b>
+<ul style="margin-top:4px">
+<li>GST on passenger transport by cab (shown at 5%), and whether the room bill is treated as the hotel collecting on SAGA's behalf.</li>
+<li>The hotel's commission is its service to SAGA, invoiced with GST if the hotel is registered.</li>
+<li>TDS on commission under Section 194H: 2% since 1 Oct 2024, with a ₹20,000 yearly threshold from April 2025. It is renumbered under the new Income-tax Act from FY 2026-27.</li>
+<li>A partner agreement covering rates, statement dates, cancellations, guest-data handling under the DPDP Act 2023, and branding.</li>
+</ul></div>
+<p><b>Onboarding a hotel:</b> KYC (GSTIN, PAN, bank account) → partner agreement → staff logins → a 30-minute walkthrough → a QR stand at reception. Guests can also scan the QR to book themselves, with the hotel's code attached so the hotel still earns its commission.</p>
+
+<h2 id="s10"><span class="n">10</span>Voice in Telugu, Hindi and English</h2>
+<p>There are two layers. The first does everything; the second gives fast shortcuts from outside the app.</p>
+<h3>Layer 1 · Saathi, inside the app (every phone, every feature)</h3>
+<ol class="steps">
+<li>The rider taps the mic: the circle next to the tab bar on iPhone, or the Saathi button on Android. They speak in English, Telugu, Hindi, or a mix.</li>
+<li>Streaming speech-to-text turns speech into text. Options: <b>Sarvam AI</b> (Indian-language specialist; ₹30 per hour of audio list price) or Google Cloud Speech / the Gemini Live API.</li>
+<li>An AI model with tool-calling maps the request to app actions (book, airport, schedule, intercity, find my car, offers, settings) and fills in details: "office every weekday at 9" becomes a weekday series at 9:00 AM.</li>
+<li>The app shows what it understood, asks for a <b>confirmation before anything is booked or paid</b>, and replies in text and speech in the same language.</li>
+</ol>
+<p>The simulation shows this flow: open the mic on any screen, or use the suggestions. In Chrome it also listens for real, in all three languages. <b>Cost:</b> a typical 6-second command costs about ₹0.05 for speech-to-text, plus a few paise of AI-model usage.</p>
+<h3>Layer 2 · Siri and Gemini, from outside the app</h3>
+<div class="tw"><table><thead><tr><th></th><th>iPhone · Siri</th><th>Android · Google</th></tr></thead><tbody>
+<tr><td>How</td><td>App Intents and App Shortcuts: "Hey Siri, book a SAGA", "Hey Siri, where's my SAGA?". These also work from the lock screen.</td><td>App Actions today. Android 16's AppFunctions lets Gemini run app tasks on supported phones (Galaxy S26, Pixel 10), currently with selected partners in preview.</td></tr>
+<tr><td>Languages</td><td>English and Hindi; Siri in India also understands English mixed with Telugu. Full Telugu goes through Saathi.</td><td>Follows Google's assistant language support.</td></tr>
+<tr><td>Plan</td><td>Ship at launch</td><td>App Actions at launch; AppFunctions when Google opens it to all apps</td></tr>
+</tbody></table></div>
+<p>Separate from voice commands, both apps will work with the screen readers (VoiceOver, TalkBack) and with large text up to 200%.</p>
+
+<h2 id="s11"><span class="n">11</span>iPhone and Android: one app, two native feels</h2>
+<div class="tw"><table><thead><tr><th></th><th>iPhone</th><th>Android</th></tr></thead><tbody>
+<tr><td>Navigation</td><td>Floating glass tab bar with a separate Saathi button, swipe-back, large titles</td><td>Navigation bar with pill indicators, Saathi FAB, predictive back</td></tr>
+<tr><td>Type</td><td>SF Pro (system font)</td><td>Roboto Flex, Material type scale</td></tr>
+<tr><td>Colour</td><td>Neutral greys, brand colour as tint</td><td>Surfaces tinted from the brand colour</td></tr>
+<tr><td>Lists, sheets</td><td>Inset grouped lists, floating sheets</td><td>Segmented lists, attached bottom sheets</td></tr>
+<tr><td>Controls</td><td>iOS switches, segmented control, haptics</td><td>M3 switches, connected button groups, ripple</td></tr>
+<tr><td>Outside the app</td><td>Live Activity and Dynamic Island</td><td>Live Update notification and status-bar chip</td></tr>
+</tbody></table></div>
+<p><b>How it's built in Flutter:</b> shared business logic and design tokens; a platform layer that uses Cupertino widgets on iPhone and Material 3 on Android; and small native pieces where Flutter can't reach. Those are the Live Activity widget (Swift), Android Live Updates and full-screen job alerts (Kotlin), the share extension, Siri App Intents and Android App Actions. Flutter draws its own UI, so the iOS 26 glass effect is recreated with background blur; system sheets, permission prompts, share sheets and haptics stay native.</p>
+
+<h2 id="s12"><span class="n">12</span>Colour, dark mode and languages</h2>
+<p>Every colour in every app comes from one function, fed by SAGA's single brand colour. The palettes below are generated live. Paste SAGA's hex code to preview them, and check the contrast of text on the brand colour.</p>
+<div class="hexin"><input id="hx" spellcheck="false" aria-label="Brand hex"><span id="hxc" style="font-size:14px;color:var(--fg2)"></span></div>
+<div class="tok" id="tok"></div>
+<ul>
+<li>In Flutter, these become a <code>ThemeExtension&lt;SagaTokens&gt;</code> for light and dark, per platform. The theme follows the phone's setting, or the rider's choice in Account.</li>
+<li>Languages ship as ARB files (<code>app_en.arb</code>, <code>app_te.arb</code>, <code>app_hi.arb</code>) with <code>flutter_localizations</code>. Server notifications use the rider's saved language. Noto Sans Telugu and Noto Sans Devanagari are bundled. Telugu and Hindi copy in the demo needs review by native speakers before launch.</li>
+<li>Odia, Tamil and Kannada can be added later without code changes; they're already listed as "coming next".</li>
+</ul>
+
+<h2 id="s13"><span class="n">13</span>What we need from SAGA</h2>
+<p><span class="tag b">Blocker</span> needed before the build starts · <span class="tag d">Build</span> needed during the build · <span class="tag l">Launch</span> needed before store submission</p>
+<div class="tw"><table id="needs"><thead><tr><th style="width:26%">Item</th><th>Details and format</th><th style="width:90px">When</th></tr></thead><tbody></tbody></table></div>
+
+<h2 id="s14"><span class="n">14</span>Build and handover to testing</h2>
+<div class="tw"><table><thead><tr><th>Phase</th><th>Scope</th><th>Indicative</th></tr></thead><tbody>
+<tr><td><b>0 · Set-up</b></td><td>Repository and API access, mapping screens to existing endpoints (gaps listed), tokens and component library in Flutter, light/dark, i18n scaffolding</td><td>Week 1</td></tr>
+<tr><td><b>1 · Ride core</b></td><td>Sign in, Home, Where to, Confirm, branded map, tracking with ride code, Arrived, payments, Trips, Account</td><td>Weeks 2–5</td></tr>
+<tr><td><b>2 · SAGA's models</b></td><td>Airport (flight resolve and tracking), scheduled series, intercity, the honest no-cars flow, offers, notifications, Live Activity / Live Update</td><td>Weeks 4–7</td></tr>
+<tr><td><b>3 · Partner apps</b></td><td>Chauffeur app, hotel app, ops dashboard front-ends against the APIs</td><td>Weeks 6–9</td></tr>
+<tr><td><b>4 · Voice and polish</b></td><td>Saathi, Siri / App Actions, screen readers, large text, performance</td><td>Weeks 8–10</td></tr>
+<tr><td><b>5 · QA and release</b></td><td>Test cycles, UAT, store listings, submission</td><td>Weeks 10–12</td></tr>
+</tbody></table></div>
+<p>The timeline depends on backend readiness. Any endpoint that doesn't exist yet (flight resolve, series, waitlist, hotel statements) is on SAGA's backend team's critical path.</p>
+<h3>What each test build comes with</h3>
+<ul>
+<li>Release notes, plus test cases mapped to the <a href="screens.html">screen map</a> (one per screen and per flow).</li>
+<li>Staging environment, test accounts for every role, sandbox payments, and seeded flights including a delayed one.</li>
+<li>A device matrix: a current iPhone and an iPhone SE-size screen on the latest iOS, a Samsung and a budget Android phone (Android 12–16), and the chauffeur phone model. Each is tested in light and dark, in all three languages, and with large text.</li>
+<li>Acceptance criteria with numbers. For example: a flight delay of 10 minutes or more moves the pickup and notifies the rider within 2 minutes; a wrong ride code never starts a trip.</li>
+<li>iPhone builds through TestFlight; Android builds through Play internal testing.</li>
+</ul>
+
+<h2 id="s15"><span class="n">15</span>Sources</h2>
+<ul class="src">
+<li>Mahindra XUV 3XO EV specifications (5 seats, 39.4 kWh): <a href="https://www.autocarindia.com/car-news/mahindra-xuv-3xo-ev-launched-438746">Autocar India</a>, <a href="https://www.team-bhp.com/new-cars/mahindra/xuv-3xo-ev/specifications/">Team-BHP</a>, <a href="https://www.cardekho.com/mahindra/xuv-3xo-ev/specs">CarDekho</a></li>
+<li>aviationstack pricing: <a href="https://aviationstack.com/pricing">aviationstack.com/pricing</a></li>
+<li>FlightAware AeroAPI: <a href="https://flightaware.com/commercial/aeroapi/">flightaware.com/commercial/aeroapi</a>; tier summary: <a href="https://geekflare.com/dev/flight-data-api/">Geekflare, Best Flight Data APIs 2026</a></li>
+<li>AeroDataBox: <a href="https://alternativeto.net/software/aerodatabox-api/about">AlternativeTo listing</a></li>
+<li>Gmail restricted scopes and CASA assessment: <a href="https://www.gmass.co/blog/google-oauth-verification-security-assessment/">GMass</a>, <a href="https://www.theregister.co.uk/2019/02/11/google_gmail_developer">The Register (2019 cost estimate)</a>, <a href="https://developer.nylas.com/docs/provider-guides/google/shared-gcp-app/">Nylas shared app</a></li>
+<li>PNR lookup by third parties: <a href="https://www.thequint.com/tech-and-auto/tech-news/indigo-airline-hack-someone-can-get-your-personal-info-using-just-pnr-name">The Quint on PNR + surname lookups</a>, <a href="https://developer.sabre.com/pnr-management">Sabre PNR management</a></li>
+<li>Android AppFunctions and Gemini: <a href="https://9to5google.com/2026/02/25/android-appfunctions-gemini/">9to5Google</a>, <a href="https://android-developers.googleblog.com/2026/05/the-android-show-developers-cut-2026.html">Android Developers Blog</a></li>
+<li>Siri languages in India: <a href="https://support.apple.com/105012">Apple Support: speaking to Siri in multiple languages in India</a></li>
+<li>Sarvam AI speech-to-text pricing: <a href="https://docs.sarvam.ai/api/pricing">docs.sarvam.ai/api/pricing</a>, <a href="https://www.sarvam.ai/apis/speech-to-text/telugu">Telugu STT</a></li>
+<li>Section 194H TDS rate change: <a href="https://taxguru.in/income-tax/budget-2024-section-194h-tds-rate-cut-2-percent-october-1.html">TaxGuru</a>, <a href="https://tax2win.in/guide/section-194h-tds-on-commission-brokerage">Tax2win</a></li>
+</ul>
+<p class="meta" style="margin-top:30px">All names, flights, fares and figures in the apps are sample data. Prices quoted are third-party list prices as of November 2026 and should be confirmed with each vendor.</p>
+</article>
+</div>
+<script src="core.js"></script>
+<script>
+(function () {
+const S = SAGA; S.state.os = "web"; S.apply();
+const $ = q => document.querySelector(q);
+$("#logo").innerHTML = S.logo();
+$("#toc").innerHTML = [...document.querySelectorAll("article h2")].map(h => { const n = h.querySelector(".n").textContent; return `<a href="#${h.id}">${n} · ${h.textContent.slice(n.length)}</a>`; }).join("");
+const NEEDS = [
+  ["Brand"],
+  ["Logo files", "SVG for the primary and single-colour versions, a 1024×1024 PNG app-icon master, and a splash version. Any usage rules.", "b"],
+  ["Brand colours", "Primary hex code (plus secondary or neutral colours if any). We generate light/dark and iOS/Android palettes from it.", "b"],
+  ["Vehicle facts", "Exact model and seat layout (5 or 6 seats), luggage capacity, and which amenities are really provided: water, chargers, Wi-Fi, child seat.", "b"],
+  ["Fleet photography", "XUV 3XO EV in SAGA livery: front ¾, side, rear ¾, front cabin, rear seats, boot. 4K, plain background preferred. Livery artwork.", "d"],
+  ["Brand font", "Only if SAGA licenses one; otherwise system fonts (SF Pro / Roboto) are used.", "d"],
+  ["Existing app and backend"],
+  ["Flutter repository", "Access to the repo and a working branch. Flutter/Dart versions, state-management choice, architecture notes, package list, build flavours (dev/staging/prod), CI.", "b"],
+  ["API documentation", "OpenAPI/Swagger, staging base URL, auth (OTP provider), real-time channel (WebSocket or Firebase), rate limits, error codes.", "b"],
+  ["Test accounts", "Rider, chauffeur, hotel staff and ops users on staging, plus seed data.", "b"],
+  ["Backend ownership", "Who builds the new endpoints (flight resolve, series, waitlist, offers, hotel statements, notifications)? Our route table lists what each screen needs.", "b"],
+  ["Business rules"],
+  ["Fare rules", "Base fare, per km, per minute, minimum, airport fixed fares, intercity rates, night charges, tolls and parking, GST treatment, cancellation, no-show and waiting charges.", "b"],
+  ["Service area and airport", "City boundary, airport name and code to show, pickup point and parking rules at the airport, terminal guidance.", "d"],
+  ["Operating rules", "Hours, shift patterns, free-waiting times, airport buffers (default 90/180 min), waitlist threshold and compensation.", "d"],
+  ["Scheduled plans", "How far ahead riders can book, skip/cancel cut-offs, plan pricing and billing.", "d"],
+  ["Payments"],
+  ["Payment gateway", "Gateway (Razorpay, Cashfree, PhonePe…), test keys, UPI Autopay for plans, refund policy, wallet or not, split-payment product if hotels want daily settlement.", "d"],
+  ["Invoicing", "GSTIN, invoice format, whether e-invoicing applies.", "l"],
+  ["Maps"],
+  ["Google Maps Platform", "Billing-enabled project, or confirmation of the current provider. Keys restricted per app (Android SHA-1, iOS bundle ID). Maps SDK, Places, Routes, and the Navigation SDK for the chauffeur app.", "d"],
+  ["Flights and travel detection"],
+  ["Flight-status provider", "Account in SAGA's name (we recommend FlightAware AeroAPI Standard, or aviationstack to start), API key.", "d"],
+  ["Inbound email", "DNS access to add MX records for trips@sagamobility.com; choice of inbound-email service.", "d"],
+  ["Gmail integration decision", "We recommend deferring it (annual security assessment). Calendar, forwarding and share cover launch.", "d"],
+  ["Notifications and messaging"],
+  ["Firebase and APNs", "Firebase project with owner access; an APNs auth key (.p8) from SAGA's Apple developer account.", "b"],
+  ["WhatsApp Business", "Meta Business verification, provider (BSP) choice, sender number, template approvals.", "l"],
+  ["SMS (DLT)", "DLT entity registration, sender header (for example SAGAEV), approved templates, SMS provider.", "l"],
+  ["Email sending", "Sender domain with SPF/DKIM for receipts and statements.", "l"],
+  ["Masked calling", "Provider (for example Exotel) so rider and chauffeur numbers stay private.", "d"],
+  ["Voice"],
+  ["Speech and AI vendor", "Choice of Sarvam AI or Google for speech-to-text, and the AI model for understanding requests; billing accounts.", "d"],
+  ["Voice persona", "Confirm the name \"Saathi\" and approve the scripted replies in each language.", "d"],
+  ["Languages"],
+  ["Launch languages", "Confirm English, Telugu and Hindi; say whether Odia, Tamil or Kannada come later.", "d"],
+  ["Native-speaker review", "One reviewer each for Telugu and Hindi to approve the ARB string files we supply.", "d"],
+  ["Hotels"],
+  ["Partner programme", "Commission rates, agreement template, statement and payment dates, pilot hotel list and contacts, hotel KYC (GSTIN, PAN, bank).", "d"],
+  ["Legal and safety"],
+  ["Policies", "Privacy policy and terms (DPDP Act 2023 consent), data retention for PNR and location, in-app account deletion (required by both stores), aggregator licence details if they must be shown.", "l"],
+  ["Safety process", "SOS handling, control-room number, escalation steps.", "d"],
+  ["Stores and release"],
+  ["Developer accounts", "Apple Developer and Google Play Console as organisation accounts, with access for us. The first audit found the Android app listed under an individual developer.", "l"],
+  ["Store listings", "App names, existing bundle IDs and package names (kept, so it's an update), descriptions, screenshots approval, support URL, privacy labels and data-safety answers.", "l"],
+  ["Testing"],
+  ["Devices and testers", "Test phones (including the chauffeur model), TestFlight and Play internal-testing emails, UAT owners and the sign-off process, bug-tracker access.", "d"],
+  ["Analytics and support", "Analytics and crash-reporting access, support helpline and WhatsApp number, FAQ content.", "d"]
+];
+const T = { b: '<span class="tag b">Blocker</span>', d: '<span class="tag d">Build</span>', l: '<span class="tag l">Launch</span>' };
+$("#needs tbody").innerHTML = NEEDS.map(r => r.length === 1 ? `<tr class="grp"><td colspan="3">${r[0]}</td></tr>` : `<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td>${T[r[2]]}</td></tr>`).join("");
+const KEYS = [["accent", "Brand fill"], ["onAccent", "Text on brand"], ["accentInk", "Brand text"], ["accentSoft", "Brand container"], ["bg", "Background"], ["surface", "Card"], ["fg", "Text"], ["fg2", "Secondary text"]];
+function tokens() {
+  const hex = S.state.hex;
+  $("#hx").value = hex.toUpperCase();
+  const lt = S.tokens("ios", "light", hex);
+  $("#hxc").textContent = `Text on brand colour: ${S.contrast(lt.accent, lt.onAccent).toFixed(1)}:1 (WCAG AA needs 4.5:1)`;
+  $("#tok").innerHTML = [["ios", "light", "iPhone · light"], ["ios", "dark", "iPhone · dark"], ["android", "light", "Android · light"], ["android", "dark", "Android · dark"]].map(([os, th, name]) => {
+    const t = S.tokens(os, th, hex);
+    return `<div class="col" style="background:${t.bg};color:${t.fg}"><div class="hd">${name}</div>${KEYS.map(([k, l]) => `<div class="sw"><i style="background:${t[k]}"></i><div>${t[k].toUpperCase()}<span>${l}</span></div></div>`).join("")}</div>`;
+  }).join("");
+}
+$("#hx").addEventListener("change", e => { let v = e.target.value.trim(); if (!v.startsWith("#")) v = "#" + v; if (/^#[0-9a-f]{6}$/i.test(v)) S.set({ hex: v.toUpperCase() }); });
+S.onChange(() => { S.state.os = "web"; S.apply(); tokens(); $("#logo").innerHTML = S.logo(); });
+tokens();
+})();
+</script>
+</body>
+</html>

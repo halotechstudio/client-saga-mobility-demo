@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SAGA Driver</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Flex:opsz,wght@8..144,400;8..144,500;8..144,600;8..144,700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="core.css">
+<style>
+body{background:#E4E4E8;color:var(--fg);overflow:hidden}
+[data-theme=dark] body{background:#0B0B0D}
+body.embed,body.bare{background:transparent}
+.shell{display:flex;height:100vh}
+.panel{width:330px;flex:none;overflow-y:auto;padding:24px 20px 40px;border-right:1px solid var(--hair);background:var(--bg);font-family:"Inter",system-ui,sans-serif}
+.embed .panel,.bare .panel{display:none}
+.panel h1{font-size:20px;font-weight:700;display:flex;align-items:center;gap:10px}
+.panel .k{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--fg2);margin:22px 0 8px}
+.panel .sw{display:flex;gap:4px;padding:3px;background:var(--surface2);border-radius:12px}
+.panel .sw button{flex:1;height:36px;border-radius:9px;font-size:14px;font-weight:600;color:var(--fg2)}
+.panel .sw button.on{background:var(--surface);color:var(--fg);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.panel .sl{display:block;width:100%;text-align:left;padding:8px 10px;border-radius:9px;font-size:15px}
+.panel .sl:hover{background:var(--surface2)}.panel .sl.on{background:var(--accent-soft);color:var(--on-accent-soft);font-weight:600}
+.notes{margin-top:18px;padding:16px;border-radius:16px;background:var(--surface);font-size:14.5px;line-height:1.5}
+.notes h3{font-size:16px;margin-bottom:8px}.notes dt{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--fg2);margin-top:10px}
+.notes code{font-family:var(--mono);font-size:12.5px;background:var(--surface2);padding:1px 5px;border-radius:5px}
+.panel a.out{display:block;margin-top:8px;font-size:14px;color:var(--accent-ink);font-weight:600;text-decoration:none}
+.stagearea{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.fit{transform-origin:center center;flex:none}
+.foot{position:absolute;left:0;right:0;bottom:0;z-index:25;padding:24px 16px 36px;background:linear-gradient(to bottom,color-mix(in srgb,var(--bg) 0%,transparent),var(--bg) 26%)}
+.has-foot .content{padding-bottom:190px}
+.online{display:flex;align-items:center;gap:16px;padding:20px;border-radius:28px;background:var(--surface)}
+.online.on{background:var(--accent);color:var(--on-accent)}
+.online.on .t-sub{color:inherit;opacity:.85}
+.online .tgl{transform:scale(1.15)}
+.online.on .tgl{background:var(--on-accent)}
+.online.on .tgl::after{background:var(--accent)!important}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.kpis div{background:var(--surface);border-radius:22px;padding:14px;font-size:14px;color:var(--fg2)}
+.kpis b{display:block;font-size:24px;color:var(--fg);font-weight:600;margin-top:4px;font-feature-settings:"tnum" 1}
+.job{display:flex;gap:14px;padding:16px;border-radius:26px;background:var(--surface);text-align:left;width:100%;color:var(--fg)}
+.job+.job{margin-top:8px}
+.job time{font-size:20px;font-weight:600;min-width:62px;font-feature-settings:"tnum" 1}
+.job .ty{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;padding:3px 10px;border-radius:12px;background:var(--accent-soft);color:var(--on-accent-soft)}
+.job.next{box-shadow:inset 0 0 0 2px var(--accent)}
+.req{position:absolute;inset:0;display:flex;flex-direction:column;padding:70px 20px 36px;background:var(--bg)}
+.ring{width:170px;height:170px;margin:10px auto 0;position:relative}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:10}
+.ring .bg{stroke:var(--surface3)}.ring .fg{stroke:var(--accent);stroke-linecap:round;stroke-dasharray:503;animation:cd 15s linear forwards}
+@keyframes cd{to{stroke-dashoffset:503}}
+.ring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring .c b{font-size:46px;font-weight:600;line-height:1}
+.turn{position:absolute;z-index:31;left:12px;right:12px;top:50px;border-radius:24px;background:var(--accent);color:var(--on-accent);padding:16px 18px;display:flex;gap:14px;align-items:center;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.turn .ic{width:40px;height:40px;stroke-width:2.4}
+.turn b{font-size:24px;display:block;line-height:1.1}.turn span{font-size:16px;opacity:.9}
+.plate{font-family:var(--mono);font-size:14px;font-weight:500;padding:5px 8px;border-radius:7px;background:var(--surface);border:1px solid var(--hair)}
+.rider{display:flex;align-items:center;gap:14px;padding:14px;border-radius:22px;background:var(--surface2)}
+.rider .ph{width:52px;height:52px;border-radius:26px;background:var(--accent-soft);color:var(--on-accent-soft);font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.acts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.act{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--fg)}
+.act span.c{width:56px;height:56px;border-radius:18px;background:var(--accent-soft);color:var(--on-accent-soft);display:flex;align-items:center;justify-content:center}
+.act.sos span.c{color:var(--danger)}
+.timer{font-size:52px;font-weight:600;font-feature-settings:"tnum" 1;letter-spacing:-.01em}
+.progress{height:8px;border-radius:4px;background:var(--surface3);overflow:hidden}
+.progress i{display:block;height:100%;background:var(--accent);border-radius:4px}
+.codein{display:flex;gap:10px;justify-content:center;margin-top:20px}
+.codein span{width:68px;height:80px;border-radius:20px;border:2px solid var(--fg3);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:36px}
+.codein span.f{border-color:var(--accent);background:var(--accent-soft);color:var(--on-accent-soft)}
+.codein.ok span{border-color:var(--success);background:color-mix(in srgb,var(--success) 16%,transparent);color:var(--success)}
+.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:24px}
+.keys button{height:66px;border-radius:20px;background:var(--surface2);font-size:28px;font-weight:500;color:var(--fg)}
+.batt{display:flex;align-items:flex-end;gap:16px}
+.batt .big{font-size:64px;font-weight:600;line-height:1;letter-spacing:-.02em}
+.cell{height:24px;border-radius:8px;background:var(--surface3);overflow:hidden;position:relative}
+.cell i{position:absolute;inset:0 auto 0 0;background:var(--success);border-radius:8px}
+.chk{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--surface);border-radius:6px;font-size:16.5px}
+.chk:first-child{border-radius:24px 24px 6px 6px}.chk:last-child{border-radius:6px 6px 24px 24px}
+.chk+.chk{margin-top:3px}
+.chk .bx{width:28px;height:28px;border-radius:8px;border:2px solid var(--fg3);display:flex;align-items:center;justify-content:center;flex:none;color:transparent}
+.chk.on .bx{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.chk .bx .ic{width:18px;height:18px;stroke-width:3}
+.seal{width:96px;height:96px;border-radius:48px;margin:0 auto;background:var(--success);color:#fff;display:flex;align-items:center;justify-content:center}
+.seal .ic{width:48px;height:48px;stroke-width:2.6}
+.stars{display:flex;justify-content:center;gap:8px}.stars button{width:52px;height:52px;color:var(--fg3)}.stars button .ic{width:34px;height:34px}.stars button.on{color:#E8A317}.stars button.on .ic{fill:#E8A317}
+.flightbox{border-radius:24px;padding:16px;background:var(--surface);display:flex;gap:14px;align-items:center}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="panel" id="panel"></aside>
+  <main class="stagearea" id="stagearea"><div class="fit" id="fit"><div class="device" id="device"><div class="screen" id="screen">
+    <div class="statusbar" id="sb"></div>
+    <div class="views" id="views"></div>
+    <div class="sbfade" id="sbfade"></div>
+    <nav class="tabbar hide" id="tabbar"></nav>
+    <div class="toast" id="toast"></div>
+    <div class="homebar"></div>
+  </div></div></div></main>
+</div>
+<script src="core.js"></script>
+<script>
+(function () {
+const S = SAGA; S.state.os = "android"; S.apply();
+const L = S.L, I = S.icon, $ = (q, r = document) => r.querySelector(q), $$ = (q, r = document) => [...r.querySelectorAll(q)];
+const EMBED = S.qs.has("embed"), BARE = S.qs.has("bare"), V = S.VEHICLE;
+document.body.classList.toggle("embed", EMBED); document.body.classList.toggle("bare", BARE);
+const esc = s => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+const st = { online: true, checks: [true, true, true, false, true], code: "", rating: 0 };
+
+const btn = (label, o = {}) => `<button class="btn ${o.kind || "btn-primary"} block ${o.cls || ""}" ${o.go ? `data-go="${o.go}"` : ""} ${o.act ? `data-act="${o.act}"` : ""} ${o.toast ? `data-toast="${esc(o.toast)}"` : ""}>${o.icon ? I(o.icon) : ""}<span>${label}</span></button>`;
+const bar = (title, o = {}) => `<header class="topbar"><div class="tb-row">${o.back === false ? '<span style="width:10px"></span>' : `<button class="ibtn" data-back aria-label="Back">${I("arrowl")}</button>`}<div class="tb-title">${o.large ? "" : title}</div><div class="tb-actions">${o.actions || ""}</div></div>${o.large ? `<h1 class="tb-headline">${title}</h1>` : ""}</header>`;
+const row = o => `<button class="row" ${o.go ? `data-go="${o.go}"` : ""} ${o.toast ? `data-toast="${esc(o.toast)}"` : ""} ${o.act ? `data-act="${o.act}"` : ""} ${o.attr || ""}>${o.icon ? `<span class="lead ${o.lc || ""}">${I(o.icon)}</span>` : ""}<span class="tx"><span class="t1" style="display:block">${o.t}</span>${o.s ? `<span class="t2" style="display:block">${o.s}</span>` : ""}</span><span class="trail">${o.trail || ""}${o.chev === false ? "" : I("chevr")}</span></button>`;
+const pill = (icon, t, k = "") => `<span class="pill ${k}">${icon ? I(icon) : ""}${t}</span>`;
+const sh = t => `<div class="sh"><h2>${t}</h2></div>`;
+const seg = (opts, cur, act) => `<div class="seg">${opts.map(([v, l]) => `<button class="${v === cur ? "on" : ""}" data-act="${act}" data-v="${v}">${v === cur ? I("check", "sm") : ""}${l}</button>`).join("")}</div>`;
+
+const SC = {}; const def = (id, m, r, mount) => (SC[id] = Object.assign({ id, render: r, mount }, m));
+
+def("shift", { n: "Start of shift", foot: 1, nav: 1, what: "A 30-second vehicle check before going online: charge, cleanliness, water, chargers, tyres. Ops sees it live.", why: "The premium promise depends on every car being ready. This makes it routine and auditable.", fl: "<code>POST /shifts</code> with checklist + optional photos (<code>image_picker</code>). Charge from the vehicle telematics API if available." }, () => `
+  ${bar(L("Start of shift", "షిఫ్ట్ ప్రారంభం", "शिफ़्ट शुरू"))}
+  <div class="content"><div class="pad">
+    <div class="card row-flex"><div class="grow"><div class="t-label">${V.make} ${V.model}</div><div class="t-h2 mt4">${V.plate}</div></div><div style="text-align:right"><div class="t-h2" style="color:var(--success)">92%</div><div class="t-sub">${L("charge", "ఛార్జ్", "चार्ज")}</div></div></div>
+    <h2 class="t-h3 mt24">${L("Quick check before you go online", "ఆన్‌లైన్ ముందు తనిఖీ", "ऑनलाइन होने से पहले जाँच")}</h2>
+    <div class="mt12">${[L("Cabin and seats cleaned", "క్యాబిన్, సీట్లు శుభ్రం", "केबिन और सीटें साफ़"), L("4 chilled water bottles", "4 చల్లని నీళ్ల సీసాలు", "4 ठंडी पानी की बोतलें"), L("USB-C chargers in place", "USB-C ఛార్జర్లు ఉన్నాయి", "USB-C चार्जर मौजूद"), L("Tyres and lights checked", "టైర్లు, లైట్లు తనిఖీ", "टायर और लाइट जाँचे"), L("Uniform and ID card", "యూనిఫాం, ID కార్డు", "यूनिफ़ॉर्म और ID कार्ड")].map((t, i) => `<button class="chk ${st.checks[i] ? "on" : ""}" data-act="chk" data-v="${i}" style="width:100%;text-align:left"><span class="bx">${I("check")}</span>${t}</button>`).join("")}</div>
+  </div></div>
+  ${`<div class="foot">${btn(st.checks.every(Boolean) ? L("Start shift", "షిఫ్ట్ ప్రారంభించు", "शिफ़्ट शुरू करें") : L(`${st.checks.filter(x => !x).length} item left`, `${st.checks.filter(x => !x).length} మిగిలి ఉంది`, `${st.checks.filter(x => !x).length} बाकी`), { go: st.checks.every(Boolean) ? "duty" : "", kind: st.checks.every(Boolean) ? "btn-primary" : "btn-secondary", cls: "lg" })}</div>`}`);
+
+def("duty", { n: "Duty", tab: "duty", what: "Online switch, today's numbers, and the day's assigned jobs in time order: airport drops linked to flights, hotel pickups, scheduled series, and on-demand rides.", why: "Drivers are salaried, so the screen is a work plan, not an earnings hustle. Flight and hotel context is visible before the job starts.", fl: "<code>GET /driver/schedule?date=</code>, live updates over WebSocket. Online state drives location upload frequency." }, () => `
+  ${bar(L("Today", "ఈ రోజు", "आज"), { back: false, large: true, actions: `<button class="ibtn" data-toast="${esc(L("No new messages from ops", "ఆప్స్ నుండి కొత్త సందేశాలు లేవు", "ऑप्स से कोई नया मैसेज नहीं"))}">${I("bell")}</button>` })}
+  <div class="content"><div class="pad">
+    <button class="online ${st.online ? "on" : ""}" data-act="online" style="width:100%;text-align:left"><span class="pico" style="width:48px;height:48px;border-radius:24px;display:flex;align-items:center;justify-content:center;background:${st.online ? "rgba(255,255,255,.18)" : "var(--surface2)"}">${I("car")}</span><div class="grow"><div class="t-h3">${st.online ? L("You're online", "మీరు ఆన్‌లైన్‌లో ఉన్నారు", "आप ऑनलाइन हैं") : L("You're offline", "మీరు ఆఫ్‌లైన్", "आप ऑफ़लाइन हैं")}</div><div class="t-sub">${st.online ? L("Shift 06:00 – 14:00 · 4 h 12 m left", "షిఫ్ట్ 06:00 – 14:00 · 4 గం 12 ని మిగిలి", "शिफ़्ट 06:00 – 14:00 · 4 घं 12 मि बाकी") : L("Tap to go online", "ఆన్‌లైన్ కావడానికి నొక్కండి", "ऑनलाइन होने के लिए दबाएँ")}</div></div><span class="tgl ${st.online ? "on" : ""}"></span></button>
+    <div class="kpis mt12"><div>${L("Trips", "ట్రిప్పులు", "ट्रिप")}<b>5</b></div><div>${L("On time", "సమయానికి", "समय पर")}<b>100%</b></div><div>${L("Rating", "రేటింగ్", "रेटिंग")}<b>4.9</b></div></div>
+  </div>
+  ${sh(L("Your jobs", "మీ పనులు", "आपके काम"))}
+  <div class="pad">
+    <button class="job next" data-go="request"><time>09:00</time><div class="grow"><span class="ty">${I("repeat", "sm")}${L("Scheduled", "షెడ్యూల్", "शेड्यूल")}</span><div class="t-h3 mt8">Ananya Rao</div><div class="t-sub">MVP Colony → Dwaraka Nagar · 12 km</div></div>${I("chevr")}</button>
+    <button class="job" data-go="waiting"><time>11:20</time><div class="grow"><span class="ty">${I("landing", "sm")}${L("Airport pickup", "ఎయిర్‌పోర్ట్ పికప్", "एयरपोर्ट पिकअप")}</span><div class="t-h3 mt8">Mr. S. Sharma</div><div class="t-sub">AI 1912 ${L("lands", "ల్యాండింగ్", "लैंडिंग")} 11:05 · ${L("on time", "సమయానికి", "समय पर")}</div></div>${I("chevr")}</button>
+    <button class="job" data-toast="${esc(L("Hotel booking: guest at the lobby, bill to room", "హోటల్ బుకింగ్: లాబీలో అతిథి, రూమ్ బిల్", "होटल बुकिंग: लॉबी में मेहमान, रूम बिल"))}"><time>13:30</time><div class="grow"><span class="ty">${I("hotel", "sm")}${L("Hotel", "హోటల్", "होटल")}</span><div class="t-h3 mt8">${L("Guest · Room 412", "అతిథి · రూమ్ 412", "मेहमान · रूम 412")}</div><div class="t-sub">Bay Pavilion Hotel → Railway Station</div></div>${I("chevr")}</button>
+  </div>
+  <div class="pad mt16"><div class="card pad0" style="height:150px;overflow:hidden;border-radius:28px">${S.map({ view: [100, 160, 260, 160], car: [260, 180, 90] })}</div></div>
+  </div>`);
+
+def("request", { n: "Job offered", tabs: 0, what: "Full-screen job card with a 15-second ring: pickup distance, rider, trip type, drop. Accept, or decline with a reason.", why: "Big targets and big type so it can be read at a glance in a parked car.", fl: "High-priority FCM data message → full-screen intent (Android <code>USE_FULL_SCREEN_INTENT</code>, allowed for ride-hailing). Response: <code>POST /jobs/{id}/accept</code>." }, () => `
+  <div class="req">
+    <div class="center">${pill("repeat", L("Scheduled ride · repeat rider", "షెడ్యూల్ రైడ్ · రెగ్యులర్ రైడర్", "शेड्यूल राइड · नियमित सवारी"), "accent")}</div>
+    <div class="ring"><svg viewBox="0 0 180 180"><circle class="bg" cx="90" cy="90" r="80"/><circle class="fg" cx="90" cy="90" r="80"/></svg><div class="c"><b>4 min</b><span class="t-sub">${L("to pickup", "పికప్‌కు", "पिकअप तक")}</span></div></div>
+    <div class="rider mt24"><span class="ph">AR</span><div class="grow"><div class="t-h3">Ananya Rao</div><div class="t-sub">★ 4.8 · ${L("prefers a quiet ride", "నిశ్శబ్ద ప్రయాణం ఇష్టం", "शांत सफ़र पसंद")}</div></div></div>
+    <div class="card mt12" style="padding:6px 18px">
+      <div class="row-flex" style="min-height:58px"><span style="width:14px;height:14px;border-radius:7px;border:4px solid var(--accent)"></span><div class="grow"><div class="t-label">${L("Pickup", "పికప్", "पिकअप")}</div><div class="t-body">MVP Colony, Sector 4</div></div><b>1.6 km</b></div>
+      <div class="hr" style="margin:0 0 0 28px"></div>
+      <div class="row-flex" style="min-height:58px"><span style="width:14px;height:14px;border-radius:3px;background:var(--fg)"></span><div class="grow"><div class="t-label">${L("Drop", "డ్రాప్", "ड्रॉप")}</div><div class="t-body">Dwaraka Nagar</div></div><b>12.4 km</b></div>
+    </div>
+    <div style="margin-top:auto">${btn(L("Accept", "అంగీకరించు", "स्वीकार करें"), { go: "topickup", cls: "lg" })}<button class="btn btn-text block mt8" data-back>${L("Can't take this", "తీసుకోలేను", "नहीं ले सकता")}</button></div>
+  </div>`);
+
+def("topickup", { n: "To pickup", tabs: 0, map: 1, what: "Turn-by-turn banner in SAGA colours, the route on the branded map, ETA, rider, and a single 'I've arrived' action.", why: "One glance for direction, one tap when there. Calls are masked so neither number is shared.", fl: "Google Navigation SDK for Android (or hand-off to Google Maps). Masked calling via the client's telephony provider (e.g. Exotel)." }, () => `
+  <div class="mapwrap">${S.map({ route: "pickup", car: [260, 210, 180], view: [79, 70, 263, 571], labelPickup: "Ananya" })}</div>
+  <div class="turn">${I("arrowr")}<div><b>${L("Right onto Beach Road", "బీచ్ రోడ్ వైపు కుడికి", "बीच रोड पर दाएँ")}</b><span>300 m</span></div></div>
+  <div class="sheet"><div class="grabber"></div>
+    <div class="row-flex"><div class="grow"><div class="t-title">4 min</div><div class="t-sub">1.6 km · ${L("arrive 8:56 AM", "ఉ. 8:56కి చేరుకోండి", "सुबह 8:56 पहुँचें")}</div></div>${pill("check", L("Early", "ముందుగా", "समय से पहले"), "ok")}</div>
+    <div class="rider mt16"><span class="ph">AR</span><div class="grow"><div class="t-h3">Ananya Rao</div><div class="t-sub">${L("Gate 2, near the park", "గేట్ 2, పార్క్ దగ్గర", "गेट 2, पार्क के पास")}</div></div></div>
+    <div class="acts mt16"><button class="act" data-toast="${esc(L("Calling rider (number masked)", "రైడర్‌కు కాల్ (నంబర్ దాచబడింది)", "सवारी को कॉल (नंबर छुपा)"))}"><span class="c">${I("phone")}</span>${L("Call", "కాల్", "कॉल")}</button><button class="act" data-toast="${esc(L("Quick replies: I've arrived · 2 min away", "త్వరిత సందేశాలు: వచ్చాను · 2 నిమిషాల్లో", "क्विक रिप्लाई: पहुँच गया · 2 मिनट"))}"><span class="c">${I("chat")}</span>${L("Message", "సందేశం", "मैसेज")}</button><button class="act sos" data-toast="${esc(L("SOS sent to SAGA control room", "SOS SAGA కంట్రోల్ రూమ్‌కు పంపాం", "SOS SAGA कंट्रोल रूम भेजा"))}"><span class="c">${I("shield")}</span>SOS</button></div>
+    <div class="mt16">${btn(L("I've arrived", "నేను చేరుకున్నాను", "मैं पहुँच गया"), { go: "waiting", cls: "lg" })}</div>
+  </div>`);
+
+def("waiting", { n: "At pickup", tabs: 0, nav: 1, foot: 1, what: "Free-wait timer and rider status. For airport pickups: flight landing time and belt, with the wait starting from landing.", why: "Removes guesswork at Arrivals; the rider gets the same information.", fl: "Waiting rules per trip type from <code>GET /policies</code> (client to confirm: 10 min city, 45 min after landing)." }, () => `
+  ${bar(L("At pickup", "పికప్ వద్ద", "पिकअप पर"))}
+  <div class="content"><div class="pad">
+    <div class="flightbox"><span class="pico" style="width:48px;height:48px;border-radius:24px;background:var(--accent);color:var(--on-accent);display:flex;align-items:center;justify-content:center">${I("landing")}</span><div class="grow"><div class="t-h3">AI 1912 ${L("landed 11:02", "11:02కి ల్యాండ్", "11:02 पर लैंड")}</div><div class="t-sub">${L("Belt 3 · guest notified you're at Arrivals", "బెల్ట్ 3 · మీరు అరైవల్స్‌లో ఉన్నారని తెలిపాం", "बेल्ट 3 · मेहमान को बताया आप अराइवल पर हैं")}</div></div></div>
+    <div class="card mt12 center"><div class="t-label">${L("Free waiting", "ఉచిత వెయిటింగ్", "मुफ़्त इंतज़ार")}</div><div class="timer mt8">08:12</div><div class="progress mt12"><i style="width:18%"></i></div><p class="t-sub mt8">${L("of 45 min after landing", "ల్యాండింగ్ తర్వాత 45 నిమిషాల్లో", "लैंडिंग के बाद 45 मिनट में से")}</p></div>
+    <div class="rider mt12"><span class="ph">SS</span><div class="grow"><div class="t-h3">Mr. S. Sharma</div><div class="t-sub">${L("Name board ready · 2 bags", "పేరు బోర్డు సిద్ధం · 2 బ్యాగులు", "नाम की तख्ती तैयार · 2 बैग")}</div></div><button class="ibtn" data-toast="${esc(L("Calling guest (number masked)", "అతిథికి కాల్", "मेहमान को कॉल"))}">${I("phone")}</button></div>
+  </div></div>
+  <div class="foot">${btn(L("Enter rider's code", "రైడర్ కోడ్ ఎంటర్ చేయండి", "सवारी का कोड डालें"), { go: "code", cls: "lg" })}</div>`);
+
+def("code", { n: "Start with code", tabs: 0, nav: 1, what: "The chauffeur types the rider's 4-digit code. Only a matching code starts the trip.", why: "Prevents wrong-car pickups at busy airports and hotel porches.", fl: "<code>POST /rides/{id}/start {code}</code>; three wrong tries alert ops." }, () => `
+  ${bar(L("Start the ride", "రైడ్ ప్రారంభించండి", "राइड शुरू करें"))}
+  <div class="content"><div class="pad center">
+    <h1 class="t-title">${L("Ask the rider for their code", "రైడర్‌ను కోడ్ అడగండి", "सवारी से कोड पूछें")}</h1>
+    <p class="t-sub mt8">${L("It's on their phone, under 'Your ride code'.", "వారి ఫోన్‌లో 'మీ రైడ్ కోడ్' కింద ఉంటుంది.", "उनके फ़ोन पर 'आपका राइड कोड' में है।")}</p>
+    <div class="codein ${st.code === "4827" ? "ok" : ""}">${[0, 1, 2, 3].map(i => `<span class="${st.code[i] ? "f" : ""}">${st.code[i] || ""}</span>`).join("")}</div>
+    ${st.code.length === 4 ? `<p class="mt16" style="font-weight:600;color:${st.code === "4827" ? "var(--success)" : "var(--danger)"}">${st.code === "4827" ? L("Code matches. Starting the ride…", "కోడ్ సరిపోయింది. రైడ్ మొదలవుతోంది…", "कोड सही है। राइड शुरू हो रही है…") : L("That code doesn't match. Try again.", "కోడ్ సరిపోలేదు. మళ్ళీ ప్రయత్నించండి.", "कोड मेल नहीं खाता। फिर कोशिश करें।")}</p>` : `<p class="t-sub mt16">${L("Demo code: 4827", "డెమో కోడ్: 4827", "डेमो कोड: 4827")}</p>`}
+    <div class="keys">${[1, 2, 3, 4, 5, 6, 7, 8, 9, "", 0, "⌫"].map(k => k === "" ? "<span></span>" : `<button data-act="key" data-v="${k}">${k}</button>`).join("")}</div>
+  </div></div>`);
+
+def("trip", { n: "On trip", tabs: 0, map: 1, what: "Navigation to the drop with the rider's requests shown as they arrive (cooler, quieter, stop here), in the chauffeur's language.", why: "The rider's app sends canned requests in English; the chauffeur reads them in Telugu or Hindi.", fl: "Same navigation component. Rider requests arrive as typed events and are localised on device." }, () => `
+  <div class="mapwrap">${S.map({ route: "trip", car: [140, 380, 180], view: [-20, 232, 441, 960], labelDrop: "Dwaraka Nagar" })}</div>
+  <div class="turn">${I("arrowu")}<div><b>${L("Continue on VIP Road", "VIP రోడ్‌లో నేరుగా", "VIP रोड पर सीधे")}</b><span>1.2 km</span></div></div>
+  <div class="sheet"><div class="grabber"></div>
+    <div class="row-flex"><div class="grow"><div class="t-title">12 min</div><div class="t-sub">5.1 km · ${L("drop 9:22 AM", "ఉ. 9:22కి డ్రాప్", "सुबह 9:22 ड्रॉप")}</div></div>${pill("snow", L("Rider: cooler, please", "రైడర్: AC పెంచండి", "सवारी: AC ठंडा करें"), "accent")}</div>
+    <div class="progress mt16"><i style="width:58%"></i></div>
+    <div class="mt20">${btn(L("End trip", "ట్రిప్ ముగించు", "ट्रिप खत्म करें"), { go: "done", cls: "lg", kind: "btn-ink" })}</div>
+  </div>`);
+
+def("done", { n: "Trip complete", tabs: 0, foot: 1, what: "Paid status (prepaid UPI, cash, or billed to hotel), distance and time, and a rider rating.", why: "No fare haggling: SAGA prices are fixed and payment is settled by the system.", fl: "<code>POST /rides/{id}/complete</code> with odometer/GPS distance; payment state from backend." }, () => `
+  <div class="content"><div class="pad center" style="padding-top:30px">
+    <div class="seal">${I("check")}</div>
+    <h1 class="t-title mt20">${L("Trip complete", "ట్రిప్ పూర్తయింది", "ट्रिप पूरी हुई")}</h1>
+    <p class="t-sub mt8">${L("Paid by UPI · nothing to collect", "UPI ద్వారా చెల్లించారు · వసూలు చేయాల్సింది ఏమీ లేదు", "UPI से भुगतान · कुछ लेना नहीं")}</p>
+    <div class="kpis mt24"><div>${L("Distance", "దూరం", "दूरी")}<b>12.4</b>km</div><div>${L("Time", "సమయం", "समय")}<b>27</b>min</div><div>${L("Fare", "ఛార్జీ", "किराया")}<b>₹287</b>${L("fixed", "స్థిరం", "तय")}</div></div>
+    <div class="t-h3 mt24">${L("Rate Ananya", "అనన్యకు రేటింగ్", "अनन्या को रेट करें")}</div>
+    <div class="stars mt12">${[1, 2, 3, 4, 5].map(n => `<button class="${n <= st.rating ? "on" : ""}" data-act="rate" data-v="${n}">${I("star")}</button>`).join("")}</div>
+  </div></div>
+  <div class="foot">${btn(L("Back to duty", "డ్యూటీకి తిరిగి", "ड्यूटी पर वापस"), { go: "duty", cls: "lg" })}</div>`);
+
+def("vehicle", { n: "Car & charging", tab: "car", what: "Charge level, estimated range for the rest of the shift, and the charging slot ops has booked.", why: "Range is managed centrally so chauffeurs never refuse a trip for charge.", fl: "Telematics or OBD feed if Mahindra exposes it; otherwise chauffeur-entered SoC at shift start. Charging slots from ops." }, () => `
+  ${bar(L("Your car", "మీ కారు", "आपकी गाड़ी"), { back: false, large: true })}
+  <div class="content"><div class="pad">
+    <div class="card stage pad0" style="padding:18px 18px 0;overflow:hidden"><div class="t-label" style="color:var(--on-stage2)">${V.plate}</div><div class="t-h3" style="color:#fff">${V.make} ${V.model}</div><div style="margin:0 -10px -30px">${S.car()}</div></div>
+    <div class="card mt12"><div class="batt"><span class="big t-num">64%</span><span class="t-sub" style="padding-bottom:8px">${L("about 210 km left", "సుమారు 210 కి.మీ మిగిలి", "लगभग 210 किमी बाकी")}</span></div><div class="cell mt12"><i style="width:64%"></i></div><p class="t-sub mt8">${L("Enough for your remaining 3 jobs (≈ 74 km).", "మిగిలిన 3 పనులకు సరిపోతుంది (≈ 74 కి.మీ).", "बाकी 3 कामों के लिए काफ़ी (≈ 74 किमी)।")}</p></div>
+  </div>
+  ${sh(L("Charging", "ఛార్జింగ్", "चार्जिंग"))}
+  <div class="group">
+    ${row({ icon: "bolt", t: L("Booked: 14:00 · SAGA hub, Madhurawada", "బుక్: 14:00 · SAGA హబ్, మధురవాడ", "बुक: 14:00 · SAGA हब, मधुरवाड़ा"), s: L("Fast charger 2 · 40 min", "ఫాస్ట్ ఛార్జర్ 2 · 40 నిమి", "फ़ास्ट चार्जर 2 · 40 मिनट"), toast: L("Directions to SAGA hub", "SAGA హబ్‌కు దారి", "SAGA हब का रास्ता") })}
+    ${row({ icon: "alert", lc: "grey", t: L("Report a problem with the car", "కారులో సమస్య తెలపండి", "गाड़ी में समस्या बताएँ"), toast: L("Ops will call you within 5 min", "ఆప్స్ 5 నిమిషాల్లో కాల్ చేస్తారు", "ऑप्स 5 मिनट में कॉल करेंगे") })}
+  </div></div>`);
+
+def("profile", { n: "Me & settings", tab: "me", what: "Shift summary, rating, and settings: language (English, Telugu, Hindi), appearance (dark by default for night driving), support and SOS.", why: "Chauffeurs choose their language once; rider requests and ops messages follow it.", fl: "Same <code>SagaTokens</code> and ARB files as the rider app (shared Flutter package)." }, () => `
+  ${bar(L("Me", "నేను", "मैं"), { back: false, large: true })}
+  <div class="content"><div class="pad"><div class="card row-flex"><span class="rider" style="padding:0;background:none"><span class="ph">RK</span></span><div class="grow"><div class="t-h3">Ravi Kumar</div><div class="t-sub">${L("Chauffeur · ID SG-0142 · 3 years", "డ్రైవర్ · ID SG-0142 · 3 సం.", "ड्राइवर · ID SG-0142 · 3 साल")}</div></div></div>
+  <div class="kpis mt12"><div>${L("This week", "ఈ వారం", "इस हफ़्ते")}<b>31</b>${L("trips", "ట్రిప్పులు", "ट्रिप")}</div><div>${L("Hours", "గంటలు", "घंटे")}<b>38</b>h</div><div>${L("Rating", "రేటింగ్", "रेटिंग")}<b>4.9</b>★</div></div></div>
+  ${sh(L("Appearance", "రూపం", "रूप"))}
+  <div class="pad">${seg([["light", L("Light", "లైట్", "लाइट")], ["dark", L("Dark", "డార్క్", "डार्क")], ["system", L("Auto", "ఆటో", "ऑटो")]], S.state.theme, "theme")}</div>
+  ${sh(L("Language", "భాష", "भाषा"))}
+  <div class="pad">${seg(S.LANGS.map(l => [l.id, l.native]), S.state.lang, "lang")}</div>
+  <div class="group mt16">
+    ${row({ icon: "cal", t: L("Shifts and leave", "షిఫ్టులు, సెలవు", "शिफ़्ट और छुट्टी"), toast: L("Next shift: Mon 06:00", "తదుపరి షిఫ్ట్: సోమ 06:00", "अगली शिफ़्ट: सोम 06:00") })}
+    ${row({ icon: "chat", t: L("Call ops", "ఆప్స్‌కు కాల్", "ऑप्स को कॉल"), toast: L("Calling SAGA control room", "SAGA కంట్రోల్ రూమ్‌కు కాల్", "SAGA कंट्रोल रूम को कॉल") })}
+    ${row({ icon: "shield", lc: "ink", t: "SOS", s: L("Alerts ops and shares your location", "ఆప్స్‌కు తెలిపి మీ లొకేషన్ పంపుతుంది", "ऑप्स को अलर्ट और लोकेशन शेयर"), toast: L("SOS sent", "SOS పంపాం", "SOS भेजा") })}
+    ${row({ icon: "logout", lc: "grey", t: L("End shift", "షిఫ్ట్ ముగించు", "शिफ़्ट खत्म करें"), go: "shift" })}
+  </div></div>`);
+
+/* chrome */
+const SB = `<svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 4C7.3 4 3.1 5.8 0 8.8L12 21 24 8.8C20.9 5.8 16.7 4 12 4Z"/></svg><svg width="16" height="16" viewBox="0 0 24 24"><path d="M2 22h20V2Z"/></svg><svg width="24" height="14" viewBox="0 0 24 14"><rect x=".5" y=".5" width="21" height="13" rx="4" fill="none" stroke="currentColor" opacity=".5"/><rect x="2.5" y="2.5" width="12" height="9" rx="2"/></svg>`;
+const TABS = [["duty", "grid", () => L("Duty", "డ్యూటీ", "ड्यूटी")], ["vehicle", "car", () => L("Car", "కారు", "गाड़ी")], ["profile", "user", () => L("Me", "నేను", "मैं")]];
+function chrome() {
+  const sc = SC[cur];
+  $("#sb").innerHTML = `<span style="display:flex;align-items:center">9:41${["topickup", "trip", "waiting"].includes(cur) ? `<span class="liveup">${I("nav")}${L("On job", "పనిలో", "काम पर")}</span>` : ""}</span><span class="punch"></span><span class="sb-r">${SB}</span>`;
+  $("#tabbar").innerHTML = TABS.map(([id, ic, lb]) => `<button class="tab ${sc.tab && SC[id].tab === sc.tab ? "on" : ""}" data-tab="${id}"><span class="ico">${I(ic)}</span><span>${lb()}</span></button>`).join("");
+  $("#tabbar").classList.toggle("hide", !sc.tab);
+  $("#sbfade").style.opacity = sc.map || sc.nav || cur === "request" ? 0 : 1;
+}
+let cur = null, stack = [];
+const views = $("#views");
+function go(id, o = {}) {
+  if (!SC[id]) return;
+  const prev = views.lastElementChild, el = document.createElement("div"), sc = SC[id];
+  el.className = `view ${sc.nav ? "has-nav" : ""} ${sc.foot ? "has-foot" : ""} ${sc.tab ? "" : "no-tabs"}`; el.innerHTML = sc.render();
+  if (!o.back && !o.tab && !o.replace && cur) stack.push(cur); if (o.tab) stack = [];
+  cur = id; views.append(el); chrome(); panel();
+  if (prev && !o.instant && !BARE) {
+    const a = o.back ? el.animate([{ opacity: 0, transform: "translateX(-8%)" }, { opacity: 1, transform: "none" }], { duration: 320, easing: "cubic-bezier(.05,.7,.1,1)" }) : el.animate([{ opacity: 0, transform: o.tab ? "none" : "translateX(10%)" }, { opacity: 1, transform: "none" }], { duration: 320, easing: "cubic-bezier(.05,.7,.1,1)" });
+    const done = () => { if (prev.isConnected) prev.remove(); try { a.cancel(); } catch (e) {} };
+    a.finished.then(done).catch(() => {}); setTimeout(done, 400);
+  } else if (prev) prev.remove();
+  if (sc.mount) sc.mount(el);
+  try { if (parent !== window) parent.postMessage({ saga: "nav", app: "driver", id }, "*"); } catch (e) {}
+}
+const back = () => go(stack.pop() || "duty", { back: true });
+const rerender = () => { const v = views.lastElementChild; const n = document.createElement("div"); n.className = v.className; n.innerHTML = SC[cur].render(); views.replaceChild(n, v); chrome(); panel(); };
+let tt; function toast(m) { const t = $("#toast"); t.innerHTML = `<div class="grow">${m}</div>`; t.classList.add("on"); clearTimeout(tt); tt = setTimeout(() => t.classList.remove("on"), 2400); }
+const A = {
+  chk(e) { st.checks[+e.dataset.v] = !st.checks[+e.dataset.v]; rerender(); },
+  online() { st.online = !st.online; rerender(); },
+  key(e) { const v = e.dataset.v; if (v === "⌫") st.code = st.code.slice(0, -1); else if (st.code.length < 4) st.code += v; rerender(); if (st.code === "4827") setTimeout(() => { if (cur === "code") { st.code = ""; go("trip", { replace: true }); } }, 1100); else if (st.code.length === 4) setTimeout(() => { st.code = ""; if (cur === "code") rerender(); }, 1400); },
+  rate(e) { st.rating = +e.dataset.v; rerender(); },
+  theme(e) { S.set({ theme: e.dataset.v }); }, lang(e) { S.set({ lang: e.dataset.v }); }
+};
+document.addEventListener("click", e => {
+  const T = e.target;
+  const a = T.closest("[data-act]"); if (a && A[a.dataset.act]) { A[a.dataset.act](a); return; }
+  const tb = T.closest("[data-tab]"); if (tb) { go(tb.dataset.tab, { tab: 1 }); return; }
+  if (T.closest("[data-back]")) { back(); return; }
+  const g = T.closest("[data-go]"); if (g && g.dataset.go) { go(g.dataset.go); return; }
+  const ts = T.closest("[data-toast]"); if (ts) { toast(ts.dataset.toast); return; }
+  const sl = T.closest(".sl"); if (sl) { go(sl.dataset.screen, { tab: !!SC[sl.dataset.screen].tab }); return; }
+  const pp = T.closest("[data-panel]"); if (pp) { const [k, v] = pp.dataset.panel.split(":"); S.set({ [k]: v }); }
+});
+document.addEventListener("pointerdown", e => { const b = e.target.closest(".btn,.row,.ibtn,.tab,.job,.keys button,.chk,.act"); if (!b) return; const r = b.getBoundingClientRect(), z = r.width / b.offsetWidth || 1, d = Math.max(b.offsetWidth, b.offsetHeight) * 2.2; const s = document.createElement("span"); s.className = "ripple"; s.style.cssText = `width:${d}px;height:${d}px;left:${(e.clientX - r.left) / z - d / 2}px;top:${(e.clientY - r.top) / z - d / 2}px`; if (getComputedStyle(b).position === "static") b.style.position = "relative"; b.style.overflow = "hidden"; b.append(s); setTimeout(() => s.remove(), 600); });
+window.addEventListener("message", e => { const d = e.data || {}; if (d.saga === "go" && SC[d.id]) go(d.id, { tab: !!SC[d.id].tab, instant: d.instant }); });
+S.onChange(() => { S.state.os = "android"; S.apply(); rerender(); });
+function panel() {
+  if (EMBED || BARE) return; const sc = SC[cur];
+  $("#panel").innerHTML = `<h1>${S.logo()}<span style="font-weight:600;color:var(--fg2)">Driver · v2</span></h1>
+  <p class="t-sub mt8" style="font-size:14px">Android only: chauffeurs use company-issued phones. Same Flutter codebase and design tokens as the rider app.</p>
+  <div class="k">Appearance</div><div class="sw">${["light", "dark"].map(o => `<button class="${S.resolvedTheme() === o ? "on" : ""}" data-panel="theme:${o}">${o[0].toUpperCase() + o.slice(1)}</button>`).join("")}</div>
+  <div class="k">Language</div><div class="sw">${S.LANGS.map(l => `<button class="${S.state.lang === l.id ? "on" : ""}" data-panel="lang:${l.id}">${l.native}</button>`).join("")}</div>
+  <div class="notes"><h3>${sc.n}</h3><dl><dt>What it does</dt><dd>${sc.what}</dd><dt>Why</dt><dd>${sc.why}</dd><dt>Flutter build</dt><dd>${sc.fl}</dd></dl></div>
+  <div class="k">Screens</div>${Object.values(SC).map(s => `<button class="sl ${s.id === cur ? "on" : ""}" data-screen="${s.id}">${s.n}</button>`).join("")}
+  <div class="k">Other apps</div><a class="out" href="index.html">Suite →</a><a class="out" href="rider.html">Rider app →</a><a class="out" href="hotel.html">Hotel partner app →</a><a class="out" href="ops.html">Ops dashboard →</a><a class="out" href="screens.html">Screen map →</a><a class="out" href="brief.html">Client brief →</a>`;
+}
+const dev = $("#device"); dev.classList.add(BARE ? "bare" : "android");
+function fit() { const area = $("#stagearea"), W = area.clientWidth, H = area.clientHeight, dw = dev.offsetWidth, dh = dev.offsetHeight, pad = EMBED || BARE ? 0 : 40, k = Math.min((W - pad) / dw, (H - pad) / dh, BARE ? 10 : 1); $("#fit").style.transform = `scale(${k})`; $("#fit").style.width = dw + "px"; $("#fit").style.height = dh + "px"; }
+addEventListener("resize", fit); fit();
+const start = S.qs.get("screen") || location.hash.slice(1) || "duty";
+go(SC[start] ? start : "duty", { instant: true, tab: !!(SC[start] || SC.duty).tab });
+})();
+</script>
+</body>
+</html>
