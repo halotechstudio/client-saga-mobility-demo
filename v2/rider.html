@@ -327,6 +327,72 @@ body.embed,body.bare{background:transparent}
 [data-os=ios] .bookc{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 18px 40px color-mix(in srgb,var(--accent) 38%,transparent);background-image:linear-gradient(160deg,rgba(255,255,255,.22),rgba(255,255,255,0) 45%)}
 [data-os=ios] .ticket .tk-cut::before,[data-os=ios] .ticket .tk-cut::after{background:color-mix(in srgb,var(--bg) 80%,transparent)}
 [data-os=ios] .foot{background:linear-gradient(to bottom,color-mix(in srgb,var(--bg) 0%,transparent),color-mix(in srgb,var(--bg) 70%,transparent) 30%);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);-webkit-mask:linear-gradient(to bottom,transparent,#000 24px);mask:linear-gradient(to bottom,transparent,#000 24px)}
+.hello{padding:4px 20px 0;font-size:17px;font-weight:600;color:var(--fg2)}
+.search2{display:flex;align-items:center;gap:10px;width:calc(100% - 40px);margin:12px 20px 0;height:64px;padding:0 8px 0 18px;border-radius:32px;background:var(--surface);color:var(--fg);box-shadow:0 10px 30px rgba(15,20,40,.08);text-align:left}
+.search2 .s-ic{color:var(--accent-ink);display:flex}
+.search2 .ph{flex:1;font-size:19px;font-weight:600;letter-spacing:-.01em}
+.search2 .s-now{display:inline-flex;align-items:center;gap:4px;height:40px;padding:0 10px 0 12px;border-radius:20px;background:var(--surface2);font-size:14px;font-weight:600}
+.search2 .s-mic{width:48px;height:48px;border-radius:24px;display:flex;align-items:center;justify-content:center;color:var(--fg2)}
+[data-os=ios] .search2{background:var(--glass2);border:1px solid var(--glass-line);backdrop-filter:blur(28px) saturate(185%);-webkit-backdrop-filter:blur(28px) saturate(185%);box-shadow:inset 0 1px 0 var(--glass-hi),0 12px 30px rgba(15,20,45,.08)}
+[data-os=android] .search2{background:var(--surface2);box-shadow:none}
+[data-os=android] .search2 .s-now{background:var(--surface3)}
+.saybtn{display:inline-flex;align-items:center;gap:6px;font-size:15px!important}
+[data-os=ios] .tabbar{right:16px}
+.sugmap{transition:transform .2s cubic-bezier(.3,.7,.4,1)}
+/* ---- v1 richness, brought back ---- */
+.arrive{position:relative;overflow:hidden;padding:54px 20px 0;min-height:400px;color:#fff;border-radius:0 0 40px 40px;background:radial-gradient(120% 90% at 100% 0%,color-mix(in srgb,var(--accent) 55%,#fff) 0%,var(--accent) 38%,color-mix(in srgb,var(--accent) 35%,#05060A) 100%)}
+[data-theme=dark] .arrive{background:radial-gradient(120% 90% at 100% 0%,var(--accent) 0%,color-mix(in srgb,var(--accent) 45%,#05060A) 50%,#05060A 100%)}
+.ar-top{display:flex;justify-content:space-between;align-items:center;padding-top:8px}
+.ar-top .gbtn,.ar-top .ibtn{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.25);color:#fff}
+.ar-live{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px 0 10px;border-radius:18px;background:rgba(0,0,0,.28);font-size:14px;font-weight:600;backdrop-filter:blur(10px)}
+.ar-h{font-family:var(--display);font-size:42px;line-height:1;font-weight:700;letter-spacing:-.035em;margin-top:18px;max-width:250px}
+.ar-ring{position:absolute;left:20px;top:206px;width:96px;height:96px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ar-ring svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.ar-ring circle{fill:none;stroke:rgba(255,255,255,.22);stroke-width:5}.ar-ring .fg{stroke:#fff;stroke-linecap:round;stroke-dasharray:283;transition:stroke-dashoffset 1s}
+.ar-ring b{font-family:var(--display);font-size:38px;font-weight:400;line-height:1}.ar-ring span{font-size:11px;letter-spacing:.14em;font-weight:700}
+.ar-car{position:absolute;right:-70px;bottom:-12px;width:330px;filter:drop-shadow(0 20px 30px rgba(0,0,0,.35));animation:carin .9s .1s cubic-bezier(.2,.9,.2,1) both}
+@keyframes carin{from{transform:translateX(60px);opacity:0}}
+.steps4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.steps4 div{font-size:12.5px;font-weight:600;color:var(--fg2)}
+.steps4 i{display:block;height:5px;border-radius:3px;background:var(--surface3);margin-bottom:8px;position:relative;overflow:hidden}
+.steps4 .on i{background:var(--accent)}.steps4 .on{color:var(--fg)}
+.steps4 .now i::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);animation:shimmer2 1.6s infinite}
+@keyframes shimmer2{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.lookfor,.telem{border-radius:30px;padding:20px;background:var(--ink);color:var(--on-ink)}
+.telem{padding:16px 18px;margin-top:4px}
+.lf-k,.tl-k{font-size:13.5px;color:var(--on-ink2);font-weight:600}
+.lf-t{font-size:19px;font-weight:600;line-height:1.25;margin-top:4px}
+.lf-hr{height:1px;background:rgba(255,255,255,.1);margin:16px 0}
+.lf-ph{width:52px;height:52px;border-radius:26px;background:linear-gradient(135deg,#C9A57A,#7B5A3A);display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}
+.lf-s{font-size:14px;color:var(--on-ink2)}
+.lf-btn{position:relative;width:48px;height:48px;border-radius:24px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#fff}
+.lf-btn i,.act span.c i{position:absolute;top:-3px;right:-3px;min-width:20px;height:20px;border-radius:10px;background:var(--danger);color:#fff;font-size:12px;font-style:normal;display:flex;align-items:center;justify-content:center;padding:0 5px}
+.act span.c{position:relative}
+.evplate{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:9px;background:#1E7B3B;color:#FFD94A;font-family:var(--mono);font-weight:700;font-size:16px;letter-spacing:.06em;border:2px solid #0F4D22;box-shadow:inset 0 0 0 2px #FFD94A33;white-space:nowrap}
+.evplate small{font-size:9px;letter-spacing:.1em;color:#fff;writing-mode:vertical-rl;transform:rotate(180deg);opacity:.85}
+.evplate.sm{font-size:13.5px;padding:6px 10px}
+.tl-live{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:4px 10px;border-radius:12px;background:rgba(255,255,255,.08)}
+.tl-big{font-family:var(--display);font-size:46px;font-weight:400;letter-spacing:-.04em;line-height:1;display:block;margin-top:4px}
+.cells{display:flex;gap:4px;margin-left:14px;margin-bottom:6px;flex:1}
+.cells i{flex:1;height:22px;border-radius:5px;background:rgba(255,255,255,.1)}
+.cells i.on{background:#3DD68C;animation:popin .4s both}
+.tl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.tl-grid.two{grid-template-columns:1fr 1fr}
+.tl-grid div{background:rgba(255,255,255,.06);border-radius:18px;padding:12px}
+.tl-grid b{display:block;font-size:17px;letter-spacing:.02em}.tl-grid b.g{color:#3DD68C}
+.tl-grid span{font-size:12.5px;color:var(--on-ink2)}
+.paychips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:16px -4px 0;padding:0 4px}.paychips .chip{flex:none}
+.codecard .codebox span{background:var(--ink);color:#fff}
+.minimap{position:relative;height:150px;overflow:hidden;border-radius:28px;background:#14161A}
+.minimap .map{position:absolute;inset:0}
+.mm-chip{position:absolute;left:12px;bottom:12px;padding:8px 14px;border-radius:16px;background:rgba(18,20,24,.7);color:#fff;font-size:14px;font-weight:600;backdrop-filter:blur(12px)}
+.walletc{position:relative;overflow:hidden;padding:22px;border-radius:34px;background:var(--ink);color:var(--on-ink)}
+.wl-big{font-family:var(--display);font-size:60px;font-weight:400;letter-spacing:-.045em;line-height:1;margin-top:12px}
+.wchip{background:rgba(255,255,255,.1)!important;color:#fff!important;border-color:rgba(255,255,255,.14)!important}
+.msgs{display:flex;flex-direction:column;gap:8px;padding:8px 16px 20px}
+.bub{max-width:80%;padding:11px 14px;border-radius:20px;font-size:16px;line-height:1.35;animation:popin .3s both}
+.bub.me{align-self:flex-end;background:var(--accent);color:var(--on-accent);border-bottom-right-radius:6px}
+.bub.them{align-self:flex-start;background:var(--surface);border-bottom-left-radius:6px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.bub small{display:block;font-size:12px;opacity:.7;margin-top:4px}
 .vnote{font-size:13.5px;color:var(--fg2);max-width:230px;line-height:1.35}
 </style>
 </head>
@@ -366,7 +432,7 @@ const V = S.VEHICLE, RIDERS = S.riders();
 const app = {
   dest: "Dwaraka Nagar", dir: "dep", shift: 0, booked: false, series: false, inter: false, sugg: true,
   days: [1, 2, 3, 4, 5], ret: true, same: true, idest: "Araku Valley", itrip: "one", rating: 0, tripSeg: "up", skips: [],
-  perms: { loc: true, notif: true, cal: true, flight: true }, travel: { cal: true, mail: true, notif: true, auto: false }, read: true, noCars: false
+  perms: { loc: true, notif: true, cal: true, flight: true }, wallet: 1250, pay: "upi", autopay: true, tipped: 0, stage: 2, driverLive: false, readD: 0, wtx: [["plus", "Added from UPI", "12 Nov", 1000], ["car", "Ride · RK Beach", "2 Nov", -164], ["gift", "Referral · Meera", "28 Oct", 150]], travel: { cal: true, mail: true, notif: true, auto: false }, read: true, noCars: false
 };
 const FARE = 287, AIRFARE = 1140;
 const KM = { "Vizianagaram": 60, "Srikakulam": 110, "Araku Valley": 115, "Kakinada": 160, "Rajahmundry": 195 };
@@ -459,15 +525,12 @@ def("home", { g: "Ride", n: "Home", tab: "home", what: "Greeting, one search bar
     </div>` : "";
   return `<div class="content">
     <div class="home-head">${S.logo()}<div class="r"><span class="bellwrap">${hbtn("bell", 'data-go="notifications"', "Notifications")}<i></i></span><button class="avatar" data-tab="account">AR</button></div></div>
-    <div class="greet2"><h1>${greet()},<br>Ananya</h1><p>${L("Today's suggestion", "ఈ రోజు సూచన", "आज का सुझाव")}</p></div>
+    <p class="hello">${greet()}, Ananya</p>
+    <button class="search2 press" data-go="where"><span class="s-ic">${I("search")}</span><span class="ph">${L("Where to?", "ఎక్కడికి?", "कहाँ जाना है?")}</span><span class="s-now" data-go="schedule">${I("clock", "sm")}${L("Now", "ఇప్పుడే", "अभी")}${I("chevd", "sm")}</span><span class="s-mic" data-voice aria-label="${L("Speak to Saathi", "సాథీతో మాట్లాడండి", "साथी से बोलें")}">${I("mic")}</span></button>
     ${(() => { const d = S.tokens(S.state.os, "dark", S.state.hex), v = ["mapLand", "mapBlock", "mapWater", "mapPark", "mapRoad", "mapCase", "mapMajor", "mapMajorCase", "mapLabel", "mapSand"].map(k => "--" + k.replace(/[A-Z]/g, m => "-" + m.toLowerCase()) + ":" + d[k]).join(";");
-      return `<div class="sugmap" data-go="options" data-dest="Office · Dwaraka Nagar" role="button" style="${v};--bg:#0B0C0F;--fg:#F5F5F7">${S.map({ route: "trip", view: [-60, 262, 480, 372], labelDrop: L("Office", "ఆఫీస్", "ऑफ़िस") })}
+      return `<div class="sugmap press" data-go="options" data-dest="Office · Dwaraka Nagar" role="button" style="${v};--bg:#0B0C0F;--fg:#F5F5F7">${S.map({ route: "trip", view: [-60, 262, 480, 372], labelDrop: L("Office", "ఆఫీస్", "ऑफ़िस") })}
         <span class="sm-chip"><span class="dotlive"></span>${L("2 cars free · 6 min", "2 కార్లు ఖాళీ · 6 నిమి", "2 गाड़ियाँ खाली · 6 मिनट")}</span>
         <div class="sm-bar"><div class="grow"><div class="sm-k">${L("Office · Dwaraka Nagar", "ఆఫీస్ · ద్వారకా నగర్", "ऑफ़िस · द्वारका नगर")}</div><div class="sm-v">18 min · ${S.inr(FARE)}</div></div><span class="sm-go">${L("Confirm", "నిర్ధారించు", "पक्का करें")}</span></div></div>`; })()}
-    <div class="duo">
-      <button class="bookc" data-go="where"><span class="bc-top"><span class="bc-ic">${I("search")}</span><span class="bc-mic" data-voice aria-label="Saathi">${I("mic")}</span></span><b>${L("Where to?", "ఎక్కడికి?", "कहाँ?")}</b><span class="bc-s">${L("Book a ride", "రైడ్ బుక్ చేయండి", "राइड बुक करें")}</span></button>
-      <div class="statc" data-tab="rides" role="button"><b class="t-num">12</b><span>${L("rides this month", "ఈ నెల రైడ్‌లు", "इस महीने की राइड")}</span><span class="st-pts">${I("leaf", "sm")}19 kg CO₂</span></div>
-    </div>
     <div class="chips places">
       <button class="chip" data-go="options" data-dest="Office · Dwaraka Nagar">${I("building")}${L("Office", "ఆఫీస్", "ऑफ़िस")}</button>
       <button class="chip" data-go="options" data-dest="RK Beach">${I("pin")}RK Beach</button>
@@ -540,17 +603,20 @@ def("flysoon", { g: "Start", n: "Flying soon?", tabs: 0, nav: 1, foot: 1, what: 
   </div>
   ${foot(btn(L("Skip for now", "ఇప్పటికి వద్దు", "अभी छोड़ें"), { kind: "btn-secondary", go: "home", attr: 'data-reset="1"' }))}`);
 
-def("options", { g: "Ride", n: "Confirm ride", tabs: 0, map: 1, what: "Branded map with the route, then the SUV itself, a fixed fare, what's included, payment and one Confirm button.", why: "One vehicle class means no menu to compare. The sheet sells the ride instead: the car, the cabin, the chauffeur.", fl: "<code>google_maps_flutter</code> + cloud map style. Fare from <code>POST /quotes</code>. iOS sheet: <code>CupertinoSheetRoute</code>; Android: <code>showModalBottomSheet</code>." }, () => `
+const steps4 = n => `<div class="steps4">${[L("Assigned", "కేటాయించారు", "तय"), L("On the way", "దారిలో", "रास्ते में"), L("At pickup", "పికప్ వద్ద", "पिकअप पर"), L("Ride started", "రైడ్ మొదలు", "राइड शुरू")].map((t, i) => `<div class="${i < n ? "on" : ""} ${i === n - 1 ? "now" : ""}"><i></i><span>${t}</span></div>`).join("")}</div>`;
+const telemetry = () => `<div class="telem"><div class="row-flex"><span class="tl-k grow">${L("Your car right now", "మీ కారు ఇప్పుడు", "आपकी गाड़ी अभी")}</span><span class="tl-live"><span class="dotlive"></span>Live</span></div>
+  <div class="row-flex mt12" style="align-items:flex-end"><b class="tl-big"><span data-count="86">86</span>%</b><div class="cells">${Array.from({ length: 10 }, (_, i) => `<i class="${i < 9 ? "on" : ""}" style="animation-delay:${i * 60}ms"></i>`).join("")}</div></div>
+  <div class="tl-grid"><div><b class="mono">268 KM</b><span>${L("range left", "మిగిలిన రేంజ్", "बची रेंज")}</span></div><div><b class="mono g">0.6 KG</b><span>${L("CO₂ you save", "మీరు ఆదా చేసే CO₂", "आपका बचाया CO₂")}</span></div><div><b class="mono">22°C</b><span>${L("cabin, pre-cooled", "క్యాబిన్, చల్లగా", "केबिन, ठंडा")}</span></div></div></div>`;
+def("options", { g: "Ride", n: "Confirm ride", tabs: 0, map: 1, what: "Route on the branded map, then the car itself, a fixed fare, live telemetry of the actual car coming (battery, range, cabin temperature), payment chips (UPI, wallet, card, cash), and slide to book.", why: "One vehicle class means nothing to compare, so the sheet sells the ride. Sliding to book prevents accidental bookings.", fl: "<code>POST /quotes</code>; telemetry from the assigned car's last ping; booking event goes to the chauffeur app (live in the suite)." }, () => `
   <div class="mapwrap">${S.map({ route: "trip", view: [-20, 232, 441, 960], labelPickup: "MVP Colony", labelDrop: app.dest.split(" · ").pop() })}</div>
   ${mapBtns()}
   <div class="sheet">
     <div class="grabber"></div>
+    <div class="row-flex"><div class="grow"><div class="t-label">${L("Your ride to", "మీ రైడ్", "आपकी राइड")} ${app.dest.split(" · ").pop()}</div><div class="t-title mt4">SAGA EV</div><div class="t-sub">${V.short} · ${RIDERS} ${L("riders", "మంది", "सवारी")} · ${V.bags} ${L("bags", "బ్యాగులు", "बैग")}</div></div><div class="price"><div class="t-title t-num">${S.inr(FARE)}</div><div class="t-label">${L("Fixed fare", "స్థిర ఛార్జీ", "तय किराया")}</div></div></div>
     <div class="optcar">${S.car({ reflect: false })}</div>
-    <div class="row-flex mt8"><div class="grow"><div class="t-h2">SAGA EV</div><div class="t-sub">${V.short} · ${RIDERS} ${L("riders", "మంది", "सवारी")} · ${V.bags} ${L("bags", "బ్యాగులు", "बैग")}</div></div><div class="price"><div class="t-h2 t-num">${S.inr(FARE)}</div><div class="t-label">${L("Fixed fare", "స్థిర ఛార్జీ", "तय किराया")}</div></div></div>
-    <div class="perks mt12">${pill("snow", L("Cooled cabin", "చల్లని క్యాబిన్", "ठंडा केबिन"), "accent")}${pill("drop", L("Water", "నీళ్లు", "पानी"), "accent")}${pill("bag", L("Bag help", "బ్యాగ్ సాయం", "बैग में मदद"), "accent")}${pill("device", L("Charging", "ఛార్జింగ్", "चार्जिंग"), "accent")}</div>
-    <div class="row-flex mt16" style="font-size:16px"><span class="dotlive"></span><span class="grow">${L("Pickup in 6 min · drop by 7:42 PM", "6 నిమిషాల్లో పికప్ · రా. 7:42కి డ్రాప్", "6 मिनट में पिकअप · शाम 7:42 तक ड्रॉप")}</span></div>
-    <div class="group flat mt12" style="margin:12px 0 0">${row({ icon: "wallet", lc: "soft", t: "UPI · ananya@okhdfc", s: L("Pay after the ride", "రైడ్ తర్వాత చెల్లించండి", "राइड के बाद भुगतान"), toast: L("Payment methods: UPI, cards, SAGA wallet", "చెల్లింపు: UPI, కార్డులు, SAGA వాలెట్", "भुगतान: UPI, कार्ड, SAGA वॉलेट") })}</div>
-    <div class="mt16">${btn(L("Confirm SAGA EV", "SAGA EV నిర్ధారించండి", "SAGA EV पक्की करें"), { go: "finding", cls: "lg" })}</div>
+    ${telemetry()}
+    <div class="paychips mt16">${[["upi", "device", "UPI"], ["wallet", "wallet", `${L("Wallet", "వాలెట్", "वॉलेट")} ${S.inr(app.wallet)}`], ["card", "card", L("Card", "కార్డు", "कार्ड")], ["cash", "receipt", L("Cash", "నగదు", "नकद")]].map(([v, ic, t]) => `<button class="chip ${app.pay === v ? "on" : ""}" data-act="pay" data-v="${v}">${I(ic)}${t}</button>`).join("")}</div>
+    <div class="mt16">${S.slider(L(`Slide to book · ${S.inr(FARE)}`, `బుక్ చేయడానికి స్లైడ్ · ${S.inr(FARE)}`, `बुक करने के लिए स्लाइड · ${S.inr(FARE)}`), 'data-go-after="finding"')}</div>
     <button class="btn btn-text block" data-go="schedule">${L("Schedule for later", "తర్వాతకి షెడ్యూల్", "बाद के लिए शेड्यूल करें")}</button>
   </div>`);
 
@@ -584,46 +650,55 @@ def("nocars", { g: "Ride", n: "No cars nearby", tabs: 0, nav: 1, foot: 1, what: 
   </div>
   ${foot(`${btn(L("Wait for the next car", "తదుపరి కారు కోసం వేచి ఉంటాను", "अगली गाड़ी का इंतज़ार करूँगा"), { act: "waitline" })}<div class="btnrow mt8">${btn(L("Schedule", "షెడ్యూల్", "शेड्यूल"), { kind: "btn-secondary", go: "schedule" })}${btn(L("Notify me", "నాకు తెలపండి", "मुझे बताएँ"), { kind: "btn-secondary", act: "notifyme" })}</div>`)}`);
 
-def("assigned", { g: "Ride", n: "Chauffeur on the way", tabs: 0, live: 1, map: 1, what: "Regular branded map with the car's live position (no animation). Chauffeur, car, plate, the 4-digit ride code, and Call / Message / Share / Safety.", why: "The ride only starts when the chauffeur enters the rider's code, so nobody gets into the wrong car. The Live Activity / Live Update carries the ETA outside the app.", fl: "Position from WebSocket every 3–5 s, marker moved without tweening. iOS: ActivityKit Live Activity. Android 16: progress-centric Live Update notification." }, () => `
-  <div class="mapwrap">${S.map({ route: "pickup", car: [260, 236, 180], view: [79, 128, 263, 571], labelPickup: L("You", "మీరు", "आप") })}</div>
-  ${mapBtns(hbtn("share", `data-toast="${esc(L("Trip link shared", "ట్రిప్ లింక్ షేర్ చేశాం", "ट्रिप लिंक शेयर किया"))}"`, "Share"))}
-  <div class="sheet">
-    <div class="grabber"></div>
-    <div class="row-flex"><div class="grow"><div class="t-label">${L("Your chauffeur is on the way", "మీ డ్రైవర్ వస్తున్నారు", "आपका ड्राइवर आ रहा है")}</div><div class="t-title t-num mt4">6 min</div></div>${pill("check", L("On time", "సమయానికి", "समय पर"), "ok")}</div>
-    <div class="drv mt16"><span class="ph">RK</span><div class="grow"><div style="font-size:17px;font-weight:600">Ravi Kumar</div><div class="t-sub">★ 4.9 · ${L("3 years with SAGA", "SAGAలో 3 సంవత్సరాలు", "SAGA के साथ 3 साल")}</div><div class="row-flex mt8" style="gap:8px"><span class="plate">${V.plate}</span><span class="t-sub" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${V.colour} ${V.short}</span></div></div></div>
-    <div class="mt16"><div class="t-label">${L("Your ride code", "మీ రైడ్ కోడ్", "आपका राइड कोड")}</div>
-    <div class="codebox">${"4827".split("").map(d => `<span>${d}</span>`).join("")}</div>
-    <p class="t-sub mt8">${L("Tell Ravi this code when you get in. The ride starts only after he enters it.", "కారు ఎక్కాక ఈ కోడ్ రవికి చెప్పండి. ఆయన ఎంటర్ చేశాకే రైడ్ మొదలవుతుంది.", "गाड़ी में बैठकर यह कोड रवि को बताएँ। उनके डालने के बाद ही राइड शुरू होगी।")}</p></div>
-    <div class="acts mt16">
-      <button class="act" data-toast="${esc(L("Calling Ravi…", "రవికి కాల్ చేస్తున్నాం…", "रवि को कॉल कर रहे हैं…"))}"><span class="c">${I("phone")}</span>${L("Call", "కాల్", "कॉल")}</button>
-      <button class="act" data-toast="${esc(L("Messages are translated for Ravi", "సందేశాలు రవికి అనువదించబడతాయి", "मैसेज रवि के लिए अनुवाद होते हैं"))}"><span class="c">${I("chat")}</span>${L("Message", "సందేశం", "मैसेज")}</button>
-      <button class="act" data-toast="${esc(L("Trip link shared", "ట్రిప్ లింక్ షేర్ చేశాం", "ट्रिप लिंक शेयर किया"))}"><span class="c">${I("share")}</span>${L("Share", "షేర్", "शेयर")}</button>
-      <button class="act sos" data-toast="${esc(L("Safety: call 112 or alert SAGA control room", "భద్రత: 112కి కాల్ లేదా SAGA కంట్రోల్ రూమ్", "सुरक्षा: 112 पर कॉल या SAGA कंट्रोल रूम"))}"><span class="c">${I("shield")}</span>${L("Safety", "భద్రత", "सुरक्षा")}</button>
+def("assigned", { g: "Ride", n: "Chauffeur on the way", tabs: 0, live: 1, sb: "light", what: "A brand-colour hero with the car and a countdown ring, a 4-step tracker, then a black 'Look for' card: colour, model, the real green EV number plate, the chauffeur with chat and call, live battery and the car's own stats. Then the ride code and a live mini map.", why: "At a busy kerb, riders need to spot the car fast and trust it. The plate is drawn the way it looks on the road. Everything updates live from the chauffeur app.", fl: "Position and status over WebSocket. iOS Live Activity / Android Live Update mirror the countdown." }, () => `
+  <div class="content" style="padding-top:0">
+    <div class="arrive">
+      <div class="ar-top">${hbtn(ios() ? "chevl" : "arrowl", "data-back", "Back")}<span class="ar-live"><span class="dotlive"></span>${app.stage >= 3 ? L("At pickup", "పికప్ వద్ద", "पिकअप पर") : L("On the way", "దారిలో", "रास्ते में")}</span></div>
+      <h1 class="ar-h">${app.stage >= 3 ? L("Ravi is here", "రవి వచ్చారు", "रवि पहुँच गए") : L("Your SAGA is<br>arriving", "మీ SAGA<br>వస్తోంది", "आपकी SAGA<br>आ रही है")}</h1>
+      <div class="ar-ring"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45"/><circle class="fg" cx="50" cy="50" r="45" style="stroke-dashoffset:${app.stage >= 3 ? 0 : 110}"/></svg><b>${app.stage >= 3 ? "0" : "6"}</b><span>MIN</span></div>
+      <div class="ar-car">${S.car({ reflect: false })}</div>
     </div>
-    <button class="btn btn-text btn-danger block mt8" data-toast="${esc(L("Free cancellation until the car arrives", "కారు వచ్చే వరకు ఉచితంగా రద్దు", "गाड़ी आने तक मुफ़्त रद्द"))}">${L("Cancel ride", "రైడ్ రద్దు", "राइड रद्द करें")}</button>
-    <button class="demo" data-go="onride">${L("Demo: Ravi enters your code", "డెమో: రవి కోడ్ ఎంటర్ చేశారు", "डेमो: रवि ने कोड डाला")}</button>
+    <div class="pad mt16">${steps4(app.stage >= 3 ? 3 : 2)}</div>
+    <div class="pad mt16"><div class="lookfor">
+      <div class="row-flex"><span class="lf-k grow">${L("Look for", "ఇది చూడండి", "यह देखें")}</span><span class="evplate"><small>IND</small>${V.plate}</span></div><div class="lf-t" style="font-size:21px;margin-top:10px">${V.colour} ${V.short}, ${L("with the SAGA blue line", "SAGA నీలి గీతతో", "SAGA नीली लाइन के साथ")}</div>
+      <div class="lf-hr"></div>
+      <div class="row-flex"><span class="lf-ph">RK</span><div class="grow"><b style="font-size:17px">Ravi Kumar</b><div class="lf-s">★ 4.9 · ${L("3 years with SAGA", "SAGAలో 3 సంవత్సరాలు", "SAGA के साथ 3 साल")}</div></div><button class="lf-btn" data-go="chat" aria-label="Chat">${I("chat")}${unreadR() ? `<i>${unreadR()}</i>` : ""}</button><button class="lf-btn" data-toast="${esc(L("Calling Ravi (numbers stay private)…", "రవికి కాల్ (నంబర్లు గోప్యం)…", "रवि को कॉल (नंबर निजी)…"))}" aria-label="Call">${I("phone")}</button></div>
+      <div class="lf-hr"></div>
+      <div class="row-flex" style="align-items:flex-end"><div><span class="lf-k">${L("Battery", "బ్యాటరీ", "बैटरी")}</span><b class="tl-big"><span data-count="86">86</span>%</b></div><div class="cells grow">${Array.from({ length: 10 }, (_, i) => `<i class="${i < 9 ? "on" : ""}" style="animation-delay:${i * 60}ms"></i>`).join("")}</div></div>
+      <div class="tl-grid two"><div><b class="mono g">4.2 T</b><span>${L("CO₂ saved by this car", "ఈ కారు ఆదా చేసిన CO₂", "इस गाड़ी ने बचाया CO₂")}</span></div><div><b class="mono">58,300</b><span>${L("electric km driven", "ఎలక్ట్రిక్ కి.మీ", "इलेक्ट्रिक किमी चली")}</span></div></div>
+    </div></div>
+    <div class="pad mt16"><div class="card codecard"><div class="t-label">${L("Your ride code", "మీ రైడ్ కోడ్", "आपका राइड कोड")}</div><div class="codebox">${"4827".split("").map((d, i) => `<span style="animation:popin .4s ${300 + i * 90}ms both">${d}</span>`).join("")}</div><p class="t-sub mt8">${L("Tell Ravi this code when you get in. The ride starts only after he enters it.", "కారు ఎక్కాక ఈ కోడ్ రవికి చెప్పండి. ఆయన ఎంటర్ చేశాకే రైడ్ మొదలవుతుంది.", "गाड़ी में बैठकर यह कोड रवि को बताएँ। उनके डालने के बाद ही राइड शुरू होगी।")}</p></div></div>
+    <div class="pad mt12"><div class="card pad0 minimap press" style="${S.darkMap()}">${S.map({ route: "pickup", car: [260, 236, 180], view: [60, 150, 300, 180] })}<span class="mm-chip">${app.stage >= 3 ? L("Ravi is at Gate 2", "రవి గేట్ 2 వద్ద", "रवि गेट 2 पर") : L("Ravi is on Beach Road · 1.6 km", "రవి బీచ్ రోడ్‌లో · 1.6 కి.మీ", "रवि बीच रोड पर · 1.6 किमी")}</span></div></div>
+    <div class="pad mt16"><div class="acts">
+      <button class="act" data-toast="${esc(L("Trip link shared", "ట్రిప్ లింక్ షేర్ చేశాం", "ट्रिप लिंक शेयर किया"))}"><span class="c">${I("share")}</span>${L("Share", "షేర్", "शेयर")}</button>
+      <button class="act" data-go="chat"><span class="c">${I("chat")}</span>${L("Message", "సందేశం", "मैसेज")}</button>
+      <button class="act" data-go="wallet"><span class="c">${I("wallet")}</span>${L("Payment", "చెల్లింపు", "भुगतान")}</button>
+      <button class="act sos" data-toast="${esc(L("Safety: call 112 or alert SAGA control room", "భద్రత: 112కి కాల్ లేదా SAGA కంట్రోల్ రూమ్", "सुरक्षा: 112 पर कॉल या SAGA कंट्रोल रूम"))}"><span class="c">${I("shield")}</span>${L("Safety", "భద్రత", "सुरक्षा")}</button>
+    </div></div>
+    <button class="btn btn-text btn-danger block mt8" data-act="cancelride">${L("Cancel ride", "రైడ్ రద్దు", "राइड रद्द करें")}</button>
+    ${app.driverLive ? `<p class="t-sub center mt8">${L("Live with the chauffeur app: Ravi starts the ride by entering your code.", "డ్రైవర్ యాప్‌తో లైవ్: మీ కోడ్ ఎంటర్ చేసి రవి రైడ్ ప్రారంభిస్తారు.", "शोफ़र ऐप से लाइव: आपका कोड डालकर रवि राइड शुरू करेंगे।")}</p>` : `<button class="demo" data-act="demostart">${L("Demo: Ravi enters your code", "డెమో: రవి కోడ్ ఎంటర్ చేశారు", "डेमो: रवि ने कोड डाला")}</button>`}
   </div>`);
 
-def("onride", { g: "Ride", n: "On the ride", tabs: 0, live: 1, map: 1, live: 1, what: "The regular map in SAGA colours: route, car marker, ETA. Quick requests to the chauffeur, share trip and safety. No 3D or moving-car animation.", why: "Calm and readable. Riders glance at the ETA and get on with their day.", fl: "Same map widget as Assigned. Requests go to the driver app as canned messages, shown in the driver's language." }, () => `
+def("onride", { g: "Ride", n: "On the ride", tabs: 0, live: 1, map: 1, what: "The regular map in SAGA colours: route, car marker, ETA, the tracker at 'Ride started'. Requests (cooler, quiet, stop) go to the chauffeur as messages in his language; replies come back live.", why: "Calm and readable, and the rider is never stuck asking out loud.", fl: "Same map widget. Requests are canned message keys over WebSocket." }, () => `
   <div class="mapwrap">${S.map({ route: "trip", car: [140, 410, 180], view: [-20, 232, 441, 960], labelDrop: app.dest.split(" · ").pop() })}</div>
   <div class="toppill">${I("flag", "sm")}${L("To", "", "")} ${app.dest.split(" · ").pop()}${L("", " వైపు", " की ओर")}</div>
   <div class="sheet">
     <div class="grabber"></div>
-    <div class="row-flex"><div class="grow"><div class="t-title t-num">12 min</div><div class="t-sub">${L("Arriving 7:42 PM · 5.1 km left", "రా. 7:42కి చేరుకుంటారు · ఇంకా 5.1 కి.మీ", "शाम 7:42 पहुँचेंगे · 5.1 किमी बाकी")}</div></div><div class="plate">${V.plate}</div></div>
-    <div class="progress mt16"><i style="width:58%"></i></div>
+    ${steps4(4)}
+    <div class="row-flex mt16"><div class="grow"><div class="t-title t-num">12 min</div><div class="t-sub">${L("Arriving 7:42 PM · 5.1 km left", "రా. 7:42కి చేరుకుంటారు · ఇంకా 5.1 కి.మీ", "शाम 7:42 पहुँचेंगे · 5.1 किमी बाकी")}</div></div><span class="evplate sm"><small>IND</small>${V.plate}</span></div>
     <div class="t-label mt20">${L("Ask Ravi", "రవిని అడగండి", "रवि से कहें")}</div>
     <div class="perks mt8">
-      <button class="chip" data-toast="${esc(L("Sent to Ravi: cooler, please", "రవికి పంపాం: AC పెంచండి", "रवि को भेजा: AC ठंडा करें"))}">${I("snow")}${L("Cooler", "చల్లగా", "ठंडा")}</button>
-      <button class="chip" data-toast="${esc(L("Sent to Ravi: quieter ride", "రవికి పంపాం: నిశ్శబ్దంగా", "रवि को भेजा: शांत सफ़र"))}">${I("quiet")}${L("Quiet ride", "నిశ్శబ్దం", "शांति")}</button>
-      <button class="chip" data-toast="${esc(L("Sent to Ravi: stop here", "రవికి పంపాం: ఇక్కడ ఆపండి", "रवि को भेजा: यहाँ रोकें"))}">${I("pin")}${L("Stop here", "ఇక్కడ ఆపండి", "यहाँ रोकें")}</button>
+      <button class="chip" data-act="req" data-v="cooler">${I("snow")}${L("Cooler", "చల్లగా", "ठंडा")}</button>
+      <button class="chip" data-act="req" data-v="quiet">${I("quiet")}${L("Quiet ride", "నిశ్శబ్దం", "शांति")}</button>
+      <button class="chip" data-act="req" data-v="stop">${I("pin")}${L("Stop here", "ఇక్కడ ఆపండి", "यहाँ रोकें")}</button>
     </div>
     <div class="acts mt20">
       <button class="act" data-toast="${esc(L("Trip link shared", "ట్రిప్ లింక్ షేర్ చేశాం", "ट्रिप लिंक शेयर किया"))}"><span class="c">${I("share")}</span>${L("Share", "షేర్", "शेयर")}</button>
-      <button class="act" data-toast="${esc(L("Calling Ravi…", "రవికి కాల్ చేస్తున్నాం…", "रवि को कॉल कर रहे हैं…"))}"><span class="c">${I("phone")}</span>${L("Call", "కాల్", "कॉल")}</button>
-      <button class="act" data-toast="UPI · ${S.inr(FARE)}"><span class="c">${I("wallet")}</span>${L("Payment", "చెల్లింపు", "भुगतान")}</button>
+      <button class="act" data-go="chat"><span class="c">${I("chat")}${unreadR() ? `<i>${unreadR()}</i>` : ""}</span>${L("Chat", "చాట్", "चैट")}</button>
+      <button class="act" data-go="wallet"><span class="c">${I("wallet")}</span>${L("Payment", "చెల్లింపు", "भुगतान")}</button>
       <button class="act sos" data-toast="${esc(L("Safety: call 112 or alert SAGA control room", "భద్రత: 112కి కాల్ లేదా SAGA కంట్రోల్ రూమ్", "सुरक्षा: 112 पर कॉल या SAGA कंट्रोल रूम"))}"><span class="c">${I("shield")}</span>${L("Safety", "భద్రత", "सुरक्षा")}</button>
     </div>
-    <button class="demo" data-go="arrived">${L("Demo: arrive", "డెమో: చేరుకున్నాం", "डेमो: पहुँच गए")}</button>
+    ${app.driverLive ? "" : `<button class="demo" data-go="arrived">${L("Demo: arrive", "డెమో: చేరుకున్నాం", "डेमो: पहुँच गए")}</button>`}
   </div>`);
 
 def("arrived", { g: "Ride", n: "Arrived", tabs: 0, foot: 1, what: "A clear finish: fare breakdown, paid confirmation, CO₂ saved, rating with quick compliments.", why: "Ends on a good feeling, makes the electric choice tangible, and gives ops real feedback per chauffeur.", fl: "<code>GET /rides/{id}/receipt</code>, <code>POST /rides/{id}/rating</code>. GST shown per client's tax setup." }, () => `
@@ -636,12 +711,13 @@ def("arrived", { g: "Ride", n: "Arrived", tabs: 0, foot: 1, what: "A clear finis
     <div class="lineitem"><span class="muted">${L("Base fare", "బేస్ ఛార్జీ", "बेस किराया")}</span><span class="t-num">₹50</span></div>
     <div class="lineitem"><span class="muted">${L("12.4 km × ₹18", "12.4 కి.మీ × ₹18", "12.4 किमी × ₹18")}</span><span class="t-num">₹223</span></div>
     <div class="lineitem"><span class="muted">GST 5%</span><span class="t-num">₹14</span></div>
-    <div class="lineitem total"><span>${L("Paid with UPI", "UPI ద్వారా చెల్లించారు", "UPI से भुगतान")}</span><span class="t-num">${S.inr(FARE)}</span></div>
+    <div class="lineitem total"><span>${app.pay === "wallet" ? L("Paid from SAGA wallet", "SAGA వాలెట్ నుండి చెల్లించారు", "SAGA वॉलेट से भुगतान") : L("Paid with UPI", "UPI ద్వారా చెల్లించారు", "UPI से भुगतान")}</span><span class="t-num">${S.inr(FARE)}</span></div>
   </div>
   <div class="card tint mt12 row-flex">${I("leaf")}<span class="grow" style="font-size:15.5px">${L("About 1.6 kg of CO₂ saved compared with a petrol car.", "పెట్రోల్ కారుతో పోలిస్తే సుమారు 1.6 కిలోల CO₂ ఆదా.", "पेट्रोल गाड़ी के मुकाबले लगभग 1.6 किलो CO₂ बचाया।")}</span></div>
   <div class="center mt24"><div class="t-h3">${L("How was your ride with Ravi?", "రవితో మీ ప్రయాణం ఎలా ఉంది?", "रवि के साथ सफ़र कैसा रहा?")}</div>
   <div class="stars mt12">${[1, 2, 3, 4, 5].map(n => `<button class="${n <= app.rating ? "on" : ""}" data-act="rate" data-v="${n}" aria-label="${n}">${I("star")}</button>`).join("")}</div></div>
   <div class="perks mt16" style="justify-content:center">${[L("Smooth driving", "సాఫీ డ్రైవింగ్", "आरामदायक ड्राइविंग"), L("Spotless car", "శుభ్రమైన కారు", "साफ़ गाड़ी"), L("Helped with bags", "బ్యాగులకు సాయం", "बैग में मदद")].map(t => `<button class="chip" data-act="pick">${t}</button>`).join("")}</div>
+  <div class="center mt20"><div class="t-label">${L("Add a tip for Ravi", "రవికి టిప్ ఇవ్వండి", "रवि को टिप दें")}</div><div class="perks mt8" style="justify-content:center">${[20, 50, 100].map(a => `<button class="chip ${app.tipped === a ? "on" : ""}" data-act="tip" data-v="${a}">₹${a}</button>`).join("")}</div><p class="t-sub mt8">${L("100% goes to Ravi, from your wallet.", "100% రవికే, మీ వాలెట్ నుండి.", "100% रवि को, आपके वॉलेट से।")}</p></div>
   </div>${promo("friend")}</div>
   ${foot(btn(L("Done", "పూర్తయింది", "हो गया"), { go: "home", attr: 'data-reset="1"' }))}`);
 
@@ -673,7 +749,7 @@ def("airport", { g: "Airport", n: "Airport rides", tabs: 0, nav: 1, what: "Two s
       <div class="btnrow mt16">${btn(L("Scan", "స్కాన్", "स्कैन"), { kind: "btn-stage", go: "scan", icon: "scan" })}${btn(L("Upload", "అప్‌లోడ్", "अपलोड"), { kind: "btn-stage2", go: "scan", icon: "upload" })}</div>
     </div></div>
     ${dep && app.travel.cal ? `${sh(L("Found for you", "మీ కోసం కనుగొన్నది", "आपके लिए मिली"))}<div class="group">${pickBtn("6E 2134", "07:40", 20, "HYD", "dep", "K7QX2M", `<span class="lead">${I("spark")}</span><span class="tx"><span class="t1" style="display:block"><b>7:40 AM</b> · 6E 2134 · ${L("Fri 20 Nov", "శుక్ర 20 నవం", "शुक्र 20 नवं")}</span><span class="t2" style="display:block">${foundSrc} · VTZ → HYD</span></span><span class="trail">${I("chevr")}</span>`)}</div>` : ""}
-    ${sh(L("Or pick your flight", "లేదా మీ ఫ్లైట్ ఎంచుకోండి", "या अपनी फ़्लाइट चुनें"))}
+    ${sh(L("Or pick your flight", "లేదా మీ ఫ్లైట్ ఎంచుకోండి", "या अपनी फ़्लाइट चुनें"), `<button data-voice class="saybtn">${I("mic", "sm")}${L("Say it", "చెప్పండి", "बोलिए")}</button>`)}
     <div class="pad"><div class="t-label">${dep ? L("When do you fly?", "ఎప్పుడు ప్రయాణం?", "उड़ान कब है?") : L("When do you land?", "ఎప్పుడు ల్యాండింగ్?", "कब लैंड करेंगे?")}</div></div>
     <div class="chips mt8">${ADAYS.map(d => `<button class="chip ${app.aday === d ? "on" : ""}" data-act="aday" data-v="${d}">${dayLabel(d)}</button>`).join("")}</div>
     <div class="pad mt16"><div class="t-label">${dep ? L("Flying to", "ఎక్కడికి", "कहाँ जा रहे हैं") : L("Flying in from", "ఎక్కడి నుండి", "कहाँ से आ रहे हैं")}</div></div>
@@ -865,7 +941,7 @@ def("rides", { g: "Tabs", n: "Trips", tab: "rides", what: "Upcoming (airport pic
 def("offers", { g: "Tabs", n: "Offers", tab: "offers", what: "SAGA points, a promo code field, and offers targeted by trip type: first airport ride, weekday plans, referrals, partner hotels.", why: "Offers drive the behaviour SAGA wants: airport bookings, scheduled series, referrals. Ops run them from the dashboard.", fl: "<code>GET /offers?user=</code> (eligibility computed server-side). Auto-applied at quote time. See brief §8." }, () => `
   ${bar(L("Offers", "ఆఫర్లు", "ऑफ़र"), { large: true, back: false })}
   <div class="content"><div class="pad">
-    <div class="card stage"><div class="t-label" style="color:var(--on-stage2)">${L("SAGA points", "SAGA పాయింట్లు", "SAGA पॉइंट")}</div><div class="row-flex mt8"><span class="pts t-num grow">1,240</span>${pill("gift", L("Worth ₹124", "₹124 విలువ", "₹124 के बराबर"), "dark")}</div>
+    <div class="card stage"><div class="t-label" style="color:var(--on-stage2)">${L("SAGA points", "SAGA పాయింట్లు", "SAGA पॉइंट")}</div><div class="row-flex mt8"><span class="pts t-num grow" data-count="1240">1,240</span>${pill("gift", L("Worth ₹124", "₹124 విలువ", "₹124 के बराबर"), "dark")}</div>
     <div class="progress mt16" style="background:rgba(255,255,255,.14)"><i style="width:62%"></i></div><p class="t-sub mt8">${L("760 more for a free city ride", "ఉచిత సిటీ రైడ్‌కు ఇంకా 760", "मुफ़्त सिटी राइड के लिए 760 और")}</p></div>
     <div class="field mt16"><input id="promo" autocomplete="off" spellcheck="false" placeholder="${L("Have a code? e.g. FLYSAGA", "కోడ్ ఉందా? ఉదా. FLYSAGA", "कोड है? जैसे FLYSAGA")}" style="text-transform:uppercase"><button class="btn btn-text sm" data-act="promo">${L("Apply", "వర్తించు", "लगाएँ")}</button></div>
   </div>
@@ -884,7 +960,7 @@ def("account", { g: "Tabs", n: "Account & settings", tab: "account", what: "Prof
     <div class="pad"><div class="card row-flex"><span class="avatar xl">AR</span><div class="grow"><div class="t-h3">Ananya Rao</div><div class="t-sub">+91 98480 12345</div></div>${I("chevr")}</div></div>
     <div class="group mt16">
       ${row({ icon: "pin", t: L("Saved places", "సేవ్ చేసిన స్థలాలు", "सेव की गई जगहें"), trail: "2", toast: L("Home and Office saved", "ఇల్లు, ఆఫీస్ సేవ్ అయ్యాయి", "घर और ऑफ़िस सेव हैं") })}
-      ${row({ icon: "wallet", t: L("Payments", "చెల్లింపులు", "भुगतान"), trail: "UPI", toast: L("UPI, cards and SAGA wallet", "UPI, కార్డులు, SAGA వాలెట్", "UPI, कार्ड और SAGA वॉलेट") })}
+      ${row({ icon: "wallet", t: L("Wallet and payments", "వాలెట్, చెల్లింపులు", "वॉलेट और भुगतान"), trail: S.inr(app.wallet), go: "wallet" })}
       ${row({ icon: "plane", t: L("Find my flights", "నా ఫ్లైట్లు కనుగొను", "मेरी फ़्लाइट ढूँढें"), trail: L("On", "ఆన్", "चालू"), go: "travel" })}
     </div>
     ${sh(L("Appearance", "రూపం", "रूप"))}
@@ -902,6 +978,28 @@ def("account", { g: "Tabs", n: "Account & settings", tab: "account", what: "Prof
     </div>
     ${promo("made")}
   </div>`);
+
+def("wallet", { g: "Settings", n: "Wallet", tabs: 0, nav: 1, what: "SAGA wallet: balance, add money in one tap, auto-pay for scheduled rides and plans, points converted to cash, saved methods and every transaction.", why: "One tap to pay, no failed UPI at the kerb at 5 AM, and points that feel like money.", fl: "Wallet ledger on the backend (RBI rules for closed-loop wallets apply); top-up via the payment gateway; UPI Autopay mandate for plans." }, () => `
+  ${bar(L("Wallet", "వాలెట్", "वॉलेट"))}
+  <div class="content"><div class="pad">
+    <div class="walletc"><span class="promo-wm" aria-hidden="true">SAGA</span><div class="row-flex"><span class="grow" style="color:var(--on-ink2);font-weight:600">${L("SAGA wallet", "SAGA వాలెట్", "SAGA वॉलेट")}</span>${I("wallet")}</div><div class="wl-big">₹<span data-count="${app.wallet}">${app.wallet.toLocaleString("en-IN")}</span></div><div class="t-sub" style="color:var(--on-ink2)">${L("Used first for every ride", "ప్రతి రైడ్‌కు ముందుగా వాడబడుతుంది", "हर राइड में पहले इसका इस्तेमाल")}</div>
+      <div class="perks mt16">${[500, 1000, 2000].map(a => `<button class="chip wchip" data-act="topup" data-v="${a}">+ ₹${a.toLocaleString("en-IN")}</button>`).join("")}</div></div>
+  </div>
+  <div class="group mt16">
+    <div class="row"><span class="lead">${I("repeat")}</span><span class="tx"><span class="t1" style="display:block">${L("Auto-pay scheduled rides", "షెడ్యూల్ రైడ్‌లకు ఆటో-పే", "शेड्यूल राइड के लिए ऑटो-पे")}</span><span class="t2" style="display:block">${L("UPI Autopay tops up when below ₹300", "₹300 కంటే తక్కువైతే UPI ఆటోపే", "₹300 से कम होने पर UPI ऑटोपे")}</span></span>${tgl(app.autopay, 'data-act="autopay"')}</div>
+    ${row({ icon: "gift", lc: "soft", t: L("Convert 1,240 points to ₹124", "1,240 పాయింట్లు ₹124గా మార్చండి", "1,240 पॉइंट को ₹124 में बदलें"), act: "convert" })}
+  </div>
+  ${sh(L("Pay with", "చెల్లింపు విధానం", "भुगतान का तरीका"))}
+  <div class="group">${[["wallet", "wallet", L("SAGA wallet", "SAGA వాలెట్", "SAGA वॉलेट")], ["upi", "device", "UPI · ananya@okhdfc"], ["card", "card", "HDFC Visa ••2231"], ["cash", "receipt", L("Cash", "నగదు", "नकद")]].map(([v, ic, t]) => `<button class="row" data-act="pay" data-v="${v}"><span class="lead soft">${I(ic)}</span><span class="tx"><span class="t1" style="display:block">${t}</span></span><span class="trail">${app.pay === v ? `<span style="color:var(--accent-ink)">${I("check")}</span>` : ""}</span></button>`).join("")}</div>
+  ${sh(L("Activity", "లావాదేవీలు", "लेन-देन"))}
+  <div class="group">${app.wtx.map(t => `<div class="row"><span class="lead grey">${I(t[0])}</span><span class="tx"><span class="t1" style="display:block">${t[1]}</span><span class="t2" style="display:block">${t[2]}</span></span><span class="trail" style="color:${t[3] > 0 ? "var(--success)" : "var(--fg)"};font-weight:600">${t[3] > 0 ? "+" : "−"}₹${Math.abs(t[3])}</span></div>`).join("")}</div>
+  </div>`);
+
+def("chat", { g: "Ride", n: "Chat with chauffeur", tabs: 0, nav: 1, what: "In-app chat with quick replies; each side reads in their own language. Live with the chauffeur app in the suite.", why: "No numbers shared, no language barrier, no shouting across a busy kerb.", fl: "Canned message keys over WebSocket, rendered per reader's locale; free text via a translation API." }, () => `
+  ${bar("Ravi Kumar", { actions: hbtn("phone", `data-toast="${esc(L("Calling Ravi (numbers stay private)…", "రవికి కాల్…", "रवि को कॉल…"))}"`, "Call") })}
+  <div class="content" style="padding-bottom:190px"><p class="t-sub center">${L("Messages are translated for each of you", "సందేశాలు ఇద్దరికీ అనువదించబడతాయి", "संदेश दोनों के लिए अनुवाद होते हैं")}</p>
+    <div class="msgs">${S.chat.get().map(m => `<div class="bub ${m.who === "rider" ? "me" : "them"}">${S.msg(m.k)}<small>${m.at}</small></div>`).join("")}</div></div>
+  ${foot(`<div class="perks">${["coming", "atgate", "bags", "cooler"].map(k => `<button class="chip" data-act="send" data-v="${k}">${S.msg(k)}</button>`).join("")}</div>`)}`, () => { app.readD = S.chat.get().filter(m => m.who === "driver").length; const c = $("#views .view:last-child .content"); if (c) c.scrollTop = 9999; });
 
 def("language", { g: "Settings", n: "Language", tabs: 0, nav: 1, what: "English, Telugu and Hindi, each written in its own script. Changes the whole app, notifications and Saathi's voice at once.", why: "Vizag riders and many chauffeurs are more comfortable in Telugu; Hindi covers visitors and many airport travellers.", fl: "ARB files per locale; server sends notification templates per user locale. Odia, Tamil, Kannada can be added without code changes." }, () => `
   ${bar(L("Language", "భాష", "भाषा"))}
@@ -1010,8 +1108,8 @@ function chrome() {
   const sc = SC[cur], t = sc.tab;
   $("#tabbar").innerHTML = TABS.map(([id, ic, lb]) => `<button class="tab ${t === id ? "on" : ""}" data-tab="${id}">${ios() ? I(ic) : `<span class="ico">${I(ic)}</span>`}<span>${lb()}</span></button>`).join("");
   $("#tabbar").classList.toggle("hide", !t);
-  $("#tabvoice").innerHTML = I("mic"); $("#tabvoice").classList.toggle("hide", !t || !ios());
-  $("#fab").innerHTML = I("mic") + `<span>Saathi</span>`; $("#fab").classList.toggle("hide", !t || ios());
+  $("#tabvoice").classList.add("hide");
+  $("#fab").classList.add("hide");
   $(".homebar").style.background = sc.sb === "light" ? "#fff" : "";
   $("#sbfade").style.opacity = sc.sb === "light" || sc.map || sc.nav ? 0 : 1;
   statusbar();
@@ -1049,6 +1147,7 @@ function go(id, o = {}) {
   }
   const done = () => { $$(".view", views).forEach(v => { if (v !== el) v.remove(); }); el.style.boxShadow = ""; anims.forEach(a => { try { a.cancel(); } catch (e) {} }); };
   if (anims.length) { const t = setTimeout(done, dur + 60); Promise.all(anims.map(a => a.finished)).then(() => { clearTimeout(t); done(); }).catch(() => {}); } else done();
+  S.enter(el);
   if (SC[id].mount) SC[id].mount(el);
   try { if (!BARE && !EMBED) history.replaceState(null, "", location.pathname + location.search + "#" + id); } catch (e) {}
   try { if (parent !== window) parent.postMessage({ saga: "nav", app: "rider", os: S.state.os, id }, "*"); } catch (e) {}
@@ -1071,12 +1170,21 @@ const A = {
   nocars() { app.noCars = true; toast(L("Simulating: every car is busy", "అన్ని కార్లు బిజీ అని చూపిస్తున్నాం", "सभी गाड़ियाँ व्यस्त दिखा रहे हैं")); },
   waitline() { toast(L("You're first in line. We'll alert you the moment a car is free.", "మీరు మొదటి స్థానంలో. కారు ఖాళీ కాగానే తెలుపుతాం.", "आप पहले नंबर पर हैं। गाड़ी खाली होते ही बताएँगे।"), L("In line", "లైన్‌లో", "लाइन में")); setTimeout(() => { if (cur === "nocars") go("assigned", { replace: true }); }, 2400); },
   notifyme() { toast(L("We'll notify you when a car is free nearby.", "దగ్గర కారు ఖాళీ కాగానే తెలుపుతాం.", "पास में गाड़ी खाली होते ही बताएँगे।")); },
-  rate(e) { app.rating = +e.dataset.v; rerender(); },
+  rate(e) { app.rating = +e.dataset.v; S.live.send("rated", { n: app.rating }); rerender(); },
   pick(e) { e.classList.toggle("on"); },
   dir(e) { app.dir = e.dataset.v; rerender(); },
   shift(e) { app.shift = Math.max(-30, Math.min(30, app.shift + +e.dataset.v)); rerender(); },
   tg(e) { e.classList.toggle("on"); },
   bookflight() { app.booked = true; go("booked"); },
+  pay(e) { app.pay = e.dataset.v; rerender(); },
+  topup(e) { const a = +e.dataset.v; app.wallet += a; app.wtx.unshift(["plus", L("Added from UPI", "UPI నుండి జమ", "UPI से जोड़ा"), L("Just now", "ఇప్పుడే", "अभी"), a]); toast(L(`₹${a} added. New balance ${S.inr(app.wallet)}`, `₹${a} జమ. కొత్త బ్యాలెన్స్ ${S.inr(app.wallet)}`, `₹${a} जुड़े। नया बैलेंस ${S.inr(app.wallet)}`), L("Wallet", "వాలెట్", "वॉलेट")); rerender(); S.countUp(views.lastElementChild); },
+  autopay() { app.autopay = !app.autopay; rerender(); },
+  convert() { app.wallet += 124; app.wtx.unshift(["gift", L("1,240 points converted", "1,240 పాయింట్లు మార్చారు", "1,240 पॉइंट बदले"), L("Just now", "ఇప్పుడే", "अभी"), 124]); toast(L("₹124 added from points", "పాయింట్ల నుండి ₹124 జమ", "पॉइंट से ₹124 जुड़े"), L("Wallet", "వాలెట్", "वॉलेट")); rerender(); },
+  tip(e) { const a = +e.dataset.v; if (app.tipped) return; app.tipped = a; app.wallet -= a; app.wtx.unshift(["heart", L("Tip · Ravi Kumar", "టిప్ · రవి కుమార్", "टिप · रवि कुमार"), L("Just now", "ఇప్పుడే", "अभी"), -a]); S.live.send("tip", { amt: a }); toast(L(`₹${a} sent to Ravi. Thank you!`, `₹${a} రవికి పంపాం. ధన్యవాదాలు!`, `₹${a} रवि को भेजे। धन्यवाद!`)); rerender(); },
+  req(e) { const k = e.dataset.v; S.chat.add({ who: "rider", k, at: "7:3" + (S.chat.get().length % 10) }); S.live.send("msg", { k }); toast(S.msg(k), L("Sent to Ravi", "రవికి పంపాం", "रवि को भेजा")); },
+  send(e) { A.req(e); rerender(); },
+  cancelride() { S.live.send("cancel"); toast(L("Ride cancelled. No charge.", "రైడ్ రద్దు. ఛార్జ్ లేదు.", "राइड रद्द। कोई चार्ज नहीं।")); go("home", { tab: 1 }); },
+  demostart() { app.stage = 4; go("onride"); },
   pickf(e) { const d = e.dataset; app.flight = { no: d.no, t: d.t, code: d.city, day: +d.day, dir: d.dir, pnr: d.pnr || app.pnrIn || "" }; app.dir = d.dir; app.shift = 0; go("flight"); },
   aday(e) { app.aday = +e.dataset.v; rerender(); }, acity(e) { app.acity = e.dataset.v; rerender(); },
   rescan() { rerender(); SC.scan.mount(views.lastElementChild); },
@@ -1189,6 +1297,16 @@ document.addEventListener("keydown", e => {
 });
 document.addEventListener("pointerdown", e => {
   if (!ios()) { const b = e.target.closest(".btn,.row,.ibtn,.tab,.chip,.tile,.act"); if (!b) return; const r = b.getBoundingClientRect(), z = r.width / b.offsetWidth || 1, d = Math.max(b.offsetWidth, b.offsetHeight) * 2.2; const s = document.createElement("span"); s.className = "ripple"; s.style.cssText = `width:${d}px;height:${d}px;left:${(e.clientX - r.left) / z - d / 2}px;top:${(e.clientY - r.top) / z - d / 2}px`; if (getComputedStyle(b).position === "static") b.style.position = "relative"; b.style.overflow = "hidden"; b.append(s); setTimeout(() => s.remove(), 600); }
+});
+const unreadR = () => Math.max(0, S.chat.get().filter(m => m.who === "driver").length - app.readD);
+S.initSliders(tr => { if (tr.dataset.goAfter === "finding") { app.stage = 2; app.tipped = 0; app.rating = 0; S.chat.reset(); app.readD = 0; S.live.send("book", { dest: app.dest.split(" · ").pop() }); } if (tr.dataset.goAfter) go(tr.dataset.goAfter); });
+S.live.on(d => {
+  if (d.t === "got") { app.driverLive = true; timers.forEach(clearTimeout); timers = []; toast(L("Ravi's app received your booking", "మీ బుకింగ్ రవి యాప్‌కు చేరింది", "आपकी बुकिंग रवि के ऐप तक पहुँची"), L("Matched", "జత అయింది", "मैच हुआ")); if (cur === "finding") timers.push(setTimeout(() => { if (cur === "finding") go("assigned", { replace: true }); }, 12000)); }
+  if (d.t === "ack") { app.stage = 2; toast(L("Ravi is on the way · 6 min", "రవి వస్తున్నారు · 6 నిమి", "रवि आ रहे हैं · 6 मिनट"), L("Chauffeur assigned", "డ్రైవర్ కేటాయించారు", "ड्राइवर तय")); if (["finding", "nocars"].includes(cur)) go("assigned", { replace: true }); }
+  if (d.t === "arrived") { app.stage = 3; toast(L("Ravi has arrived at Gate 2. Free waiting for 10 min.", "రవి గేట్ 2 వద్దకు వచ్చారు. 10 నిమి ఉచిత వెయిటింగ్.", "रवि गेट 2 पर पहुँच गए। 10 मिनट मुफ़्त इंतज़ार।"), L("Your SAGA is here", "మీ SAGA వచ్చింది", "आपकी SAGA आ गई")); if (cur === "assigned") rerender(); }
+  if (d.t === "start") { app.stage = 4; toast(L("Code accepted. Enjoy the ride.", "కోడ్ సరైనది. ప్రయాణం ఆనందించండి.", "कोड सही। सफ़र का आनंद लें।"), L("Ride started", "రైడ్ మొదలైంది", "राइड शुरू")); go("onride"); }
+  if (d.t === "end") go("arrived");
+  if (d.t === "msg") { toast(S.msg(d.k), "Ravi Kumar"); if (["chat", "assigned", "onride"].includes(cur)) rerender(); }
 });
 window.addEventListener("message", e => { const d = e.data || {}; if (d.saga === "go" && SC[d.id] && d.id !== cur) go(d.id, { tab: !!SC[d.id].tab, instant: d.instant }); });
 S.onChange(() => { S.apply(); rerender(); if ($("#voice").classList.contains("on")) voiceUI($(".vtext", vEl)?.textContent || "", ""); });

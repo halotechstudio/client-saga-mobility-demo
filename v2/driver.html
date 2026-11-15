@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>SAGA Driver</title>
+<title>SAGA Chauffeur</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manjari:wght@400;700&family=Roboto+Flex:opsz,wght@8..144,400;8..144,500;8..144,600;8..144,700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="core.css">
@@ -19,6 +19,7 @@ body.embed,body.bare{background:transparent}
 .panel .sw{display:flex;gap:4px;padding:3px;background:var(--surface2);border-radius:12px}
 .panel .sw button{flex:1;height:36px;border-radius:9px;font-size:14px;font-weight:600;color:var(--fg2)}
 .panel .sw button.on{background:var(--surface);color:var(--fg);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.panel .grp{font-size:13px;font-weight:600;color:var(--fg2);margin:16px 0 4px}
 .panel .sl{display:block;width:100%;text-align:left;padding:8px 10px;border-radius:9px;font-size:15px}
 .panel .sl:hover{background:var(--surface2)}.panel .sl.on{background:var(--accent-soft);color:var(--on-accent-soft);font-weight:600}
 .notes{margin-top:18px;padding:16px;border-radius:16px;background:var(--surface);font-size:14.5px;line-height:1.5}
@@ -29,70 +30,139 @@ body.embed,body.bare{background:transparent}
 .fit{transform-origin:center center;flex:none}
 .foot{position:absolute;left:0;right:0;bottom:0;z-index:25;padding:24px 16px 36px;background:linear-gradient(to bottom,color-mix(in srgb,var(--bg) 0%,transparent),var(--bg) 26%)}
 .has-foot .content{padding-bottom:190px}
-.online{display:flex;align-items:center;gap:16px;padding:20px;border-radius:28px;background:var(--surface)}
+/* onboarding */
+.wl{position:absolute;inset:0;display:flex;flex-direction:column;color:#F4F4F6;padding:64px 22px 40px}
+.wl .t-hero{color:#fff}
+.wl-car{margin:28px -40px 0 -16px}
+.wl-langs{display:flex;justify-content:center;gap:6px}
+.wl-langs button{height:44px;padding:0 16px;border-radius:22px;color:#A9ABB3;font-size:15px;font-weight:600}
+.wl-langs button.on{background:rgba(255,255,255,.12);color:#fff}
+.vrow{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--surface);border-radius:6px}
+.vrow:first-child{border-radius:24px 24px 6px 6px}.vrow:last-child{border-radius:6px 6px 24px 24px}.vrow+.vrow{margin-top:3px}
+.vrow .vi{width:42px;height:42px;border-radius:21px;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--success) 15%,transparent);color:var(--success);flex:none}
+.vrow .vi.warn{background:color-mix(in srgb,var(--warning) 16%,transparent);color:var(--warning)}
+.vrow b{display:block;font-size:16.5px;font-weight:600}.vrow span.s{font-size:14px;color:var(--fg2)}
+/* inspection camera */
+.cam{position:absolute;inset:0;background:radial-gradient(80% 60% at 50% 40%,#2E3239 0%,#121418 60%,#08090B 100%);color:#fff;overflow:hidden}
+.cam-top{position:absolute;top:50px;left:16px;right:16px;z-index:3}
+.cam-steps{display:flex;gap:4px;margin-top:12px}.cam-steps i{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.18)}
+.cam-steps i.d{background:#fff}.cam-steps i.w{background:var(--warning)}.cam-steps i.c{background:var(--accent)}
+.cam-title{font-family:var(--display);font-size:30px;font-weight:700;letter-spacing:-.02em;margin-top:14px;line-height:1.05}
+.cam-hint{font-size:15px;color:#BFC2CA;margin-top:6px;line-height:1.4}
+.cam-frame{position:absolute;left:22px;right:22px;top:250px;height:250px;border-radius:30px;border:2px dashed rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center}
+.cam-frame .guide{width:100%;opacity:.5}
+.cam-frame .gi{color:rgba(255,255,255,.45)}.cam-frame .gi .ic{width:120px;height:120px;stroke-width:1}
+.cam-frame.ok{border:2px solid var(--success)}.cam-frame.warn{border:2px solid var(--warning)}
+.cam-scan{position:absolute;left:10px;right:10px;height:2px;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:beam 1s ease-in-out infinite alternate;top:10%}
+@keyframes beam{to{top:90%}}
+.cam-res{position:absolute;left:22px;right:22px;top:516px;display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:20px;background:rgba(255,255,255,.1);font-size:15px;animation:popin .4s both}
+.cam-res .ic{flex:none}
+.cam-res.ok .ic{color:#3DD68C}.cam-res.warn .ic{color:#F5B53D}
+.cam-shots{position:absolute;left:16px;right:16px;bottom:150px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.cam-shots span{flex:none;width:46px;height:46px;border-radius:12px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;position:relative}
+.cam-shots span .ic{width:20px;height:20px}
+.cam-shots span.w{box-shadow:inset 0 0 0 2px #F5B53D}
+.shutter{position:absolute;left:50%;bottom:44px;transform:translateX(-50%);width:84px;height:84px;border-radius:42px;border:5px solid #fff;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center}
+.shutter i{width:62px;height:62px;border-radius:31px;background:#fff;transition:transform .15s}
+.shutter:active i{transform:scale(.85)}
+.camflash{position:absolute;inset:0;background:#fff;pointer-events:none;animation:flash .45s forwards;z-index:9}
+/* duty */
+.online{display:flex;align-items:center;gap:16px;padding:22px;border-radius:32px;background:var(--surface)}
 .online.on{background:var(--accent);color:var(--on-accent)}
 .online.on .t-sub{color:inherit;opacity:.85}
-.online .tgl{transform:scale(1.15)}
+.online .t-h3{font-family:var(--display);font-size:24px;font-weight:700;letter-spacing:-.02em}
 .online.on .tgl{background:var(--on-accent)}
 .online.on .tgl::after{background:var(--accent)!important}
+.radar{position:relative;display:flex;align-items:center;gap:16px;padding:18px;border-radius:28px;background:var(--ink);color:var(--on-ink);overflow:hidden}
+.radar .dish{position:relative;width:64px;height:64px;border-radius:32px;border:1px solid rgba(255,255,255,.2);flex:none;overflow:hidden}
+.radar .dish::before{content:"";position:absolute;inset:0;background:conic-gradient(from 0deg,transparent 0deg,color-mix(in srgb,var(--accent) 80%,transparent) 60deg,transparent 61deg);animation:spin 2s linear infinite;border-radius:50%}
+.radar .dish::after{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;margin:-4px;border-radius:4px;background:#fff}
+@keyframes spin{to{transform:rotate(360deg)}}
+.radar b{font-size:17px;display:block}.radar span{font-size:14px;color:var(--on-ink2)}
 .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.kpis div{background:var(--surface);border-radius:22px;padding:14px;font-size:14px;color:var(--fg2)}
-.kpis b{display:block;font-size:24px;color:var(--fg);font-weight:600;margin-top:4px;font-feature-settings:"tnum" 1}
-.job{display:flex;gap:14px;padding:16px;border-radius:26px;background:var(--surface);text-align:left;width:100%;color:var(--fg)}
+.kpis div{background:var(--surface);border-radius:26px;padding:16px;font-size:14px;color:var(--fg2)}
+.kpis div:first-child{background:var(--ink);color:var(--on-ink2)}.kpis div:first-child b{color:#fff}
+.kpis b{display:block;font-family:var(--display);font-size:36px;font-weight:400;letter-spacing:-.04em;line-height:1;margin-top:10px;color:var(--fg);font-feature-settings:"tnum" 1}
+.job{display:flex;gap:14px;padding:16px;border-radius:28px;background:var(--surface);text-align:left;width:100%;color:var(--fg)}
 .job+.job{margin-top:8px}
-.job time{font-size:20px;font-weight:600;min-width:62px;font-feature-settings:"tnum" 1}
+.job time{font-family:var(--display);font-size:26px;font-weight:400;letter-spacing:-.03em;min-width:66px}
 .job .ty{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;padding:3px 10px;border-radius:12px;background:var(--accent-soft);color:var(--on-accent-soft)}
-.job.next{box-shadow:inset 0 0 0 2px var(--accent)}
-.req{position:absolute;inset:0;display:flex;flex-direction:column;padding:70px 20px 36px;background:var(--bg)}
-.ring{width:170px;height:170px;margin:10px auto 0;position:relative}
+.job.next{background:var(--ink);color:var(--on-ink)}.job.next .t-sub{color:var(--on-ink2)}
+/* assigned takeover */
+.req{position:absolute;inset:0;display:flex;flex-direction:column;padding:62px 20px 36px;background:var(--accent);color:var(--on-accent)}
+.req .t-sub{color:inherit;opacity:.85}
+.ring{width:150px;height:150px;margin:6px auto 0;position:relative}
 .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
-.ring circle{fill:none;stroke-width:10}
-.ring .bg{stroke:var(--surface3)}.ring .fg{stroke:var(--accent);stroke-linecap:round;stroke-dasharray:503;animation:cd 15s linear forwards}
+.ring circle{fill:none;stroke-width:9}
+.ring .bg{stroke:rgba(255,255,255,.2)}.ring .fg{stroke:#fff;stroke-linecap:round;stroke-dasharray:503;animation:cd 10s linear forwards}
 @keyframes cd{to{stroke-dashoffset:503}}
 .ring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ring .c b{font-size:46px;font-weight:600;line-height:1}
-.turn{position:absolute;z-index:31;left:12px;right:12px;top:50px;border-radius:24px;background:var(--accent);color:var(--on-accent);padding:16px 18px;display:flex;gap:14px;align-items:center;box-shadow:0 6px 20px rgba(0,0,0,.25)}
-.turn .ic{width:40px;height:40px;stroke-width:2.4}
-.turn b{font-size:24px;display:block;line-height:1.1}.turn span{font-size:16px;opacity:.9}
+.ring .c b{font-family:var(--display);font-size:46px;font-weight:400;line-height:1}
+.rcard{background:rgba(255,255,255,.12);border-radius:24px;padding:6px 16px}
+.rcard .rr{display:flex;align-items:center;gap:12px;min-height:56px}
+.rcard .hr{background:rgba(255,255,255,.2)}
+.req .btn-stage{background:#fff;color:#0B0C0F}
+/* nav */
+.turn{position:absolute;z-index:31;left:12px;right:12px;top:50px;border-radius:26px;background:var(--ink);color:#fff;padding:16px 18px;display:flex;gap:14px;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.turn .ic{width:40px;height:40px;stroke-width:2.4;color:var(--accent-ink)}
+[data-theme=light] .turn .ic{color:#8FA6FF}
+.turn b{font-family:var(--display);font-size:26px;display:block;line-height:1.05;font-weight:700}.turn span{font-size:16px;opacity:.8}
 .plate{font-family:var(--mono);font-size:14px;font-weight:500;padding:5px 8px;border-radius:7px;background:var(--surface);border:1px solid var(--hair)}
 .rider{display:flex;align-items:center;gap:14px;padding:14px;border-radius:22px;background:var(--surface2)}
 .rider .ph{width:52px;height:52px;border-radius:26px;background:var(--accent-soft);color:var(--on-accent-soft);font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
 .acts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .act{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--fg)}
-.act span.c{width:56px;height:56px;border-radius:18px;background:var(--accent-soft);color:var(--on-accent-soft);display:flex;align-items:center;justify-content:center}
+.act span.c{width:56px;height:56px;border-radius:18px;background:var(--accent-soft);color:var(--on-accent-soft);display:flex;align-items:center;justify-content:center;position:relative}
+.act span.c i{position:absolute;top:-3px;right:-3px;min-width:20px;height:20px;border-radius:10px;background:var(--danger);color:#fff;font-size:12px;font-style:normal;display:flex;align-items:center;justify-content:center;padding:0 5px}
 .act.sos span.c{color:var(--danger)}
-.timer{font-size:52px;font-weight:600;font-feature-settings:"tnum" 1;letter-spacing:-.01em}
+.timer{font-family:var(--display);font-size:64px;font-weight:400;letter-spacing:-.04em;line-height:1}
 .progress{height:8px;border-radius:4px;background:var(--surface3);overflow:hidden}
 .progress i{display:block;height:100%;background:var(--accent);border-radius:4px}
 .codein{display:flex;gap:10px;justify-content:center;margin-top:20px}
 .codein span{width:68px;height:80px;border-radius:20px;border:2px solid var(--fg3);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:36px}
-.codein span.f{border-color:var(--accent);background:var(--accent-soft);color:var(--on-accent-soft)}
+.codein span.f{border-color:var(--accent);background:var(--accent-soft);color:var(--on-accent-soft);animation:popin .3s both}
 .codein.ok span{border-color:var(--success);background:color-mix(in srgb,var(--success) 16%,transparent);color:var(--success)}
+.codein.bad span{border-color:var(--danger);color:var(--danger)}
 .keys{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:24px}
 .keys button{height:66px;border-radius:20px;background:var(--surface2);font-size:28px;font-weight:500;color:var(--fg)}
-.batt{display:flex;align-items:flex-end;gap:16px}
-.batt .big{font-family:var(--display);font-size:72px;font-weight:400;line-height:.9;letter-spacing:-.05em}
-.kpis div{border-radius:26px;padding:16px}
-.kpis div:first-child{background:var(--ink);color:var(--on-ink2)}.kpis div:first-child b{color:#fff}
-.kpis b{font-family:var(--display);font-size:38px;font-weight:400;letter-spacing:-.04em;line-height:1;margin-top:10px}
-.online{border-radius:32px;padding:22px}
-.online .t-h3{font-family:var(--display);font-size:24px;font-weight:700;letter-spacing:-.02em}
-.job{border-radius:28px}
-.job time{font-family:var(--display);font-size:26px;font-weight:400;letter-spacing:-.03em}
-.job.next{background:var(--ink);color:var(--on-ink);box-shadow:none}.job.next .t-sub{color:var(--on-ink2)}
-.timer{font-family:var(--display);font-size:64px;font-weight:400;letter-spacing:-.04em}
-.cell{height:24px;border-radius:8px;background:var(--surface3);overflow:hidden;position:relative}
-.cell i{position:absolute;inset:0 auto 0 0;background:var(--success);border-radius:8px}
-.chk{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--surface);border-radius:6px;font-size:16.5px}
-.chk:first-child{border-radius:24px 24px 6px 6px}.chk:last-child{border-radius:6px 6px 24px 24px}
-.chk+.chk{margin-top:3px}
-.chk .bx{width:28px;height:28px;border-radius:8px;border:2px solid var(--fg3);display:flex;align-items:center;justify-content:center;flex:none;color:transparent}
-.chk.on .bx{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
-.chk .bx .ic{width:18px;height:18px;stroke-width:3}
-.seal{width:96px;height:96px;border-radius:48px;margin:0 auto;background:var(--success);color:#fff;display:flex;align-items:center;justify-content:center}
+.safety{position:absolute;z-index:32;left:12px;right:12px;top:150px;display:flex;gap:12px;align-items:center;padding:14px 16px;border-radius:22px;background:#F5B53D;color:#2A1B00;font-size:15px;font-weight:600;box-shadow:0 10px 24px rgba(0,0,0,.25);animation:sheetup .5s both}
+.ringc{width:190px;height:190px;margin:0 auto;position:relative}
+.ringc svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ringc circle{fill:none;stroke-width:14;stroke-linecap:round}
+.ringc .bg{stroke:var(--surface3)}.ringc .fg{stroke:var(--success);transition:stroke-dashoffset 3.2s cubic-bezier(.3,0,.2,1)}
+.ringc .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ringc .c b{font-family:var(--display);font-size:52px;font-weight:400;letter-spacing:-.04em;line-height:1}
+.seal{width:96px;height:96px;border-radius:48px;margin:0 auto;background:var(--success);color:#fff;display:flex;align-items:center;justify-content:center;animation:popin .5s both}
 .seal .ic{width:48px;height:48px;stroke-width:2.6}
 .stars{display:flex;justify-content:center;gap:8px}.stars button{width:52px;height:52px;color:var(--fg3)}.stars button .ic{width:34px;height:34px}.stars button.on{color:#E8A317}.stars button.on .ic{fill:#E8A317}
 .flightbox{border-radius:24px;padding:16px;background:var(--surface);display:flex;gap:14px;align-items:center}
+.bonus{padding:20px;border-radius:30px;background:var(--accent);color:var(--on-accent)}
+.bonus .big{font-family:var(--display);font-size:46px;font-weight:400;letter-spacing:-.04em;line-height:1}
+.bonus .progress{background:rgba(255,255,255,.25)}.bonus .progress i{background:#fff}
+.wallet{padding:22px;border-radius:32px;background:var(--ink);color:var(--on-ink)}
+.wallet .big{font-family:var(--display);font-size:56px;font-weight:400;letter-spacing:-.045em;line-height:1;margin-top:8px}
+.tx{display:flex;align-items:center;gap:12px;padding:12px 4px;border-bottom:1px solid var(--hair);font-size:15.5px}
+.tx:last-child{border-bottom:0}.tx b{margin-left:auto;font-feature-settings:"tnum" 1}.tx .s{display:block;font-size:13.5px;color:var(--fg2)}
+.tx .ti{width:40px;height:40px;border-radius:20px;background:var(--surface2);display:flex;align-items:center;justify-content:center;flex:none}
+/* chat */
+.msgs{display:flex;flex-direction:column;gap:8px;padding:8px 16px 20px}
+.bub{max-width:80%;padding:11px 14px;border-radius:20px;font-size:16px;line-height:1.35;animation:popin .3s both}
+.bub.me{align-self:flex-end;background:var(--accent);color:var(--on-accent);border-bottom-right-radius:6px}
+.bub.them{align-self:flex-start;background:var(--surface2);border-bottom-left-radius:6px}
+.bub small{display:block;font-size:12px;opacity:.7;margin-top:4px}
+.qr{display:flex;flex-wrap:wrap;gap:8px}
+/* heads-up notification (Android) */
+.hu{position:absolute;z-index:95;left:8px;right:8px;top:8px;display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:24px;background:var(--surface);color:var(--fg);box-shadow:0 12px 34px rgba(0,0,0,.28);transform:translateY(-130%);transition:transform .45s cubic-bezier(.2,1.2,.3,1);cursor:pointer}
+.hu.on{transform:none}
+.hu .ap{width:36px;height:36px;border-radius:18px;background:var(--accent);color:var(--on-accent);display:flex;align-items:center;justify-content:center;flex:none}
+.hu .ap .ic{width:19px;height:19px}
+.hu .hd{font-size:12.5px;color:var(--fg2);display:flex;gap:6px}.hu b{display:block;font-size:15.5px;margin-top:2px}.hu p{font-size:14.5px;color:var(--fg2);margin-top:2px;line-height:1.35}
+.bellb{position:relative}.bellb i{position:absolute;top:8px;right:8px;min-width:18px;height:18px;border-radius:9px;background:var(--danger);color:#fff;font-size:11px;font-style:normal;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.nt{display:flex;gap:14px;padding:14px 16px;background:var(--surface);border-radius:6px}
+.nt:first-child{border-radius:24px 24px 6px 6px}.nt:last-child{border-radius:6px 6px 24px 24px}.nt:only-child{border-radius:24px}.nt+.nt{margin-top:3px}
+.nt .ni{width:42px;height:42px;border-radius:21px;background:var(--accent-soft);color:var(--on-accent-soft);display:flex;align-items:center;justify-content:center;flex:none}
+.nt.new .ni{background:var(--accent);color:var(--on-accent)}
+.nt b{font-size:16px;display:block}.nt p{font-size:14.5px;color:var(--fg2);margin-top:2px;line-height:1.4}.nt time{font-size:13px;color:var(--fg2);display:block;margin-top:4px}
 </style>
 </head>
 <body>
@@ -103,6 +173,7 @@ body.embed,body.bare{background:transparent}
     <div class="views" id="views"></div>
     <div class="sbfade" id="sbfade"></div>
     <nav class="tabbar hide" id="tabbar"></nav>
+    <div class="hu" id="hu"></div>
     <div class="toast" id="toast"></div>
     <div class="homebar"></div>
   </div></div></div></main>
@@ -115,195 +186,369 @@ const L = S.L, I = S.icon, $ = (q, r = document) => r.querySelector(q), $$ = (q,
 const EMBED = S.qs.has("embed"), BARE = S.qs.has("bare"), V = S.VEHICLE;
 document.body.classList.toggle("embed", EMBED); document.body.classList.toggle("bare", BARE);
 const esc = s => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
-const st = { online: true, checks: [true, true, true, false, true], code: "", rating: 0 };
+
+const STEPS = [
+  ["front", "car", ["Front", "ముందు భాగం", "आगे से"], ["Stand 3 m in front. Fit the whole car in the frame.", "3 మీటర్ల దూరంలో ముందు నిలబడండి. కారు మొత్తం ఫ్రేమ్‌లో ఉండాలి.", "3 मीटर आगे खड़े हों। पूरी गाड़ी फ़्रेम में रखें।"], "side"],
+  ["left", "car", ["Left side", "ఎడమ వైపు", "बाईं ओर"], ["Walk to the left side. Wheels to wheels in the frame.", "ఎడమ వైపుకు వెళ్ళండి. రెండు చక్రాలు ఫ్రేమ్‌లో.", "बाईं ओर जाएँ। दोनों पहिये फ़्रेम में।"], "side"],
+  ["rear", "car", ["Rear", "వెనుక భాగం", "पीछे से"], ["Stand behind the car. Include the bumper and boot lid.", "కారు వెనుక నిలబడండి. బంపర్, బూట్ కనిపించాలి.", "गाड़ी के पीछे खड़े हों। बम्पर और डिक्की दिखे।"], "side", "warn"],
+  ["right", "car", ["Right side", "కుడి వైపు", "दाईं ओर"], ["Now the right side, wheels to wheels.", "ఇప్పుడు కుడి వైపు, రెండు చక్రాలు.", "अब दाईं ओर, दोनों पहिये।"], "side"],
+  ["cabin", "wheel", ["Front cabin", "ముందు క్యాబిన్", "आगे का केबिन"], ["Open the driver door. Seats, dashboard and floor mats.", "డ్రైవర్ డోర్ తెరవండి. సీట్లు, డ్యాష్‌బోర్డ్, మ్యాట్లు.", "ड्राइवर का दरवाज़ा खोलें। सीटें, डैशबोर्ड, मैट।"], "icon"],
+  ["seats", "seat", ["Rear seats", "వెనుక సీట్లు", "पीछे की सीटें"], ["Rear seats and footwell. Check for left items.", "వెనుక సీట్లు, కాళ్ల దగ్గర. మర్చిపోయిన వస్తువులు చూడండి.", "पीछे की सीटें और पैरों की जगह। छूटा सामान देखें।"], "icon"],
+  ["boot", "bag", ["Boot", "బూట్", "डिक्की"], ["Open the boot. It should be empty and clean.", "బూట్ తెరవండి. ఖాళీగా, శుభ్రంగా ఉండాలి.", "डिक्की खोलें। खाली और साफ़ होनी चाहिए।"], "icon"],
+  ["tyres", "refresh", ["Tyres", "టైర్లు", "टायर"], ["One photo of each tyre. Look for cuts or low pressure.", "ప్రతి టైరుకు ఒక ఫోటో. కోతలు, తక్కువ గాలి చూడండి.", "हर टायर की एक फ़ोटो। कट या कम हवा देखें।"], "icon"],
+  ["dash", "battery", ["Dashboard", "డ్యాష్‌బోర్డ్", "डैशबोर्ड"], ["Charge and odometer in one photo. We read them for you.", "ఛార్జ్, ఓడోమీటర్ ఒకే ఫోటోలో. మేమే చదువుతాం.", "चार्ज और ओडोमीटर एक फ़ोटो में। हम पढ़ लेंगे।"], "icon"]
+];
+const st = { step: 0, shots: [], busy: false, flash: false, mode: "start", checks: [true, true, true, false, true], online: false, code: "", bad: false, rating: 0, autoAssign: false, safety: false, charging: false, charge: 64, tips: 350, notif: 2, inbox: [], perms: { loc: true, alerts: true, cam: true }, job: { rider: "Ananya Rao", ini: "AR", pick: "MVP Colony, Sector 4", drop: "Dwaraka Nagar", km: 12.4 }, riderLive: false };
+const NOTIFS0 = [
+  ["plane", L("AI 1912 landed 11:02", "AI 1912 11:02కి ల్యాండ్", "AI 1912 11:02 पर लैंड"), L("Your 11:20 Arrivals pickup is on time. Belt 3.", "మీ 11:20 అరైవల్స్ పికప్ సమయానికి. బెల్ట్ 3.", "आपका 11:20 अराइवल पिकअप समय पर। बेल्ट 3।"), "10:58"],
+  ["bolt", L("Charging slot booked", "ఛార్జింగ్ స్లాట్ బుక్", "चार्जिंग स्लॉट बुक"), L("14:00 at SAGA hub, Madhurawada. Fast charger 2.", "14:00కి SAGA హబ్, మధురవాడ. ఫాస్ట్ ఛార్జర్ 2.", "14:00 SAGA हब, मधुरवाड़ा। फ़ास्ट चार्जर 2।"), "09:40"]
+];
 
 const btn = (label, o = {}) => `<button class="btn ${o.kind || "btn-primary"} block ${o.cls || ""}" ${o.go ? `data-go="${o.go}"` : ""} ${o.act ? `data-act="${o.act}"` : ""} ${o.toast ? `data-toast="${esc(o.toast)}"` : ""}>${o.icon ? I(o.icon) : ""}<span>${label}</span></button>`;
 const bar = (title, o = {}) => `<header class="topbar"><div class="tb-row">${o.back === false ? '<span style="width:10px"></span>' : `<button class="ibtn" data-back aria-label="Back">${I("arrowl")}</button>`}<div class="tb-title">${o.large ? "" : title}</div><div class="tb-actions">${o.actions || ""}</div></div>${o.large ? `<h1 class="tb-headline">${title}</h1>` : ""}</header>`;
-const row = o => `<button class="row" ${o.go ? `data-go="${o.go}"` : ""} ${o.toast ? `data-toast="${esc(o.toast)}"` : ""} ${o.act ? `data-act="${o.act}"` : ""} ${o.attr || ""}>${o.icon ? `<span class="lead ${o.lc || ""}">${I(o.icon)}</span>` : ""}<span class="tx"><span class="t1" style="display:block">${o.t}</span>${o.s ? `<span class="t2" style="display:block">${o.s}</span>` : ""}</span><span class="trail">${o.trail || ""}${o.chev === false ? "" : I("chevr")}</span></button>`;
+const row = o => { const live = o.go || o.toast || o.act; const tag = live ? "button" : "div"; return `<${tag} class="row" ${o.go ? `data-go="${o.go}"` : ""} ${o.toast ? `data-toast="${esc(o.toast)}"` : ""} ${o.act ? `data-act="${o.act}"` : ""}>${o.icon ? `<span class="lead ${o.lc || ""}">${I(o.icon)}</span>` : ""}<span class="tx" style="flex:1"><span class="t1" style="display:block">${o.t}</span>${o.s ? `<span class="t2" style="display:block">${o.s}</span>` : ""}</span><span class="trail">${o.trail || ""}${live ? I("chevr") : ""}</span></${tag}>`; };
 const pill = (icon, t, k = "") => `<span class="pill ${k}">${icon ? I(icon) : ""}${t}</span>`;
-const sh = t => `<div class="sh"><h2>${t}</h2></div>`;
+const sh = (t, link = "") => `<div class="sh"><h2>${t}</h2>${link}</div>`;
 const seg = (opts, cur, act) => `<div class="seg">${opts.map(([v, l]) => `<button class="${v === cur ? "on" : ""}" data-act="${act}" data-v="${v}">${v === cur ? I("check", "sm") : ""}${l}</button>`).join("")}</div>`;
+const tgl = (on, attr = "") => `<span class="tgl ${on ? "on" : ""}" role="switch" aria-checked="${on}" ${attr}></span>`;
+const bell = () => `<button class="ibtn bellb" data-go="inbox" aria-label="Notifications">${I("bell")}${st.notif ? `<i>${st.notif}</i>` : ""}</button>`;
 
 const SC = {}; const def = (id, m, r, mount) => (SC[id] = Object.assign({ id, render: r, mount }, m));
 
-def("shift", { n: "Start of shift", foot: 1, nav: 1, what: "A 30-second vehicle check before going online: charge, cleanliness, water, chargers, tyres. Ops sees it live.", why: "The premium promise depends on every car being ready. This makes it routine and auditable.", fl: "<code>POST /shifts</code> with checklist + optional photos (<code>image_picker</code>). Charge from the vehicle telematics API if available." }, () => `
-  ${bar(L("Start of shift", "షిఫ్ట్ ప్రారంభం", "शिफ़्ट शुरू"))}
-  <div class="content"><div class="pad">
-    <div class="card row-flex"><div class="grow"><div class="t-label">${V.make} ${V.model}</div><div class="t-h2 mt4">${V.plate}</div></div><div style="text-align:right"><div class="t-h2" style="color:var(--success)">92%</div><div class="t-sub">${L("charge", "ఛార్జ్", "चार्ज")}</div></div></div>
-    <h2 class="t-h3 mt24">${L("Quick check before you go online", "ఆన్‌లైన్ ముందు తనిఖీ", "ऑनलाइन होने से पहले जाँच")}</h2>
-    <div class="mt12">${[L("Cabin and seats cleaned", "క్యాబిన్, సీట్లు శుభ్రం", "केबिन और सीटें साफ़"), L("4 chilled water bottles", "4 చల్లని నీళ్ల సీసాలు", "4 ठंडी पानी की बोतलें"), L("USB-C chargers in place", "USB-C ఛార్జర్లు ఉన్నాయి", "USB-C चार्जर मौजूद"), L("Tyres and lights checked", "టైర్లు, లైట్లు తనిఖీ", "टायर और लाइट जाँचे"), L("Uniform and ID card", "యూనిఫాం, ID కార్డు", "यूनिफ़ॉर्म और ID कार्ड")].map((t, i) => `<button class="chk ${st.checks[i] ? "on" : ""}" data-act="chk" data-v="${i}" style="width:100%;text-align:left"><span class="bx">${I("check")}</span>${t}</button>`).join("")}</div>
-  </div></div>
-  ${`<div class="foot">${btn(st.checks.every(Boolean) ? L("Start shift", "షిఫ్ట్ ప్రారంభించు", "शिफ़्ट शुरू करें") : L(`${st.checks.filter(x => !x).length} item left`, `${st.checks.filter(x => !x).length} మిగిలి ఉంది`, `${st.checks.filter(x => !x).length} बाकी`), { go: st.checks.every(Boolean) ? "duty" : "", toast: st.checks.every(Boolean) ? "" : L("Tick every item to start your shift", "షిఫ్ట్ ప్రారంభించడానికి అన్నీ టిక్ చేయండి", "शिफ़्ट शुरू करने के लिए सब पर टिक करें"), kind: st.checks.every(Boolean) ? "btn-primary" : "btn-secondary", cls: "lg" })}</div>`}`);
+/* ---------------- onboarding ---------------- */
+def("welcome", { g: "Onboarding", n: "Welcome", sb: "light", what: "First launch on the company phone: the car, one promise, sign in with the employee ID. Language first.", why: "Sets the tone: a professional tool for salaried chauffeurs, not a gig app.", fl: "Route <code>/driver/welcome</code>. Same tokens as the rider app." }, () => `
+  <div class="stage wl">
+    <div>${S.logo()} <span style="font-size:13px;color:#A9ABB3;margin-left:6px">${L("Chauffeur", "డ్రైవర్", "शोफ़र")}</span></div>
+    <div class="wl-car">${S.car()}</div>
+    <div style="margin-top:auto">
+      <h1 class="t-hero">${L("Your shift,<br>planned for you.", "మీ షిఫ్ట్,<br>మీ కోసం ప్లాన్.", "आपकी शिफ़्ट,<br>आपके लिए तय।")}</h1>
+      <p class="t-body mt12" style="color:#A9ABB3">${L("Dispatch plans every job, every charge and every break. You drive; we handle the rest.", "ప్రతి పని, ఛార్జింగ్, విరామం డిస్పాచ్ ప్లాన్ చేస్తుంది. మీరు నడపండి; మిగతాది మేము.", "हर काम, चार्जिंग और ब्रेक डिस्पैच तय करता है। आप चलाइए; बाकी हम।")}</p>
+      <div class="mt24">${btn(L("Sign in with employee ID", "ఉద్యోగి IDతో సైన్ ఇన్", "कर्मचारी ID से साइन इन"), { go: "signin", kind: "btn-stage", cls: "lg" })}</div>
+      <div class="wl-langs mt16">${S.LANGS.map(l => `<button class="${S.state.lang === l.id ? "on" : ""}" data-act="lang" data-v="${l.id}">${l.native}</button>`).join("")}</div>
+    </div>
+  </div>`);
 
-def("duty", { n: "Duty", tab: "duty", what: "Online switch, today's numbers, and the day's assigned jobs in time order: airport drops linked to flights, hotel pickups, scheduled series, and on-demand rides.", why: "Drivers are salaried, so the screen is a work plan, not an earnings hustle. Flight and hotel context is visible before the job starts.", fl: "<code>GET /driver/schedule?date=</code>, live updates over WebSocket. Online state drives location upload frequency." }, () => `
-  ${bar(L("Today", "ఈ రోజు", "आज"), { back: false, large: true, actions: `<button class="ibtn" data-toast="${esc(L("No new messages from ops", "ఆప్స్ నుండి కొత్త సందేశాలు లేవు", "ऑप्स से कोई नया मैसेज नहीं"))}">${I("bell")}</button>` })}
+def("signin", { g: "Onboarding", n: "Sign in", nav: 1, foot: 1, what: "Employee ID and the registered mobile; the OTP fills itself.", why: "Only SAGA staff can use this app, and the phone stays tied to the chauffeur.", fl: "<code>POST /driver/auth</code> + SMS Retriever." }, () => `
+  ${bar(L("Sign in", "సైన్ ఇన్", "साइन इन"))}
   <div class="content"><div class="pad">
-    <button class="online ${st.online ? "on" : ""}" data-act="online" style="width:100%;text-align:left"><span class="pico" style="width:48px;height:48px;border-radius:24px;display:flex;align-items:center;justify-content:center;background:${st.online ? "rgba(255,255,255,.18)" : "var(--surface2)"}">${I("car")}</span><div class="grow"><div class="t-h3">${st.online ? L("You're online", "మీరు ఆన్‌లైన్‌లో ఉన్నారు", "आप ऑनलाइन हैं") : L("You're offline", "మీరు ఆఫ్‌లైన్", "आप ऑफ़लाइन हैं")}</div><div class="t-sub">${st.online ? L("Shift 06:00 – 14:00 · 4 h 12 m left", "షిఫ్ట్ 06:00 – 14:00 · 4 గం 12 ని మిగిలి", "शिफ़्ट 06:00 – 14:00 · 4 घं 12 मि बाकी") : L("Tap to go online", "ఆన్‌లైన్ కావడానికి నొక్కండి", "ऑनलाइन होने के लिए दबाएँ")}</div></div><span class="tgl ${st.online ? "on" : ""}"></span></button>
-    <div class="kpis mt12"><div>${L("Trips", "ట్రిప్పులు", "ट्रिप")}<b>5</b></div><div>${L("On time", "సమయానికి", "समय पर")}<b>100%</b></div><div>${L("Rating", "రేటింగ్", "रेटिंग")}<b>4.9</b></div></div>
+    <h1 class="t-title">${L("Welcome to SAGA", "SAGAకి స్వాగతం", "SAGA में स्वागत है")}</h1>
+    <p class="t-label mt24">${L("Employee ID", "ఉద్యోగి ID", "कर्मचारी ID")}</p>
+    <div class="field mt8"><input class="mono" value="SG-0142" aria-label="Employee ID" style="letter-spacing:.08em;font-size:19px"></div>
+    <p class="t-label mt16">${L("Registered mobile", "రిజిస్టర్డ్ మొబైల్", "रजिस्टर्ड मोबाइल")}</p>
+    <div class="field mt8"><b>+91</b><input value="98661 20442" type="tel" aria-label="Mobile" style="font-size:19px"></div>
+    <p class="t-label mt16">${L("Code from SMS", "SMS కోడ్", "SMS कोड")}</p>
+    <div class="boxes mt8">${"583014".split("").map((d, i) => `<span class="f" style="animation:popin .3s ${200 + i * 100}ms both">${d}</span>`).join("")}</div>
+  </div></div>
+  <div class="foot">${btn(L("Continue", "కొనసాగండి", "आगे बढ़ें"), { go: "verify", cls: "lg" })}</div>`);
+
+def("verify", { g: "Onboarding", n: "Profile checks", nav: 1, foot: 1, what: "First day only: licence, commercial badge, police verification, training and a selfie, each with its status. Anything pending has a one-tap fix.", why: "Riders trust SAGA because every chauffeur is verified. The app shows the chauffeur exactly what's done and what's left.", fl: "<code>GET /driver/compliance</code>; selfie via camera, matched by ops." }, () => {
+  const v = (icon, t, s, k = "ok") => `<div class="vrow"><span class="vi ${k === "warn" ? "warn" : ""}">${I(k === "warn" ? "clock" : "check")}</span><div style="flex:1"><b>${t}</b><span class="s">${s}</span></div></div>`;
+  return `${bar(L("Your profile", "మీ ప్రొఫైల్", "आपकी प्रोफ़ाइल"))}
+  <div class="content"><div class="pad">
+    <h1 class="t-title">${L("Almost ready, Ravi", "దాదాపు సిద్ధం, రవి", "लगभग तैयार, रवि")}</h1>
+    <p class="t-sub mt8">${L("SAGA checked these for you. One thing left.", "SAGA ఇవి తనిఖీ చేసింది. ఒక్కటే మిగిలి ఉంది.", "SAGA ने ये जाँच लिए। बस एक बाकी है।")}</p>
+    <div class="mt20">
+      ${v("card", L("Driving licence", "డ్రైవింగ్ లైసెన్స్", "ड्राइविंग लाइसेंस"), L("LMV-TR · valid till 2031", "LMV-TR · 2031 వరకు", "LMV-TR · 2031 तक"))}
+      ${v("shield", L("Commercial badge", "కమర్షియల్ బ్యాడ్జ్", "कमर्शियल बैज"), L("Verified by SAGA ops", "SAGA ఆప్స్ ధృవీకరించింది", "SAGA ऑप्स द्वारा सत्यापित"))}
+      ${v("shield", L("Police verification", "పోలీస్ వెరిఫికేషన్", "पुलिस सत्यापन"), L("Cleared 12 Oct 2026", "12 అక్టో 2026న క్లియర్", "12 अक्टू 2026 को पास"))}
+      ${v("user", L("Selfie for your ID card", "ID కార్డు కోసం సెల్ఫీ", "ID कार्ड के लिए सेल्फ़ी"), L("Matched to your licence", "లైసెన్స్‌తో సరిపోయింది", "लाइसेंस से मिलान"))}
+      ${v("spark", L("Training · 4 of 5 modules", "శిక్షణ · 5లో 4 మాడ్యూల్స్", "प्रशिक्षण · 5 में से 4 मॉड्यूल"), L("Airport etiquette · 6 min left", "ఎయిర్‌పోర్ట్ మర్యాద · 6 నిమి మిగిలి", "एयरपोर्ट शिष्टाचार · 6 मिनट बाकी"), "warn")}
+    </div>
+    <button class="btn btn-secondary block mt12" data-toast="${esc(L("Module 5 marked complete", "మాడ్యూల్ 5 పూర్తి", "मॉड्यूल 5 पूरा"))}">${I("spark")}${L("Finish module 5 now", "మాడ్యూల్ 5 ఇప్పుడే పూర్తి చేయండి", "मॉड्यूल 5 अभी पूरा करें")}</button>
+  </div></div>
+  <div class="foot">${btn(L("Continue", "కొనసాగండి", "आगे बढ़ें"), { go: "perms", cls: "lg" })}</div>`;
+});
+
+def("perms", { g: "Onboarding", n: "Permissions", nav: 1, foot: 1, what: "Location always (dispatch plans around where you are), job alerts on the lock screen, and the camera for the vehicle check.", why: "Each permission has one plain reason. Without them, jobs can't reach the chauffeur.", fl: "<code>permission_handler</code>: locationAlways, USE_FULL_SCREEN_INTENT, camera." }, () => {
+  const p = (k, icon, t, s) => `<div class="permrow" style="display:flex;gap:14px;align-items:flex-start;padding:16px;background:var(--surface);border-radius:6px;margin-top:3px"><span class="pico" style="width:42px;height:42px;border-radius:21px;background:var(--accent-soft);color:var(--on-accent-soft);display:flex;align-items:center;justify-content:center;flex:none">${I(icon)}</span><div style="flex:1"><b style="font-size:16.5px">${t}</b><div class="t-sub mt4">${s}</div></div>${tgl(st.perms[k], `data-act="perm" data-k="${k}"`)}</div>`;
+  return `${bar(L("Set up", "సెటప్", "सेटअप"))}
+  <div class="content"><div class="pad">
+    <h1 class="t-title">${L("Three things, then you're on", "మూడు అనుమతులు, తర్వాత మొదలు", "तीन चीज़ें, फिर शुरू")}</h1>
+    <div class="mt20" style="border-radius:24px;overflow:hidden">
+      ${p("loc", "pin", L("Location, always", "లొకేషన్, ఎల్లప్పుడూ", "लोकेशन, हमेशा"), L("So dispatch can plan jobs around where you are. Only during your shift.", "మీరు ఎక్కడున్నారో చూసి డిస్పాచ్ పనులు ప్లాన్ చేస్తుంది. షిఫ్ట్‌లో మాత్రమే.", "ताकि डिस्पैच आपकी जगह के हिसाब से काम तय करे। सिर्फ़ शिफ़्ट में।"))}
+      ${p("alerts", "bell", L("Job alerts", "జాబ్ అలర్ట్‌లు", "जॉब अलर्ट"), L("New jobs show full screen, even when the phone is locked.", "ఫోన్ లాక్‌లో ఉన్నా కొత్త పనులు పూర్తి స్క్రీన్‌లో.", "फ़ोन लॉक हो तब भी नया काम पूरी स्क्रीन पर।"))}
+      ${p("cam", "scan", L("Camera", "కెమెరా", "कैमरा"), L("For the 1-minute vehicle check before every shift.", "ప్రతి షిఫ్ట్‌కు ముందు 1 నిమిషం వాహన తనిఖీ కోసం.", "हर शिफ़्ट से पहले 1 मिनट की गाड़ी जाँच के लिए।"))}
+    </div>
+  </div></div>
+  <div class="foot">${btn(L("Start vehicle check", "వాహన తనిఖీ ప్రారంభించండి", "गाड़ी जाँच शुरू करें"), { act: "startcheck", cls: "lg", icon: "scan" })}</div>`;
+});
+
+/* ---------------- vehicle inspection ---------------- */
+def("inspect", { g: "Start of shift", n: "Vehicle check", sb: "light", what: "A guided photo check, inside and out: front, both sides, rear, cabins, boot, tyres and the dashboard. Each photo is checked as it's taken; marks already on record are recognised, new damage is flagged to ops.", why: "Every ride is a premium promise. The check takes a minute, protects the chauffeur from blame for old damage, and gives ops a dated record of every car, every shift.", fl: "<code>camera</code> package; photos to <code>POST /shifts/{id}/inspection</code>; damage comparison server-side against the last inspection. Odometer and charge read by on-device OCR." }, () => {
+  const total = st.mode === "end" ? 4 : STEPS.length, s = STEPS[Math.min(st.step, total - 1)], last = st.shots[st.shots.length - 1];
+  return `<div class="cam">
+    <div class="cam-top">
+      <div class="row-flex" style="justify-content:space-between"><button class="ibtn" data-back style="color:#fff">${I("close")}</button><span style="font-size:14px;color:#BFC2CA">${st.mode === "end" ? L("End-of-shift check", "షిఫ్ట్ ముగింపు తనిఖీ", "शिफ़्ट के अंत की जाँच") : L("Vehicle check", "వాహన తనిఖీ", "गाड़ी जाँच")} · ${Math.min(st.step + 1, total)} / ${total}</span><span style="width:48px"></span></div>
+      <div class="cam-steps">${Array.from({ length: total }, (_, i) => `<i class="${i < st.shots.length ? (st.shots[i] === "warn" ? "w" : "d") : i === st.step ? "c" : ""}"></i>`).join("")}</div>
+      <div class="cam-title">${L(...s[2])}</div>
+      <div class="cam-hint">${L(...s[3])}</div>
+    </div>
+    <div class="cam-frame ${st.busy ? "" : last && st.justShot ? last : ""}">${s[4] === "side" ? `<div class="guide">${S.car({ reflect: false })}</div>` : `<span class="gi">${I(s[1])}</span>`}${st.busy ? '<span class="cam-scan"></span>' : ""}</div>
+    ${st.busy ? `<div class="cam-res">${I("spark")}${L("Checking the photo…", "ఫోటో తనిఖీ చేస్తున్నాం…", "फ़ोटो जाँच रहे हैं…")}</div>` : st.justShot ? `<div class="cam-res ${last}">${I(last === "warn" ? "alert" : "check")}${st.lastNote}</div>` : ""}
+    <div class="cam-shots">${st.shots.map((r, i) => `<span class="${r === "warn" ? "w" : ""}">${I(STEPS[i][1])}</span>`).join("")}</div>
+    <button class="shutter" data-act="shoot" aria-label="${L("Take photo", "ఫోటో తీయండి", "फ़ोटो लें")}"><i></i></button>
+    ${st.flash ? '<div class="camflash"></div>' : ""}
+  </div>`;
+});
+
+def("checklist", { g: "Start of shift", n: "Ready to go", nav: 1, foot: 1, what: "Summary of the photo check, charge and odometer read from the dashboard photo, and the cabin checklist. Slide to go online.", why: "Sliding (not tapping) avoids going online by accident and makes starting the shift feel deliberate.", fl: "<code>POST /shifts/{id}/start</code>." }, () => {
+  const all = st.checks.every(Boolean);
+  const items = [L("Cabin and seats cleaned", "క్యాబిన్, సీట్లు శుభ్రం", "केबिन और सीटें साफ़"), L("4 chilled water bottles", "4 చల్లని నీళ్ల సీసాలు", "4 ठंडी पानी की बोतलें"), L("USB-C chargers in place", "USB-C ఛార్జర్లు ఉన్నాయి", "USB-C चार्जर मौजूद"), L("Child seat in the boot", "బూట్‌లో చైల్డ్ సీట్", "डिक्की में चाइल्ड सीट"), L("Uniform and ID card", "యూనిఫాం, ID కార్డు", "यूनिफ़ॉर्म और ID कार्ड")];
+  const warn = st.shots.filter(x => x === "warn").length;
+  return `${bar(L("Ready to go", "సిద్ధం", "तैयार"))}
+  <div class="content"><div class="pad">
+    <div class="card" style="border-radius:28px"><div class="row-flex"><span class="seal" style="width:56px;height:56px;margin:0">${I("check")}</span><div class="grow"><b style="font-size:18px">${L(`${st.shots.length} photos · no new damage`, `${st.shots.length} ఫోటోలు · కొత్త నష్టం లేదు`, `${st.shots.length} फ़ोटो · कोई नया नुकसान नहीं`)}</b><div class="t-sub">${warn ? L("1 mark already on record: rear bumper", "1 గుర్తు ఇప్పటికే రికార్డులో: వెనుక బంపర్", "1 निशान पहले से दर्ज: पिछला बम्पर") : L("All clear", "అంతా సరే", "सब ठीक")}</div></div></div></div>
+    <div class="kpis mt12"><div>${L("Charge", "ఛార్జ్", "चार्ज")}<b data-count="92">92</b>%</div><div>${L("Range", "రేంజ్", "रेंज")}<b data-count="300">300</b>km</div><div>${L("Odometer", "ఓడోమీటర్", "ओडोमीटर")}<b style="font-size:24px">12,408</b>km</div></div>
+    <h2 class="t-h3 mt24">${L("Cabin checklist", "క్యాబిన్ చెక్‌లిస్ట్", "केबिन चेकलिस्ट")}</h2>
+    <div class="mt12" style="border-radius:24px;overflow:hidden">${items.map((t, i) => `<button class="row" data-act="chk" data-v="${i}" style="background:var(--surface);border-radius:4px;margin-top:3px"><span class="tx" style="flex:1"><span class="t1" style="display:block">${t}</span></span>${tgl(st.checks[i])}</button>`).join("")}</div>
+  </div></div>
+  <div class="foot">${all ? S.slider(L("Slide to go online", "ఆన్‌లైన్‌కి స్లైడ్ చేయండి", "ऑनलाइन होने के लिए स्लाइड"), 'data-after="goonline"', "ink") : btn(L(`Tick ${st.checks.filter(x => !x).length} more to go online`, `ఆన్‌లైన్‌కు ఇంకా ${st.checks.filter(x => !x).length} టిక్ చేయండి`, `ऑनलाइन के लिए ${st.checks.filter(x => !x).length} और टिक करें`), { kind: "btn-secondary", cls: "lg", toast: L("Tick every item first", "ముందు అన్నీ టిక్ చేయండి", "पहले सब टिक करें") })}</div>`;
+});
+
+/* ---------------- duty ---------------- */
+def("duty", { g: "On duty", n: "Duty", tab: "duty", what: "Online card with the shift clock, the dispatch radar while a job is being planned, today's numbers, and the day's jobs in order: scheduled riders, airport pickups tied to flights, hotel guests.", why: "Salaried model: dispatch owns the plan, so chauffeurs never chase surge or guess where to wait.", fl: "<code>GET /driver/schedule</code> + WebSocket. In the suite, a booking on the rider phone arrives here live." }, () => `
+  ${bar(L("Today", "ఈ రోజు", "आज"), { back: false, large: true, actions: bell() })}
+  <div class="content"><div class="pad">
+    <button class="online press ${st.online ? "on" : ""}" data-act="online" style="width:100%;text-align:left"><span style="width:48px;height:48px;border-radius:24px;display:flex;align-items:center;justify-content:center;background:${st.online ? "rgba(255,255,255,.18)" : "var(--surface2)"}">${I("car")}</span><div class="grow"><div class="t-h3">${st.online ? L("You're online", "మీరు ఆన్‌లైన్‌లో ఉన్నారు", "आप ऑनलाइन हैं") : L("You're offline", "మీరు ఆఫ్‌లైన్", "आप ऑफ़लाइन हैं")}</div><div class="t-sub">${st.online ? L("Shift 06:00 – 14:00 · 4 h 12 m left", "షిఫ్ట్ 06:00 – 14:00 · 4 గం 12 ని", "शिफ़्ट 06:00 – 14:00 · 4 घं 12 मि बाकी") : L("Do the vehicle check to go online", "ఆన్‌లైన్‌కు వాహన తనిఖీ చేయండి", "ऑनलाइन होने के लिए गाड़ी जाँच करें")}</div></div>${tgl(st.online)}</button>
+    ${st.online ? `<div class="radar mt12"><span class="dish"></span><div><b>${L("Dispatch is planning your next job", "డిస్పాచ్ మీ తదుపరి పని ప్లాన్ చేస్తోంది", "डिस्पैच आपका अगला काम तय कर रहा है")}</b><span>${L("Stay near MVP Colony. No need to move.", "MVP కాలనీ దగ్గర ఉండండి. కదలనక్కర్లేదు.", "MVP कॉलोनी के पास रहें। हिलने की ज़रूरत नहीं।")}</span></div></div>` : ""}
+    <div class="kpis mt12"><div>${L("Trips", "ట్రిప్పులు", "ट्रिप")}<b data-count="5">5</b></div><div>${L("On time", "సమయానికి", "समय पर")}<b><span data-count="100">100</span>%</b></div><div>${L("Rating", "రేటింగ్", "रेटिंग")}<b data-count="4.9">4.9</b></div></div>
   </div>
   ${sh(L("Your jobs", "మీ పనులు", "आपके काम"))}
   <div class="pad">
-    <button class="job next" data-go="request"><time>09:00</time><div class="grow"><span class="ty">${I("repeat", "sm")}${L("Scheduled", "షెడ్యూల్", "शेड्यूल")}</span><div class="t-h3 mt8">Ananya Rao</div><div class="t-sub">MVP Colony → Dwaraka Nagar · 12 km</div></div>${I("chevr")}</button>
-    <button class="job" data-go="waiting"><time>11:20</time><div class="grow"><span class="ty">${I("landing", "sm")}${L("Airport pickup", "ఎయిర్‌పోర్ట్ పికప్", "एयरपोर्ट पिकअप")}</span><div class="t-h3 mt8">Mr. S. Sharma</div><div class="t-sub">AI 1912 ${L("lands", "ల్యాండింగ్", "लैंडिंग")} 11:05 · ${L("on time", "సమయానికి", "समय पर")}</div></div>${I("chevr")}</button>
-    <button class="job" data-toast="${esc(L("Hotel booking: guest at the lobby, bill to room", "హోటల్ బుకింగ్: లాబీలో అతిథి, రూమ్ బిల్", "होटल बुकिंग: लॉबी में मेहमान, रूम बिल"))}"><time>13:30</time><div class="grow"><span class="ty">${I("hotel", "sm")}${L("Hotel", "హోటల్", "होटल")}</span><div class="t-h3 mt8">${L("Guest · Room 412", "అతిథి · రూమ్ 412", "मेहमान · रूम 412")}</div><div class="t-sub">Bay Pavilion Hotel → Railway Station</div></div>${I("chevr")}</button>
+    <button class="job next press" data-go="assigned"><time>09:00</time><div class="grow"><span class="ty">${I("repeat", "sm")}${L("Scheduled", "షెడ్యూల్", "शेड्यूल")}</span><div class="t-h3 mt8">Ananya Rao</div><div class="t-sub">MVP Colony → Dwaraka Nagar · 12 km</div></div>${I("chevr")}</button>
+    <button class="job press" data-go="waiting"><time>11:20</time><div class="grow"><span class="ty">${I("landing", "sm")}${L("Airport pickup", "ఎయిర్‌పోర్ట్ పికప్", "एयरपोर्ट पिकअप")}</span><div class="t-h3 mt8">Mr. S. Sharma</div><div class="t-sub">AI 1912 · ${L("lands 11:05, on time", "11:05 ల్యాండింగ్, సమయానికి", "11:05 लैंडिंग, समय पर")}</div></div>${I("chevr")}</button>
+    <button class="job press" data-toast="${esc(L("Hotel booking: guest at the porch, billed to room", "హోటల్ బుకింగ్: పోర్చ్ వద్ద అతిథి, రూమ్ బిల్", "होटल बुकिंग: पोर्च पर मेहमान, रूम बिल"))}"><time>13:30</time><div class="grow"><span class="ty">${I("hotel", "sm")}${L("Hotel", "హోటల్", "होटल")}</span><div class="t-h3 mt8">${L("Guest · Room 412", "అతిథి · రూమ్ 412", "मेहमान · रूम 412")}</div><div class="t-sub">Bay Pavilion → Railway Station</div></div>${I("chevr")}</button>
+    <button class="job press" data-go="vehicle"><time>14:00</time><div class="grow"><span class="ty">${I("bolt", "sm")}${L("Charging", "ఛార్జింగ్", "चार्जिंग")}</span><div class="t-h3 mt8">SAGA hub, Madhurawada</div><div class="t-sub">${L("Fast charger 2 · 40 min · break included", "ఫాస్ట్ ఛార్జర్ 2 · 40 నిమి · విరామం", "फ़ास्ट चार्जर 2 · 40 मिनट · ब्रेक शामिल")}</div></div>${I("chevr")}</button>
   </div>
-  <div class="pad mt16"><div class="card pad0 darkmap" style="height:170px;overflow:hidden;border-radius:30px;${S.darkMap()}">${S.map({ view: [90, 100, 260, 170], car: [260, 180, 90] })}</div></div>
-  <div class="pad mt16"><div class="promo"><span class="promo-wm" aria-hidden="true">SAGA</span><span class="promo-k">${S.logo()}</span><div class="promo-h">${L("Every ride,<br><mark>on time.</mark>", "ప్రతి రైడ్,<br><mark>సమయానికి.</mark>", "हर राइड,<br><mark>समय पर।</mark>")}</div><p class="promo-s">${L("You're 100% on time this week. Thank you, Ravi.", "ఈ వారం మీరు 100% సమయానికి ఉన్నారు. ధన్యవాదాలు, రవి.", "इस हफ़्ते आप 100% समय पर रहे। धन्यवाद, रवि।")}</p></div></div>
-  </div>`);
+  <div class="pad mt16"><div class="promo"><span class="promo-wm" aria-hidden="true">SAGA</span><span class="promo-k">${S.logo()}</span><div class="promo-h">${L("Every ride,<br><mark>on time.</mark>", "ప్రతి రైడ్,<br><mark>సమయానికి.</mark>", "हर राइड,<br><mark>समय पर।</mark>")}</div><p class="promo-s">${L("You're 100% on time this week. Thank you, Ravi.", "ఈ వారం మీరు 100% సమయానికి. ధన్యవాదాలు, రవి.", "इस हफ़्ते आप 100% समय पर। धन्यवाद, रवि।")}</p></div></div>
+  </div>`, () => { if (st.autoAssign && st.online) { st.autoAssign = false; timer(() => { if (cur === "duty") { notify("car", L("New job assigned", "కొత్త పని కేటాయించబడింది", "नया काम मिला"), L("Ananya Rao · MVP Colony → Dwaraka Nagar", "అనన్య రావు · MVP కాలనీ → ద్వారకా నగర్", "अनन्या राव · MVP कॉलोनी → द्वारका नगर")); go("assigned"); } }, 4200); } });
 
-def("request", { n: "Job offered", tabs: 0, what: "Full-screen job card with a 15-second ring: pickup distance, rider, trip type, drop. Accept, or decline with a reason.", why: "Big targets and big type so it can be read at a glance in a parked car.", fl: "High-priority FCM data message → full-screen intent (Android <code>USE_FULL_SCREEN_INTENT</code>, allowed for ride-hailing). Response: <code>POST /jobs/{id}/accept</code>." }, () => `
+def("assigned", { g: "On duty", n: "Job assigned", what: "Full-screen brief in the brand colour: rider, pickup, drop, trip type, and a 10-second ring that acknowledges by itself. No accept / reject.", why: "Salaried model: jobs are assigned, not auctioned. The chauffeur gets a clear brief, not a decision under time pressure.", fl: "High-priority FCM data message → full-screen intent. <code>POST /jobs/{id}/ack</code>. In the suite, this is triggered by the rider sliding to book." }, () => `
   <div class="req">
-    <div class="center">${pill("repeat", L("Scheduled ride · repeat rider", "షెడ్యూల్ రైడ్ · రెగ్యులర్ రైడర్", "शेड्यूल राइड · नियमित सवारी"), "accent")}</div>
-    <div class="ring"><svg viewBox="0 0 180 180"><circle class="bg" cx="90" cy="90" r="80"/><circle class="fg" cx="90" cy="90" r="80"/></svg><div class="c"><b>4 min</b><span class="t-sub">${L("to pickup", "పికప్‌కు", "पिकअप तक")}</span></div></div>
-    <div class="rider mt24"><span class="ph">AR</span><div class="grow"><div class="t-h3">Ananya Rao</div><div class="t-sub">★ 4.8 · ${L("prefers a quiet ride", "నిశ్శబ్ద ప్రయాణం ఇష్టం", "शांत सफ़र पसंद")}</div></div></div>
-    <div class="card mt12" style="padding:6px 18px">
-      <div class="row-flex" style="min-height:58px"><span style="width:14px;height:14px;border-radius:7px;border:4px solid var(--accent)"></span><div class="grow"><div class="t-label">${L("Pickup", "పికప్", "पिकअप")}</div><div class="t-body">MVP Colony, Sector 4</div></div><b>1.6 km</b></div>
-      <div class="hr" style="margin:0 0 0 28px"></div>
-      <div class="row-flex" style="min-height:58px"><span style="width:14px;height:14px;border-radius:3px;background:var(--fg)"></span><div class="grow"><div class="t-label">${L("Drop", "డ్రాప్", "ड्रॉप")}</div><div class="t-body">Dwaraka Nagar</div></div><b>12.4 km</b></div>
+    <div class="center">${pill("car", st.riderLive ? L("Booked just now in the rider app", "రైడర్ యాప్‌లో ఇప్పుడే బుక్", "राइडर ऐप में अभी बुक") : L("Scheduled ride · repeat rider", "షెడ్యూల్ రైడ్ · రెగ్యులర్ రైడర్", "शेड्यूल राइड · नियमित सवारी"), "dark")}</div>
+    <div class="ring"><svg viewBox="0 0 180 180"><circle class="bg" cx="90" cy="90" r="80"/><circle class="fg" cx="90" cy="90" r="80"/></svg><div class="c"><b>4</b><span class="t-sub">${L("min to pickup", "నిమి పికప్‌కు", "मिनट पिकअप तक")}</span></div></div>
+    <div class="rcard mt20"><div class="rr"><span style="width:46px;height:46px;border-radius:23px;background:#fff;color:var(--accent);font-weight:700;display:flex;align-items:center;justify-content:center">${st.job.ini}</span><div class="grow"><b style="font-size:18px">${st.job.rider}</b><div class="t-sub">★ 4.8 · ${L("prefers a quiet ride", "నిశ్శబ్ద ప్రయాణం ఇష్టం", "शांत सफ़र पसंद")}</div></div></div>
+      <div class="hr" style="margin:6px 0"></div>
+      <div class="rr">${I("pin")}<div class="grow"><b>${st.job.pick}</b><div class="t-sub">${L("Pickup · 1.6 km away", "పికప్ · 1.6 కి.మీ", "पिकअप · 1.6 किमी")}</div></div></div>
+      <div class="rr">${I("flag")}<div class="grow"><b>${st.job.drop}</b><div class="t-sub">${st.job.km} km · ${L("fixed fare, prepaid", "స్థిర ఛార్జీ, ముందే చెల్లింపు", "तय किराया, पहले से भुगतान")}</div></div></div>
     </div>
-    <div style="margin-top:auto">${btn(L("Accept", "అంగీకరించు", "स्वीकार करें"), { go: "topickup", cls: "lg" })}<button class="btn btn-text block mt8" data-back>${L("Can't take this", "తీసుకోలేను", "नहीं ले सकता")}</button></div>
-  </div>`);
+    <div style="margin-top:auto">${btn(L("Start navigation", "నావిగేషన్ ప్రారంభించండి", "नेविगेशन शुरू करें"), { act: "ack", kind: "btn-stage", cls: "lg", icon: "nav" })}<button class="btn btn-text block mt8" style="color:#fff" data-toast="${esc(L("Ops will call you in 1 minute", "ఆప్స్ 1 నిమిషంలో కాల్ చేస్తారు", "ऑप्स 1 मिनट में कॉल करेंगे"))}">${L("Report a problem", "సమస్య తెలపండి", "समस्या बताएँ")}</button></div>
+  </div>`, () => timer(() => { if (cur === "assigned") A.ack(); }, 10000));
 
-def("topickup", { n: "To pickup", tabs: 0, map: 1, what: "Turn-by-turn banner in SAGA colours, the route on the branded map, ETA, rider, and a single 'I've arrived' action.", why: "One glance for direction, one tap when there. Calls are masked so neither number is shared.", fl: "Google Navigation SDK for Android (or hand-off to Google Maps). Masked calling via the client's telephony provider (e.g. Exotel)." }, () => `
-  <div class="mapwrap">${S.map({ route: "pickup", car: [260, 210, 180], view: [79, 70, 263, 571], labelPickup: "Ananya" })}</div>
+def("topickup", { g: "On the job", n: "To pickup", map: 1, what: "Turn card, branded map, ETA, rider, masked call and in-app chat with an unread badge. 'I've arrived' tells the rider instantly.", why: "One glance for direction, one tap when there.", fl: "Navigation SDK; arrival event to the rider app over WebSocket." }, () => `
+  <div class="mapwrap">${S.map({ route: "pickup", car: [260, 210, 180], view: [79, 70, 263, 571], labelPickup: st.job.rider.split(" ")[0] })}</div>
   <div class="turn">${I("arrowr")}<div><b>${L("Right onto Beach Road", "బీచ్ రోడ్ వైపు కుడికి", "बीच रोड पर दाएँ")}</b><span>300 m</span></div></div>
   <div class="sheet"><div class="grabber"></div>
     <div class="row-flex"><div class="grow"><div class="t-title">4 min</div><div class="t-sub">1.6 km · ${L("arrive 8:56 AM", "ఉ. 8:56కి చేరుకోండి", "सुबह 8:56 पहुँचें")}</div></div>${pill("check", L("Early", "ముందుగా", "समय से पहले"), "ok")}</div>
-    <div class="rider mt16"><span class="ph">AR</span><div class="grow"><div class="t-h3">Ananya Rao</div><div class="t-sub">${L("Gate 2, near the park", "గేట్ 2, పార్క్ దగ్గర", "गेट 2, पार्क के पास")}</div></div></div>
-    <div class="acts mt16"><button class="act" data-toast="${esc(L("Calling rider (number masked)", "రైడర్‌కు కాల్ (నంబర్ దాచబడింది)", "सवारी को कॉल (नंबर छुपा)"))}"><span class="c">${I("phone")}</span>${L("Call", "కాల్", "कॉल")}</button><button class="act" data-toast="${esc(L("Quick replies: I've arrived · 2 min away", "త్వరిత సందేశాలు: వచ్చాను · 2 నిమిషాల్లో", "क्विक रिप्लाई: पहुँच गया · 2 मिनट"))}"><span class="c">${I("chat")}</span>${L("Message", "సందేశం", "मैसेज")}</button><button class="act sos" data-toast="${esc(L("SOS sent to SAGA control room", "SOS SAGA కంట్రోల్ రూమ్‌కు పంపాం", "SOS SAGA कंट्रोल रूम भेजा"))}"><span class="c">${I("shield")}</span>SOS</button></div>
-    <div class="mt16">${btn(L("I've arrived", "నేను చేరుకున్నాను", "मैं पहुँच गया"), { go: "waiting", cls: "lg" })}</div>
+    <div class="rider mt16"><span class="ph">${st.job.ini}</span><div class="grow"><div class="t-h3">${st.job.rider}</div><div class="t-sub">${L("Gate 2, near the park", "గేట్ 2, పార్క్ దగ్గర", "गेट 2, पार्क के पास")}</div></div></div>
+    <div class="acts mt16"><button class="act" data-toast="${esc(L("Calling rider (number masked)", "రైడర్‌కు కాల్ (నంబర్ దాచబడింది)", "सवारी को कॉल (नंबर छुपा)"))}"><span class="c">${I("phone")}</span>${L("Call", "కాల్", "कॉल")}</button><button class="act" data-go="chat"><span class="c">${I("chat")}${unread() ? `<i>${unread()}</i>` : ""}</span>${L("Chat", "చాట్", "चैट")}</button><button class="act sos" data-toast="${esc(L("SOS sent to SAGA control room", "SOS SAGA కంట్రోల్ రూమ్‌కు", "SOS SAGA कंट्रोल रूम भेजा"))}"><span class="c">${I("shield")}</span>SOS</button></div>
+    <div class="mt16">${btn(L("I've arrived", "నేను చేరుకున్నాను", "मैं पहुँच गया"), { act: "arrived", cls: "lg" })}</div>
   </div>`);
 
-def("waiting", { n: "At pickup", tabs: 0, nav: 1, foot: 1, what: "Free-wait timer and rider status. For airport pickups: flight landing time and belt, with the wait starting from landing.", why: "Removes guesswork at Arrivals; the rider gets the same information.", fl: "Waiting rules per trip type from <code>GET /policies</code> (client to confirm: 10 min city, 45 min after landing)." }, () => `
+def("waiting", { g: "On the job", n: "At pickup", nav: 1, foot: 1, what: "Free-wait timer and rider status. For airport pickups, the flight's landing time and belt; the wait starts from landing.", why: "Removes guesswork at Arrivals; the rider sees the same.", fl: "Waiting rules from <code>GET /policies</code>." }, () => `
   ${bar(L("At pickup", "పికప్ వద్ద", "पिकअप पर"))}
   <div class="content"><div class="pad">
-    <div class="flightbox"><span class="pico" style="width:48px;height:48px;border-radius:24px;background:var(--accent);color:var(--on-accent);display:flex;align-items:center;justify-content:center">${I("landing")}</span><div class="grow"><div class="t-h3">AI 1912 ${L("landed 11:02", "11:02కి ల్యాండ్", "11:02 पर लैंड")}</div><div class="t-sub">${L("Belt 3 · guest notified you're at Arrivals", "బెల్ట్ 3 · మీరు అరైవల్స్‌లో ఉన్నారని తెలిపాం", "बेल्ट 3 · मेहमान को बताया आप अराइवल पर हैं")}</div></div></div>
-    <div class="card mt12 center"><div class="t-label">${L("Free waiting", "ఉచిత వెయిటింగ్", "मुफ़्त इंतज़ार")}</div><div class="timer mt8">08:12</div><div class="progress mt12"><i style="width:18%"></i></div><p class="t-sub mt8">${L("of 45 min after landing", "ల్యాండింగ్ తర్వాత 45 నిమిషాల్లో", "लैंडिंग के बाद 45 मिनट में से")}</p></div>
-    <div class="rider mt12"><span class="ph">SS</span><div class="grow"><div class="t-h3">Mr. S. Sharma</div><div class="t-sub">${L("Name board ready · 2 bags", "పేరు బోర్డు సిద్ధం · 2 బ్యాగులు", "नाम की तख्ती तैयार · 2 बैग")}</div></div><button class="ibtn" data-toast="${esc(L("Calling guest (number masked)", "అతిథికి కాల్", "मेहमान को कॉल"))}">${I("phone")}</button></div>
+    <div class="card center" style="border-radius:30px"><div class="t-label">${L("Free waiting", "ఉచిత వెయిటింగ్", "मुफ़्त इंतज़ार")}</div><div class="timer mt8" id="wt">00:00</div><div class="progress mt12"><i id="wtb" style="width:0%"></i></div><p class="t-sub mt8">${L("of 10 min · the rider has been told you're here", "10 నిమిషాల్లో · మీరు వచ్చారని రైడర్‌కు తెలిపాం", "10 मिनट में से · सवारी को बता दिया है")}</p></div>
+    <div class="rider mt12"><span class="ph">${st.job.ini}</span><div class="grow"><div class="t-h3">${st.job.rider}</div><div class="t-sub">${L("Coming down", "కిందకు వస్తున్నారు", "नीचे आ रही हैं")}</div></div><button class="ibtn" data-go="chat">${I("chat")}</button></div>
+    <div class="flightbox mt12"><span style="width:44px;height:44px;border-radius:22px;background:var(--accent-soft);color:var(--on-accent-soft);display:flex;align-items:center;justify-content:center">${I("landing")}</span><div class="grow"><b>${L("Next: AI 1912 lands 11:05", "తదుపరి: AI 1912 11:05కి", "अगला: AI 1912 11:05 पर")}</b><div class="t-sub">${L("Arrivals pickup chained after this ride", "ఈ రైడ్ తర్వాత అరైవల్స్ పికప్", "इस राइड के बाद अराइवल पिकअप")}</div></div></div>
   </div></div>
-  <div class="foot">${btn(L("Enter rider's code", "రైడర్ కోడ్ ఎంటర్ చేయండి", "सवारी का कोड डालें"), { go: "code", cls: "lg" })}</div>`);
+  <div class="foot">${btn(L("Enter rider's code", "రైడర్ కోడ్ ఎంటర్ చేయండి", "सवारी का कोड डालें"), { go: "code", cls: "lg" })}</div>`, () => { const t0 = Date.now(); const tick = () => { if (cur !== "waiting") return; const s = Math.floor((Date.now() - t0) / 1000) + 12, el = $("#wt"); if (el) { el.textContent = `0${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; $("#wtb").style.width = Math.min(100, s / 6) + "%"; } timer(tick, 1000); }; tick(); });
 
-def("code", { n: "Start with code", tabs: 0, nav: 1, what: "The chauffeur types the rider's 4-digit code. Only a matching code starts the trip.", why: "Prevents wrong-car pickups at busy airports and hotel porches.", fl: "<code>POST /rides/{id}/start {code}</code>; three wrong tries alert ops." }, () => `
+def("code", { g: "On the job", n: "Start with code", nav: 1, what: "The chauffeur types the rider's 4-digit code. Digits pop in; a wrong code shakes red; the right one turns green and the rider's app moves into the ride by itself.", why: "Prevents wrong-car pickups at busy airports and hotel porches.", fl: "<code>POST /rides/{id}/start {code}</code>; three wrong tries alert ops." }, () => `
   ${bar(L("Start the ride", "రైడ్ ప్రారంభించండి", "राइड शुरू करें"))}
   <div class="content"><div class="pad center">
     <h1 class="t-title">${L("Ask the rider for their code", "రైడర్‌ను కోడ్ అడగండి", "सवारी से कोड पूछें")}</h1>
-    <p class="t-sub mt8">${L("It's on their phone, under 'Your ride code'.", "వారి ఫోన్‌లో 'మీ రైడ్ కోడ్' కింద ఉంటుంది.", "उनके फ़ोन पर 'आपका राइड कोड' में है।")}</p>
-    <div class="codein ${st.code === "4827" ? "ok" : ""}">${[0, 1, 2, 3].map(i => `<span class="${st.code[i] ? "f" : ""}">${st.code[i] || ""}</span>`).join("")}</div>
-    ${st.code.length === 4 ? `<p class="mt16" style="font-weight:600;color:${st.code === "4827" ? "var(--success)" : "var(--danger)"}">${st.code === "4827" ? L("Code matches. Starting the ride…", "కోడ్ సరిపోయింది. రైడ్ మొదలవుతోంది…", "कोड सही है। राइड शुरू हो रही है…") : L("That code doesn't match. Try again.", "కోడ్ సరిపోలేదు. మళ్ళీ ప్రయత్నించండి.", "कोड मेल नहीं खाता। फिर कोशिश करें।")}</p>` : `<p class="t-sub mt16">${L("Demo code: 4827", "డెమో కోడ్: 4827", "डेमो कोड: 4827")}</p>`}
+    <p class="t-sub mt8">${L("It's on their phone, under 'Your ride code'.", "వారి ఫోన్‌లో 'మీ రైడ్ కోడ్' కింద.", "उनके फ़ोन पर 'आपका राइड कोड' में।")}</p>
+    <div class="codein ${st.code === "4827" ? "ok" : st.bad ? "bad shake" : ""}">${[0, 1, 2, 3].map(i => `<span class="${st.code[i] ? "f" : ""}">${st.code[i] || ""}</span>`).join("")}</div>
+    <p class="mt16 ${st.code === "4827" ? "" : "t-sub"}" style="font-weight:600;${st.code === "4827" ? "color:var(--success)" : st.bad ? "color:var(--danger)" : ""}">${st.code === "4827" ? L("Code matches. Starting the ride…", "కోడ్ సరిపోయింది. రైడ్ మొదలవుతోంది…", "कोड सही है। राइड शुरू हो रही है…") : st.bad ? L("That code doesn't match. Try again.", "కోడ్ సరిపోలేదు. మళ్ళీ ప్రయత్నించండి.", "कोड मेल नहीं खाता। फिर कोशिश करें।") : L("Demo code: 4827", "డెమో కోడ్: 4827", "डेमो कोड: 4827")}</p>
     <div class="keys">${[1, 2, 3, 4, 5, 6, 7, 8, 9, "", 0, "⌫"].map(k => k === "" ? "<span></span>" : `<button data-act="key" data-v="${k}">${k}</button>`).join("")}</div>
   </div></div>`);
 
-def("trip", { n: "On trip", tabs: 0, map: 1, what: "Navigation to the drop with the rider's requests shown as they arrive (cooler, quieter, stop here), in the chauffeur's language.", why: "The rider's app sends canned requests in English; the chauffeur reads them in Telugu or Hindi.", fl: "Same navigation component. Rider requests arrive as typed events and are localised on device." }, () => `
-  <div class="mapwrap">${S.map({ route: "trip", car: [140, 380, 180], view: [-20, 232, 441, 960], labelDrop: "Dwaraka Nagar" })}</div>
+def("trip", { g: "On the job", n: "On trip", map: 1, what: "Navigation to the drop. Rider requests arrive live (in the chauffeur's language); a safety attention alert drops in and is logged for human review. Slide to end the trip.", why: "Safety is visible and fair. Sliding to end avoids ending a trip by a stray tap while driving.", fl: "Same navigation component. Driver-monitoring events from the in-car camera (if fitted) logged to <code>/safety</code>." }, () => `
+  <div class="mapwrap">${S.map({ route: "trip", car: [140, 380, 180], view: [-20, 232, 441, 960], labelDrop: st.job.drop })}</div>
   <div class="turn">${I("arrowu")}<div><b>${L("Continue on VIP Road", "VIP రోడ్‌లో నేరుగా", "VIP रोड पर सीधे")}</b><span>1.2 km</span></div></div>
+  ${st.safety ? `<div class="safety">${I("alert")}<span>${L("Attention check: eyes on the road. Logged for review, no penalty.", "అటెన్షన్ చెక్: రోడ్డుపై దృష్టి. రివ్యూకు నమోదు, జరిమానా లేదు.", "ध्यान जाँच: नज़र सड़क पर। समीक्षा के लिए दर्ज, कोई दंड नहीं।")}</span></div>` : ""}
   <div class="sheet"><div class="grabber"></div>
-    <div class="row-flex"><div class="grow"><div class="t-title">12 min</div><div class="t-sub">5.1 km · ${L("drop 9:22 AM", "ఉ. 9:22కి డ్రాప్", "सुबह 9:22 ड्रॉप")}</div></div>${pill("snow", L("Rider: cooler, please", "రైడర్: AC పెంచండి", "सवारी: AC ठंडा करें"), "accent")}</div>
-    <div class="progress mt16"><i style="width:58%"></i></div>
-    <div class="mt20">${btn(L("End trip", "ట్రిప్ ముగించు", "ट्रिप खत्म करें"), { go: "done", cls: "lg", kind: "btn-ink" })}</div>
-  </div>`);
+    <div class="row-flex"><div class="grow"><div class="t-title">12 min</div><div class="t-sub">5.1 km · ${L("drop 9:22 AM", "ఉ. 9:22కి డ్రాప్", "सुबह 9:22 ड्रॉप")}</div></div><button class="ibtn" data-go="chat">${I("chat")}</button></div>
+    <div class="progress mt12"><i style="width:58%"></i></div>
+    <div class="mt20">${S.slider(L("Slide to end trip", "ట్రిప్ ముగించడానికి స్లైడ్", "ट्रिप खत्म करने के लिए स्लाइड"), 'data-after="endtrip"', "ink")}</div>
+  </div>`, () => { timer(() => { if (cur === "trip") { st.safety = true; rerender(); timer(() => { st.safety = false; if (cur === "trip") rerender(); }, 4500); } }, 2200); });
 
-def("done", { n: "Trip complete", tabs: 0, foot: 1, what: "Paid status (prepaid UPI, cash, or billed to hotel), distance and time, and a rider rating.", why: "No fare haggling: SAGA prices are fixed and payment is settled by the system.", fl: "<code>POST /rides/{id}/complete</code> with odometer/GPS distance; payment state from backend." }, () => `
+def("done", { g: "On the job", n: "Trip complete", foot: 1, what: "Paid status, distance and time, rider rating, and the next job already lined up.", why: "No fare handling and no idle time: dispatch chains the next job.", fl: "<code>POST /rides/{id}/complete</code>; next job from the schedule." }, () => `
   <div class="content"><div class="pad center" style="padding-top:30px">
     <div class="seal">${I("check")}</div>
     <h1 class="t-title mt20">${L("Trip complete", "ట్రిప్ పూర్తయింది", "ट्रिप पूरी हुई")}</h1>
-    <p class="t-sub mt8">${L("Paid by UPI · nothing to collect", "UPI ద్వారా చెల్లించారు · వసూలు చేయాల్సింది ఏమీ లేదు", "UPI से भुगतान · कुछ लेना नहीं")}</p>
-    <div class="kpis mt24"><div>${L("Distance", "దూరం", "दूरी")}<b>12.4</b>km</div><div>${L("Time", "సమయం", "समय")}<b>27</b>min</div><div>${L("Fare", "ఛార్జీ", "किराया")}<b>₹287</b>${L("fixed", "స్థిరం", "तय")}</div></div>
-    <div class="t-h3 mt24">${L("Rate Ananya", "అనన్యకు రేటింగ్", "अनन्या को रेट करें")}</div>
+    <p class="t-sub mt8">${L("Paid by UPI · nothing to collect", "UPI ద్వారా చెల్లించారు · వసూలు లేదు", "UPI से भुगतान · कुछ लेना नहीं")}</p>
+    <div class="kpis mt24"><div>${L("Distance", "దూరం", "दूरी")}<b data-count="12.4">12.4</b>km</div><div>${L("Time", "సమయం", "समय")}<b data-count="27">27</b>min</div><div>${L("Fare", "ఛార్జీ", "किराया")}<b>₹287</b></div></div>
+    <div class="t-h3 mt24">${L("Rate", "రేటింగ్", "रेट करें")} ${st.job.rider.split(" ")[0]}</div>
     <div class="stars mt12">${[1, 2, 3, 4, 5].map(n => `<button class="${n <= st.rating ? "on" : ""}" data-act="rate" data-v="${n}">${I("star")}</button>`).join("")}</div>
+    <div class="job next mt24" style="text-align:left"><time>11:20</time><div class="grow"><span class="ty">${I("landing", "sm")}${L("Next job", "తదుపరి పని", "अगला काम")}</span><div class="t-h3 mt8">Mr. S. Sharma · AI 1912</div><div class="t-sub">${L("Arrivals · on time · 18 min drive", "అరైవల్స్ · సమయానికి · 18 నిమి", "अराइवल · समय पर · 18 मिनट")}</div></div></div>
   </div></div>
-  <div class="foot">${btn(L("Back to duty", "డ్యూటీకి తిరిగి", "ड्यूटी पर वापस"), { go: "duty", cls: "lg" })}</div>`);
+  <div class="foot">${btn(L("Start next job", "తదుపరి పని ప్రారంభించండి", "अगला काम शुरू करें"), { go: "waiting", cls: "lg", icon: "nav" })}</div>`);
 
-def("vehicle", { n: "Car & charging", tab: "car", what: "Charge level, estimated range for the rest of the shift, and the charging slot ops has booked.", why: "Range is managed centrally so chauffeurs never refuse a trip for charge.", fl: "Telematics or OBD feed if Mahindra exposes it; otherwise chauffeur-entered SoC at shift start. Charging slots from ops." }, () => `
-  ${bar(L("Your car", "మీ కారు", "आपकी गाड़ी"), { back: false, large: true })}
+def("chat", { g: "On the job", n: "Chat with rider", nav: 1, what: "In-app chat with quick replies. Each side reads the other's message in their own language (Telugu, Hindi, English).", why: "No personal numbers shared, no typing while driving, no language barrier.", fl: "Canned message keys over WebSocket; rendered per reader's locale. Free text goes through a translation API." }, () => `
+  ${bar(st.job.rider, { actions: `<button class="ibtn" data-toast="${esc(L("Calling rider (number masked)", "రైడర్‌కు కాల్", "सवारी को कॉल"))}">${I("phone")}</button>` })}
+  <div class="content" style="padding-bottom:170px"><p class="t-sub center">${L("Messages are translated for each of you", "సందేశాలు ఇద్దరికీ అనువదించబడతాయి", "संदेश दोनों के लिए अनुवाद होते हैं")}</p>
+    <div class="msgs">${S.chat.get().map(m => `<div class="bub ${m.who === "driver" ? "me" : "them"}">${S.msg(m.k)}<small>${m.at}</small></div>`).join("")}</div></div>
+  <div class="foot"><div class="qr">${["arrived", "traffic", "gate", "sure"].map(k => `<button class="chip" data-act="say" data-v="${k}">${S.msg(k)}</button>`).join("")}</div></div>`, () => { st.read = S.chat.get().length; const c = $("#views .view:last-child .content"); if (c) c.scrollTop = 9999; });
+
+/* ---------------- car & me ---------------- */
+def("vehicle", { g: "Car & me", n: "Charging", tab: "car", what: "Charge ring with the level needed for the rest of the plan, the booked bay, and Start charging that fills the ring and counts kWh.", why: "No range anxiety and no queuing at public chargers: charging is planned by dispatch.", fl: "Telematics if available; charger session via the hub's OCPP backend." }, () => {
+  const c = st.charge, off = 534 - 534 * c / 100;
+  return `${bar(L("Your car", "మీ కారు", "आपकी गाड़ी"), { back: false, large: true, actions: bell() })}
   <div class="content"><div class="pad">
-    <div class="card stage pad0" style="padding:18px 18px 0;overflow:hidden"><div class="t-label" style="color:var(--on-stage2)">${V.plate}</div><div class="t-h3" style="color:#fff">${V.make} ${V.model}</div><div style="margin:0 -10px -30px">${S.car()}</div></div>
-    <div class="card mt12"><div class="batt"><span class="big t-num">64%</span><span class="t-sub" style="padding-bottom:8px">${L("about 210 km left", "సుమారు 210 కి.మీ మిగిలి", "लगभग 210 किमी बाकी")}</span></div><div class="cell mt12"><i style="width:64%"></i></div><p class="t-sub mt8">${L("Enough for your remaining 3 jobs (≈ 74 km).", "మిగిలిన 3 పనులకు సరిపోతుంది (≈ 74 కి.మీ).", "बाकी 3 कामों के लिए काफ़ी (≈ 74 किमी)।")}</p></div>
+    <div class="card center" style="border-radius:32px;padding:24px"><div class="ringc"><svg viewBox="0 0 200 200"><circle class="bg" cx="100" cy="100" r="85"/><circle class="fg" id="rfg" cx="100" cy="100" r="85" stroke-dasharray="534" stroke-dashoffset="${off}"/></svg><div class="c"><b id="rpct">${c}%</b><span class="t-sub" id="rkwh">${st.charging ? "+0.0 kWh" : L("about 210 km", "సుమారు 210 కి.మీ", "लगभग 210 किमी")}</span></div></div>
+      <p class="t-sub mt12">${L("Enough for your next 3 jobs (≈ 74 km). Plan needs 30% by 14:00.", "తదుపరి 3 పనులకు సరిపోతుంది (≈ 74 కి.మీ). 14:00కి 30% కావాలి.", "अगले 3 कामों के लिए काफ़ी (≈ 74 किमी)। 14:00 तक 30% चाहिए।")}</p>
+      <div class="mt16">${btn(st.charging ? L("Charging…", "ఛార్జ్ అవుతోంది…", "चार्ज हो रही है…") : L("Start charging (at the hub)", "ఛార్జింగ్ ప్రారంభించండి (హబ్ వద్ద)", "चार्जिंग शुरू करें (हब पर)"), { act: "charge", icon: "bolt", kind: st.charging ? "btn-secondary" : "btn-primary" })}</div></div>
   </div>
-  ${sh(L("Charging", "ఛార్జింగ్", "चार्जिंग"))}
-  <div class="group">
-    ${row({ icon: "bolt", t: L("Booked: 14:00 · SAGA hub, Madhurawada", "బుక్: 14:00 · SAGA హబ్, మధురవాడ", "बुक: 14:00 · SAGA हब, मधुरवाड़ा"), s: L("Fast charger 2 · 40 min", "ఫాస్ట్ ఛార్జర్ 2 · 40 నిమి", "फ़ास्ट चार्जर 2 · 40 मिनट"), toast: L("Directions to SAGA hub", "SAGA హబ్‌కు దారి", "SAGA हब का रास्ता") })}
+  <div class="group mt16">
+    ${row({ icon: "bolt", t: L("Booked: 14:00 · SAGA hub, Madhurawada", "బుక్: 14:00 · SAGA హబ్", "बुक: 14:00 · SAGA हब"), s: L("Fast charger 2 · 40 min · paid break", "ఫాస్ట్ ఛార్జర్ 2 · 40 నిమి · విరామం", "फ़ास्ट चार्जर 2 · 40 मिनट · ब्रेक"), toast: L("Directions to SAGA hub", "SAGA హబ్‌కు దారి", "SAGA हब का रास्ता") })}
+    ${row({ icon: "scan", t: L("Today's vehicle check", "ఈ రోజు వాహన తనిఖీ", "आज की गाड़ी जाँच"), s: L("9 photos · no new damage · 06:02", "9 ఫోటోలు · కొత్త నష్టం లేదు · 06:02", "9 फ़ोटो · कोई नया नुकसान नहीं · 06:02"), toast: L("Inspection report saved for ops", "తనిఖీ నివేదిక ఆప్స్‌కు సేవ్", "जाँच रिपोर्ट ऑप्स के लिए सेव") })}
     ${row({ icon: "alert", lc: "grey", t: L("Report a problem with the car", "కారులో సమస్య తెలపండి", "गाड़ी में समस्या बताएँ"), toast: L("Ops will call you within 5 min", "ఆప్స్ 5 నిమిషాల్లో కాల్ చేస్తారు", "ऑप्स 5 मिनट में कॉल करेंगे") })}
-  </div></div>`);
+  </div></div>`;
+});
 
-def("profile", { n: "Me & settings", tab: "me", what: "Shift summary, rating, and settings: language (English, Telugu, Hindi), appearance (dark by default for night driving), support and SOS.", why: "Chauffeurs choose their language once; rider requests and ops messages follow it.", fl: "Same <code>SagaTokens</code> and ARB files as the rider app (shared Flutter package)." }, () => `
-  ${bar(L("Me", "నేను", "मैं"), { back: false, large: true })}
-  <div class="content"><div class="pad"><div class="card row-flex"><span class="rider" style="padding:0;background:none"><span class="ph">RK</span></span><div class="grow"><div class="t-h3">Ravi Kumar</div><div class="t-sub">${L("Chauffeur · ID SG-0142 · 3 years", "డ్రైవర్ · ID SG-0142 · 3 సం.", "ड्राइवर · ID SG-0142 · 3 साल")}</div></div></div>
-  <div class="kpis mt12"><div>${L("This week", "ఈ వారం", "इस हफ़्ते")}<b>31</b>${L("trips", "ట్రిప్పులు", "ट्रिप")}</div><div>${L("Hours", "గంటలు", "घंटे")}<b>38</b>h</div><div>${L("Rating", "రేటింగ్", "रेटिंग")}<b>4.9</b>★</div></div></div>
-  ${sh(L("Appearance", "రూపం", "रूप"))}
-  <div class="pad">${seg([["light", L("Light", "లైట్", "लाइट")], ["dark", L("Dark", "డార్క్", "डार्क")], ["system", L("Auto", "ఆటో", "ऑटो")]], S.state.theme, "theme")}</div>
+def("profile", { g: "Car & me", n: "Me · shift summary", tab: "me", what: "Shift summary (trips, on-time, rating, safety score), bonus progress, wallet with salary, bonus and rider tips, training, and settings: language, appearance, end shift with an end-of-shift photo check.", why: "Pay rewards what SAGA promises riders: safe, punctual service. Tips from riders land here instantly.", fl: "<code>GET /driver/summary</code>, <code>GET /driver/wallet</code>. Payouts via the payroll bank account." }, () => `
+  ${bar(L("Me", "నేను", "मैं"), { back: false, large: true, actions: bell() })}
+  <div class="content"><div class="pad">
+    <div class="kpis"><div>${L("Trips", "ట్రిప్పులు", "ट्रिप")}<b data-count="31">31</b>${L("this week", "ఈ వారం", "इस हफ़्ते")}</div><div>${L("Safety", "భద్రత", "सुरक्षा")}<b data-count="98">98</b>/100</div><div>${L("Rating", "రేటింగ్", "रेटिंग")}<b data-count="4.9">4.9</b>★</div></div>
+    <div class="bonus mt12"><div class="row-flex"><span class="grow" style="font-weight:600">${L("November bonus", "నవంబర్ బోనస్", "नवंबर बोनस")}</span>${pill("trend", L("on track", "సరైన దారిలో", "सही राह पर"), "dark")}</div><div class="big mt12">₹<span data-count="1200">1,200</span> <span style="font-size:20px;opacity:.8">/ ₹1,500</span></div><div class="progress mt12"><i style="width:80%"></i></div><p class="t-sub mt8" style="color:inherit;opacity:.85">${L("For 98%+ on time and a safety score above 95.", "98%+ సమయానికి, 95కి మించి భద్రత స్కోర్‌కు.", "98%+ समय पर और 95 से ऊपर सुरक्षा स्कोर के लिए।")}</p></div>
+  </div>
+  ${sh(L("Wallet", "వాలెట్", "वॉलेट"))}
+  <div class="pad"><div class="wallet"><div class="row-flex"><span class="grow" style="color:var(--on-ink2)">${L("Tips from riders this month", "ఈ నెల రైడర్ల టిప్స్", "इस महीने सवारियों से टिप")}</span>${I("wallet")}</div><div class="big">₹<span data-count="${st.tips}">${st.tips}</span></div>
+    <div class="mt16" style="background:rgba(255,255,255,.06);border-radius:20px;padding:4px 14px">
+      <div class="tx" style="border-color:rgba(255,255,255,.1)"><span class="ti" style="background:rgba(255,255,255,.1)">${I("heart", "sm")}</span><span>${L("Tip · Ananya R.", "టిప్ · అనన్య", "टिप · अनन्या")}<span class="s" style="color:var(--on-ink2)">${L("Today", "ఈ రోజు", "आज")}</span></span><b>+₹50</b></div>
+      <div class="tx" style="border-color:rgba(255,255,255,.1)"><span class="ti" style="background:rgba(255,255,255,.1)">${I("building", "sm")}</span><span>${L("Salary · October", "జీతం · అక్టోబర్", "वेतन · अक्टूबर")}<span class="s" style="color:var(--on-ink2)">HDFC ••4410 · 1 Nov</span></span><b>₹28,500</b></div>
+    </div>
+    <button class="btn btn-stage block mt16" data-toast="${esc(L("₹350 sent to HDFC ••4410", "₹350 HDFC ••4410కి పంపాం", "₹350 HDFC ••4410 में भेजे"))}">${I("download")}${L("Withdraw tips", "టిప్స్ తీసుకోండి", "टिप निकालें")}</button></div></div>
   ${sh(L("Language", "భాష", "भाषा"))}
   <div class="pad">${seg(S.LANGS.map(l => [l.id, l.native]), S.state.lang, "lang")}</div>
+  ${sh(L("Appearance", "రూపం", "रूप"))}
+  <div class="pad">${seg([["light", L("Light", "లైట్", "लाइट")], ["dark", L("Dark", "డార్క్", "डार्क")], ["system", L("Auto", "ఆటో", "ऑटो")]], S.state.theme, "theme")}</div>
   <div class="group mt16">
-    ${row({ icon: "cal", t: L("Shifts and leave", "షిఫ్టులు, సెలవు", "शिफ़्ट और छुट्टी"), toast: L("Next shift: Mon 06:00", "తదుపరి షిఫ్ట్: సోమ 06:00", "अगली शिफ़्ट: सोम 06:00") })}
+    ${row({ icon: "spark", t: L("Training: Airport etiquette", "శిక్షణ: ఎయిర్‌పోర్ట్ మర్యాద", "प्रशिक्षण: एयरपोर्ट शिष्टाचार"), s: L("6 minutes · counts towards your bonus", "6 నిమిషాలు · బోనస్‌కు లెక్క", "6 मिनट · बोनस में गिना जाएगा"), toast: L("Opening module", "మాడ్యూల్ తెరుస్తున్నాం", "मॉड्यूल खुल रहा है") })}
     ${row({ icon: "chat", t: L("Call ops", "ఆప్స్‌కు కాల్", "ऑप्स को कॉल"), toast: L("Calling SAGA control room", "SAGA కంట్రోల్ రూమ్‌కు కాల్", "SAGA कंट्रोल रूम को कॉल") })}
-    ${row({ icon: "shield", lc: "ink", t: "SOS", s: L("Alerts ops and shares your location", "ఆప్స్‌కు తెలిపి మీ లొకేషన్ పంపుతుంది", "ऑप्स को अलर्ट और लोकेशन शेयर"), toast: L("SOS sent", "SOS పంపాం", "SOS भेजा") })}
-    ${row({ icon: "logout", lc: "grey", t: L("End shift", "షిఫ్ట్ ముగించు", "शिफ़्ट खत्म करें"), go: "shift" })}
+    ${row({ icon: "logout", lc: "grey", t: L("End shift", "షిఫ్ట్ ముగించు", "शिफ़्ट खत्म करें"), s: L("4-photo check, then hand over the car", "4 ఫోటోల తనిఖీ, తర్వాత కారు అప్పగింత", "4 फ़ोटो जाँच, फिर गाड़ी सौंपें"), act: "endshift" })}
   </div></div>`);
 
-/* chrome */
+def("inbox", { g: "Car & me", n: "Notifications", nav: 1, what: "Everything dispatch, riders and the car told you today: new jobs, flight changes, rider messages, tips, charging slots, ops broadcasts.", why: "Nothing important is lost if a heads-up was missed while driving.", fl: "FCM, channels per type (jobs = urgent, rider messages = high, ops = default)." }, () => {
+  const all = [...st.inbox, ...NOTIFS0.map(n => ({ icon: n[0], t: n[1], p: n[2], at: n[3] }))];
+  return `${bar(L("Notifications", "నోటిఫికేషన్లు", "नोटिफ़िकेशन"))}
+  <div class="content"><div class="pad">${all.map((n, i) => `<div class="nt ${i < st.inbox.length ? "new" : ""}"><span class="ni">${I(n.icon)}</span><div class="grow"><b>${n.t}</b><p>${n.p}</p><time>${n.at}</time></div></div>`).join("")}</div></div>`;
+}, () => { st.notif = 0; });
+
+/* ---------------- chrome ---------------- */
 const SB = `<svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 4C7.3 4 3.1 5.8 0 8.8L12 21 24 8.8C20.9 5.8 16.7 4 12 4Z"/></svg><svg width="16" height="16" viewBox="0 0 24 24"><path d="M2 22h20V2Z"/></svg><svg width="24" height="14" viewBox="0 0 24 14"><rect x=".5" y=".5" width="21" height="13" rx="4" fill="none" stroke="currentColor" opacity=".5"/><rect x="2.5" y="2.5" width="12" height="9" rx="2"/></svg>`;
-const TABS = [["duty", "grid", () => L("Duty", "డ్యూటీ", "ड्यूटी")], ["vehicle", "car", () => L("Car", "కారు", "गाड़ी")], ["profile", "user", () => L("Me", "నేను", "मैं")]];
+const TABS = [["duty", "grid", () => L("Duty", "డ్యూటీ", "ड्यूटी")], ["vehicle", "bolt", () => L("Car", "కారు", "गाड़ी")], ["profile", "user", () => L("Me", "నేను", "मैं")]];
+const unread = () => Math.max(0, S.chat.get().filter(m => m.who === "rider").length - (st.readRider || 0));
 function chrome() {
   const sc = SC[cur];
-  $("#sb").innerHTML = `<span style="display:flex;align-items:center">9:41${["topickup", "trip", "waiting"].includes(cur) ? `<span class="liveup">${I("nav")}${L("On job", "పనిలో", "काम पर")}</span>` : ""}</span><span class="punch"></span><span class="sb-r">${SB}</span>`;
+  $("#sb").style.setProperty("--sb", sc.sb === "light" || cur === "assigned" ? "#fff" : "var(--fg)");
+  $("#sb").innerHTML = `<span style="display:flex;align-items:center">9:41${["topickup", "trip", "waiting", "code"].includes(cur) ? `<span class="liveup">${I("nav")}${L("On job", "పనిలో", "काम पर")}</span>` : ""}</span><span class="punch"></span><span class="sb-r">${SB}</span>`;
   $("#tabbar").innerHTML = TABS.map(([id, ic, lb]) => `<button class="tab ${sc.tab && SC[id].tab === sc.tab ? "on" : ""}" data-tab="${id}"><span class="ico">${I(ic)}</span><span>${lb()}</span></button>`).join("");
   $("#tabbar").classList.toggle("hide", !sc.tab);
-  $("#sbfade").style.opacity = sc.map || sc.nav || cur === "request" ? 0 : 1;
+  $("#sbfade").style.opacity = sc.map || sc.nav || sc.sb === "light" || cur === "assigned" ? 0 : 1;
+  $(".homebar").style.background = sc.sb === "light" || cur === "assigned" ? "#fff" : "";
 }
-let cur = null, stack = [];
+let cur = null, stack = [], timers = [];
+const timer = (fn, ms) => timers.push(setTimeout(fn, ms));
 const views = $("#views");
 function go(id, o = {}) {
   if (!SC[id]) return;
+  timers.forEach(clearTimeout); timers = [];
   const prev = views.lastElementChild, el = document.createElement("div"), sc = SC[id];
-  el.className = `view ${sc.nav ? "has-nav" : ""} ${sc.foot ? "has-foot" : ""} ${sc.tab ? "" : "no-tabs"}`; el.innerHTML = sc.render();
+  el.className = `view ${sc.nav ? "has-nav" : ""} ${sc.foot ? "has-foot" : ""} ${sc.tab ? "" : "no-tabs"}`; el.dataset.id = id; el.innerHTML = sc.render();
   if (!o.back && !o.tab && !o.replace && cur) stack.push(cur); if (o.tab) stack = [];
   cur = id; views.append(el); chrome(); panel();
   if (prev && !o.instant && !BARE) {
-    const a = o.back ? el.animate([{ opacity: 0, transform: "translateX(-8%)" }, { opacity: 1, transform: "none" }], { duration: 320, easing: "cubic-bezier(.05,.7,.1,1)" }) : el.animate([{ opacity: 0, transform: o.tab ? "none" : "translateX(10%)" }, { opacity: 1, transform: "none" }], { duration: 320, easing: "cubic-bezier(.05,.7,.1,1)" });
+    const a = el.animate([{ opacity: 0, transform: o.back ? "translateX(-8%)" : o.tab ? "none" : "translateX(10%)" }, { opacity: 1, transform: "none" }], { duration: 320, easing: "cubic-bezier(.05,.7,.1,1)" });
     const done = () => { if (prev.isConnected) prev.remove(); try { a.cancel(); } catch (e) {} };
     a.finished.then(done).catch(() => {}); setTimeout(done, 400);
   } else if (prev) prev.remove();
+  S.enter(el);
   if (sc.mount) sc.mount(el);
   try { if (parent !== window) parent.postMessage({ saga: "nav", app: "driver", id }, "*"); } catch (e) {}
 }
 const back = () => go(stack.pop() || "duty", { back: true });
-const rerender = () => { const v = views.lastElementChild; const n = document.createElement("div"); n.className = v.className; n.innerHTML = SC[cur].render(); views.replaceChild(n, v); chrome(); panel(); };
+const rerender = () => { const v = views.lastElementChild; if (!v) return; const st0 = v.querySelector(".content")?.scrollTop || 0; const n = document.createElement("div"); n.className = v.className; n.dataset.id = cur; n.innerHTML = SC[cur].render(); views.replaceChild(n, v); const c = n.querySelector(".content"); if (c) c.scrollTop = st0; chrome(); panel(); };
 let tt; function toast(m) { const t = $("#toast"); t.innerHTML = `<div class="grow">${m}</div>`; t.classList.add("on"); clearTimeout(tt); tt = setTimeout(() => t.classList.remove("on"), 2400); }
+let ht; function notify(icon, title, body, to) {
+  st.inbox.unshift({ icon, t: title, p: body, at: L("now", "ఇప్పుడు", "अभी") }); st.notif++;
+  const h = $("#hu"); h.innerHTML = `<span class="ap">${I(icon)}</span><div class="grow"><div class="hd">${S.logo()}<span>· ${L("now", "ఇప్పుడు", "अभी")}</span></div><b>${title}</b><p>${body}</p></div>`;
+  h.dataset.to = to || ""; h.classList.add("on"); clearTimeout(ht); ht = setTimeout(() => h.classList.remove("on"), 4200);
+  if (SC[cur] && SC[cur].tab) rerender();
+}
+
 const A = {
+  lang(e) { S.set({ lang: e.dataset.v }); }, theme(e) { S.set({ theme: e.dataset.v }); },
+  perm(e) { st.perms[e.dataset.k] = !st.perms[e.dataset.k]; rerender(); },
+  startcheck() { st.mode = "start"; st.step = 0; st.shots = []; st.justShot = false; go("inspect"); },
+  endshift() { st.mode = "end"; st.step = 0; st.shots = []; st.justShot = false; go("inspect"); },
+  shoot() {
+    if (st.busy) return; st.flash = true; st.busy = true; st.justShot = false; rerender(); st.flash = false;
+    timer(() => {
+      const s = STEPS[st.step], r = s[5] || "ok"; st.shots.push(r); st.busy = false; st.justShot = true;
+      st.lastNote = r === "warn" ? L("Small scratch, rear bumper · already on record", "చిన్న గీత, వెనుక బంపర్ · ఇప్పటికే రికార్డులో", "छोटी खरोंच, पिछला बम्पर · पहले से दर्ज") : s[0] === "dash" ? L("92% charge · 12,408 km read", "92% ఛార్జ్ · 12,408 కి.మీ చదివాం", "92% चार्ज · 12,408 किमी पढ़ा") : L("Looks good", "బాగుంది", "सब ठीक");
+      const total = st.mode === "end" ? 4 : STEPS.length;
+      if (st.shots.length >= total) { rerender(); timer(() => { if (st.mode === "end") { st.online = false; toast(L("Shift closed. Car handed over in good condition.", "షిఫ్ట్ ముగిసింది. కారు మంచి స్థితిలో అప్పగించారు.", "शिफ़्ट बंद। गाड़ी अच्छी हालत में सौंपी।")); go("profile", { tab: 1 }); } else go("checklist"); }, 1100); }
+      else { st.step++; rerender(); }
+    }, 900);
+  },
   chk(e) { st.checks[+e.dataset.v] = !st.checks[+e.dataset.v]; rerender(); },
-  online() { st.online = !st.online; rerender(); },
-  key(e) { const v = e.dataset.v; if (v === "⌫") st.code = st.code.slice(0, -1); else if (st.code.length < 4) st.code += v; rerender(); if (st.code === "4827") setTimeout(() => { if (cur === "code") { st.code = ""; go("trip", { replace: true }); } }, 1100); else if (st.code.length === 4) setTimeout(() => { st.code = ""; if (cur === "code") rerender(); }, 1400); },
+  online() { if (!st.online) { A.startcheck(); return; } st.online = false; rerender(); },
+  ack() { S.live.send("ack"); notify("nav", L("Navigation started", "నావిగేషన్ మొదలైంది", "नेविगेशन शुरू"), L(`${st.job.rider} has been told you're on the way`, `మీరు వస్తున్నారని ${st.job.rider}కు తెలిపాం`, `${st.job.rider} को बता दिया कि आप आ रहे हैं`)); go("topickup"); },
+  arrived() { S.live.send("arrived"); S.chat.add({ who: "driver", k: "arrived", at: "8:56" }); S.live.send("msg", { k: "arrived" }); go("waiting"); },
+  key(e) { const v = e.dataset.v; st.bad = false; if (v === "⌫") st.code = st.code.slice(0, -1); else if (st.code.length < 4) st.code += v; rerender();
+    if (st.code === "4827") timer(() => { st.code = ""; S.live.send("start"); go("trip", { replace: true }); }, 1000);
+    else if (st.code.length === 4) { st.bad = true; rerender(); timer(() => { st.code = ""; st.bad = false; if (cur === "code") rerender(); }, 1300); } },
   rate(e) { st.rating = +e.dataset.v; rerender(); },
-  theme(e) { S.set({ theme: e.dataset.v }); }, lang(e) { S.set({ lang: e.dataset.v }); }
+  say(e) { S.chat.add({ who: "driver", k: e.dataset.v, at: "9:0" + (S.chat.get().length % 10) }); S.live.send("msg", { k: e.dataset.v }); rerender(); },
+  charge() { if (st.charging) return; st.charging = true; rerender(); const fg = $("#rfg"); requestAnimationFrame(() => { if (fg) fg.setAttribute("stroke-dashoffset", 534 - 534 * .92); }); const t0 = Date.now(); const tick = () => { const p = Math.min(1, (Date.now() - t0) / 3200); if ($("#rpct")) { $("#rpct").textContent = Math.round(64 + 28 * p) + "%"; $("#rkwh").textContent = "+" + (11 * p).toFixed(1) + " kWh"; } if (p < 1) setTimeout(tick, 40); else { st.charge = 92; st.charging = false; notify("bolt", L("Charged to 92%", "92% ఛార్జ్ అయింది", "92% चार्ज हुई"), L("Enough for the rest of your shift.", "మిగిలిన షిఫ్ట్‌కు సరిపోతుంది.", "बाकी शिफ़्ट के लिए काफ़ी।")); } }; tick(); }
 };
+S.initSliders(tr => {
+  if (tr.dataset.after === "goonline") { st.online = true; st.autoAssign = true; notify("check", L("You're online", "మీరు ఆన్‌లైన్‌లో ఉన్నారు", "आप ऑनलाइन हैं"), L("Dispatch is planning your first job.", "డిస్పాచ్ మీ మొదటి పని ప్లాన్ చేస్తోంది.", "डिस्पैच आपका पहला काम तय कर रहा है।")); go("duty", { tab: 1 }); }
+  if (tr.dataset.after === "endtrip") { S.live.send("end"); go("done", { replace: true }); }
+});
+/* live link with the rider app */
+S.live.on(d => {
+  if (d.t === "book") { st.riderLive = true; st.job = { rider: "Ananya Rao", ini: "AR", pick: "MVP Colony, Sector 4", drop: d.dest || "Dwaraka Nagar", km: 12.4 }; S.live.send("got"); notify("car", L("New job assigned", "కొత్త పని కేటాయించబడింది", "नया काम मिला"), `${st.job.rider} · ${st.job.pick} → ${st.job.drop}`); go("assigned"); }
+  if (d.t === "msg") { notify("chat", st.job.rider, S.msg(d.k)); if (cur === "chat") rerender(); }
+  if (d.t === "rated") notify("star", L(`${st.job.rider} rated you ${d.n}★`, `${st.job.rider} మీకు ${d.n}★ ఇచ్చారు`, `${st.job.rider} ने ${d.n}★ दिए`), L("Thank you for a great ride.", "మంచి ప్రయాణానికి ధన్యవాదాలు.", "बढ़िया सफ़र के लिए धन्यवाद।"));
+  if (d.t === "tip") { st.tips += d.amt; notify("heart", L(`${st.job.rider} tipped you ₹${d.amt}`, `${st.job.rider} మీకు ₹${d.amt} టిప్ ఇచ్చారు`, `${st.job.rider} ने ₹${d.amt} टिप दी`), L("Added to your wallet.", "మీ వాలెట్‌లో జమ.", "आपके वॉलेट में जुड़ गया।")); }
+  if (d.t === "cancel") { notify("close", L("Ride cancelled by rider", "రైడర్ రద్దు చేశారు", "सवारी ने राइड रद्द की"), L("Dispatch will plan your next job.", "డిస్పాచ్ తదుపరి పని ప్లాన్ చేస్తుంది.", "डिस्पैच अगला काम तय करेगा।")); if (["assigned", "topickup", "waiting"].includes(cur)) go("duty", { tab: 1 }); }
+});
+
 document.addEventListener("click", e => {
   const T = e.target;
+  if (T.closest("#hu")) { $("#hu").classList.remove("on"); const to = $("#hu").dataset.to; if (to) go(to); return; }
   const a = T.closest("[data-act]"); if (a && A[a.dataset.act]) { A[a.dataset.act](a); return; }
   const tb = T.closest("[data-tab]"); if (tb) { go(tb.dataset.tab, { tab: 1 }); return; }
   if (T.closest("[data-back]")) { back(); return; }
-  const g = T.closest("[data-go]"); if (g && g.dataset.go) { go(g.dataset.go); return; }
+  const g = T.closest("[data-go]"); if (g && g.dataset.go) { if (g.dataset.go === "chat") st.readRider = S.chat.get().filter(m => m.who === "rider").length; go(g.dataset.go); return; }
   const ts = T.closest("[data-toast]"); if (ts) { toast(ts.dataset.toast); return; }
-  const sl = T.closest(".sl"); if (sl) { go(sl.dataset.screen, { tab: !!SC[sl.dataset.screen].tab }); return; }
+  const sl = T.closest(".sl[data-screen]"); if (sl) { go(sl.dataset.screen, { tab: !!SC[sl.dataset.screen].tab }); return; }
   const pp = T.closest("[data-panel]"); if (pp) { const [k, v] = pp.dataset.panel.split(":"); S.set({ [k]: v }); }
 });
-document.addEventListener("pointerdown", e => { const b = e.target.closest(".btn,.row,.ibtn,.tab,.job,.keys button,.chk,.act"); if (!b) return; const r = b.getBoundingClientRect(), z = r.width / b.offsetWidth || 1, d = Math.max(b.offsetWidth, b.offsetHeight) * 2.2; const s = document.createElement("span"); s.className = "ripple"; s.style.cssText = `width:${d}px;height:${d}px;left:${(e.clientX - r.left) / z - d / 2}px;top:${(e.clientY - r.top) / z - d / 2}px`; if (getComputedStyle(b).position === "static") b.style.position = "relative"; b.style.overflow = "hidden"; b.append(s); setTimeout(() => s.remove(), 600); });
-window.addEventListener("message", e => { const d = e.data || {}; if (d.saga === "go" && SC[d.id]) go(d.id, { tab: !!SC[d.id].tab, instant: d.instant }); });
+document.addEventListener("pointerdown", e => { const b = e.target.closest(".btn,.row,.ibtn,.tab,.job,.keys button,.act,.chip"); if (!b) return; const r = b.getBoundingClientRect(), z = r.width / b.offsetWidth || 1, d = Math.max(b.offsetWidth, b.offsetHeight) * 2.2; const s = document.createElement("span"); s.className = "ripple"; s.style.cssText = `width:${d}px;height:${d}px;left:${(e.clientX - r.left) / z - d / 2}px;top:${(e.clientY - r.top) / z - d / 2}px`; if (getComputedStyle(b).position === "static") b.style.position = "relative"; b.style.overflow = "hidden"; b.append(s); setTimeout(() => s.remove(), 600); });
+window.addEventListener("message", e => { const d = e.data || {}; if (d.saga === "go" && SC[d.id] && d.id !== cur) go(d.id, { tab: !!SC[d.id].tab, instant: d.instant }); });
 S.onChange(() => { S.state.os = "android"; S.apply(); rerender(); });
 function panel() {
   if (EMBED || BARE) return; const sc = SC[cur];
-  $("#panel").innerHTML = `<h1>${S.logo()}<span style="font-weight:600;color:var(--fg2)">Driver · v2</span></h1>
-  <p class="t-sub mt8" style="font-size:14px">Android only: chauffeurs use company-issued phones. Same Flutter codebase and design tokens as the rider app.</p>
+  const groups = {}; Object.values(SC).forEach(s => (groups[s.g] = groups[s.g] || []).push(s));
+  $("#panel").innerHTML = `<h1>${S.logo()}<span style="font-weight:600;color:var(--fg2)">Chauffeur · v2</span></h1>
+  <p class="t-sub mt8" style="font-size:14px">Android, on company phones. Open the suite to see it react live to bookings, messages and tips from the rider app.</p>
   <div class="k">Appearance</div><div class="sw">${["light", "dark"].map(o => `<button class="${S.resolvedTheme() === o ? "on" : ""}" data-panel="theme:${o}">${o[0].toUpperCase() + o.slice(1)}</button>`).join("")}</div>
   <div class="k">Language</div><div class="sw">${S.LANGS.map(l => `<button class="${S.state.lang === l.id ? "on" : ""}" data-panel="lang:${l.id}">${l.native}</button>`).join("")}</div>
   <div class="notes"><h3>${sc.n}</h3><dl><dt>What it does</dt><dd>${sc.what}</dd><dt>Why</dt><dd>${sc.why}</dd><dt>Flutter build</dt><dd>${sc.fl}</dd></dl></div>
-  <div class="k">Screens</div>${Object.values(SC).map(s => `<button class="sl ${s.id === cur ? "on" : ""}" data-screen="${s.id}">${s.n}</button>`).join("")}
-  <div class="k">Other apps</div><a class="out" href="index.html">Suite →</a><a class="out" href="rider.html">Rider app →</a><a class="out" href="hotel.html">Hotel partner app →</a><a class="out" href="ops.html">Ops dashboard →</a><a class="out" href="screens.html">Screen map →</a><a class="out" href="brief.html">Client brief →</a>`;
+  <div class="k">Screens</div>${Object.entries(groups).map(([g, l]) => `<div class="grp">${g}</div>${l.map(s => `<button class="sl ${s.id === cur ? "on" : ""}" data-screen="${s.id}">${s.n}</button>`).join("")}`).join("")}
+  <div class="k">Other apps</div><a class="out" href="index.html">Suite →</a><a class="out" href="rider.html">Rider app →</a><a class="out" href="hotel.html">Hotel partner app →</a><a class="out" href="ops.html">Ops dashboard →</a>`;
 }
 const dev = $("#device"); dev.classList.add(BARE ? "bare" : "android");
 function fit() { const area = $("#stagearea"), W = area.clientWidth, H = area.clientHeight, dw = dev.offsetWidth, dh = dev.offsetHeight, pad = EMBED || BARE ? 0 : 40, k = Math.min((W - pad) / dw, (H - pad) / dh, BARE ? 10 : 1); $("#fit").style.transform = `scale(${k})`; $("#fit").style.width = dw + "px"; $("#fit").style.height = dh + "px"; }
 addEventListener("resize", fit); fit();
-const start = S.qs.get("screen") || location.hash.slice(1) || "duty";
-go(SC[start] ? start : "duty", { instant: true, tab: !!(SC[start] || SC.duty).tab });
+const start = S.qs.get("screen") || location.hash.slice(1) || "welcome";
+if (["duty", "assigned", "topickup", "waiting", "code", "trip", "done", "chat"].includes(start)) { st.online = true; st.shots = ["ok", "ok", "warn", "ok", "ok", "ok", "ok", "ok", "ok"]; }
+go(SC[start] ? start : "welcome", { instant: true, tab: !!(SC[start] || SC.welcome).tab });
 })();
 </script>
 </body>

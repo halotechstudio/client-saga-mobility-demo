@@ -78,7 +78,7 @@
     if (os === "android") {
       t = dark
         ? { bg: T(.16, .012), surface: T(.205, .015), surface2: T(.25, .018), surface3: T(.295, .02), fg: T(.94, .008), fg2: T(.8, .014), fg3: T(.62, .014), hair: T(.33, .014) }
-        : { bg: T(.985, .006), surface: T(.965, .012), surface2: T(.94, .018), surface3: T(.91, .024), fg: T(.2, .012), fg2: T(.42, .016), fg3: T(.62, .016), hair: T(.88, .012) };
+        : { bg: T(.968, .01), surface: "#FFFFFF", surface2: T(.945, .016), surface3: T(.905, .022), fg: T(.18, .012), fg2: T(.42, .016), fg3: T(.62, .016), hair: T(.9, .012) };
     } else {
       t = dark
         ? { bg: "#000000", surface: "#1C1C1E", surface2: "#2C2C2E", surface3: "#3A3A3C", fg: "#F5F5F7", fg2: "#AEAEB2", fg3: "#6E6E73", hair: "#38383A" }
@@ -385,6 +385,54 @@
     });
     return `<svg class="seatsvg" viewBox="0 0 170 ${H}" aria-hidden="true"><rect x="12" y="8" width="146" height="${H - 16}" rx="44" class="shell"/><rect x="26" y="26" width="118" height="22" rx="10" class="wind"/>${g}</svg>`;
   };
+
+
+
+  /* ---------- live link between the rider and chauffeur apps (same browser: suite phones, tabs) ---------- */
+  S.live = (() => {
+    const fns = []; let ch = null; const me = Math.random().toString(36).slice(2);
+    try { ch = new BroadcastChannel("saga-live"); ch.onmessage = e => { if (e.data && e.data.from !== me) fns.forEach(f => f(e.data)); }; } catch (e) {}
+    addEventListener("storage", e => { if (e.key === "saga2.live" && e.newValue) { try { const d = JSON.parse(e.newValue); if (d.from !== me && !ch) fns.forEach(f => f(d)); } catch (_) {} } });
+    return {
+      send(t, data = {}) { const d = Object.assign({ t, from: me, at: Date.now() }, data); try { ch && ch.postMessage(d); } catch (e) {} try { localStorage.setItem("saga2.live", JSON.stringify(d)); } catch (e) {} },
+      on(fn) { fns.push(fn); }
+    };
+  })();
+  /* one shared chat log for the demo */
+  S.chat = { get: () => S.get("chat", [{ who: "driver", k: "onway", at: "8:52" }]), add(m) { const c = S.chat.get(); c.push(m); S.put("chat", c.slice(-30)); return c; }, reset() { S.put("chat", [{ who: "driver", k: "onway", at: "8:52" }]); } };
+  /* canned messages, written once, shown in each reader's language */
+  S.MSG = {
+    onway: ["I'm on my way. See you in a few minutes.", "నేను బయలుదేరాను. కొద్ది నిమిషాల్లో కలుస్తాను.", "मैं रास्ते में हूँ। कुछ मिनट में मिलते हैं।"],
+    arrived: ["I've arrived at Gate 2.", "నేను గేట్ 2 వద్దకు వచ్చాను.", "मैं गेट 2 पर पहुँच गया हूँ।"],
+    traffic: ["Slight traffic, 3 minutes more.", "కొంచెం ట్రాఫిక్, ఇంకో 3 నిమిషాలు.", "थोड़ा ट्रैफ़िक है, 3 मिनट और।"],
+    gate: ["Which gate should I come to?", "ఏ గేట్ వద్దకు రావాలి?", "किस गेट पर आऊँ?"],
+    coming: ["Coming down now.", "ఇప్పుడే కిందకు వస్తున్నాను.", "अभी नीचे आ रहा हूँ।"],
+    atgate: ["I'm at Gate 2, near the park.", "నేను గేట్ 2 వద్ద, పార్క్ దగ్గర ఉన్నాను.", "मैं गेट 2 पर हूँ, पार्क के पास।"],
+    bags: ["I have 2 bags, please help.", "నా దగ్గర 2 బ్యాగులు ఉన్నాయి, సాయం చేయండి.", "मेरे पास 2 बैग हैं, कृपया मदद करें।"],
+    cooler: ["Could you make it a little cooler?", "AC కొంచెం పెంచగలరా?", "AC थोड़ा ठंडा कर देंगे?"],
+    quiet: ["A quiet ride, please.", "నిశ్శబ్దంగా వెళ్దాం, దయచేసి.", "कृपया शांत सफ़र रखें।"],
+    stop: ["Please stop here.", "దయచేసి ఇక్కడ ఆపండి.", "कृपया यहाँ रोकिए।"],
+    sure: ["Sure, done.", "సరే, చేశాను.", "ठीक है, कर दिया।"]
+  };
+  S.msg = k => { const m = S.MSG[k]; return m ? S.L(m[0], m[1], m[2]) : k; };
+
+  /* ---------- slide-to-confirm: for actions that cost money or matter for safety ---------- */
+  S.slider = (label, attrs = "", cls = "") => `<div class="slide ${cls}" ${attrs} tabindex="0" role="button" aria-label="${label}"><span class="sl-fill"></span><span class="sl-txt">${label}</span><span class="sl-knob">${S.icon("arrowr")}</span></div>`;
+  S.initSliders = (onDone) => {
+    let drag = null;
+    const set = (tr, x) => { const k = tr.querySelector(".sl-knob"), max = tr.offsetWidth - k.offsetWidth - 8; x = Math.max(0, Math.min(max, x)); k.style.transform = `translateX(${x}px)`; tr.querySelector(".sl-fill").style.width = x + 64 + "px"; return x / max; };
+    const finish = tr => { tr.classList.add("done"); set(tr, 9999); tr.querySelector(".sl-knob").innerHTML = S.icon("check"); setTimeout(() => onDone(tr), 380); };
+    document.addEventListener("pointerdown", e => { const k = e.target.closest(".sl-knob"); if (!k) return; const tr = k.parentElement; if (tr.classList.contains("done")) return; const r = tr.getBoundingClientRect(); drag = { tr, x0: e.clientX, z: r.width / tr.offsetWidth || 1 }; tr.classList.add("dragging"); try { k.setPointerCapture(e.pointerId); } catch (_) {} e.preventDefault(); });
+    document.addEventListener("pointermove", e => { if (drag) drag.p = set(drag.tr, (e.clientX - drag.x0) / drag.z); });
+    document.addEventListener("pointerup", () => { if (!drag) return; const { tr, p } = drag; drag = null; tr.classList.remove("dragging"); if (p > .82) finish(tr); else { set(tr, 0); } });
+    document.addEventListener("click", e => { const tr = e.target.closest(".slide"); if (!tr || tr.classList.contains("done") || e.target.closest(".sl-knob")) return; tr.classList.remove("shake"); void tr.offsetWidth; tr.classList.add("shake"); });
+    document.addEventListener("keydown", e => { const tr = e.target.closest && e.target.closest(".slide"); if (tr && (e.key === "Enter" || e.key === " ") && !tr.classList.contains("done")) { e.preventDefault(); finish(tr); } });
+    S.completeSlider = finish;
+  };
+  /* count numbers up when a screen appears */
+  S.countUp = root => root.querySelectorAll("[data-count]").forEach(el => { const to = +el.dataset.count, dec = (el.dataset.count.split(".")[1] || "").length, t0 = Date.now(), d = 900; const fmt = v => dec ? v.toFixed(dec) : Math.round(v).toLocaleString("en-IN"); const tick = () => { const p = Math.min(1, (Date.now() - t0) / d), e = 1 - Math.pow(1 - p, 3); el.textContent = fmt(to * e); if (p < 1) setTimeout(tick, 16); }; tick(); });
+  /* stagger children of the entering screen */
+  S.enter = el => { el.classList.add("enter"); el.querySelectorAll(".content>*").forEach((c, i) => c.style.setProperty("--i", Math.min(i, 10))); S.countUp(el); setTimeout(() => el.classList.remove("enter"), 2200); };
 
   /* ---------- voice engine (Web Speech API when present; scripted otherwise) ---------- */
   S.voice = {
