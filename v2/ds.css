@@ -2344,9 +2344,6 @@ button.sc-time{border:0;font:inherit;cursor:pointer}
 .it-a{fill:#0A0E21}.it-b{fill:#2449F0}
 .it-c{fill:#3BEA68;transform-box:fill-box;transform-origin:center;animation:itC 5.5s infinite}
 @keyframes itC{0%,40%{transform:scale(1)}46%,54%{transform:scale(1.6)}60%,100%{transform:scale(1)}}
-/* dock: pill ends, round centre key */
-.tabbar,[data-os] .tabbar,[data-os=android] .tabbar,[data-os=ios] .tabbar{border-radius:999px!important;padding:8px 10px!important}
-#tabbar.tabbar,[data-theme][data-os] #tabbar{border-radius:999px!important}
 /* intercity: frosted white glass */
 .svc-int{background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.10))!important;-webkit-backdrop-filter:blur(22px) saturate(1.4);backdrop-filter:blur(22px) saturate(1.4);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 0 0 1px rgba(255,255,255,.22),0 22px 44px -24px rgba(0,0,0,.8)!important}
 .svc-int::after{background:radial-gradient(70% 60% at 85% 0%,rgba(255,255,255,.18),transparent 60%)!important}
@@ -2357,34 +2354,11 @@ button.sc-time{border:0;font:inherit;cursor:pointer}
 .svc-int .it-lit{stroke:#fff}
 .svc-int .it-a{fill:#fff}
 
-/* ---------- v7.4 dock: one calm glass pill, round keys, and an eco orb with a progress ring ---------- */
-#tabbar.tabbar,[data-theme][data-os] #tabbar{border-radius:999px!important;padding:7px!important;gap:4px!important;align-items:center!important;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.06)),rgba(16,18,26,.72)!important;border:1px solid rgba(255,255,255,.12)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 18px 40px -16px rgba(0,0,0,.85)!important}
-[data-theme=light] #tabbar.tabbar,[data-theme=light][data-os] #tabbar{background:rgba(255,255,255,.82)!important;border-color:rgba(10,14,33,.08)!important;box-shadow:0 18px 40px -18px rgba(10,14,33,.35)!important}
-#tabbar .tab,[data-os] #tabbar .tab{flex:0 0 54px!important;width:54px!important;height:54px!important;border-radius:50%!important}
-#tabbar .tab-ind{border-radius:50%!important}
-#tabbar .tab-eco{flex:0 0 58px;width:58px;height:58px;margin:0!important;border-radius:50%!important;overflow:visible}
-#tabbar .tab-eco::before{content:"";position:absolute;inset:-3px;border-radius:50%;z-index:2;pointer-events:none;background:conic-gradient(from -90deg,#3BEA68 calc(var(--lvl) * 360deg),rgba(255,255,255,.14) 0);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2.6px),#000 calc(100% - 2.4px));mask:radial-gradient(farthest-side,transparent calc(100% - 2.6px),#000 calc(100% - 2.4px));filter:drop-shadow(0 0 4px rgba(59,234,104,.6))}
-#tabbar .tab-eco .ev{inset:3px;border-radius:50%}
-#tabbar .tab-eco .eh{border-radius:50%}
-#tabbar .tab-eco .ep{display:none}
-#tabbar .tab-eco.full::after{inset:-7px;border-radius:50%}
-#tabbar .tab-eco .ei .ic{width:22px;height:22px}
 /* service name, top-left of each card */
 .svc-tag{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 11px 0 9px;border-radius:999px;font-size:12px;font-weight:600;color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.18);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);white-space:nowrap}
 .svc-tag .ic{width:14px;height:14px}
 .svc-tag.abs{position:absolute;left:14px;top:14px;z-index:3}
 .onb-top{align-items:center}
-/* the eco orb: raised, glowing, alive */
-#tabbar .tab-eco{flex:0 0 64px;width:64px;height:64px;margin:-14px 2px 0!important;border-radius:50%!important;box-shadow:0 0 0 5px rgba(12,14,22,.9),0 10px 26px -6px rgba(59,234,104,.65),0 0 34px -4px rgba(59,234,104,.45);animation:orbGlow 3.6s ease-in-out infinite}
-[data-theme=light] #tabbar .tab-eco{box-shadow:0 0 0 5px rgba(255,255,255,.95),0 10px 26px -6px rgba(23,184,90,.55),0 0 30px -6px rgba(59,234,104,.45)}
-@keyframes orbGlow{50%{box-shadow:0 0 0 5px rgba(12,14,22,.9),0 12px 30px -6px rgba(59,234,104,.85),0 0 46px 0 rgba(59,234,104,.55)}}
-[data-theme=light] #tabbar .tab-eco{animation:none}
-#tabbar .tab-eco .ev{background:radial-gradient(90% 70% at 50% 0%,rgba(120,140,255,.45),transparent 70%),radial-gradient(70% 60% at 50% 110%,rgba(59,234,104,.35),transparent 70%),#050914}
-#tabbar .tab-eco .eh{background:conic-gradient(from 0deg,transparent 0 70%,rgba(255,255,255,.55) 80%,transparent 90%);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px));mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px));animation:orbSheen 4s linear infinite}
-@keyframes orbSheen{to{transform:rotate(360deg)}}
-#tabbar .tab-eco .ei .ic{width:24px;height:24px;filter:drop-shadow(0 0 6px rgba(190,255,215,.9))}
-#tabbar .tab-eco .ei::after{content:"";position:absolute;left:50%;top:50%;width:4px;height:4px;margin:-20px 0 0 12px;border-radius:50%;background:#fff;box-shadow:0 0 6px #fff;animation:twinkle 2.4s ease-in-out infinite}
-.svc-scene .svc-tag svg.ic{position:static!important;inset:auto!important;width:14px!important;height:14px!important;flex:none}
 
 /* ---------- v7.5 Home: one endless studio from top to bottom ---------- */
 .view.v-home{background:radial-gradient(85% 34% at 50% 27%,rgba(150,166,215,.22),rgba(150,166,215,0) 72%),radial-gradient(60% 9% at 50% 40%,rgba(255,255,255,.07),rgba(255,255,255,0) 75%),linear-gradient(180deg,#0B0D14 0%,#0F121B 26%,#0B0D14 48%,#08090E 72%,#07080C 100%)!important}
@@ -2401,22 +2375,4 @@ button.sc-time{border:0;font:inherit;cursor:pointer}
 .svc-int .it-b{fill:#fff}
 .svc-int .onb-fare{color:#06331C;background:#7CF59E}
 .svc-int .svc-cta{background:#fff;color:#0A4A72}
-
-/* ---------- v7.6 dock, after the reference: a compact glass tray of rounded-square keys ---------- */
-#tabbar.tabbar,[data-theme][data-os] #tabbar{left:50%!important;right:auto!important;width:auto!important;transform:translateX(-50%)!important;justify-content:center!important;gap:6px!important;padding:6px!important;border-radius:24px!important;background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.05)),rgba(14,16,22,.84)!important;border:1px solid rgba(255,255,255,.1)!important;-webkit-backdrop-filter:blur(20px) saturate(150%)!important;backdrop-filter:blur(20px) saturate(150%)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 16px 36px -14px rgba(0,0,0,.85)!important}
-[data-theme=light] #tabbar.tabbar,[data-theme=light][data-os] #tabbar{background:rgba(255,255,255,.7)!important;border-color:rgba(10,14,33,.07)!important}
-#tabbar .tab,[data-os] #tabbar .tab{flex:0 0 50px!important;width:50px!important;height:50px!important;border-radius:17px!important;background:rgba(255,255,255,.07)!important;border:1px solid rgba(255,255,255,.08)!important;color:rgba(255,255,255,.82)!important}
-[data-theme=light] #tabbar .tab{background:rgba(10,14,33,.04)!important;border-color:rgba(10,14,33,.06)!important;color:#0A0E21!important}
-#tabbar .tab.on,#tabbar.has-ind .tab.on{color:#0A0E21!important}
-#tabbar .tab-ind{border-radius:17px!important;background:#fff!important;box-shadow:0 6px 16px -6px rgba(255,255,255,.4)!important}
-[data-theme=light] #tabbar .tab-ind{background:#0A0E21!important}
-[data-theme=light] #tabbar .tab.on{color:#fff!important}
-#tabbar .dk{width:21px;height:21px}
-/* eco: same key shape, filled with liquid light */
-#tabbar .tab-eco{flex:0 0 50px!important;width:50px!important;height:50px!important;margin:0!important;border-radius:17px!important;animation:none!important;overflow:visible;box-shadow:0 0 0 1px rgba(59,234,104,.45),0 6px 20px -6px rgba(59,234,104,.7)!important}
-#tabbar .tab-eco::before{display:none}
-#tabbar .tab-eco .ev{inset:0;border-radius:17px}
-#tabbar .tab-eco .eh{border-radius:17px;-webkit-mask:none;mask:none;background:linear-gradient(160deg,rgba(255,255,255,.28),transparent 42%);animation:none}
-#tabbar .tab-eco .ei::after{display:none}
-#tabbar .tab-eco .ei .ic{width:21px;height:21px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))}
-#tabbar .tab-eco.full::after{inset:-5px;border-radius:21px}
+.svc-scene .svc-tag svg.ic{position:static!important;inset:auto!important;width:14px!important;height:14px!important;flex:none}
