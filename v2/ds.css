@@ -2369,3 +2369,19 @@ button.sc-time{border:0;font:inherit;cursor:pointer}
 #tabbar .tab-eco .ep{display:none}
 #tabbar .tab-eco.full::after{inset:-7px;border-radius:50%}
 #tabbar .tab-eco .ei .ic{width:22px;height:22px}
+/* service name, top-left of each card */
+.svc-tag{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 11px 0 9px;border-radius:999px;font-size:12px;font-weight:600;color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.18);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);white-space:nowrap}
+.svc-tag .ic{width:14px;height:14px}
+.svc-tag.abs{position:absolute;left:14px;top:14px;z-index:3}
+.onb-top{align-items:center}
+/* the eco orb: raised, glowing, alive */
+#tabbar .tab-eco{flex:0 0 64px;width:64px;height:64px;margin:-14px 2px 0!important;border-radius:50%!important;box-shadow:0 0 0 5px rgba(12,14,22,.9),0 10px 26px -6px rgba(59,234,104,.65),0 0 34px -4px rgba(59,234,104,.45);animation:orbGlow 3.6s ease-in-out infinite}
+[data-theme=light] #tabbar .tab-eco{box-shadow:0 0 0 5px rgba(255,255,255,.95),0 10px 26px -6px rgba(23,184,90,.55),0 0 30px -6px rgba(59,234,104,.45)}
+@keyframes orbGlow{50%{box-shadow:0 0 0 5px rgba(12,14,22,.9),0 12px 30px -6px rgba(59,234,104,.85),0 0 46px 0 rgba(59,234,104,.55)}}
+[data-theme=light] #tabbar .tab-eco{animation:none}
+#tabbar .tab-eco .ev{background:radial-gradient(90% 70% at 50% 0%,rgba(120,140,255,.45),transparent 70%),radial-gradient(70% 60% at 50% 110%,rgba(59,234,104,.35),transparent 70%),#050914}
+#tabbar .tab-eco .eh{background:conic-gradient(from 0deg,transparent 0 70%,rgba(255,255,255,.55) 80%,transparent 90%);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px));mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px));animation:orbSheen 4s linear infinite}
+@keyframes orbSheen{to{transform:rotate(360deg)}}
+#tabbar .tab-eco .ei .ic{width:24px;height:24px;filter:drop-shadow(0 0 6px rgba(190,255,215,.9))}
+#tabbar .tab-eco .ei::after{content:"";position:absolute;left:50%;top:50%;width:4px;height:4px;margin:-20px 0 0 12px;border-radius:50%;background:#fff;box-shadow:0 0 6px #fff;animation:twinkle 2.4s ease-in-out infinite}
+.svc-scene .svc-tag svg.ic{position:static!important;inset:auto!important;width:14px!important;height:14px!important;flex:none}
