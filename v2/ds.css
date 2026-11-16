@@ -2311,8 +2311,14 @@ button.sc-time{border:0;font:inherit;cursor:pointer}
 .svc-fade{position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.25),transparent 30%,transparent 62%,rgba(22,23,28,.92))}
 .svc-int .svc-fade{background:linear-gradient(180deg,rgba(0,0,0,.2),transparent 30%,transparent 62%,rgba(12,31,28,.95))}
 .svc-scene>:not(video):not(.svc-fade){z-index:1}
-.svc-sch .svc-scene,.svc-int .svc-scene{height:150px}
-.svc-air .svc-scene{height:150px;-webkit-mask:none;mask:none}
 .svc-air .svc-fade{background:linear-gradient(180deg,rgba(11,18,87,.15),transparent 30%,transparent 60%,#152294 100%)}
 .svc-air .svc-vid{mix-blend-mode:normal}
-.sc-days i{background:rgba(10,12,18,.55)!important;color:rgba(255,255,255,.75);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}.scx-time{text-shadow:0 2px 10px rgba(0,0,0,.6)}
+.sc-days i{background:rgba(255,255,255,.08)!important;color:rgba(255,255,255,.75)}.scx-time{text-shadow:0 2px 10px rgba(0,0,0,.6)}
+/* scheduled + intercity cards use the onboarding card designs */
+.svc-scene.onb{height:auto;display:flex;flex-direction:column;gap:14px;padding:16px 16px 6px;overflow:visible}
+.svc-scene.onb .eyebrow{font-size:11.5px!important}
+.svc-scene.onb .week i{width:auto;flex:1;margin:0 2px;height:44px;border-radius:14px}
+.svc-scene.onb .week i.on{background:#fff;color:#1B2470}
+.svc-scene.onb .trip{height:62px}
+.svc-int .svc-scene.onb .row-flex{font-size:13px!important}
+.svc.pulse .svc-scene.onb{animation:cardPop .7s cubic-bezier(.3,1.4,.5,1)}
