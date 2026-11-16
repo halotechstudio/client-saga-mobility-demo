@@ -22,7 +22,7 @@
 .form2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media (max-width:820px){.cmdmap{height:360px}.form2{grid-template-columns:1fr}}
 </style>
-<link rel="stylesheet" href="ds.css?v=15">
+<link rel="stylesheet" href="ds.css?v=16">
 </head>
 <body>
 <div class="app">
@@ -57,26 +57,51 @@ const stt = (t, k = "") => `<span class="st ${k}">${t}</span>`;
 const bar = (v, k) => `<div style="display:flex;align-items:center;gap:8px"><div class="bar ${k}" style="flex:1"><i style="width:${v}%"></i></div><span class="t-num" style="font-size:13px;min-width:34px">${v}%</span></div>`;
 const P = {};
 
+/* flight watch on a 10:00–16:00 line; pickups hang off each flight */
+const FLT = [["AI 1912", "DEL → VTZ", 11.08, "ok", "landing", "lands 11:05 · SG-01"], ["AI 1913", "VTZ → DEL", 13.17, "ok", "takeoff", "pickup 11:40 · SG-03"], ["6E 6402", "BLR → VTZ", 13.0, "w", "landing", "+25 min · pickup 13:05"], ["6E 1427", "VTZ → MAA", 15.33, "ok", "takeoff", "pickup 13:05"]];
+const timeline = () => `<div class="ox-tl">
+  <span class="ox-tl-axis"></span>${[10, 11, 12, 13, 14, 15, 16].map(h => `<span class="ox-tl-h" style="left:${(h - 10) / 6 * 100}%">${h}:00</span>`).join("")}
+  <span class="ox-now" style="left:${(10.03 - 10) / 6 * 100}%"></span>
+  ${FLT.map(([no, rt, t, k, ic, sub], i) => `<span class="ox-fl ${k}" style="left:${(t - 10) / 6 * 100}%;bottom:26px;--stem:${i % 2 ? 74 : 12}px;--d:${i * 90}ms"><b>${I(ic, "sm")}${no}</b><small>${rt} · ${sub}</small></span>`).join("")}
+</div>`;
+
 P.command = () => {
   const c = k => FLEET.filter(f => f[2] === k).length;
   return `${head("Command", "Sunday 15 November · 10:02 AM · Visakhapatnam", `<button class="btn btn-secondary" data-toast="Broadcast sent to all on-shift chauffeurs">${I("chat")}Message chauffeurs</button>`)}
-  <div class="grid g4">
-    <div class="kpi acc"><div class="l">${I("car")}Fleet now</div><div class="v">${c("trip") + c("pick")} / 16</div><div class="s">${c("free")} free · ${c("chg")} charging · ${c("off")} off</div></div>
-    <div class="kpi"><div class="l">${I("clock")}Waitlist</div><div class="v" style="color:var(--warning)">2</div><div class="s">Siripuram · next free car 11 min</div></div>
-    <div class="kpi"><div class="l">${I("plane")}Flights tracked</div><div class="v">24</div><div class="s">1 delayed · pickups auto-moved</div></div>
-    <div class="kpi dark"><div class="l">${I("trend")}Today so far</div><div class="v">${inr(48650)}</div><div class="s">96 rides · 58 scheduled · 11 hotel</div></div>
+  <div class="grid g4 wx-kpis">
+    <div class="kpi acc"><div class="l">${I("car")}Fleet now</div><div class="v"><span data-count="${c("trip") + c("pick")}">${c("trip") + c("pick")}</span> <small>/ 16</small></div><div class="s">${c("free")} free · ${c("chg")} charging · ${c("off")} off</div></div>
+    <div class="kpi"><div class="l">${I("clock")}Waitlist</div><div class="v" style="color:#FFB37A"><span data-count="2">2</span></div><div class="s">Siripuram · next free car 11 min</div></div>
+    <div class="kpi"><div class="l">${I("plane")}Flights tracked</div><div class="v"><span data-count="24">24</span></div><div class="s">1 delayed · pickups auto-moved</div></div>
+    <div class="kpi"><div class="l">${I("trend")}Today so far</div><div class="v">₹<span data-count="48650">48,650</span></div><div class="s">96 rides · 58 scheduled · 11 hotel</div></div>
   </div>
   <div class="grid g21" style="margin-top:14px">
-    <div class="panel" style="padding:0;overflow:hidden"><div class="mapbox cmdmap darkmap" style="border-radius:0;${S.darkMap()}">${S.map({ view: [0, 40, 400, 700], cars: CARS.map(c => [c[0], c[1], c[2], c[3] || "me"]) })}<div class="mapover"><span>${I("car", "sm")} 16 cars</span><span style="color:var(--accent-ink)">● 4 free</span><span>● 12 busy or charging</span></div></div></div>
+    <div class="panel ox-map" style="padding:0;overflow:hidden"><div class="mapbox darkmap" style="border-radius:0;${S.darkMap()}">${S.map({ view: [0, 40, 400, 700], cars: CARS.map(c => [c[0], c[1], c[2], c[3] || "me"]) })}
+      <div class="ox-legend"><span>${I("car", "sm")}16 cars</span><span><i style="background:#3BEA68"></i>${c("free")} free</span><span><i style="background:#7C89FF"></i>${c("trip") + c("pick")} on jobs</span><span><i style="background:#FFB37A"></i>${c("chg")} charging</span></div></div></div>
     <div class="panel"><h2>Needs attention <small>3 open</small></h2>
-      <div class="alert"><span class="li" style="padding:0;border:0"><span class="ico warn">${I("clock")}</span></span><div style="flex:1"><b>2 riders waiting at Siripuram</b><div class="note">No free car within 10 min. SG-09 is at the hub at 82%.</div><div class="acts"><button class="btn btn-primary sm" data-toast="SG-09 released from charging and assigned">Release SG-09</button><button class="btn btn-secondary sm" data-toast="Riders offered 100 points and a scheduled slot">Offer to schedule</button></div></div></div>
-      <div class="alert"><span class="li" style="padding:0;border:0"><span class="ico">${I("plane")}</span></span><div style="flex:1"><b>6E 6402 delayed 25 min</b><div class="note">Arrival pickup moved 12:40 → 13:05 automatically. Rider notified. SG-10 keeps the job.</div><div class="acts"><button class="btn btn-secondary sm" data-toast="Opened flight watch">View flight</button></div></div></div>
-      <div class="alert"><span class="li" style="padding:0;border:0"><span class="ico bad">${I("battery")}</span></span><div style="flex:1"><b>SG-07 at 18%</b><div class="note">Charging slot booked at 10:45 after the current drop. Next job reassigned to SG-16.</div><div class="acts"><button class="btn btn-secondary sm" data-toast="Plan confirmed">Confirm plan</button></div></div></div>
+      <div class="ox-alert" style="--d:0ms"><span class="ox-ai w">${I("clock")}</span><div style="flex:1"><b>2 riders waiting at Siripuram</b><div class="note">No free car within 10 min. SG-09 is at the hub at 82%.</div><div class="acts"><button class="btn btn-primary sm" data-toast="SG-09 released from charging and assigned">Release SG-09</button><button class="btn btn-secondary sm" data-toast="Riders offered 100 points and a scheduled slot">Offer to schedule</button></div></div></div>
+      <div class="ox-alert" style="--d:80ms"><span class="ox-ai l">${I("plane")}</span><div style="flex:1"><b>6E 6402 delayed 25 min</b><div class="note">Arrival pickup moved 12:40 → 13:05 automatically. Rider notified. SG-10 keeps the job.</div><div class="acts"><a class="btn btn-secondary sm" href="#flights">View flight</a></div></div></div>
+      <div class="ox-alert" style="--d:160ms"><span class="ox-ai b">${I("battery")}</span><div style="flex:1"><b>SG-07 at 18%</b><div class="note">Charging slot booked at 10:45 after the current drop. Next job reassigned to SG-16.</div><div class="acts"><button class="btn btn-secondary sm" data-toast="Plan confirmed">Confirm plan</button></div></div></div>
+    </div>
+  </div>
+  <div class="panel" style="margin-top:14px"><h2>Flight watch <small>linked to bookings · 10:00 to 16:00</small><a class="btn btn-text sm" href="#flights">All flights</a></h2>${timeline()}</div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="panel"><h2>Waitlist <small>fare locked · 50 points each</small></h2>
+      <div class="ox-wait"><span class="ox-pos">1</span><div><b>Pooja R.</b><small>Siripuram → Gajuwaka · ₹312</small></div><div class="ox-cd"><b class="t-num" data-cd="660">11:00</b><small>SG-09 next</small></div></div>
+      <div class="ox-wait"><span class="ox-pos">2</span><div><b>Imran K.</b><small>Siripuram → RK Beach · ₹176</small></div><div class="ox-cd"><b class="t-num" data-cd="840">14:00</b><small>SG-04 next</small></div></div>
+      <p class="note" style="margin-top:8px">Both saw the honest "we're growing our fleet" screen and chose to wait. 8 of 9 waitlisted riders today kept their ride.</p>
+    </div>
+    <div class="panel"><h2>Charging bays <small>SAGA hub, Madhurawada</small></h2>
+      <div class="ox-bays">
+        <div class="ox-bay on"><small>Bay 1 · fast</small><b>SG-06 · Prasad V.</b><span class="ox-pct t-num">31%</span><div class="ox-cell"><i style="--p:.31"></i></div><small style="margin-top:6px">Ready 10:40</small></div>
+        <div class="ox-bay on"><small>Bay 2 · fast</small><b>SG-09 · Naveen K.</b><span class="ox-pct t-num">82%</span><div class="ox-cell"><i style="--p:.82"></i></div><small style="margin-top:6px">Can leave now</small></div>
+        <div class="ox-bay"><small>Bay 3 · fast</small><b>SG-07 at 10:45</b><span class="ox-pct t-num">18%</span><div class="ox-cell"><i style="--p:.18"></i></div><small style="margin-top:6px">Reserved after drop</small></div>
+        <div class="ox-bay free"><small>Bay 4 · slow</small><b>Free</b><span class="ox-pct"></span><div class="ox-cell"><i style="--p:0"></i></div><small style="margin-top:6px">SG-14 at 13:30</small></div>
+      </div>
     </div>
   </div>
   <div class="grid g3" style="margin-top:14px">
     <div class="panel"><h2>Next 2 hours</h2><div class="li"><span class="ico">${I("takeoff")}</span><div style="flex:1"><b>9 airport drops</b><span class="s">all flights on time</span></div></div><div class="li"><span class="ico">${I("landing")}</span><div style="flex:1"><b>4 airport pickups</b><span class="s">1 delayed, adjusted</span></div></div><div class="li"><span class="ico">${I("repeat")}</span><div style="flex:1"><b>14 scheduled rides</b><span class="s">12 same-chauffeur matches</span></div></div></div>
-    <div class="panel"><h2>Demand vs. fleet</h2><p class="note">Peak forecast 17:30–19:30: 31 requests for 14 cars on shift. Suggest moving SG-14's shift to start at 16:00.</p><button class="btn btn-secondary sm" style="margin-top:12px" data-toast="Shift change sent to Kumar S.">Propose shift change</button></div>
+    <div class="panel wx-lit"><h2>Demand vs. fleet</h2><p class="note">Peak forecast 17:30–19:30: 31 requests for 14 cars on shift. Suggest moving SG-14's shift to start at 16:00.</p><button class="btn btn-secondary sm" style="margin-top:12px" data-toast="Shift change sent to Kumar S.">Propose shift change</button></div>
     <div class="panel"><h2>Service today</h2><div class="li"><div style="flex:1"><b>On-time pickups</b></div><b>97%</b></div><div class="li"><div style="flex:1"><b>Avg. rating</b></div><b>4.86</b></div><div class="li"><div style="flex:1"><b>Waitlist kept (not lost)</b></div><b>8 of 9</b></div></div>
   </div>`;
 };
@@ -93,12 +118,13 @@ P.bookings = () => {
 };
 
 P.flights = () => `${head("Flight watch", "Every flight linked to a booking, polled and pushed by the flight-status provider. Pickups move by rule; ops only handles exceptions.")}
+  <div class="panel" style="margin-bottom:14px"><h2>Today <small>10:00 to 16:00</small></h2>${timeline()}</div>
   <div class="panel"><div class="tablewrap"><table class="tb"><thead><tr><th>Flight</th><th>Route</th><th>Scheduled</th><th>Status</th><th>Linked ride</th><th>Pickup</th><th>Found via</th></tr></thead><tbody>
-    <tr><td class="m">6E 6402</td><td>BLR → VTZ</td><td>12:35</td><td>${stt("Delayed 25 min", "warn")}</td><td>Priya M. · arrival</td><td><s style="color:var(--fg2)">12:40</s> <b>13:05</b> <span class="sub">auto-moved, rider told</span></td><td>Airline SMS (Android)</td></tr>
-    <tr><td class="m">AI 1912</td><td>DEL → VTZ</td><td>11:05</td><td>${stt("Landed 11:02", "ok")}</td><td>Mr. S. Sharma · hotel</td><td>At Arrivals · SG-01</td><td>Hotel booking</td></tr>
+    <tr><td class="m">6E 6402</td><td>BLR → VTZ</td><td>12:35</td><td>${stt("Delayed 25 min", "warn")}</td><td>Priya M. · arrival</td><td><s style="color:var(--fg2)">12:40</s> <b>13:05</b> <span class="sub">auto-moved, rider told</span></td><td>Ticket scan</td></tr>
+    <tr><td class="m">AI 1912</td><td>DEL → VTZ</td><td>11:05</td><td>${stt("On time", "ok")}</td><td>Mr. S. Sharma · hotel</td><td>11:15 at Arrivals · SG-01</td><td>Hotel booking</td></tr>
     <tr><td class="m">AI 1913</td><td>VTZ → DEL</td><td>13:10</td><td>${stt("On time", "ok")}</td><td>Mr. A. Mehta · hotel</td><td>11:40</td><td>Hotel booking</td></tr>
-    <tr><td class="m">6E 1427</td><td>VTZ → MAA</td><td>15:20</td><td>${stt("On time", "ok")}</td><td>K. Srinivas</td><td>13:05</td><td>Mail filter (auto)</td></tr>
-    <tr><td class="m">6E 2134</td><td>VTZ → HYD</td><td>Fri 07:40</td><td>${stt("Scheduled")}</td><td>Ananya Rao</td><td>Fri 05:20</td><td>Gmail</td></tr>
+    <tr><td class="m">6E 1427</td><td>VTZ → MAA</td><td>15:20</td><td>${stt("On time", "ok")}</td><td>K. Srinivas</td><td>13:05</td><td>Gmail filter</td></tr>
+    <tr><td class="m">6E 2134</td><td>VTZ → HYD</td><td>Fri 07:40</td><td>${stt("Scheduled")}</td><td>Ananya Rao</td><td>Fri 05:20</td><td>Gmail filter</td></tr>
     <tr><td class="m">6E 571</td><td>VTZ → CCU</td><td>07:45</td><td>${stt("Departed", "ok")}</td><td>Mr. R. Iyer · hotel</td><td>Completed</td><td>Hotel booking</td></tr>
   </tbody></table></div></div>
   <div class="grid g3" style="margin-top:14px">
@@ -167,7 +193,16 @@ P.notifications = () => {
 };
 
 let tt; const toast = m => { const t = $("#toast"); t.textContent = m; t.classList.add("on"); clearTimeout(tt); tt = setTimeout(() => t.classList.remove("on"), 2400); };
-function render() { side(); $("#main").innerHTML = (P[st.page] || P.command)(); }
+let tm = [];
+function mount() {
+  tm.forEach(clearTimeout); tm = [];
+  const m = $("#main"); S.countUp(m);
+  const box = m.querySelector(".ox-map .mapbox");
+  if (box) { const r0 = box.getBoundingClientRect(); [...box.querySelectorAll(".m-car")].forEach((g, i) => { const f = FLEET[i]; if (!f) return; const r = g.getBoundingClientRect(), t = document.createElement("span"); t.className = "ox-tag " + (f[2] === "free" ? "f" : f[2] === "chg" ? "c" : ""); t.textContent = f[0]; t.style.left = (r.left + r.width / 2 - r0.left) + "px"; t.style.top = (r.top - r0.top) + "px"; box.appendChild(t); }); }
+  const cds = [...m.querySelectorAll("[data-cd]")];
+  if (cds.length) { const t0 = Date.now(); const tick = () => { if (!document.body.contains(cds[0])) return; cds.forEach(el => { const left = Math.max(0, +el.dataset.cd - Math.floor((Date.now() - t0) / 1000)); el.textContent = Math.floor(left / 60) + ":" + String(left % 60).padStart(2, "0"); }); tm.push(setTimeout(tick, 1000)); }; tick(); }
+}
+function render() { side(); $("#main").innerHTML = (P[st.page] || P.command)(); mount(); }
 addEventListener("hashchange", () => { st.page = location.hash.slice(1) || "command"; $("#side").classList.remove("open"); render(); scrollTo(0, 0); });
 document.addEventListener("click", e => {
   const q = s => e.target.closest(s);

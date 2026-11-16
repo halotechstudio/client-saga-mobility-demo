@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Serif+Telugu:wght@500;600&family=Noto+Serif+Devanagari:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="core.css">
 <link rel="stylesheet" href="web.css">
-<link rel="stylesheet" href="ds.css?v=15">
+<link rel="stylesheet" href="ds.css?v=16">
 </head>
 <body>
 <div class="app">
@@ -18,6 +18,7 @@
 <div class="drawer" id="drawer"></div>
 <div class="toastw" id="toast"></div>
 <script src="core.js?v=33"></script>
+<script src="stage.js?v=6"></script>
 <script>
 (function () {
 const S = SAGA; S.state.os = "web"; S.apply();
@@ -39,7 +40,7 @@ function side() {
   const n = (id, ic, t, b) => `<a class="nv ${st.page === id ? "on" : ""}" href="#${id}">${I(ic)}${t}${b ? `<span class="badge">${b}</span>` : ""}</a>`;
   $("#side").innerHTML = `<div class="brand">${S.logo()}<small>for Hotels</small></div>
     <div class="prop"><b>Bay Pavilion Hotel</b>Beach Road, Visakhapatnam<br><span style="color:var(--fg2)">Front desk · Lakshmi</span></div>
-    ${n("today", "grid", "Today")}${n("book", "plus", "Book a ride")}${n("bookings", "cal", "Bookings", 2)}${n("earnings", "wallet", "Commission & statements")}${n("settings", "gear", "Settings")}
+    ${n("today", "grid", "Today")}${n("book", "plus", "Book a ride")}${n("track", "nav", "Live tracking", 2)}${n("bookings", "cal", "Bookings")}${n("earnings", "wallet", "Commission & statements")}${n("settings", "gear", "Settings")}
     <div class="bottom"><div class="tw">${["light", "dark"].map(t => `<button class="${S.resolvedTheme() === t ? "on" : ""}" data-settheme="${t}">${t[0].toUpperCase() + t.slice(1)}</button>`).join("")}</div>
     <a class="nv" href="index.html">${I("arrowl")}Back to suite</a></div>`;
 }
@@ -47,12 +48,24 @@ const head = (h, p, right = "") => `<div class="hd"><div><button class="ibtn men
 const status = s => `<span class="st ${s[1]}">${s[0]}</span>`;
 
 const P = {};
-P.today = () => `${head("Good morning, Lakshmi", "Sunday 15 November · 7 guest rides today", `<a class="btn btn-primary" href="#book">${I("plus")}Book a ride for a guest</a>`)}
-  <div class="grid g4">
-    <div class="kpi acc"><div class="l">${I("car")}Rides today</div><div class="v">7</div><div class="s">2 done · 2 live · 3 scheduled</div></div>
-    <div class="kpi"><div class="l">${I("plane")}Airport, next 3 h</div><div class="v">2</div><div class="s">Both flights on time</div></div>
-    <div class="kpi"><div class="l">${I("clock")}Avg. wait at porch</div><div class="v">3.8 min</div><div class="s">Last 30 days</div></div>
-    <div class="kpi dark"><div class="l">${I("wallet")}Commission, November</div><div class="v">${inr(18420)}</div><div class="s">142 rides · ${RATE * 100}% of fares</div></div>
+P.today = () => `
+  <div class="wx-hero">
+    <div class="stg" id="unv"></div>
+    <div class="wx-shade"></div>
+    <div class="wx-hero-in">
+      <button class="ibtn menu-btn wx-menu" data-menu>${I("more")}</button>
+      <span class="eyebrow"><span class="dotlive"></span> Bay Pavilion Hotel · Sunday 15 November</span>
+      <h1 class="serif">Good morning, <em>Lakshmi.</em></h1>
+      <p>7 guest rides today. 2 are on the road right now, both on time.</p>
+      <div class="wx-cta"><a class="btn btn-primary" href="#book">${I("plus")}Book a ride for a guest</a><a class="btn btn-secondary" href="#track">${I("nav")}Track live rides</a></div>
+    </div>
+    <div class="wx-chips"><span>${I("leaf", "sm")}100% electric</span><span>${I("user", "sm")}SAGA chauffeurs</span><span>${I("tag", "sm")}Fixed fares</span></div>
+  </div>
+  <div class="grid g4 wx-kpis">
+    <div class="kpi acc"><div class="l">${I("car")}Rides today</div><div class="v"><span data-count="7">7</span></div><div class="s">2 done · 2 live · 3 scheduled</div></div>
+    <div class="kpi"><div class="l">${I("plane")}Airport, next 3 h</div><div class="v"><span data-count="2">2</span></div><div class="s">Both flights on time</div></div>
+    <div class="kpi"><div class="l">${I("clock")}Avg. wait at porch</div><div class="v"><span data-count="3.8">3.8</span> <small>min</small></div><div class="s">Last 30 days</div></div>
+    <div class="kpi"><div class="l">${I("wallet")}Commission, November</div><div class="v">₹<span data-count="18420">18,420</span></div><div class="s">142 rides · ${RATE * 100}% of fares</div></div>
   </div>
   <div class="grid g21" style="margin-top:14px">
     <div class="panel"><h2>Today's guest rides <a class="btn btn-text sm" href="#bookings">All bookings</a></h2>
@@ -60,13 +73,12 @@ P.today = () => `${head("Good morning, Lakshmi", "Sunday 15 November · 7 guest 
       ${BK.map((b, i) => `<tr data-open="${i}" style="cursor:pointer"><td><b class="t-num">${b.t}</b></td><td>${b.g}<span class="sub">Room ${b.rm}</span></td><td><span style="display:inline-flex;gap:8px;align-items:center">${I(TYI[b.ty], "sm")}${b.ty}</span><span class="sub">${b.d}</span></td><td>${status(b.s)}</td><td class="r">${inr(b.f)}<span class="sub">${b.pay}</span></td></tr>`).join("")}
       </tbody></table></div></div>
     <div class="grid" style="align-content:start">
-      <div class="panel"><h2>Live <small>updated now</small></h2>
+      <div class="panel"><h2>Live <small><span class="dotlive"></span> updated now</small></h2>
         <div class="mapbox darkmap" style="height:220px;${S.darkMap()}">${S.map({ view: [120, 300, 240, 200], cars: [[260, 420, 180, "me"], [180, 440, 0, "busy"]], pickup: false })}</div>
-        <div class="li" style="margin-top:8px"><span class="ico">${I("takeoff")}</span><div style="flex:1"><b>Mr. A. Mehta · Room 318</b><span class="s">Kiran arriving at the porch in 4 min · AI 1913</span></div></div>
+        <a class="li wx-li" href="#track"><span class="ico">${I("takeoff")}</span><div style="flex:1"><b>Mr. A. Mehta · Room 318</b><span class="s">Kiran arriving at the porch in 4 min · AI 1913</span></div>${I("chevr", "sm")}</a>
         <div class="li"><span class="ico">${I("landing")}</span><div style="flex:1"><b>Mr. S. Sharma</b><span class="s">Ravi is at Arrivals with a name board</span></div></div>
       </div>
-      <div class="promo"><span class="promo-wm" aria-hidden="true">SAGA</span><span class="promo-k">${S.logo()}</span><div class="promo-h">Your guests ride<br><mark>electric.</mark></div><p class="promo-s">Chauffeur-driven, fixed fares, and 10% back to you on every ride you book.</p></div>
-      <div class="panel"><h2>Guests flying tomorrow</h2><p class="note">3 guests have flights before 9 AM tomorrow. Book their drops now so SAGA can plan cars tonight.</p><a class="btn btn-secondary sm" style="margin-top:12px" href="#book">Book airport drops</a></div>
+      <div class="panel wx-lit"><h2>Guests flying tomorrow</h2><p class="note">3 guests have flights before 9 AM tomorrow. Book their drops now so SAGA can plan cars tonight.</p><a class="btn btn-secondary sm" style="margin-top:12px" href="#book">${I("takeoff", "sm")}Book airport drops</a></div>
     </div>
   </div>`;
 
@@ -77,33 +89,62 @@ P.book = () => {
   const pays = [["room", "Add to room bill", "Guest pays the hotel at checkout. SAGA invoices the hotel monthly; your commission is netted off."], ["guest", "Guest pays SAGA", "We send the guest a UPI payment link on WhatsApp. SAGA pays your commission monthly."], ["account", "Hotel account (complimentary)", "For VIPs and packages. Billed to the hotel monthly; commission still applies."]];
   return `${head("Book a ride for a guest", "The guest gets the chauffeur's name, car and live tracking on WhatsApp and SMS. No app needed.")}
   <div class="grid g12">
-    <div class="panel">
-      <h2>Trip</h2>
+    <div class="panel wx-form">
+      <div class="wx-step"><b>1</b>Trip</div>
       <div class="chipr">${ty.map(([v, ic, t]) => `<button class="${st.type === v ? "on" : ""}" data-type="${v}">${I(ic)}${t}</button>`).join("")}</div>
-      <div class="grid g2" style="margin-top:16px">
-        <div class="fld"><label>Guest name</label><div class="in"><input value="Mrs. L. Das"></div></div>
-        <div class="fld"><label>Room</label><div class="in"><input value="220"></div></div>
+      <div class="wx-step"><b>2</b>Guest</div>
+      <div class="grid g2">
+        <div class="fld"><label>Guest name</label><div class="in">${I("user", "sm")}<input value="Mrs. L. Das"></div></div>
+        <div class="fld"><label>Room</label><div class="in">${I("hotel", "sm")}<input value="220"></div></div>
         <div class="fld"><label>Guest mobile (WhatsApp)</label><div class="in"><b>+91</b><input value="98490 55210"></div></div>
-        <div class="fld"><label>Riders and bags</label><div class="in"><input value="2 riders · 2 bags"></div></div>
+        <div class="fld"><label>Riders and bags</label><div class="in">${I("users", "sm")}<input value="2 riders · 2 bags"></div></div>
+      </div>
+      <div class="wx-step"><b>3</b>${air ? "Flight" : "Where and when"}</div>
+      <div class="grid g2">
         ${air ? `<div class="fld"><label>Guest's flight</label><div class="in">${I("plane", "sm")}<input value="6E 2134" class="mono"><button class="btn btn-text sm" data-toast="Point the tablet camera at the guest's ticket or boarding pass">${I("scan", "sm")}Scan ticket</button></div></div>
         <div class="fld"><label>${st.type === "airdrop" ? "Pickup from hotel" : "Landing"}</label><div class="in">${I("clock", "sm")}<input value="${st.type === "airdrop" ? "Mon 16 Nov · 5:20 AM" : "Mon 16 Nov · lands 11:05 AM"}"></div></div>`
         : `<div class="fld"><label>Drop</label><div class="in">${I("pin", "sm")}<input value="${st.type === "inter" ? "Araku Valley" : "Railway Station"}"></div></div>
         <div class="fld"><label>Pickup time</label><div class="in">${I("clock", "sm")}<input value="Today · 1:30 PM"></div></div>`}
       </div>
-      ${air ? `<div class="li" style="margin-top:12px;background:var(--accent-soft);color:var(--on-accent-soft);border-radius:14px;padding:12px 14px;border:0"><span class="ico" style="background:var(--accent);color:var(--on-accent)">${I("refresh")}</span><div style="flex:1"><b>${st.type === "airdrop" ? "Pickup set from the flight: 5:20 AM" : "Chauffeur waits from landing, up to 45 min free"}</b><span class="s" style="color:inherit;opacity:.85">${st.type === "airdrop" ? "6E 2134 departs 7:40 AM. 50 min drive + 90 min at the airport. Moves automatically if the flight changes." : "SAGA tracks the flight and adjusts if it lands early or late."}</span></div></div>` : ""}
-      <h2 style="margin-top:22px">Payment</h2>
+      ${air ? `<div class="wx-flight"><span class="ico">${I("refresh")}</span><div><b>${st.type === "airdrop" ? "Pickup set from the flight: 5:20 AM" : "Chauffeur waits from landing, up to 45 min free"}</b><span>${st.type === "airdrop" ? "6E 2134 departs 7:40 AM. 50 min drive + 90 min at the airport. Moves automatically if the flight changes." : "SAGA tracks the flight and adjusts if it lands early or late."}</span></div></div>` : ""}
+      <div class="wx-step"><b>4</b>Payment</div>
       <div class="opts">${pays.map(([v, t, s]) => `<button class="opt ${st.pay === v ? "on" : ""}" data-pay="${v}"><span class="rd"></span><span><b>${t}</b><span>${s}</span></span></button>`).join("")}</div>
     </div>
     <div class="grid" style="align-content:start">
-      <div class="panel"><h2>Quote</h2>
-        <div class="li"><div style="flex:1"><b>${S.VEHICLE.short}</b><span class="s">Fixed fare, includes GST</span></div><b style="font-size:22px">${inr(fare)}</b></div>
-        <div class="li"><div style="flex:1"><b>Your commission (${RATE * 100}%)</b><span class="s">Credited in the monthly statement</span></div><b style="font-size:18px;color:var(--success)">+ ${inr(com)}</b></div>
+      <div class="panel wx-quote">
+        <img src="${SagaStage.src("cut-side")}" alt="${S.VEHICLE.short}">
+        <div class="wx-q-top"><div><span class="eyebrow">${S.VEHICLE.short} · 6 riders · ${S.VEHICLE.bags} bags</span><b class="serif">${inr(fare)}</b><small>Fixed fare, includes GST</small></div></div>
+        <div class="li"><div style="flex:1"><b>Your commission (${RATE * 100}%)</b><span class="s">Credited in the monthly statement</span></div><b class="wx-plus">+ ${inr(com)}</b></div>
         <div class="li"><div style="flex:1"><b>Guest sees</b><span class="s">${st.pay === "room" ? "On their room bill" : st.pay === "guest" ? "In the UPI link" : "Nothing to pay"}</span></div><b>${st.pay === "account" ? "Complimentary" : inr(fare)}</b></div>
         <button class="btn btn-primary block" style="margin-top:14px" data-confirm>${I("check")}Book and notify guest</button>
       </div>
       <div class="panel"><h2>What the guest receives</h2>
-        <div class="wa"><b>SAGA × Bay Pavilion Hotel</b><br>Hello Mrs. Das, your ride to the airport is booked for <b>Mon 16 Nov, 5:20 AM</b> from the hotel porch.<br>We're tracking 6E 2134 and will move the pickup if it changes.<br>Chauffeur details arrive the evening before.${st.pay === "guest" ? "<br>Pay securely: saga.link/p/7Q2" : ""}</div>
+        <div class="wa">${S.logoMark()}<div><b>SAGA × Bay Pavilion Hotel</b><br>Hello Mrs. Das, your ride ${air ? "to the airport" : ""} is booked for <b>${air ? "Mon 16 Nov, 5:20 AM" : "today, 1:30 PM"}</b> from the hotel porch.${air ? "<br>We're tracking 6E 2134 and will move the pickup if it changes." : ""}<br>Chauffeur details and a live tracking link arrive before pickup.${st.pay === "guest" ? "<br>Pay securely: saga.link/p/7Q2" : ""}<small>09:41 ✓✓</small></div></div>
         <p class="note" style="margin-top:10px">Sent on WhatsApp (approved template) with SMS fallback, in the guest's language when known.</p>
+      </div>
+    </div>
+  </div>`;
+};
+
+/* live guest-ride tracking: the front desk sees what the guest sees */
+const TRK = [["check", "Booked", "Guest notified on WhatsApp"], ["user", "Chauffeur assigned", "Kiran B. · SAGA Luxe · AP 39 EV 2041"], ["nav", "On the way", "From Siripuram · 4 min"], ["hotel", "At the porch", "Free wait 10 min"], ["route", "On trip", "To Bhogapuram Airport"], ["flag", "Dropped", "Invoice to the room bill"]];
+P.track = () => {
+  const k = st.trk || 2;
+  return `${head("Live guest ride", "Mr. A. Mehta · Room 318 · Airport drop for AI 1913 (dep 13:10). Updates every few seconds.", `<button class="btn btn-secondary" data-toast="Tracking link re-sent to the guest">${I("share")}Resend link</button><a class="btn btn-secondary" href="#bookings">All bookings</a>`)}
+  ${st.justBooked ? `<div class="wx-booked lg-brand"><span class="dv-seal">${I("check")}</span><div><b>Mrs. L. Das · Room 220 is booked</b><span>Airport drop · Mon 16 Nov, 5:20 AM · 6E 2134. Her tracking opens here when the chauffeur sets off. Live right now:</span></div></div>` : ""}
+  <div class="grid g21">
+    <div class="panel wx-trk-map" style="padding:0;overflow:hidden">
+      <div class="mapbox darkmap" style="height:460px;border-radius:0;${S.darkMap()}">${S.map({ route: "pickup", view: [70, 60, 330, 400], pickup: true })}
+        <div class="mapover wx-over"><span><span class="dotlive"></span> Kiran B. · 4 min away</span><span>${I("plane", "sm")}AI 1913 on time</span></div>
+      </div>
+    </div>
+    <div class="grid" style="align-content:start">
+      <div class="panel wx-chauf"><img src="${SagaStage.src("cut-front")}" alt="${S.VEHICLE.short}"><div><span class="eyebrow">Your guest's chauffeur</span><b>Kiran B.</b><small>★ 4.9 · ${S.VEHICLE.short} · <span class="t-num">${S.VEHICLE.plate}</span></small></div></div>
+      <div class="panel"><h2>Progress</h2>
+        <div class="wx-steps">${TRK.map(([ic, t, s], i) => `<div class="${i < k ? "done" : i === k ? "now" : ""}"><span>${I(i < k ? "check" : ic, "sm")}</span><div><b>${t}</b><small>${s}</small></div></div>`).join("")}</div>
+      </div>
+      <div class="panel"><h2>Sent to the guest</h2>
+        <div class="wa">${S.logoMark()}<div>Kiran is on the way in a black ${S.VEHICLE.short}, <b>${S.VEHICLE.plate}</b>. Arriving at the porch in about 4 minutes. Track live: saga.link/t/K3<small>11:36 ✓✓</small></div></div>
       </div>
     </div>
   </div>`;
@@ -118,35 +159,37 @@ P.bookings = () => {
   </tbody></table></div></div>`;
 };
 
-P.earnings = () => `${head("Commission and statements", "November 2026 so far. Sample figures; rates and tax treatment are set in your partner agreement.", `<button class="btn btn-secondary" data-toast="Statement PDF downloaded">${I("download")}Download statement</button>`)}
-  <div class="grid g4">
-    <div class="kpi"><div class="l">${I("car")}Guest rides</div><div class="v">142</div><div class="s">Gross fares ${inr(184200)}</div></div>
-    <div class="kpi acc"><div class="l">${I("percent")}Commission earned</div><div class="v">${inr(18420)}</div><div class="s">${RATE * 100}% of gross fares</div></div>
-    <div class="kpi"><div class="l">${I("receipt")}Owed to SAGA</div><div class="v">${inr(112800)}</div><div class="s">Room bill + hotel account rides</div></div>
-    <div class="kpi dark"><div class="l">${I("wallet")}Net to pay SAGA</div><div class="v">${inr(91432)}</div><div class="s">Due 7 Dec · after commission</div></div>
+P.earnings = () => {
+  const months = [["Jun", 9120], ["Jul", 11840], ["Aug", 13260], ["Sep", 15290], ["Oct", 24160], ["Nov", 18420]], max = 26000;
+  return `${head("Commission and statements", "November 2026 so far. Sample figures; rates and tax treatment are set in your partner agreement.", `<button class="btn btn-secondary" data-toast="Statement PDF downloaded">${I("download")}Download statement</button>`)}
+  <div class="grid g4 wx-kpis">
+    <div class="kpi"><div class="l">${I("car")}Guest rides</div><div class="v"><span data-count="142">142</span></div><div class="s">Gross fares ${inr(184200)}</div></div>
+    <div class="kpi acc"><div class="l">${I("wallet")}Your commission</div><div class="v">₹<span data-count="18420">18,420</span></div><div class="s">10% of gross fares</div></div>
+    <div class="kpi"><div class="l">${I("receipt")}Room bills to settle</div><div class="v">₹<span data-count="112800">1,12,800</span></div><div class="s">Collected by you for SAGA</div></div>
+    <div class="kpi"><div class="l">${I("cal")}Net to pay SAGA</div><div class="v">₹<span data-count="91432">91,432</span></div><div class="s">Due 7 Dec · after commission</div></div>
   </div>
-  <div class="grid g12" style="margin-top:14px">
-    <div class="panel"><h2>How the money moves</h2>
-      <div class="flow"><div class="nd"><b>Guest</b>pays at checkout or by UPI</div><div class="ar">${I("arrowr")}fare</div><div class="nd"><b>Hotel</b>or SAGA collects</div><div class="ar">${I("arrowr")}monthly</div><div class="nd"><b>Statement</b>fares owed minus commission</div></div>
-      <div class="tablewrap" style="margin-top:16px"><table class="tb"><thead><tr><th>Payment mode</th><th class="r">Rides</th><th class="r">Fares</th><th>Who collected</th></tr></thead><tbody>
-        <tr><td>Room bill</td><td class="r">68</td><td class="r">${inr(96300)}</td><td>Hotel → owes SAGA</td></tr>
-        <tr><td>Hotel account</td><td class="r">12</td><td class="r">${inr(16500)}</td><td>Hotel → owes SAGA</td></tr>
-        <tr><td>Guest paid SAGA</td><td class="r">62</td><td class="r">${inr(71400)}</td><td>SAGA directly</td></tr>
-      </tbody></table></div>
+  <div class="grid g21" style="margin-top:14px">
+    <div class="panel"><h2>Commission by month <small>June to November · November so far</small></h2>
+      <div class="wx-chart">${months.map(([m, v], i) => `<div class="${i === months.length - 1 ? "now" : ""}"><b class="t-num">${(v / 1000).toFixed(1)}k</b><i style="--h:${v / max};--d:${i * 80}ms"></i><small>${m}</small></div>`).join("")}</div>
+      <div class="wx-mix"><span style="--w:52%" class="a">Room bill · 68 rides</span><span style="--w:9%" class="b">Hotel account · 12</span><span style="--w:39%" class="c">Guest paid SAGA · 62</span></div>
+      <div class="wx-legend"><span><i class="a"></i>Room bill ${inr(96300)}</span><span><i class="b"></i>Hotel account ${inr(16500)}</span><span><i class="c"></i>Guest paid SAGA ${inr(71400)}</span></div>
     </div>
-    <div class="panel"><h2>Settlement, November</h2>
-      <div class="li"><div style="flex:1"><b>Fares collected by hotel</b><span class="s">Room bill + hotel account</span></div><b>${inr(112800)}</b></div>
-      <div class="li"><div style="flex:1"><b>Commission on all 142 rides</b><span class="s">${RATE * 100}% of ${inr(184200)}</span></div><b style="color:var(--success)">− ${inr(18420)}</b></div>
-      <div class="li"><div style="flex:1"><b>GST on commission (18%)</b><span class="s">On the hotel's commission invoice</span></div><b style="color:var(--success)">− ${inr(3316)}</b></div>
-      <div class="li"><div style="flex:1"><b>TDS on commission (2%)</b><span class="s">Deducted by SAGA, Form 16A issued</span></div><b>+ ${inr(368)}</b></div>
-      <div class="li" style="border-top:2px solid var(--fg)"><div style="flex:1"><b style="font-size:17px">Hotel pays SAGA</b><span class="s">By 7 Dec via NEFT / UPI · auto-debit optional</span></div><b style="font-size:22px">${inr(91432)}</b></div>
-      <p class="note" style="margin-top:12px">If guest-paid rides exceed what the hotel collected in a month, SAGA pays the difference to the hotel instead. Tax treatment shown is illustrative; SAGA's CA to confirm.</p>
+    <div class="panel"><h2>November settlement</h2>
+      <div class="li"><div style="flex:1"><b>Room bills and hotel account</b><span class="s">Collected by the hotel</span></div><b>${inr(112800)}</b></div>
+      <div class="li"><div style="flex:1"><b>Commission</b><span class="s">10% of ${inr(184200)}</span></div><b class="wx-plus">− ${inr(18420)}</b></div>
+      <div class="li"><div style="flex:1"><b>GST on commission (18%)</b><span class="s">Charged by the hotel</span></div><b>− ${inr(3316)}</b></div>
+      <div class="li"><div style="flex:1"><b>TDS (2%)</b><span class="s">Form 16A issued quarterly</span></div><b>+ ${inr(368)}</b></div>
+      <div class="wx-total"><span>Net to pay SAGA</span><b class="serif">${inr(91432)}</b><small>Due 7 Dec · UPI or NEFT</small></div>
     </div>
   </div>
-  <div class="panel" style="margin-top:14px"><h2>Past statements</h2><div class="tablewrap"><table class="tb"><thead><tr><th>Month</th><th class="r">Rides</th><th class="r">Gross</th><th class="r">Commission</th><th class="r">Settled</th><th>Status</th><th></th></tr></thead><tbody>
-    <tr><td>October 2026</td><td class="r">188</td><td class="r">${inr(241600)}</td><td class="r">${inr(24160)}</td><td class="r">${inr(118250)}</td><td><span class="st ok">Paid 6 Nov</span></td><td class="r"><button class="btn btn-text sm" data-toast="Invoice downloaded">${I("download")}PDF</button></td></tr>
-    <tr><td>September 2026</td><td class="r">121</td><td class="r">${inr(152900)}</td><td class="r">${inr(15290)}</td><td class="r">${inr(70110)}</td><td><span class="st ok">Paid 5 Oct</span></td><td class="r"><button class="btn btn-text sm" data-toast="Invoice downloaded">${I("download")}PDF</button></td></tr>
-  </tbody></table></div></div>`;
+  <div class="panel" style="margin-top:14px"><h2>Statements</h2>
+    <div class="tablewrap"><table class="tb"><thead><tr><th>Month</th><th class="r">Rides</th><th class="r">Gross</th><th class="r">Commission</th><th class="r">Settled</th><th>Status</th><th></th></tr></thead><tbody>
+      <tr><td><b>November 2026</b><span class="sub">so far</span></td><td class="r">142</td><td class="r">${inr(184200)}</td><td class="r wx-plus">${inr(18420)}</td><td class="r">${inr(91432)}</td><td>${status(["Due 7 Dec", "acc"])}</td><td class="r"><button class="btn btn-text sm" data-toast="Draft statement opened">View</button></td></tr>
+      <tr><td><b>October 2026</b></td><td class="r">188</td><td class="r">${inr(241600)}</td><td class="r wx-plus">${inr(24160)}</td><td class="r">${inr(118250)}</td><td>${status(["Paid 6 Nov", "ok"])}</td><td class="r"><button class="btn btn-text sm" data-toast="October statement PDF downloaded">${I("download", "sm")}PDF</button></td></tr>
+      <tr><td><b>September 2026</b></td><td class="r">121</td><td class="r">${inr(152900)}</td><td class="r wx-plus">${inr(15290)}</td><td class="r">${inr(70110)}</td><td>${status(["Paid 5 Oct", "ok"])}</td><td class="r"><button class="btn btn-text sm" data-toast="September statement PDF downloaded">${I("download", "sm")}PDF</button></td></tr>
+    </tbody></table></div>
+  </div>`;
+};
 
 P.settings = () => `${head("Settings", "Property details and who can book on behalf of guests.")}
   <div class="grid g2">
@@ -173,7 +216,16 @@ function drawer(i) {
   d.classList.add("on");
 }
 let tt; const toast = m => { const t = $("#toast"); t.textContent = m; t.classList.add("on"); clearTimeout(tt); tt = setTimeout(() => t.classList.remove("on"), 2400); };
-function render() { side(); $("#main").innerHTML = (P[st.page] || P.today)(); }
+let tm = [];
+function mount() {
+  tm.forEach(clearTimeout); tm = [];
+  const m = $("#main"); S.countUp(m);
+  const u = m.querySelector("#unv"); if (u) { const s1 = SagaStage.unveil(u, { set: "l", autoplay: false, instant: st.unv }); s1.ready.then(() => s1.play()); st.unv = 1; }
+  const map = m.querySelector(".wx-trk-map svg"), rt = map && map.querySelector(".m-route");
+  if (rt) { const g = document.createElementNS("http://www.w3.org/2000/svg", "g"); g.setAttribute("class", "wx-car"); g.innerHTML = '<image href="' + SagaStage.src("top-down") + '" x="-13" y="-13" width="26" height="26" transform="rotate(90)"/><animateMotion dur="10s" repeatCount="indefinite" rotate="auto" path="' + rt.getAttribute("d") + '"/>'; map.appendChild(g); }
+  if (st.page === "track") { const adv = () => { if (st.page !== "track") return; st.trk = Math.min(4, (st.trk || 2) + 1); const rows = [...m.querySelectorAll(".wx-steps>div")]; rows.forEach((r, i) => { r.classList.toggle("done", i < st.trk); r.classList.toggle("now", i === st.trk); }); if (st.trk < 4) tm.push(setTimeout(adv, 5000)); }; if ((st.trk || 2) < 4) tm.push(setTimeout(adv, 5000)); }
+}
+function render() { side(); $("#main").innerHTML = (P[st.page] || P.today)(); mount(); }
 addEventListener("hashchange", () => { st.page = location.hash.slice(1) || "today"; $("#side").classList.remove("open"); render(); scrollTo(0, 0); });
 document.addEventListener("click", e => {
   const T = e.target, q = s => T.closest(s);
@@ -183,7 +235,7 @@ document.addEventListener("click", e => {
   else if (q("[data-filter]")) { st.filter = q("[data-filter]").dataset.filter; render(); }
   else if (q("[data-open]")) drawer(+q("[data-open]").dataset.open);
   else if (q("[data-close]")) $("#drawer").classList.remove("on");
-  else if (q("[data-confirm]")) { toast("Booked. Mrs. Das has been sent the details on WhatsApp."); setTimeout(() => (location.hash = "bookings"), 900); }
+  else if (q("[data-confirm]")) { toast("Booked. Mrs. Das has been sent the details on WhatsApp."); st.trk = 2; st.justBooked = true; setTimeout(() => (location.hash = "track"), 900); }
   else if (q("[data-menu]")) $("#side").classList.toggle("open");
   else if (q("[data-toast]")) toast(q("[data-toast]").dataset.toast);
 });
