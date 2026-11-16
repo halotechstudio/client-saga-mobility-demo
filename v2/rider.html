@@ -404,7 +404,7 @@ body.embed,body.bare{background:transparent}
 .upd-sheet{position:absolute;left:12px;right:12px;bottom:24px;padding:22px;border-radius:28px;background:var(--surface);box-shadow:0 20px 60px rgba(0,0,0,.25)}
 </style>
 <link rel="stylesheet" href="system.css?v=9"><link rel="stylesheet" href="system3.css?v=9"><link rel="stylesheet" href="system4.css?v=9"><link rel="stylesheet" href="system6.css?v=11"><link rel="stylesheet" href="system7.css?v=10">
-<link rel="stylesheet" href="ds.css?v=39">
+<link rel="stylesheet" href="ds.css?v=40">
 </head>
 <body>
 <div class="shell">
@@ -659,12 +659,12 @@ def("home", { g: "Ride", n: "Home", tab: "home", what: "A greeting and three qui
       <div class="hm-tick"><span style="--k:0">${I("tag", "sm")}${L("Fixed fares, no surge", "స్థిర ఛార్జీలు, సర్జ్ లేదు", "तय किराया, कोई सर्ज नहीं")}</span><span style="--k:1">${I("leaf", "sm")}${L("Every SAGA is 100% electric", "ప్రతి SAGA 100% ఎలక్ట్రిక్", "हर SAGA 100% इलेक्ट्रिक")}</span><span style="--k:2">${I("shield", "sm")}${L("Salaried, verified chauffeurs", "జీతం పొందే, ధృవీకరించిన డ్రైవర్లు", "वेतनभोगी, सत्यापित ड्राइवर")}</span></div>
     </div>
     <div class="hm-stage hm-stage3"><div class="hm-spin" data-car3d></div><button class="hm-about" data-go="vehicle">SAGA Luxe <em>${L("About the car", "కారు గురించి", "गाड़ी के बारे में")}</em>${I("chevr", "sm")}</button></div>
-    <button class="search2 press hm-search" data-go="where"><span class="s-ic">${I("search")}</span><span class="ph">${L("Where to?", "ఎక్కడికి?", "कहाँ जाना है?")}</span><span class="s-now" data-go="schedule">${I("clock", "sm")}${L("Later", "తర్వాత", "बाद में")}</span><span class="s-mic" data-voice aria-label="${L("Speak to Saathi", "సాథీతో మాట్లాడండి", "साथी से बोलें")}">${I("mic", "sm")}</span></button>
+    <button class="search2 press hm-search" data-go="where"><span class="s-ic">${I("search")}</span><span class="ph">${L("Where to?", "ఎక్కడికి?", "कहाँ जाना है?")}<span class="ph-roll">${[L("VTZ Airport", "VTZ ఎయిర్‌పోర్ట్", "VTZ एयरपोर्ट"), L("Office", "ఆఫీస్", "ऑफ़िस"), "RK Beach", L("Araku Valley", "అరకు వ్యాలీ", "अराकू घाटी")].map((t, k) => `<i style="--k:${k}">${t}</i>`).join("")}</span></span><span class="s-now" data-go="schedule">${I("clock", "sm")}${L("Later", "తర్వాత", "बाद में")}</span><span class="s-mic" data-voice aria-label="${L("Speak to Saathi", "సాథీతో మాట్లాడండి", "साथी से बोलें")}">${I("mic", "sm")}</span></button>
 
     <div class="sv sv-onb">
-      <button class="sv2" data-go="airport" style="--i:0"><span class="sv2-bg" style="background-image:url(${SagaStage.src("still-front-low")})"></span>${chapCard(0).replace("chap-card", "chap-card sv2-card")}<span class="sv2-cta">${L("Plan airport ride", "ఎయిర్‌పోర్ట్ రైడ్ ప్లాన్", "एयरपोर्ट राइड प्लान")}${I("arrowr", "sm")}</span></button>
-      <button class="sv2" data-go="schedule" style="--i:1"><span class="sv2-bg" style="background-image:url(${SagaStage.src("still-side")})"></span>${chapCard(1).replace("chap-card", "chap-card sv2-card")}<span class="sv2-cta">${L("Schedule rides", "రైడ్‌లు షెడ్యూల్", "राइड शेड्यूल करें")}${I("arrowr", "sm")}</span></button>
-      <button class="sv2" data-go="intercity" style="--i:2"><span class="sv2-bg" style="background-image:url(${SagaStage.src("still-rear")})"></span>${chapCard(2).replace("chap-card", "chap-card sv2-card")}<span class="sv2-cta">${L("Plan a trip", "ప్రయాణం ప్లాన్", "यात्रा प्लान करें")}${I("arrowr", "sm")}</span></button>
+      <button class="sv2" data-go="airport" style="--i:0">${chapCard(0).trim().replace("chap-card", "chap-card sv2-card").slice(0, -6) + (`<span class="sv2-cta">${L("Plan airport ride", "ఎయిర్‌పోర్ట్ రైడ్ ప్లాన్", "एयरपोर्ट राइड प्लान")}${I("arrowr", "sm")}</span></div>`)}</button>
+      <button class="sv2" data-go="schedule" style="--i:1">${chapCard(1).trim().replace("chap-card", "chap-card sv2-card").slice(0, -6) + (`<span class="sv2-cta">${L("Schedule rides", "రైడ్‌లు షెడ్యూల్", "राइड शेड्यूल करें")}${I("arrowr", "sm")}</span></div>`)}</button>
+      <button class="sv2" data-go="intercity" style="--i:2">${chapCard(2).trim().replace("chap-card", "chap-card sv2-card").slice(0, -6) + (`<span class="sv2-cta">${L("Plan a trip", "ప్రయాణం ప్లాన్", "यात्रा प्लान करें")}${I("arrowr", "sm")}</span></div>`)}</button>
     </div>
 
     <div class="hm-sec"><span>${L("Make it effortless", "మరింత సులభంగా", "और आसान")}</span><small class="bn-dots"><i class="on"></i><i></i><i></i></small></div>
@@ -1637,6 +1637,10 @@ SC.home.mount = el => {
     c.addEventListener("pointermove", lean); c.addEventListener("pointerdown", lean);
     const rest = () => { c.style.transform = ""; }; c.addEventListener("pointerleave", rest); c.addEventListener("pointerup", rest); c.addEventListener("pointercancel", rest);
   });
+  const replay = c => { const w = c.querySelectorAll(".week i"); w.forEach(x => x.classList.remove("on")); void c.offsetWidth; w.forEach((x, k) => { if (k < 5) setTimeout(() => x.classList.add("on"), 60); }); c.querySelectorAll(".a1,.tripd").forEach(p => { p.style.animation = "none"; void p.getBoundingClientRect(); p.style.animation = ""; }); c.classList.remove("pulse"); void c.offsetWidth; c.classList.add("pulse"); };
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) replay(e.target); }), { threshold: .6 });
+  el.querySelectorAll(".sv2").forEach(c => { io.observe(c); c.addEventListener("pointerdown", () => replay(c)); });
+  const loop = () => { if (cur !== "home") { io.disconnect(); return; } el.querySelectorAll(".sv2").forEach(replay); timers.push(setTimeout(loop, 7000)); }; timers.push(setTimeout(loop, 7000));
   // banner rail: dots follow the swipe, and it turns the page by itself until touched
   const rail = el.querySelector(".bn-rail"), dots = [...el.querySelectorAll(".bn-dots i")];
   if (rail) {
