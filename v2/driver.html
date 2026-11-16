@@ -164,8 +164,8 @@ body.embed,body.bare{background:transparent}
 .nt.new .ni{background:var(--accent);color:var(--on-accent)}
 .nt b{font-size:16px;display:block}.nt p{font-size:14.5px;color:var(--fg2);margin-top:2px;line-height:1.4}.nt time{font-size:13px;color:var(--fg2);display:block;margin-top:4px}
 </style>
-<link rel="stylesheet" href="system.css?v=9"><link rel="stylesheet" href="system3.css?v=9"><link rel="stylesheet" href="system4.css?v=9">
-<link rel="stylesheet" href="ds.css?v=14">
+<link rel="stylesheet" href="system.css?v=9">
+<link rel="stylesheet" href="ds.css?v=15">
 </head>
 <body>
 <div class="shell">
@@ -181,6 +181,7 @@ body.embed,body.bare{background:transparent}
   </div></div></div></main>
 </div>
 <script src="core.js?v=33"></script>
+<script src="stage.js?v=6"></script>
 <script>
 (function () {
 const S = SAGA; S.state.os = "android"; S.apply();
@@ -190,15 +191,15 @@ document.body.classList.toggle("embed", EMBED); document.body.classList.toggle("
 const esc = s => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 
 const STEPS = [
-  ["front", "car", ["Front", "ముందు భాగం", "आगे से"], ["Stand 3 m in front. Fit the whole car in the frame.", "3 మీటర్ల దూరంలో ముందు నిలబడండి. కారు మొత్తం ఫ్రేమ్‌లో ఉండాలి.", "3 मीटर आगे खड़े हों। पूरी गाड़ी फ़्रेम में रखें।"], "side"],
-  ["left", "car", ["Left side", "ఎడమ వైపు", "बाईं ओर"], ["Walk to the left side. Wheels to wheels in the frame.", "ఎడమ వైపుకు వెళ్ళండి. రెండు చక్రాలు ఫ్రేమ్‌లో.", "बाईं ओर जाएँ। दोनों पहिये फ़्रेम में।"], "side"],
-  ["rear", "car", ["Rear", "వెనుక భాగం", "पीछे से"], ["Stand behind the car. Include the bumper and boot lid.", "కారు వెనుక నిలబడండి. బంపర్, బూట్ కనిపించాలి.", "गाड़ी के पीछे खड़े हों। बम्पर और डिक्की दिखे।"], "side", "warn"],
-  ["right", "car", ["Right side", "కుడి వైపు", "दाईं ओर"], ["Now the right side, wheels to wheels.", "ఇప్పుడు కుడి వైపు, రెండు చక్రాలు.", "अब दाईं ओर, दोनों पहिये।"], "side"],
-  ["cabin", "wheel", ["Front cabin", "ముందు క్యాబిన్", "आगे का केबिन"], ["Open the driver door. Seats, dashboard and floor mats.", "డ్రైవర్ డోర్ తెరవండి. సీట్లు, డ్యాష్‌బోర్డ్, మ్యాట్లు.", "ड्राइवर का दरवाज़ा खोलें। सीटें, डैशबोर्ड, मैट।"], "icon"],
-  ["seats", "seat", ["Rear seats", "వెనుక సీట్లు", "पीछे की सीटें"], ["Rear seats and footwell. Check for left items.", "వెనుక సీట్లు, కాళ్ల దగ్గర. మర్చిపోయిన వస్తువులు చూడండి.", "पीछे की सीटें और पैरों की जगह। छूटा सामान देखें।"], "icon"],
-  ["boot", "bag", ["Boot", "బూట్", "डिक्की"], ["Open the boot. It should be empty and clean.", "బూట్ తెరవండి. ఖాళీగా, శుభ్రంగా ఉండాలి.", "डिक्की खोलें। खाली और साफ़ होनी चाहिए।"], "icon"],
-  ["tyres", "refresh", ["Tyres", "టైర్లు", "टायर"], ["One photo of each tyre. Look for cuts or low pressure.", "ప్రతి టైరుకు ఒక ఫోటో. కోతలు, తక్కువ గాలి చూడండి.", "हर टायर की एक फ़ोटो। कट या कम हवा देखें।"], "icon"],
-  ["dash", "battery", ["Dashboard", "డ్యాష్‌బోర్డ్", "डैशबोर्ड"], ["Charge and odometer in one photo. We read them for you.", "ఛార్జ్, ఓడోమీటర్ ఒకే ఫోటోలో. మేమే చదువుతాం.", "चार्ज और ओडोमीटर एक फ़ोटो में। हम पढ़ लेंगे।"], "icon"]
+  ["front", "car", ["Front", "ముందు భాగం", "आगे से"], ["Stand 3 m in front. Fit the whole car in the frame.", "3 మీటర్ల దూరంలో ముందు నిలబడండి. కారు మొత్తం ఫ్రేమ్‌లో ఉండాలి.", "3 मीटर आगे खड़े हों। पूरी गाड़ी फ़्रेम में रखें।"], "spin2-68"],
+  ["fl", "car", ["Front-left corner", "ముందు ఎడమ మూల", "आगे बायाँ कोना"], ["Step to the front-left corner. Bumper and wheel in view.", "ముందు ఎడమ మూలకు వెళ్ళండి. బంపర్, చక్రం కనిపించాలి.", "आगे बाएँ कोने पर जाएँ। बम्पर और पहिया दिखे।"], "spin2-04"],
+  ["left", "car", ["Left side", "ఎడమ వైపు", "बाईं ओर"], ["Walk to the left side. Wheels to wheels in the frame.", "ఎడమ వైపుకు వెళ్ళండి. రెండు చక్రాలు ఫ్రేమ్‌లో.", "बाईं ओर जाएँ। दोनों पहिये फ़्रेम में।"], "spin2-13"],
+  ["rl", "car", ["Rear-left corner", "వెనుక ఎడమ మూల", "पीछे बायाँ कोना"], ["Rear-left corner. Tail light and wheel in view.", "వెనుక ఎడమ మూల. టెయిల్ లైట్, చక్రం కనిపించాలి.", "पीछे बायाँ कोना। टेल लाइट और पहिया दिखे।"], "spin2-22"],
+  ["rear", "car", ["Rear", "వెనుక భాగం", "पीछे से"], ["Stand behind the car. Include the bumper and boot lid.", "కారు వెనుక నిలబడండి. బంపర్, బూట్ కనిపించాలి.", "गाड़ी के पीछे खड़े हों। बम्पर और डिक्की दिखे।"], "spin2-31", "warn"],
+  ["rr", "car", ["Rear-right corner", "వెనుక కుడి మూల", "पीछे दायाँ कोना"], ["Rear-right corner. Tail light and wheel in view.", "వెనుక కుడి మూల. టెయిల్ లైట్, చక్రం కనిపించాలి.", "पीछे दायाँ कोना। टेल लाइट और पहिया दिखे।"], "spin2-40"],
+  ["right", "car", ["Right side", "కుడి వైపు", "दाईं ओर"], ["Now the right side, wheels to wheels.", "ఇప్పుడు కుడి వైపు, రెండు చక్రాలు.", "अब दाईं ओर, दोनों पहिये।"], "spin2-49"],
+  ["fr", "car", ["Front-right corner", "ముందు కుడి మూల", "आगे दायाँ कोना"], ["Front-right corner. Headlamp and wheel in view.", "ముందు కుడి మూల. హెడ్‌ల్యాంప్, చక్రం కనిపించాలి.", "आगे दायाँ कोना। हेडलैंप और पहिया दिखे।"], "spin2-58"],
+  ["dash", "battery", ["Dashboard", "డ్యాష్‌బోర్డ్", "डैशबोर्ड"], ["Charge and odometer in one photo. We read them for you.", "ఛార్జ్, ఓడోమీటర్ ఒకే ఫోటోలో. మేమే చదువుతాం.", "चार्ज और ओडोमीटर एक फ़ोटो में। हम पढ़ लेंगे।"], "cut-front"]
 ];
 const st = { step: 0, shots: [], busy: false, flash: false, mode: "start", checks: [true, true, true, false, true], online: false, code: "", bad: false, rating: 0, autoAssign: false, safety: false, charging: false, charge: 64, tips: 350, notif: 2, inbox: [], perms: { loc: true, alerts: true, cam: true }, job: { rider: "Ananya Rao", ini: "AR", pick: "MVP Colony, Sector 4", drop: "Dwaraka Nagar", km: 12.4 }, riderLive: false };
 const NOTIFS0 = [
@@ -218,226 +219,286 @@ const bell = () => `<button class="ibtn bellb" data-go="inbox" aria-label="Notif
 const SC = {}; const def = (id, m, r, mount) => (SC[id] = Object.assign({ id, render: r, mount }, m));
 
 /* ---------------- onboarding ---------------- */
-def("welcome", { g: "Onboarding", n: "Welcome", sb: "light", what: "First launch on the company phone: the car, one promise, sign in with the employee ID. Language first.", why: "Sets the tone: a professional tool for salaried chauffeurs, not a gig app.", fl: "Route <code>/driver/welcome</code>. Same tokens as the rider app." }, () => `
-  <div class="stage wl">
-    <div>${S.logo()} <span style="font-size:13px;color:#A9ABB3;margin-left:6px">${L("Chauffeur", "డ్రైవర్", "शोफ़र")}</span></div>
-    <div class="wl-car">${S.car()}</div>
-    <div style="margin-top:auto">
-      <h1 class="t-hero">${L("Your shift,<br>planned for you.", "మీ షిఫ్ట్,<br>మీ కోసం ప్లాన్.", "आपकी शिफ़्ट,<br>आपके लिए तय।")}</h1>
-      <p class="t-body mt12" style="color:#A9ABB3">${L("Dispatch plans every job, every charge and every break. You drive; we handle the rest.", "ప్రతి పని, ఛార్జింగ్, విరామం డిస్పాచ్ ప్లాన్ చేస్తుంది. మీరు నడపండి; మిగతాది మేము.", "हर काम, चार्जिंग और ब्रेक डिस्पैच तय करता है। आप चलाइए; बाकी हम।")}</p>
-      <div class="mt24">${btn(L("Sign in with employee ID", "ఉద్యోగి IDతో సైన్ ఇన్", "कर्मचारी ID से साइन इन"), { go: "signin", kind: "btn-stage", cls: "lg" })}</div>
-      <div class="wl-langs mt16">${S.LANGS.map(l => `<button class="${S.state.lang === l.id ? "on" : ""}" data-act="lang" data-v="${l.id}">${l.native}</button>`).join("")}</div>
-    </div>
-  </div>`);
+/* ---------------- v4 "Luminous" chauffeur: cockpit tone, Android first ---------------- */
+const pane = (inner, cls = "") => `<div class="dv-glass ${cls}">${inner}</div>`;
+const kpi = (label, val, unit = "", count = true) => `<div class="dv-kpi"><small>${label}</small><b class="t-num">${count ? `<span data-count="${val}">${val}</span>` : val}<i>${unit}</i></b></div>`;
+const ticks = (n, on, cls = "") => `<span class="dv-ticks ${cls}" aria-hidden="true">${Array.from({ length: n }, (_, i) => `<i class="${i < on ? "on" : ""}" style="--a:${i * 360 / n}deg"></i>`).join("")}</span>`;
 
-def("signin", { g: "Onboarding", n: "Sign in", nav: 1, foot: 1, what: "Employee ID and the registered mobile; the OTP fills itself.", why: "Only SAGA staff can use this app, and the phone stays tied to the chauffeur.", fl: "<code>POST /driver/auth</code> + SMS Retriever." }, () => `
+def("welcome", { g: "Onboarding", n: "Welcome · the unveil", sb: "light", what: "First launch on the company phone: the SAGA Luxe revealed on a dark stage (DRLs, then the LED livery, then the ceiling light), one promise, language in the top corner, and sign in with the employee ID.", why: "Sets the tone: a professional tool for salaried chauffeurs, driving the company's flagship car, not a gig app.", fl: "Same portrait unveil layers as the rider app (<code>Stack</code> + <code>BlendMode.plus</code> + animated shutters). Route <code>/driver/welcome</code>." }, () => `
+  <div class="ob go dv-ob">
+    <div class="stg" id="unv"></div>
+    <div class="ob-shade"></div>
+    <div class="ob-top ob-in" style="animation-delay:2.6s">${S.logo()}<div class="ob-langs">${S.LANGS.map(l => `<button class="${S.state.lang === l.id ? "on" : ""}" data-act="lang" data-v="${l.id}">${l.native}</button>`).join("")}</div></div>
+    <div class="ob-body">
+      <span class="ob-eyebrow ob-in" style="animation-delay:2.2s"><i></i>${L("SAGA staff · company car", "SAGA ఉద్యోగి · కంపెనీ కారు", "SAGA कर्मचारी · कंपनी की गाड़ी")}</span>
+      <h1 class="ob-h ob-in" style="animation-delay:2.35s">${L("Your shift,<br><em>planned for you.</em>", "మీ షిఫ్ట్,<br><em>మీ కోసం ప్లాన్.</em>", "आपकी शिफ़्ट,<br><em>आपके लिए तय।</em>")}</h1>
+      <p class="ob-p ob-in" style="animation-delay:2.5s">${L("Dispatch plans every job, every charge and every break. You drive; we handle the rest.", "ప్రతి పని, ఛార్జింగ్, విరామం డిస్పాచ్ ప్లాన్ చేస్తుంది. మీరు నడపండి; మిగతాది మేము.", "हर काम, चार्जिंग और ब्रेक डिस्पैच तय करता है। आप चलाइए; बाकी हम।")}</p>
+      <div class="ob-cta ob-in" style="animation-delay:2.7s">${btn(L("Sign in with employee ID", "ఉద్యోగి IDతో సైన్ ఇన్", "कर्मचारी ID से साइन इन"), { go: "signin", icon: "user" })}</div>
+    </div>
+  </div>`, el => { const s = SagaStage.unveil(el.querySelector("#unv"), { set: "p", autoplay: false, instant: st.unveiled }); s.ready.then(() => s.play()); st.unveiled = 1; });
+
+def("signin", { g: "Onboarding", n: "Sign in", nav: 1, foot: 1, what: "Employee ID on a glass badge with the chauffeur's photo, the registered mobile, and the SMS code filling itself digit by digit.", why: "Only SAGA staff can use this app, and the phone stays tied to the chauffeur.", fl: "<code>POST /driver/auth</code> + SMS Retriever." }, () => `
   ${bar(L("Sign in", "సైన్ ఇన్", "साइन इन"))}
   <div class="content"><div class="pad">
-    <h1 class="t-title">${L("Welcome to SAGA", "SAGAకి స్వాగతం", "SAGA में स्वागत है")}</h1>
-    <p class="t-label mt24">${L("Employee ID", "ఉద్యోగి ID", "कर्मचारी ID")}</p>
-    <div class="field mt8"><input class="mono" value="SG-0142" aria-label="Employee ID" style="letter-spacing:.08em;font-size:19px"></div>
-    <p class="t-label mt16">${L("Registered mobile", "రిజిస్టర్డ్ మొబైల్", "रजिस्टर्ड मोबाइल")}</p>
-    <div class="field mt8"><b>+91</b><input value="98661 20442" type="tel" aria-label="Mobile" style="font-size:19px"></div>
-    <p class="t-label mt16">${L("Code from SMS", "SMS కోడ్", "SMS कोड")}</p>
-    <div class="boxes mt8">${"583014".split("").map((d, i) => `<span class="f" style="animation:popin .3s ${200 + i * 100}ms both">${d}</span>`).join("")}</div>
+    <span class="eyebrow">${L("SAGA Mobility · staff", "SAGA మొబిలిటీ · సిబ్బంది", "SAGA मोबिलिटी · स्टाफ़")}</span>
+    <h1 class="t-title serif mt8">${L("Welcome back, <em>Ravi.</em>", "తిరిగి స్వాగతం, <em>రవి.</em>", "वापसी पर स्वागत, <em>रवि।</em>")}</h1>
+    <div class="dv-badge mt16 lg-brand"><span class="dv-ph">RK</span><div class="grow"><small>${L("Employee ID", "ఉద్యోగి ID", "कर्मचारी ID")}</small><b class="t-num">SG-0142</b><small>Ravi Kumar · ${L("Chauffeur, grade 2", "డ్రైవర్, గ్రేడ్ 2", "शोफ़र, ग्रेड 2")}</small></div>${S.logoMark()}</div>
+    <p class="t-label mt20">${L("Registered mobile", "రిజిస్టర్డ్ మొబైల్", "रजिस्टर्ड मोबाइल")}</p>
+    <div class="field dv-field mt8"><b>+91</b><input value="98661 20442" type="tel" aria-label="${L("Mobile", "మొబైల్", "मोबाइल")}"></div>
+    <p class="t-label mt16">${L("Code from SMS · filled for you", "SMS కోడ్ · ఆటోమేటిక్‌గా", "SMS कोड · अपने-आप भरा")}</p>
+    <div class="dv-otp mt8">${"583014".split("").map((d, i) => `<span style="--d:${300 + i * 110}ms">${d}</span>`).join("")}</div>
   </div></div>
-  <div class="foot">${btn(L("Continue", "కొనసాగండి", "आगे बढ़ें"), { go: "verify", cls: "lg" })}</div>`);
+  <div class="foot">${btn(L("Continue", "కొనసాగండి", "आगे बढ़ें"), { go: "verify" })}</div>`);
 
-def("verify", { g: "Onboarding", n: "Profile checks", nav: 1, foot: 1, what: "First day only: licence, commercial badge, police verification, training and a selfie, each with its status. Anything pending has a one-tap fix.", why: "Riders trust SAGA because every chauffeur is verified. The app shows the chauffeur exactly what's done and what's left.", fl: "<code>GET /driver/compliance</code>; selfie via camera, matched by ops." }, () => {
-  const v = (icon, t, s, k = "ok") => `<div class="vrow"><span class="vi ${k === "warn" ? "warn" : ""}">${I(k === "warn" ? "clock" : "check")}</span><div style="flex:1"><b>${t}</b><span class="s">${s}</span></div></div>`;
+def("verify", { g: "Onboarding", n: "Profile checks", nav: 1, foot: 1, what: "First day only: licence, commercial badge, police verification, selfie and training, ticked one after another on a glass list with a progress ring. Anything pending has a one-tap fix.", why: "Riders trust SAGA because every chauffeur is verified. The app shows the chauffeur exactly what's done and what's left.", fl: "<code>GET /driver/compliance</code>; selfie via camera, matched by ops." }, () => {
+  const v = (icon, t, s, k, i) => `<div class="dv-ck ${k}" style="--d:${200 + i * 140}ms"><span class="dv-ck-i">${I(k === "warn" ? "clock" : "check")}</span><div class="grow"><b>${t}</b><small>${s}</small></div>${I(icon, "sm dv-ck-t")}</div>`;
   return `${bar(L("Your profile", "మీ ప్రొఫైల్", "आपकी प्रोफ़ाइल"))}
   <div class="content"><div class="pad">
-    <h1 class="t-title">${L("Almost ready, Ravi", "దాదాపు సిద్ధం, రవి", "लगभग तैयार, रवि")}</h1>
-    <p class="t-sub mt8">${L("SAGA checked these for you. One thing left.", "SAGA ఇవి తనిఖీ చేసింది. ఒక్కటే మిగిలి ఉంది.", "SAGA ने ये जाँच लिए। बस एक बाकी है।")}</p>
-    <div class="mt20">
-      ${v("card", L("Driving licence", "డ్రైవింగ్ లైసెన్స్", "ड्राइविंग लाइसेंस"), L("LMV-TR · valid till 2031", "LMV-TR · 2031 వరకు", "LMV-TR · 2031 तक"))}
-      ${v("shield", L("Commercial badge", "కమర్షియల్ బ్యాడ్జ్", "कमर्शियल बैज"), L("Verified by SAGA ops", "SAGA ఆప్స్ ధృవీకరించింది", "SAGA ऑप्स द्वारा सत्यापित"))}
-      ${v("shield", L("Police verification", "పోలీస్ వెరిఫికేషన్", "पुलिस सत्यापन"), L("Cleared 12 Oct 2026", "12 అక్టో 2026న క్లియర్", "12 अक्टू 2026 को पास"))}
-      ${v("user", L("Selfie for your ID card", "ID కార్డు కోసం సెల్ఫీ", "ID कार्ड के लिए सेल्फ़ी"), L("Matched to your licence", "లైసెన్స్‌తో సరిపోయింది", "लाइसेंस से मिलान"))}
-      ${v("spark", L("Training · 4 of 5 modules", "శిక్షణ · 5లో 4 మాడ్యూల్స్", "प्रशिक्षण · 5 में से 4 मॉड्यूल"), L("Airport etiquette · 6 min left", "ఎయిర్‌పోర్ట్ మర్యాద · 6 నిమి మిగిలి", "एयरपोर्ट शिष्टाचार · 6 मिनट बाकी"), "warn")}
-    </div>
-    <button class="btn btn-secondary block mt12" data-toast="${esc(L("Module 5 marked complete", "మాడ్యూల్ 5 పూర్తి", "मॉड्यूल 5 पूरा"))}">${I("spark")}${L("Finish module 5 now", "మాడ్యూల్ 5 ఇప్పుడే పూర్తి చేయండి", "मॉड्यूल 5 अभी पूरा करें")}</button>
+    <div class="dv-vhead"><span class="dv-ring">${ticks(40, 32)}<b class="t-num">4/5</b></span><div><h1 class="t-title">${L("Almost ready, Ravi", "దాదాపు సిద్ధం, రవి", "लगभग तैयार, रवि")}</h1><p class="t-sub mt4">${L("SAGA checked these for you. One thing left.", "SAGA ఇవి తనిఖీ చేసింది. ఒక్కటే మిగిలి ఉంది.", "SAGA ने ये जाँच लिए। बस एक बाकी है।")}</p></div></div>
+    ${pane(`
+      ${v("card", L("Driving licence", "డ్రైవింగ్ లైసెన్స్", "ड्राइविंग लाइसेंस"), L("LMV-TR · valid till 2031", "LMV-TR · 2031 వరకు", "LMV-TR · 2031 तक"), "ok", 0)}
+      ${v("shield", L("Commercial badge", "కమర్షియల్ బ్యాడ్జ్", "कमर्शियल बैज"), L("Verified by SAGA ops", "SAGA ఆప్స్ ధృవీకరించింది", "SAGA ऑप्स द्वारा सत्यापित"), "ok", 1)}
+      ${v("shield", L("Police verification", "పోలీస్ వెరిఫికేషన్", "पुलिस सत्यापन"), L("Cleared 12 Oct 2026", "12 అక్టో 2026న క్లియర్", "12 अक्टू 2026 को पास"), "ok", 2)}
+      ${v("user", L("Selfie for your ID card", "ID కార్డు కోసం సెల్ఫీ", "ID कार्ड के लिए सेल्फ़ी"), L("Matched to your licence", "లైసెన్స్‌తో సరిపోయింది", "लाइसेंस से मिलान"), "ok", 3)}
+      ${v("spark", L("Training · 4 of 5 modules", "శిక్షణ · 5లో 4 మాడ్యూల్స్", "प्रशिक्षण · 5 में से 4 मॉड्यूल"), L("Airport etiquette · 6 min left", "ఎయిర్‌పోర్ట్ మర్యాద · 6 నిమి మిగిలి", "एयरपोर्ट शिष्टाचार · 6 मिनट बाकी"), "warn", 4)}`, "mt16 dv-list")}
+    <button class="btn btn-secondary block mt12" data-toast="${esc(L("Module 5 marked complete", "మాడ్యూల్ 5 పూర్తి", "मॉड्यूल 5 पूरा"))}">${I("spark")}<span>${L("Finish module 5 now", "మాడ్యూల్ 5 ఇప్పుడే పూర్తి చేయండి", "मॉड्यूल 5 अभी पूरा करें")}</span></button>
   </div></div>
-  <div class="foot">${btn(L("Continue", "కొనసాగండి", "आगे बढ़ें"), { go: "perms", cls: "lg" })}</div>`;
+  <div class="foot">${btn(L("Continue", "కొనసాగండి", "आगे बढ़ें"), { go: "perms" })}</div>`;
 });
 
-def("perms", { g: "Onboarding", n: "Permissions", nav: 1, foot: 1, what: "Location always (dispatch plans around where you are), job alerts on the lock screen, and the camera for the vehicle check.", why: "Each permission has one plain reason. Without them, jobs can't reach the chauffeur.", fl: "<code>permission_handler</code>: locationAlways, USE_FULL_SCREEN_INTENT, camera." }, () => {
-  const p = (k, icon, t, s) => `<div class="permrow" style="display:flex;gap:14px;align-items:flex-start;padding:16px;background:var(--surface);border-radius:6px;margin-top:3px"><span class="pico" style="width:42px;height:42px;border-radius:21px;background:var(--accent-soft);color:var(--on-accent-soft);display:flex;align-items:center;justify-content:center;flex:none">${I(icon)}</span><div style="flex:1"><b style="font-size:16.5px">${t}</b><div class="t-sub mt4">${s}</div></div>${tgl(st.perms[k], `data-act="perm" data-k="${k}"`)}</div>`;
+def("perms", { g: "Onboarding", n: "Permissions", nav: 1, foot: 1, what: "Three permissions on glass cards, each with one plain reason: location during the shift, full-screen job alerts, and the camera for the photo check.", why: "Each permission has one plain reason. Without them, jobs can't reach the chauffeur.", fl: "<code>permission_handler</code>: locationAlways, USE_FULL_SCREEN_INTENT, camera." }, () => {
+  const p = (k, icon, t, s) => `<button class="dv-perm ${st.perms[k] ? "on" : ""}" data-act="perm" data-k="${k}"><span class="dv-perm-i">${I(icon)}</span><span class="grow"><b>${t}</b><small>${s}</small></span>${tgl(st.perms[k])}</button>`;
   return `${bar(L("Set up", "సెటప్", "सेटअप"))}
   <div class="content"><div class="pad">
     <h1 class="t-title">${L("Three things, then you're on", "మూడు అనుమతులు, తర్వాత మొదలు", "तीन चीज़ें, फिर शुरू")}</h1>
-    <div class="mt20" style="border-radius:24px;overflow:hidden">
-      ${p("loc", "pin", L("Location, always", "లొకేషన్, ఎల్లప్పుడూ", "लोकेशन, हमेशा"), L("So dispatch can plan jobs around where you are. Only during your shift.", "మీరు ఎక్కడున్నారో చూసి డిస్పాచ్ పనులు ప్లాన్ చేస్తుంది. షిఫ్ట్‌లో మాత్రమే.", "ताकि डिस्पैच आपकी जगह के हिसाब से काम तय करे। सिर्फ़ शिफ़्ट में।"))}
-      ${p("alerts", "bell", L("Job alerts", "జాబ్ అలర్ట్‌లు", "जॉब अलर्ट"), L("New jobs show full screen, even when the phone is locked.", "ఫోన్ లాక్‌లో ఉన్నా కొత్త పనులు పూర్తి స్క్రీన్‌లో.", "फ़ोन लॉक हो तब भी नया काम पूरी स्क्रीन पर।"))}
-      ${p("cam", "scan", L("Camera", "కెమెరా", "कैमरा"), L("For the 1-minute vehicle check before every shift.", "ప్రతి షిఫ్ట్‌కు ముందు 1 నిమిషం వాహన తనిఖీ కోసం.", "हर शिफ़्ट से पहले 1 मिनट की गाड़ी जाँच के लिए।"))}
+    <div class="dv-perms mt16">
+      ${p("loc", "pin", L("Location, during your shift", "లొకేషన్, షిఫ్ట్‌లో", "लोकेशन, शिफ़्ट में"), L("So dispatch can plan jobs around where you are. Never off shift.", "మీరు ఎక్కడున్నారో చూసి డిస్పాచ్ పనులు ప్లాన్ చేస్తుంది. షిఫ్ట్ బయట ఎప్పుడూ కాదు.", "ताकि डिस्पैच आपकी जगह के हिसाब से काम तय करे। शिफ़्ट के बाहर कभी नहीं।"))}
+      ${p("alerts", "bell", L("Full-screen job alerts", "పూర్తి స్క్రీన్ జాబ్ అలర్ట్‌లు", "पूरी स्क्रीन पर जॉब अलर्ट"), L("New jobs show full screen, even when the phone is locked.", "ఫోన్ లాక్‌లో ఉన్నా కొత్త పనులు పూర్తి స్క్రీన్‌లో.", "फ़ोन लॉक हो तब भी नया काम पूरी स्क्रीन पर।"))}
+      ${p("cam", "scan", L("Camera", "కెమెరా", "कैमरा"), L("For the 1-minute photo check before and after every shift.", "ప్రతి షిఫ్ట్ ముందు, తర్వాత 1 నిమిషం ఫోటో తనిఖీ కోసం.", "हर शिफ़्ट से पहले और बाद 1 मिनट की फ़ोटो जाँच के लिए।"))}
     </div>
   </div></div>
-  <div class="foot">${btn(L("Start vehicle check", "వాహన తనిఖీ ప్రారంభించండి", "गाड़ी जाँच शुरू करें"), { act: "startcheck", cls: "lg", icon: "scan" })}</div>`;
+  <div class="foot">${btn(L("Start vehicle check", "వాహన తనిఖీ ప్రారంభించండి", "गाड़ी जाँच शुरू करें"), { act: "startcheck", icon: "scan" })}</div>`;
 });
 
-/* ---------------- vehicle inspection ---------------- */
-def("inspect", { g: "Start of shift", n: "Vehicle check", sb: "light", what: "A guided photo check, inside and out: front, both sides, rear, cabins, boot, tyres and the dashboard. Each photo is checked as it's taken; marks already on record are recognised, new damage is flagged to ops.", why: "Every ride is a premium promise. The check takes a minute, protects the chauffeur from blame for old damage, and gives ops a dated record of every car, every shift.", fl: "<code>camera</code> package; photos to <code>POST /shifts/{id}/inspection</code>; damage comparison server-side against the last inspection. Odometer and charge read by on-device OCR." }, () => {
-  const total = st.mode === "end" ? 4 : STEPS.length, s = STEPS[Math.min(st.step, total - 1)], last = st.shots[st.shots.length - 1];
-  return `<div class="cam">
-    <div class="cam-top">
-      <div class="row-flex" style="justify-content:space-between"><button class="ibtn" data-back style="color:#fff">${I("close")}</button><span style="font-size:14px;color:#BFC2CA">${st.mode === "end" ? L("End-of-shift check", "షిఫ్ట్ ముగింపు తనిఖీ", "शिफ़्ट के अंत की जाँच") : L("Vehicle check", "వాహన తనిఖీ", "गाड़ी जाँच")} · ${Math.min(st.step + 1, total)} / ${total}</span><span style="width:48px"></span></div>
-      <div class="cam-steps">${Array.from({ length: total }, (_, i) => `<i class="${i < st.shots.length ? (st.shots[i] === "warn" ? "w" : "d") : i === st.step ? "c" : ""}"></i>`).join("")}</div>
-      <div class="cam-title">${L(...s[2])}</div>
-      <div class="cam-hint">${L(...s[3])}</div>
+/* ---------------- vehicle inspection: every "photo" is a real render of the car from that angle ---------------- */
+const shotSeq = () => st.mode === "end" ? [0, 2, 4, 6] : STEPS.map((_, i) => i);
+const shotImg = i => SagaStage.src(STEPS[i][4]);
+def("inspect", { g: "Start of shift", n: "Vehicle check", sb: "light", what: "A guided 9-photo check: front, the four corners, both sides, the rear and the dashboard. The viewfinder shows the angle to stand at with a level line; each shot flashes, drops into the film strip as a real photo and gets its check. Marks already on record are recognised; the dashboard photo is read for charge and odometer.", why: "Every ride is a premium promise. The check takes a minute, protects the chauffeur from blame for old damage, and gives ops a dated record of every car, every shift.", fl: "<code>camera</code> package; photos to <code>POST /shifts/{id}/inspection</code>; damage comparison server-side against the last inspection. Odometer and charge read by on-device OCR. In this demo the photos are Cycles renders of the car from each angle." }, () => {
+  const seq = shotSeq(), total = seq.length, k = Math.min(st.step, total - 1), i = seq[k], s = STEPS[i], last = st.shots[st.shots.length - 1], done = st.shots.length >= total;
+  return `<div class="dv-cam ${st.busy ? "busy" : ""} ${st.justShot ? "shot" : ""}">
+    <div class="dv-cam-top">
+      <button class="dv-x" data-back aria-label="${L("Close", "మూసివేయి", "बंद करें")}">${I("close")}</button>
+      <span class="dv-cam-t">${st.mode === "end" ? L("End-of-shift check", "షిఫ్ట్ ముగింపు తనిఖీ", "शिफ़्ट के अंत की जाँच") : L("Vehicle check", "వాహన తనిఖీ", "गाड़ी जाँच")}<b class="t-num">${Math.min(st.shots.length + (done ? 0 : 1), total)} / ${total}</b></span>
+      <span class="dv-x ghost"></span>
     </div>
-    <div class="cam-frame ${st.busy ? "" : last && st.justShot ? last : ""}">${s[4] === "side" ? `<div class="guide">${S.car({ reflect: false })}</div>` : `<span class="gi">${I(s[1])}</span>`}${st.busy ? '<span class="cam-scan"></span>' : ""}</div>
-    ${st.busy ? `<div class="cam-res">${I("spark")}${L("Checking the photo…", "ఫోటో తనిఖీ చేస్తున్నాం…", "फ़ोटो जाँच रहे हैं…")}</div>` : st.justShot ? `<div class="cam-res ${last}">${I(last === "warn" ? "alert" : "check")}${st.lastNote}</div>` : ""}
-    <div class="cam-shots">${st.shots.map((r, i) => `<span class="${r === "warn" ? "w" : ""}">${I(STEPS[i][1])}</span>`).join("")}</div>
-    <button class="shutter" data-act="shoot" aria-label="${L("Take photo", "ఫోటో తీయండి", "फ़ोटो लें")}"><i></i></button>
-    ${st.flash ? '<div class="camflash"></div>' : ""}
+    <div class="dv-steps">${seq.map((x, n) => `<i class="${n < st.shots.length ? (st.shots[n] === "warn" ? "w" : "d") : n === k ? "c" : ""}"></i>`).join("")}</div>
+    <div class="dv-cam-name"><b>${L(...s[2])}</b><small>${L(...s[3])}</small></div>
+    <div class="dv-vf ${s[0] === "dash" ? "dash" : ""}">
+      <img src="${shotImg(i)}" alt="" class="dv-live">
+      ${s[0] === "dash" ? `<span class="dv-ocr a"><small>${L("Charge", "ఛార్జ్", "चार्ज")}</small>92%</span><span class="dv-ocr b"><small>ODO</small>12,408 km</span>` : `<span class="dv-level"></span>`}
+      <span class="dv-grid"></span><i class="c1"></i><i class="c2"></i><i class="c3"></i><i class="c4"></i>
+      ${st.busy ? `<span class="dv-scanl"></span>` : ""}
+      ${st.flash ? `<span class="dv-flash"></span>` : ""}
+      <span class="dv-angle">${I(s[1], "sm")}${L(...s[2])}</span>
+    </div>
+    <div class="dv-res ${st.busy ? "busy" : st.justShot ? last : ""}">${st.busy ? `${I("spark", "sm")}${L("Checking the photo…", "ఫోటో తనిఖీ చేస్తున్నాం…", "फ़ोटो जाँच रहे हैं…")}` : st.justShot ? `${I(last === "warn" ? "alert" : "check", "sm")}${st.lastNote}` : `${I("info", "sm")}${L("Hold steady. The frame turns green when it's straight.", "స్థిరంగా పట్టుకోండి. నేరుగా ఉంటే ఫ్రేమ్ ఆకుపచ్చ అవుతుంది.", "स्थिर रखें। सीधा होने पर फ़्रेम हरा होगा।")}`}</div>
+    <div class="dv-film">${seq.map((x, n) => n < st.shots.length ? `<span class="${st.shots[n] === "warn" ? "w" : ""} ${n === st.shots.length - 1 && st.justShot ? "new" : ""}"><img src="${shotImg(x)}" alt=""><b>${I(st.shots[n] === "warn" ? "alert" : "check", "sm")}</b></span>` : `<span class="empty ${n === k ? "c" : ""}">${I(STEPS[x][1], "sm")}</span>`).join("")}</div>
+    <button class="dv-shutter" data-act="shoot" aria-label="${L("Take photo", "ఫోటో తీయండి", "फ़ोटो लें")}" ${done ? "disabled" : ""}><i></i></button>
   </div>`;
 });
 
-def("checklist", { g: "Start of shift", n: "Ready to go", nav: 1, foot: 1, what: "Summary of the photo check, charge and odometer read from the dashboard photo, and the cabin checklist. Slide to go online.", why: "Sliding (not tapping) avoids going online by accident and makes starting the shift feel deliberate.", fl: "<code>POST /shifts/{id}/start</code>." }, () => {
-  const all = st.checks.every(Boolean);
+def("checklist", { g: "Start of shift", n: "Ready to go", nav: 1, foot: 1, what: "The nine photos as a contact sheet with their checks, the charge, range and odometer read from the dashboard photo, and the cabin checklist. Slide to go online.", why: "Sliding (not tapping) avoids going online by accident and makes starting the shift feel deliberate.", fl: "<code>POST /shifts/{id}/start</code>." }, () => {
+  const all = st.checks.every(Boolean), seq = shotSeq();
   const items = [L("Cabin and seats cleaned", "క్యాబిన్, సీట్లు శుభ్రం", "केबिन और सीटें साफ़"), L("4 chilled water bottles", "4 చల్లని నీళ్ల సీసాలు", "4 ठंडी पानी की बोतलें"), L("USB-C chargers in place", "USB-C ఛార్జర్లు ఉన్నాయి", "USB-C चार्जर मौजूद"), L("Child seat in the boot", "బూట్‌లో చైల్డ్ సీట్", "डिक्की में चाइल्ड सीट"), L("Uniform and ID card", "యూనిఫాం, ID కార్డు", "यूनिफ़ॉर्म और ID कार्ड")];
   const warn = st.shots.filter(x => x === "warn").length;
   return `${bar(L("Ready to go", "సిద్ధం", "तैयार"))}
   <div class="content"><div class="pad">
-    <div class="card" style="border-radius:28px"><div class="row-flex"><span class="seal" style="width:56px;height:56px;margin:0">${I("check")}</span><div class="grow"><b style="font-size:18px">${L(`${st.shots.length} photos · no new damage`, `${st.shots.length} ఫోటోలు · కొత్త నష్టం లేదు`, `${st.shots.length} फ़ोटो · कोई नया नुकसान नहीं`)}</b><div class="t-sub">${warn ? L("1 mark already on record: rear bumper", "1 గుర్తు ఇప్పటికే రికార్డులో: వెనుక బంపర్", "1 निशान पहले से दर्ज: पिछला बम्पर") : L("All clear", "అంతా సరే", "सब ठीक")}</div></div></div></div>
-    <div class="kpis mt12"><div>${L("Charge", "ఛార్జ్", "चार्ज")}<b data-count="92">92</b>%</div><div>${L("Range", "రేంజ్", "रेंज")}<b data-count="300">300</b>km</div><div>${L("Odometer", "ఓడోమీటర్", "ओडोमीटर")}<b style="font-size:24px">12,408</b>km</div></div>
-    <h2 class="t-h3 mt24">${L("Cabin checklist", "క్యాబిన్ చెక్‌లిస్ట్", "केबिन चेकलिस्ट")}</h2>
-    <div class="mt12" style="border-radius:24px;overflow:hidden">${items.map((t, i) => `<button class="row" data-act="chk" data-v="${i}" style="background:var(--surface);border-radius:4px;margin-top:3px"><span class="tx" style="flex:1"><span class="t1" style="display:block">${t}</span></span>${tgl(st.checks[i])}</button>`).join("")}</div>
+    ${pane(`<div class="dv-sum"><span class="dv-seal">${I("check")}</span><div class="grow"><b>${L(`${st.shots.length || 9} photos · no new damage`, `${st.shots.length || 9} ఫోటోలు · కొత్త నష్టం లేదు`, `${st.shots.length || 9} फ़ोटो · कोई नया नुकसान नहीं`)}</b><small>${warn ? L("1 mark already on record: rear bumper", "1 గుర్తు ఇప్పటికే రికార్డులో: వెనుక బంపర్", "1 निशान पहले से दर्ज: पिछला बम्पर") : L("All clear", "అంతా సరే", "सब ठीक")}</small></div></div>
+      <div class="dv-sheet">${seq.map((x, n) => `<span class="${(st.shots[n] || "ok") === "warn" ? "w" : ""}" style="--d:${n * 50}ms"><img src="${shotImg(x)}" alt="${esc(L(...STEPS[x][2]))}"><b>${I((st.shots[n] || "ok") === "warn" ? "alert" : "check", "sm")}</b></span>`).join("")}</div>`, "mt4")}
+    <div class="dv-kpis mt12">${kpi(L("Charge", "ఛార్జ్", "चार्ज"), 92, "%")}${kpi(L("Range", "రేంజ్", "रेंज"), 300, "km")}${kpi(L("Odometer", "ఓడోమీటర్", "ओडोमीटर"), "12,408", "km", false)}</div>
+    <h2 class="t-h3 mt20">${L("Cabin checklist", "క్యాబిన్ చెక్‌లిస్ట్", "केबिन चेकलिस्ट")}</h2>
+    ${pane(items.map((t, i) => `<button class="dv-tick ${st.checks[i] ? "on" : ""}" data-act="chk" data-v="${i}"><span class="dv-box">${I("check", "sm")}</span><span class="grow">${t}</span></button>`).join(""), "mt8 dv-list")}
   </div></div>
-  <div class="foot">${all ? S.slider(L("Slide to go online", "ఆన్‌లైన్‌కి స్లైడ్ చేయండి", "ऑनलाइन होने के लिए स्लाइड"), 'data-after="goonline"', "ink") : btn(L(`Tick ${st.checks.filter(x => !x).length} more to go online`, `ఆన్‌లైన్‌కు ఇంకా ${st.checks.filter(x => !x).length} టిక్ చేయండి`, `ऑनलाइन के लिए ${st.checks.filter(x => !x).length} और टिक करें`), { kind: "btn-secondary", cls: "lg", toast: L("Tick every item first", "ముందు అన్నీ టిక్ చేయండి", "पहले सब टिक करें") })}</div>`;
+  <div class="foot">${all ? S.slider(L("Slide to go online", "ఆన్‌లైన్‌కి స్లైడ్ చేయండి", "ऑनलाइन होने के लिए स्लाइड"), 'data-after="goonline"', "ink") : btn(L(`Tick ${st.checks.filter(x => !x).length} more to go online`, `ఆన్‌లైన్‌కు ఇంకా ${st.checks.filter(x => !x).length} టిక్ చేయండి`, `ऑनलाइन के लिए ${st.checks.filter(x => !x).length} और टिक करें`), { kind: "btn-secondary", toast: L("Tick every item first", "ముందు అన్నీ టిక్ చేయండి", "पहले सब टिक करें") })}</div>`;
 });
 
 /* ---------------- duty ---------------- */
-def("duty", { g: "On duty", n: "Duty", tab: "duty", what: "Online card with the shift clock, the dispatch radar while a job is being planned, today's numbers, and the day's jobs in order: scheduled riders, airport pickups tied to flights, hotel guests.", why: "Salaried model: dispatch owns the plan, so chauffeurs never chase surge or guess where to wait.", fl: "<code>GET /driver/schedule</code> + WebSocket. In the suite, a booking on the rider phone arrives here live." }, () => `
-  ${bar(L("Today", "ఈ రోజు", "आज"), { back: false, large: true, actions: bell() })}
+def("duty", { g: "On duty", n: "Duty", tab: "duty", what: "A lit online card with the shift clock; while online, a dispatch radar sweeps as the next job is planned. Today's numbers count up, then the day's jobs on a timeline: scheduled riders, airport pickups tied to flights, hotel guests, the planned charge.", why: "Salaried model: dispatch owns the plan, so chauffeurs never chase surge or guess where to wait.", fl: "<code>GET /driver/schedule</code> + WebSocket. In the suite, a booking on the rider phone arrives here live." }, () => {
+  const job = (t, ic, type, name, sub, attr, i, next) => `<button class="dv-job ${next ? "next" : ""}" ${attr} style="--d:${i * 70}ms"><time class="t-num">${t}</time><span class="dv-node">${I(ic, "sm")}</span><span class="grow"><small>${type}</small><b>${name}</b><span>${sub}</span></span>${I("chevr")}</button>`;
+  return `${bar(L("Today", "ఈ రోజు", "आज"), { back: false, large: true, actions: bell() })}
   <div class="content"><div class="pad">
-    <button class="online press ${st.online ? "on" : ""}" data-act="online" style="width:100%;text-align:left"><span style="width:48px;height:48px;border-radius:24px;display:flex;align-items:center;justify-content:center;background:${st.online ? "rgba(255,255,255,.18)" : "var(--surface2)"}">${I("car")}</span><div class="grow"><div class="t-h3">${st.online ? L("You're online", "మీరు ఆన్‌లైన్‌లో ఉన్నారు", "आप ऑनलाइन हैं") : L("You're offline", "మీరు ఆఫ్‌లైన్", "आप ऑफ़लाइन हैं")}</div><div class="t-sub">${st.online ? L("Shift 06:00 – 14:00 · 4 h 12 m left", "షిఫ్ట్ 06:00 – 14:00 · 4 గం 12 ని", "शिफ़्ट 06:00 – 14:00 · 4 घं 12 मि बाकी") : L("Do the vehicle check to go online", "ఆన్‌లైన్‌కు వాహన తనిఖీ చేయండి", "ऑनलाइन होने के लिए गाड़ी जाँच करें")}</div></div>${tgl(st.online)}</button>
-    ${st.online ? `<div class="radar mt12"><span class="dish"></span><div><b>${L("Dispatch is planning your next job", "డిస్పాచ్ మీ తదుపరి పని ప్లాన్ చేస్తోంది", "डिस्पैच आपका अगला काम तय कर रहा है")}</b><span>${L("Stay near MVP Colony. No need to move.", "MVP కాలనీ దగ్గర ఉండండి. కదలనక్కర్లేదు.", "MVP कॉलोनी के पास रहें। हिलने की ज़रूरत नहीं।")}</span></div></div>` : ""}
-    <div class="kpis mt12"><div>${L("Trips", "ట్రిప్పులు", "ट्रिप")}<b data-count="5">5</b></div><div>${L("On time", "సమయానికి", "समय पर")}<b><span data-count="100">100</span>%</b></div><div>${L("Rating", "రేటింగ్", "रेटिंग")}<b data-count="4.9">4.9</b></div></div>
+    <button class="dv-online ${st.online ? "on lg-brand" : ""}" data-act="online">
+      <span class="dv-on-ic">${I("car")}</span>
+      <span class="grow"><b>${st.online ? L("You're online", "మీరు ఆన్‌లైన్‌లో ఉన్నారు", "आप ऑनलाइन हैं") : L("You're offline", "మీరు ఆఫ్‌లైన్", "आप ऑफ़लाइन हैं")}</b><small>${st.online ? L("Shift 06:00 – 14:00 · 4 h 12 m left", "షిఫ్ట్ 06:00 – 14:00 · 4 గం 12 ని", "शिफ़्ट 06:00 – 14:00 · 4 घं 12 मि बाकी") : L("Do the vehicle check to go online", "ఆన్‌లైన్‌కు వాహన తనిఖీ చేయండి", "ऑनलाइन होने के लिए गाड़ी जाँच करें")}</small></span>${tgl(st.online)}
+      ${st.online ? `<span class="dv-shift"><i style="transform:scaleX(.48)"></i></span>` : ""}
+    </button>
+    ${st.online ? `<div class="dv-radar mt12"><span class="dv-dish"><i></i><b></b></span><div><b>${L("Dispatch is planning your next job", "డిస్పాచ్ మీ తదుపరి పని ప్లాన్ చేస్తోంది", "डिस्पैच आपका अगला काम तय कर रहा है")}</b><small>${L("Stay near MVP Colony. No need to move.", "MVP కాలనీ దగ్గర ఉండండి. కదలనక్కర్లేదు.", "MVP कॉलोनी के पास रहें। हिलने की ज़रूरत नहीं।")}</small></div></div>` : ""}
+    <div class="dv-kpis mt12">${kpi(L("Trips", "ట్రిప్పులు", "ट्रिप"), 5)}${kpi(L("On time", "సమయానికి", "समय पर"), 100, "%")}${kpi(L("Rating", "రేటింగ్", "रेटिंग"), 4.9, "★")}</div>
   </div>
   ${sh(L("Your jobs", "మీ పనులు", "आपके काम"))}
-  <div class="pad">
-    <button class="job next press" data-go="assigned"><time>09:00</time><div class="grow"><span class="ty">${I("repeat", "sm")}${L("Scheduled", "షెడ్యూల్", "शेड्यूल")}</span><div class="t-h3 mt8">Ananya Rao</div><div class="t-sub">MVP Colony → Dwaraka Nagar · 12 km</div></div>${I("chevr")}</button>
-    <button class="job press" data-go="waiting"><time>11:20</time><div class="grow"><span class="ty">${I("landing", "sm")}${L("Airport pickup", "ఎయిర్‌పోర్ట్ పికప్", "एयरपोर्ट पिकअप")}</span><div class="t-h3 mt8">Mr. S. Sharma</div><div class="t-sub">AI 1912 · ${L("lands 11:05, on time", "11:05 ల్యాండింగ్, సమయానికి", "11:05 लैंडिंग, समय पर")}</div></div>${I("chevr")}</button>
-    <button class="job press" data-toast="${esc(L("Hotel booking: guest at the porch, billed to room", "హోటల్ బుకింగ్: పోర్చ్ వద్ద అతిథి, రూమ్ బిల్", "होटल बुकिंग: पोर्च पर मेहमान, रूम बिल"))}"><time>13:30</time><div class="grow"><span class="ty">${I("hotel", "sm")}${L("Hotel", "హోటల్", "होटल")}</span><div class="t-h3 mt8">${L("Guest · Room 412", "అతిథి · రూమ్ 412", "मेहमान · रूम 412")}</div><div class="t-sub">Bay Pavilion → Railway Station</div></div>${I("chevr")}</button>
-    <button class="job press" data-go="vehicle"><time>14:00</time><div class="grow"><span class="ty">${I("bolt", "sm")}${L("Charging", "ఛార్జింగ్", "चार्जिंग")}</span><div class="t-h3 mt8">SAGA hub, Madhurawada</div><div class="t-sub">${L("Fast charger 2 · 40 min · break included", "ఫాస్ట్ ఛార్జర్ 2 · 40 నిమి · విరామం", "फ़ास्ट चार्जर 2 · 40 मिनट · ब्रेक शामिल")}</div></div>${I("chevr")}</button>
+  <div class="pad dv-tl">
+    ${job("09:00", "repeat", L("Scheduled", "షెడ్యూల్", "शेड्यूल"), "Ananya Rao", "MVP Colony → Dwaraka Nagar · 12 km", 'data-go="assigned"', 0, 1)}
+    ${job("11:20", "landing", L("Airport pickup", "ఎయిర్‌పోర్ట్ పికప్", "एयरपोर्ट पिकअप"), "Mr. S. Sharma", `AI 1912 · ${L("lands 11:05, on time", "11:05 ల్యాండింగ్, సమయానికి", "11:05 लैंडिंग, समय पर")}`, 'data-go="waiting"', 1)}
+    ${job("13:30", "hotel", L("Hotel", "హోటల్", "होटल"), L("Guest · Room 412", "అతిథి · రూమ్ 412", "मेहमान · रूम 412"), "Bay Pavilion → Railway Station", `data-toast="${esc(L("Hotel booking: guest at the porch, billed to room", "హోటల్ బుకింగ్: పోర్చ్ వద్ద అతిథి, రూమ్ బిల్", "होटल बुकिंग: पोर्च पर मेहमान, रूम बिल"))}"`, 2)}
+    ${job("14:00", "bolt", L("Charging", "ఛార్జింగ్", "चार्जिंग"), "SAGA hub, Madhurawada", L("Fast charger 2 · 40 min · break included", "ఫాస్ట్ ఛార్జర్ 2 · 40 నిమి · విరామం", "फ़ास्ट चार्जर 2 · 40 मिनट · ब्रेक शामिल"), 'data-go="vehicle"', 3)}
   </div>
-  <div class="pad mt16"><div class="promo"><span class="promo-wm" aria-hidden="true">SAGA</span><span class="promo-k">${S.logo()}</span><div class="promo-h">${L("Every ride,<br><mark>on time.</mark>", "ప్రతి రైడ్,<br><mark>సమయానికి.</mark>", "हर राइड,<br><mark>समय पर।</mark>")}</div><p class="promo-s">${L("You're 100% on time this week. Thank you, Ravi.", "ఈ వారం మీరు 100% సమయానికి. ధన్యవాదాలు, రవి.", "इस हफ़्ते आप 100% समय पर। धन्यवाद, रवि।")}</p></div></div>
-  </div>`, () => { if (st.autoAssign && st.online) { st.autoAssign = false; timer(() => { if (cur === "duty") { notify("car", L("New job assigned", "కొత్త పని కేటాయించబడింది", "नया काम मिला"), L("Ananya Rao · MVP Colony → Dwaraka Nagar", "అనన్య రావు · MVP కాలనీ → ద్వారకా నగర్", "अनन्या राव · MVP कॉलोनी → द्वारका नगर")); go("assigned"); } }, 4200); } });
+  <div class="pad mt12"><div class="dv-note">${I("star", "sm")}<span>${L("You're 100% on time this week. Thank you, Ravi.", "ఈ వారం మీరు 100% సమయానికి. ధన్యవాదాలు, రవి.", "इस हफ़्ते आप 100% समय पर। धन्यवाद, रवि।")}</span></div></div>
+  </div>`;
+}, () => { if (st.autoAssign && st.online) { st.autoAssign = false; timer(() => { if (cur === "duty") { notify("car", L("New job assigned", "కొత్త పని కేటాయించబడింది", "नया काम मिला"), L("Ananya Rao · MVP Colony → Dwaraka Nagar", "అనన్య రావు · MVP కాలనీ → ద్వారకా నగర్", "अनन्या राव · MVP कॉलोनी → द्वारका नगर")); go("assigned"); } }, 4200); } });
 
-def("assigned", { g: "On duty", n: "Job assigned", what: "Full-screen brief in the brand colour: rider, pickup, drop, trip type, and a 10-second ring that acknowledges by itself. No accept / reject.", why: "Salaried model: jobs are assigned, not auctioned. The chauffeur gets a clear brief, not a decision under time pressure.", fl: "High-priority FCM data message → full-screen intent. <code>POST /jobs/{id}/ack</code>. In the suite, this is triggered by the rider sliding to book." }, () => `
-  <div class="req">
-    <div class="center">${pill("car", st.riderLive ? L("Booked just now in the rider app", "రైడర్ యాప్‌లో ఇప్పుడే బుక్", "राइडर ऐप में अभी बुक") : L("Scheduled ride · repeat rider", "షెడ్యూల్ రైడ్ · రెగ్యులర్ రైడర్", "शेड्यूल राइड · नियमित सवारी"), "dark")}</div>
-    <div class="ring"><svg viewBox="0 0 180 180"><circle class="bg" cx="90" cy="90" r="80"/><circle class="fg" cx="90" cy="90" r="80"/></svg><div class="c"><b>4</b><span class="t-sub">${L("min to pickup", "నిమి పికప్‌కు", "मिनट पिकअप तक")}</span></div></div>
-    <div class="rcard mt20"><div class="rr"><span style="width:46px;height:46px;border-radius:23px;background:#fff;color:var(--accent);font-weight:700;display:flex;align-items:center;justify-content:center">${st.job.ini}</span><div class="grow"><b style="font-size:18px">${st.job.rider}</b><div class="t-sub">★ 4.8 · ${L("prefers a quiet ride", "నిశ్శబ్ద ప్రయాణం ఇష్టం", "शांत सफ़र पसंद")}</div></div></div>
-      <div class="hr" style="margin:6px 0"></div>
-      <div class="rr">${I("pin")}<div class="grow"><b>${st.job.pick}</b><div class="t-sub">${L("Pickup · 1.6 km away", "పికప్ · 1.6 కి.మీ", "पिकअप · 1.6 किमी")}</div></div></div>
-      ${(st.job.stops || []).map((x, i) => `<div class="rr"><span class="sn">${i + 1}</span><div class="grow"><b>${x.n}</b><div class="t-sub">${x.type === "pickup" ? L("Pick up another passenger", "మరో ప్రయాణికుడిని ఎక్కించుకోండి", "दूसरे यात्री को लें") : L("Stop · wait up to 5 min", "స్టాప్ · 5 నిమి వరకు వేచి ఉండండి", "स्टॉप · 5 मिनट तक रुकें")}</div></div></div>`).join("")}
-      <div class="rr">${I("flag")}<div class="grow"><b>${st.job.drop}</b><div class="t-sub">${st.job.km} km · ${L("fixed fare, prepaid", "స్థిర ఛార్జీ, ముందే చెల్లింపు", "तय किराया, पहले से भुगतान")}</div></div></div>
+/* ---------------- the job, start to finish ---------------- */
+def("assigned", { g: "On duty", n: "Job assigned", what: "Full-screen job offer in lit brand glass: a ring of 60 ticks that goes dark over 10 seconds (then navigation starts by itself), the minutes to pickup in the middle, the rider with rating and preference, and pickup, stops and drop on a route card. No accept / reject.", why: "Salaried model: jobs are assigned, not auctioned. The chauffeur gets a clear brief, not a decision under time pressure.", fl: "High-priority FCM data message → full-screen intent. <code>POST /jobs/{id}/ack</code>. In the suite, this is triggered by the rider sliding to book." }, () => `
+  <div class="dv-offer">
+    <span class="dv-tag">${I("car", "sm")}${st.riderLive ? L("Booked just now in the rider app", "రైడర్ యాప్‌లో ఇప్పుడే బుక్", "राइडर ऐप में अभी बुक") : L("Scheduled ride · repeat rider", "షెడ్యూల్ రైడ్ · రెగ్యులర్ రైడర్", "शेड्यूल राइड · नियमित सवारी")}</span>
+    <div class="dv-oring">${ticks(60, 60, "big")}<div class="dv-oc"><small>${L("Pickup in", "పికప్", "पिकअप")}</small><b class="serif">4</b><small>${L("min · 1.6 km", "నిమి · 1.6 కి.మీ", "मिनट · 1.6 किमी")}</small></div><span class="dv-osec t-num" id="osec">10</span></div>
+    <div class="dv-ocard">
+      <div class="dv-rider"><span class="dv-ph light">${st.job.ini}</span><div class="grow"><b>${st.job.rider}</b><small>★ 4.8 · ${L("prefers a quiet ride", "నిశ్శబ్ద ప్రయాణం ఇష్టం", "शांत सफ़र पसंद")}</small></div><span class="dv-fare"><b>₹287</b><small>${L("prepaid", "ముందే చెల్లింపు", "पहले से भुगतान")}</small></span></div>
+      <div class="dv-route">
+        <div><i class="p"></i><span><b>${st.job.pick}</b><small>${L("Pickup · Gate 2", "పికప్ · గేట్ 2", "पिकअप · गेट 2")}</small></span></div>
+        ${(st.job.stops || []).map((x, i) => `<div><i class="s">${i + 1}</i><span><b>${x.n}</b><small>${x.type === "pickup" ? L("Pick up another passenger", "మరో ప్రయాణికుడిని ఎక్కించుకోండి", "दूसरे यात्री को लें") : L("Stop · wait up to 5 min", "స్టాప్ · 5 నిమి వరకు వేచి ఉండండి", "स्टॉप · 5 मिनट तक रुकें")}</small></span></div>`).join("")}
+        <div><i class="d"></i><span><b>${st.job.drop}</b><small>${st.job.km} km · ${L("fixed fare, prepaid", "స్థిర ఛార్జీ, ముందే చెల్లింపు", "तय किराया, पहले से भुगतान")}</small></span></div>
+      </div>
     </div>
-    <div style="margin-top:auto">${btn(L("Start navigation", "నావిగేషన్ ప్రారంభించండి", "नेविगेशन शुरू करें"), { act: "ack", kind: "btn-stage", cls: "lg", icon: "nav" })}<button class="btn btn-text block mt8" style="color:#fff" data-toast="${esc(L("Ops will call you in 1 minute", "ఆప్స్ 1 నిమిషంలో కాల్ చేస్తారు", "ऑप्स 1 मिनट में कॉल करेंगे"))}">${L("Report a problem", "సమస్య తెలపండి", "समस्या बताएँ")}</button></div>
-  </div>`, () => timer(() => { if (cur === "assigned") A.ack(); }, 10000));
+    <div class="dv-ofoot">${btn(L("Start navigation", "నావిగేషన్ ప్రారంభించండి", "नेविगेशन शुरू करें"), { act: "ack", kind: "btn-stage dv-white", icon: "nav" })}<button class="btn btn-text block mt8 dv-ghost" data-toast="${esc(L("Ops will call you in 1 minute", "ఆప్స్ 1 నిమిషంలో కాల్ చేస్తారు", "ऑप्स 1 मिनट में कॉल करेंगे"))}">${L("Report a problem", "సమస్య తెలపండి", "समस्या बताएँ")}</button></div>
+  </div>`, el => {
+  const tk = [...el.querySelectorAll(".dv-ticks i")], sec = el.querySelector("#osec"), t0 = Date.now();
+  const tick = () => { if (cur !== "assigned") return; const p = Math.min(1, (Date.now() - t0) / 10000); tk.forEach((t, i) => t.classList.toggle("on", i >= Math.floor(p * 60))); if (sec) sec.textContent = Math.max(0, Math.ceil(10 - p * 10)); if (p >= 1) A.ack(); else timer(tick, 166); };
+  tick();
+});
 
-def("topickup", { g: "On the job", n: "To pickup", map: 1, what: "Turn card, branded map, ETA, rider, masked call and in-app chat with an unread badge. 'I've arrived' tells the rider instantly.", why: "One glance for direction, one tap when there.", fl: "Navigation SDK; arrival event to the rider app over WebSocket." }, () => `
+const turnCard = (ic, dist, road, then) => `<div class="dv-turn"><span class="dv-arrow">${I(ic)}</span><div class="grow"><b class="t-num">${dist}</b><span>${road}</span></div>${then ? `<small class="dv-then">${L("then", "తర్వాత", "फिर")} ${then}</small>` : ""}</div>`;
+def("topickup", { g: "On the job", n: "To pickup", map: 1, what: "A large turn card in lit glass (arrow, distance, road, the turn after), the branded map, then one sheet: minutes to pickup, the rider, masked call, in-app chat with an unread badge, SOS, and 'I've arrived'.", why: "One glance for direction, one tap when there. Large type is readable at arm's length on a dash mount.", fl: "Navigation SDK; arrival event to the rider app over WebSocket." }, () => `
   <div class="mapwrap">${S.map({ route: "pickup", car: [260, 210, 180], view: [79, 70, 263, 571], labelPickup: st.job.rider.split(" ")[0] })}</div>
-  <div class="turn">${I("arrowr")}<div><b>${L("Right onto Beach Road", "బీచ్ రోడ్ వైపు కుడికి", "बीच रोड पर दाएँ")}</b><span>300 m</span></div></div>
-  <div class="sheet"><div class="grabber"></div>
-    <div class="row-flex"><div class="grow"><div class="t-title">4 min</div><div class="t-sub">1.6 km · ${L("arrive 8:56 AM", "ఉ. 8:56కి చేరుకోండి", "सुबह 8:56 पहुँचें")}</div></div>${pill("check", L("Early", "ముందుగా", "समय से पहले"), "ok")}</div>
-    <div class="rider mt16"><span class="ph">${st.job.ini}</span><div class="grow"><div class="t-h3">${st.job.rider}</div><div class="t-sub">${L("Gate 2, near the park", "గేట్ 2, పార్క్ దగ్గర", "गेट 2, पार्क के पास")}</div></div></div>
-    <div class="acts mt16"><button class="act" data-toast="${esc(L("Calling rider (number masked)", "రైడర్‌కు కాల్ (నంబర్ దాచబడింది)", "सवारी को कॉल (नंबर छुपा)"))}"><span class="c">${I("phone")}</span>${L("Call", "కాల్", "कॉल")}</button><button class="act" data-go="chat"><span class="c">${I("chat")}${unread() ? `<i>${unread()}</i>` : ""}</span>${L("Chat", "చాట్", "चैट")}</button><button class="act sos" data-toast="${esc(L("SOS sent to SAGA control room", "SOS SAGA కంట్రోల్ రూమ్‌కు", "SOS SAGA कंट्रोल रूम भेजा"))}"><span class="c">${I("shield")}</span>SOS</button></div>
-    <div class="mt16">${btn(L("I've arrived", "నేను చేరుకున్నాను", "मैं पहुँच गया"), { act: "arrived", cls: "lg" })}</div>
+  ${turnCard("arrowr", "300 m", L("Right onto Beach Road", "బీచ్ రోడ్ వైపు కుడికి", "बीच रोड पर दाएँ"), L("left at Gate 2", "గేట్ 2 వద్ద ఎడమ", "गेट 2 पर बाएँ"))}
+  <div class="sheet dv-sheetb"><div class="grabber"></div>
+    <div class="dv-eta"><div class="grow"><b class="t-num">4 <i>min</i></b><small>1.6 km · ${L("arrive 8:56 AM", "ఉ. 8:56కి చేరుకోండి", "सुबह 8:56 पहुँचें")}</small></div><span class="dv-early">${I("check", "sm")}${L("Early", "ముందుగా", "समय से पहले")}</span></div>
+    <div class="dv-rider mt12"><span class="dv-ph">${st.job.ini}</span><div class="grow"><b>${st.job.rider}</b><small>${L("Gate 2, near the park", "గేట్ 2, పార్క్ దగ్గర", "गेट 2, पार्क के पास")}</small></div>
+      <button class="dv-rb" data-toast="${esc(L("Calling rider (number masked)", "రైడర్‌కు కాల్ (నంబర్ దాచబడింది)", "सवारी को कॉल (नंबर छुपा)"))}" aria-label="${L("Call", "కాల్", "कॉल")}">${I("phone")}</button>
+      <button class="dv-rb" data-go="chat" aria-label="${L("Chat", "చాట్", "चैट")}">${I("chat")}${unread() ? `<i>${unread()}</i>` : ""}</button>
+      <button class="dv-rb sos" data-toast="${esc(L("SOS sent to SAGA control room", "SOS SAGA కంట్రోల్ రూమ్‌కు", "SOS SAGA कंट्रोल रूम भेजा"))}" aria-label="SOS">${I("sos")}</button></div>
+    <div class="mt16">${btn(L("I've arrived", "నేను చేరుకున్నాను", "मैं पहुँच गया"), { act: "arrived", icon: "flag" })}</div>
   </div>`);
 
-def("waiting", { g: "On the job", n: "At pickup", nav: 1, foot: 1, what: "Free-wait timer and rider status. For airport pickups, the flight's landing time and belt; the wait starts from landing.", why: "Removes guesswork at Arrivals; the rider sees the same.", fl: "Waiting rules from <code>GET /policies</code>." }, () => `
+def("waiting", { g: "On the job", n: "At pickup", nav: 1, foot: 1, what: "Arrival: a free-wait clock (a ring of ticks that fills over 10 minutes with the time in the middle), the rider's status, and the next airport pickup already chained, with its flight.", why: "Removes guesswork at the kerb and at Arrivals; the rider sees the same clock.", fl: "Waiting rules from <code>GET /policies</code>." }, () => `
   ${bar(L("At pickup", "పికప్ వద్ద", "पिकअप पर"))}
   <div class="content"><div class="pad">
-    <div class="card center" style="border-radius:30px"><div class="t-label">${L("Free waiting", "ఉచిత వెయిటింగ్", "मुफ़्त इंतज़ार")}</div><div class="timer mt8" id="wt">00:00</div><div class="progress mt12"><i id="wtb" style="width:0%"></i></div><p class="t-sub mt8">${L("of 10 min · the rider has been told you're here", "10 నిమిషాల్లో · మీరు వచ్చారని రైడర్‌కు తెలిపాం", "10 मिनट में से · सवारी को बता दिया है")}</p></div>
-    <div class="rider mt12"><span class="ph">${st.job.ini}</span><div class="grow"><div class="t-h3">${st.job.rider}</div><div class="t-sub">${L("Coming down", "కిందకు వస్తున్నారు", "नीचे आ रही हैं")}</div></div><button class="ibtn" data-go="chat">${I("chat")}</button></div>
-    <div class="flightbox mt12"><span style="width:44px;height:44px;border-radius:22px;background:var(--accent-soft);color:var(--on-accent-soft);display:flex;align-items:center;justify-content:center">${I("landing")}</span><div class="grow"><b>${L("Next: AI 1912 lands 11:05", "తదుపరి: AI 1912 11:05కి", "अगला: AI 1912 11:05 पर")}</b><div class="t-sub">${L("Arrivals pickup chained after this ride", "ఈ రైడ్ తర్వాత అరైవల్స్ పికప్", "इस राइड के बाद अराइवल पिकअप")}</div></div></div>
+    <div class="dv-wait">${ticks(60, 0)}<div class="dv-wc"><small>${L("Free waiting", "ఉచిత వెయిటింగ్", "मुफ़्त इंतज़ार")}</small><b class="t-num" id="wt">00:12</b><small>${L("of 10 min", "10 నిమిషాల్లో", "10 मिनट में से")}</small></div></div>
+    <p class="t-sub center mt8">${L("The rider has been told you're here.", "మీరు వచ్చారని రైడర్‌కు తెలిపాం.", "सवारी को बता दिया है कि आप पहुँच गए।")}</p>
+    ${pane(`<div class="dv-rider"><span class="dv-ph">${st.job.ini}</span><div class="grow"><b>${st.job.rider}</b><small class="dv-livet">${L("Coming down", "కిందకు వస్తున్నారు", "नीचे आ रही हैं")}</small></div><button class="dv-rb" data-go="chat" aria-label="${L("Chat", "చాట్", "चैट")}">${I("chat")}${unread() ? `<i>${unread()}</i>` : ""}</button></div>`, "mt12")}
+    ${pane(`<div class="dv-rider"><span class="dv-ph ic">${I("landing")}</span><div class="grow"><b>${L("Next: AI 1912 lands 11:05", "తదుపరి: AI 1912 11:05కి", "अगला: AI 1912 11:05 पर")}</b><small>${L("Arrivals pickup chained after this ride · belt 3", "ఈ రైడ్ తర్వాత అరైవల్స్ పికప్ · బెల్ట్ 3", "इस राइड के बाद अराइवल पिकअप · बेल्ट 3")}</small></div></div>`, "mt8")}
   </div></div>
-  <div class="foot">${btn(L("Enter rider's code", "రైడర్ కోడ్ ఎంటర్ చేయండి", "सवारी का कोड डालें"), { go: "code", cls: "lg" })}</div>`, () => { const t0 = Date.now(); const tick = () => { if (cur !== "waiting") return; const s = Math.floor((Date.now() - t0) / 1000) + 12, el = $("#wt"); if (el) { el.textContent = `0${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; $("#wtb").style.width = Math.min(100, s / 6) + "%"; } timer(tick, 1000); }; tick(); });
+  <div class="foot">${btn(L("Enter rider's code", "రైడర్ కోడ్ ఎంటర్ చేయండి", "सवारी का कोड डालें"), { go: "code", icon: "lock" })}</div>`, el => {
+  const t0 = Date.now(), tk = [...el.querySelectorAll(".dv-ticks i")];
+  const tick = () => { if (cur !== "waiting") return; const s = Math.floor((Date.now() - t0) / 1000) + 12, w = $("#wt"); if (w) w.textContent = `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`; const on = Math.min(60, Math.floor(s / 10)); tk.forEach((t, i) => t.classList.toggle("on", i < on)); timer(tick, 1000); };
+  tick();
+});
 
-def("code", { g: "On the job", n: "Start with code", nav: 1, what: "The chauffeur types the rider's 4-digit code. Digits pop in; a wrong code shakes red; the right one turns green and the rider's app moves into the ride by itself.", why: "Prevents wrong-car pickups at busy airports and hotel porches.", fl: "<code>POST /rides/{id}/start {code}</code>; three wrong tries alert ops." }, () => `
+def("code", { g: "On the job", n: "Start with code", nav: 1, what: "An OTP keypad sized for a thumb in a car: four glass digit wells, keys that press in, a wrong code that shakes red, and the right one that glows green while the rider's app moves into the ride by itself.", why: "Prevents wrong-car pickups at busy airports and hotel porches.", fl: "<code>POST /rides/{id}/start {code}</code>; three wrong tries alert ops." }, () => `
   ${bar(L("Start the ride", "రైడ్ ప్రారంభించండి", "राइड शुरू करें"))}
   <div class="content"><div class="pad center">
     <h1 class="t-title">${L("Ask the rider for their code", "రైడర్‌ను కోడ్ అడగండి", "सवारी से कोड पूछें")}</h1>
-    <p class="t-sub mt8">${L("It's on their phone, under 'Your ride code'.", "వారి ఫోన్‌లో 'మీ రైడ్ కోడ్' కింద.", "उनके फ़ोन पर 'आपका राइड कोड' में।")}</p>
-    <div class="codein ${st.code === "4827" ? "ok" : st.bad ? "bad shake" : ""}">${[0, 1, 2, 3].map(i => `<span class="${st.code[i] ? "f" : ""}">${st.code[i] || ""}</span>`).join("")}</div>
-    <p class="mt16 ${st.code === "4827" ? "" : "t-sub"}" style="font-weight:600;${st.code === "4827" ? "color:var(--success)" : st.bad ? "color:var(--danger)" : ""}">${st.code === "4827" ? L("Code matches. Starting the ride…", "కోడ్ సరిపోయింది. రైడ్ మొదలవుతోంది…", "कोड सही है। राइड शुरू हो रही है…") : st.bad ? L("That code doesn't match. Try again.", "కోడ్ సరిపోలేదు. మళ్ళీ ప్రయత్నించండి.", "कोड मेल नहीं खाता। फिर कोशिश करें।") : L("Demo code: 4827", "డెమో కోడ్: 4827", "डेमो कोड: 4827")}</p>
-    <div class="keys">${[1, 2, 3, 4, 5, 6, 7, 8, 9, "", 0, "⌫"].map(k => k === "" ? "<span></span>" : `<button data-act="key" data-v="${k}">${k}</button>`).join("")}</div>
+    <p class="t-sub mt8">${L("It's on their phone, under 'Ride code'.", "వారి ఫోన్‌లో 'రైడ్ కోడ్' కింద.", "उनके फ़ोन पर 'राइड कोड' में।")}</p>
+    <div class="dv-code ${st.code === "4827" ? "ok" : st.bad ? "bad" : ""}">${[0, 1, 2, 3].map(i => `<span class="${st.code[i] ? "f" : ""} ${i === st.code.length && !st.bad ? "cur" : ""}">${st.code[i] || ""}</span>`).join("")}</div>
+    <p class="dv-cmsg ${st.code === "4827" ? "ok" : st.bad ? "bad" : ""}">${st.code === "4827" ? L("Code matches. Starting the ride…", "కోడ్ సరిపోయింది. రైడ్ మొదలవుతోంది…", "कोड सही है। राइड शुरू हो रही है…") : st.bad ? L("That code doesn't match. Try again.", "కోడ్ సరిపోలేదు. మళ్ళీ ప్రయత్నించండి.", "कोड मेल नहीं खाता। फिर कोशिश करें।") : L("Demo code: 4827", "డెమో కోడ్: 4827", "डेमो कोड: 4827")}</p>
+    <div class="dv-keys">${[1, 2, 3, 4, 5, 6, 7, 8, 9, "", 0, "⌫"].map(k => k === "" ? "<span></span>" : `<button data-act="key" data-v="${k}" ${k === "⌫" ? `aria-label="${L("Delete", "తొలగించు", "मिटाएँ")}"` : ""}>${k}</button>`).join("")}</div>
   </div></div>`);
 
-def("trip", { g: "On the job", n: "On trip", map: 1, what: "Navigation to the drop. Rider requests arrive live (in the chauffeur's language); a safety attention alert drops in and is logged for human review. Slide to end the trip.", why: "Safety is visible and fair. Sliding to end avoids ending a trip by a stray tap while driving.", fl: "Same navigation component. Driver-monitoring events from the in-car camera (if fitted) logged to <code>/safety</code>." }, () => `
+def("trip", { g: "On the job", n: "On trip", map: 1, what: "Navigation to the drop with a large turn card. One sheet: minutes left, a progress line with the car on it, the rider's requests as they arrive (in the chauffeur's language), a safety attention alert that drops in and is logged for review, and slide to end the trip.", why: "Safety is visible and fair. Sliding to end avoids ending a trip by a stray tap while driving.", fl: "Same navigation component. Driver-monitoring events from the in-car camera (if fitted) logged to <code>/safety</code>." }, () => {
+  const reqs = S.chat.get().filter(m => m.who === "rider").slice(-1);
+  return `
   <div class="mapwrap">${S.map({ route: "trip", car: [140, 380, 180], view: [-20, 232, 441, 960], labelDrop: st.job.drop })}</div>
-  <div class="turn">${I("arrowu")}<div><b>${L("Continue on VIP Road", "VIP రోడ్‌లో నేరుగా", "VIP रोड पर सीधे")}</b><span>1.2 km</span></div></div>
-  ${st.safety ? `<div class="safety">${I("alert")}<span>${L("Attention check: eyes on the road. Logged for review, no penalty.", "అటెన్షన్ చెక్: రోడ్డుపై దృష్టి. రివ్యూకు నమోదు, జరిమానా లేదు.", "ध्यान जाँच: नज़र सड़क पर। समीक्षा के लिए दर्ज, कोई दंड नहीं।")}</span></div>` : ""}
-  <div class="sheet"><div class="grabber"></div>
-    <div class="row-flex"><div class="grow"><div class="t-title">12 min</div><div class="t-sub">5.1 km · ${L("drop 9:22 AM", "ఉ. 9:22కి డ్రాప్", "सुबह 9:22 ड्रॉप")}</div></div><button class="ibtn" data-go="chat">${I("chat")}</button></div>
-    <div class="progress mt12"><i style="width:58%"></i></div>
-    <div class="mt20">${S.slider(L("Slide to end trip", "ట్రిప్ ముగించడానికి స్లైడ్", "ट्रिप खत्म करने के लिए स्लाइड"), 'data-after="endtrip"', "ink")}</div>
-  </div>`, () => { timer(() => { if (cur === "trip") { st.safety = true; rerender(); timer(() => { st.safety = false; if (cur === "trip") rerender(); }, 4500); } }, 2200); });
+  ${turnCard("arrowu", "1.2 km", L("Continue on VIP Road", "VIP రోడ్‌లో నేరుగా", "VIP रोड पर सीधे"), L("right at Siripuram", "సిరిపురం వద్ద కుడి", "सिरिपुरम पर दाएँ"))}
+  ${st.safety ? `<div class="dv-safety">${I("alert")}<span>${L("Attention check: eyes on the road. Logged for review, no penalty.", "అటెన్షన్ చెక్: రోడ్డుపై దృష్టి. రివ్యూకు నమోదు, జరిమానా లేదు.", "ध्यान जाँच: नज़र सड़क पर। समीक्षा के लिए दर्ज, कोई दंड नहीं।")}</span></div>` : ""}
+  <div class="sheet dv-sheetb"><div class="grabber"></div>
+    <div class="dv-eta"><div class="grow"><b class="t-num">12 <i>min</i></b><small>5.1 km · ${L("drop 9:22 AM", "ఉ. 9:22కి డ్రాప్", "सुबह 9:22 ड्रॉप")} · ${st.job.drop}</small></div><button class="dv-rb" data-go="chat" aria-label="${L("Chat", "చాట్", "चैट")}">${I("chat")}${unread() ? `<i>${unread()}</i>` : ""}</button></div>
+    <div class="dv-prog"><i style="transform:scaleX(.58)"></i><b style="left:58%">${I("car", "sm")}</b></div>
+    ${reqs.length ? `<div class="dv-req">${I("chat", "sm")}<span><small>${st.job.rider.split(" ")[0]}</small>${S.msg(reqs[0].k)}</span></div>` : ""}
+    <div class="mt16">${S.slider(L("Slide to end trip", "ట్రిప్ ముగించడానికి స్లైడ్", "ट्रिप खत्म करने के लिए स्लाइड"), 'data-after="endtrip"', "ink")}</div>
+  </div>`;
+}, () => { timer(() => { if (cur === "trip") { st.safety = true; rerender(); timer(() => { st.safety = false; if (cur === "trip") rerender(); }, 4500); } }, 2200); });
 
-def("done", { g: "On the job", n: "Trip complete", foot: 1, what: "Paid status, distance and time, rider rating, and the next job already lined up.", why: "No fare handling and no idle time: dispatch chains the next job.", fl: "<code>POST /rides/{id}/complete</code>; next job from the schedule." }, () => `
-  <div class="content"><div class="pad center" style="padding-top:30px">
-    <div class="seal">${I("check")}</div>
-    <h1 class="t-title mt20">${L("Trip complete", "ట్రిప్ పూర్తయింది", "ट्रिप पूरी हुई")}</h1>
-    <p class="t-sub mt8">${L("Paid by UPI · nothing to collect", "UPI ద్వారా చెల్లించారు · వసూలు లేదు", "UPI से भुगतान · कुछ लेना नहीं")}</p>
-    <div class="kpis mt24"><div>${L("Distance", "దూరం", "दूरी")}<b data-count="12.4">12.4</b>km</div><div>${L("Time", "సమయం", "समय")}<b data-count="27">27</b>min</div><div>${L("Fare", "ఛార్జీ", "किराया")}<b>₹287</b></div></div>
-    <div class="t-h3 mt24">${L("Rate", "రేటింగ్", "रेट करें")} ${st.job.rider.split(" ")[0]}</div>
-    <div class="stars mt12">${[1, 2, 3, 4, 5].map(n => `<button class="${n <= st.rating ? "on" : ""}" data-act="rate" data-v="${n}">${I("star")}</button>`).join("")}</div>
-    <div class="job next mt24" style="text-align:left"><time>11:20</time><div class="grow"><span class="ty">${I("landing", "sm")}${L("Next job", "తదుపరి పని", "अगला काम")}</span><div class="t-h3 mt8">Mr. S. Sharma · AI 1912</div><div class="t-sub">${L("Arrivals · on time · 18 min drive", "అరైవల్స్ · సమయానికి · 18 నిమి", "अराइवल · समय पर · 18 मिनट")}</div></div></div>
+def("done", { g: "On the job", n: "Trip complete", foot: 1, what: "A glowing check, then today's earnings counting up to the new total (day pay, on-time bonus, tips), the trip's distance, time and prepaid fare, a rating for the rider, and the next job already lined up.", why: "No fare handling and no idle time: dispatch chains the next job. Seeing the day's pay grow with every on-time trip rewards what SAGA promises riders.", fl: "<code>POST /rides/{id}/complete</code>; earnings from <code>GET /driver/earnings/today</code>; next job from the schedule." }, () => `
+  <div class="content"><div class="pad center dv-done">
+    <span class="dv-seal big">${I("check")}</span>
+    <h1 class="t-title mt16">${L("Trip complete", "ట్రిప్ పూర్తయింది", "ट्रिप पूरी हुई")}</h1>
+    <p class="t-sub mt4">${L("Paid by UPI · nothing to collect", "UPI ద్వారా చెల్లించారు · వసూలు లేదు", "UPI से भुगतान · कुछ लेना नहीं")}</p>
+    <div class="dv-earn lg-brand mt16"><small>${L("Earned today", "ఈ రోజు సంపాదన", "आज की कमाई")}</small><b>₹<span class="t-num" data-count="${1040 + (st.tipToday || 0)}">${(1040 + (st.tipToday || 0)).toLocaleString("en-IN")}</span></b>
+      <div class="dv-earn-r"><span>${L("Day pay", "రోజు జీతం", "दिन का वेतन")}<b>₹950</b></span><span>${L("On-time bonus", "సమయ బోనస్", "समय बोनस")}<b>+₹40</b></span><span>${L("Tips", "టిప్స్", "टिप")}<b>+₹${50 + (st.tipToday || 0)}</b></span></div></div>
+    <div class="dv-kpis mt12">${kpi(L("Distance", "దూరం", "दूरी"), 12.4, "km")}${kpi(L("Time", "సమయం", "समय"), 27, "min")}${kpi(L("Fare", "ఛార్జీ", "किराया"), "₹287", "", false)}</div>
+    <div class="t-h3 mt20">${L("Rate", "రేటింగ్", "रेट करें")} ${st.job.rider.split(" ")[0]}</div>
+    <div class="ar-stars mt8 ${st._burst ? "rated" : ""}">${[1, 2, 3, 4, 5].map(n => `<button class="${n <= st.rating ? "on" : ""}" style="--d:${(n - 1) * 60}ms" data-act="rate" data-v="${n}" aria-label="${n}">${I("star")}<i></i></button>`).join("")}</div>
+    <button class="dv-job next mt16" data-go="waiting"><time class="t-num">11:20</time><span class="dv-node">${I("landing", "sm")}</span><span class="grow"><small>${L("Next job", "తదుపరి పని", "अगला काम")}</small><b>Mr. S. Sharma · AI 1912</b><span>${L("Arrivals · on time · 18 min drive", "అరైవల్స్ · సమయానికి · 18 నిమి", "अराइवल · समय पर · 18 मिनट")}</span></span>${I("chevr")}</button>
   </div></div>
-  <div class="foot">${btn(L("Start next job", "తదుపరి పని ప్రారంభించండి", "अगला काम शुरू करें"), { go: "waiting", cls: "lg", icon: "nav" })}</div>`);
+  <div class="foot">${btn(L("Start next job", "తదుపరి పని ప్రారంభించండి", "अगला काम शुरू करें"), { go: "waiting", icon: "nav" })}</div>`);
 
-def("chat", { g: "On the job", n: "Chat with rider", nav: 1, what: "In-app chat with quick replies. Each side reads the other's message in their own language (Telugu, Hindi, English).", why: "No personal numbers shared, no typing while driving, no language barrier.", fl: "Canned message keys over WebSocket; rendered per reader's locale. Free text goes through a translation API." }, () => `
-  ${bar(st.job.rider, { actions: `<button class="ibtn" data-toast="${esc(L("Calling rider (number masked)", "రైడర్‌కు కాల్", "सवारी को कॉल"))}">${I("phone")}</button>` })}
-  <div class="content" style="padding-bottom:170px"><p class="t-sub center">${L("Messages are translated for each of you", "సందేశాలు ఇద్దరికీ అనువదించబడతాయి", "संदेश दोनों के लिए अनुवाद होते हैं")}</p>
-    <div class="msgs">${S.chat.get().map(m => `<div class="bub ${m.who === "driver" ? "me" : "them"}">${S.msg(m.k)}<small>${m.at}</small></div>`).join("")}</div></div>
-  <div class="foot"><div class="qr">${["arrived", "traffic", "gate", "sure"].map(k => `<button class="chip" data-act="say" data-v="${k}">${S.msg(k)}</button>`).join("")}</div></div>`, () => { st.read = S.chat.get().length; const c = $("#views .view:last-child .content"); if (c) c.scrollTop = 9999; });
+def("chat", { g: "On the job", n: "Chat with rider", nav: 1, what: "In-app chat in glass bubbles with big quick replies a chauffeur can tap at a red light. Each side reads the other's message in their own language (Telugu, Hindi, English).", why: "No personal numbers shared, no typing while driving, no language barrier.", fl: "Canned message keys over WebSocket; rendered per reader's locale. Free text goes through a translation API." }, () => `
+  ${bar(st.job.rider, { actions: `<button class="ibtn" data-toast="${esc(L("Calling rider (number masked)", "రైడర్‌కు కాల్", "सवारी को कॉल"))}" aria-label="${L("Call", "కాల్", "कॉल")}">${I("phone")}</button>` })}
+  <div class="content ch-c">
+    <div class="ch-who"><span class="dv-ph">${st.job.ini}</span><span><b>${st.job.rider}</b><small>${st.job.pick} → ${st.job.drop}</small></span></div>
+    <p class="ch-note">${I("globe", "sm")}${L("Messages are translated for each of you", "సందేశాలు ఇద్దరికీ అనువదించబడతాయి", "संदेश दोनों के लिए अनुवाद होते हैं")}</p>
+    <div class="msgs ch-msgs">${S.chat.get().map((m, i, a) => `<div class="bub ${m.who === "driver" ? "me" : "them"}" style="--d:${Math.max(0, i - a.length + 4) * 70}ms">${m.who !== "driver" && (i === 0 || a[i - 1].who === "driver") ? `<i class="ch-av">${st.job.ini}</i>` : ""}<span>${S.msg(m.k)}</span><small>${m.at}</small></div>`).join("")}</div>
+  </div>
+  <div class="ch-dock dv-dock"><div class="dv-qr">${["arrived", "traffic", "gate", "sure"].map(k => `<button class="chip" data-act="say" data-v="${k}">${S.msg(k)}</button>`).join("")}</div></div>`, () => { st.readRider = S.chat.get().filter(m => m.who === "rider").length; const c = $("#views .view:last-child .content"); if (c) c.scrollTop = 9999; });
 
 /* ---------------- car & me ---------------- */
-def("vehicle", { g: "Car & me", n: "Charging", tab: "car", what: "Charge ring with the level needed for the rest of the plan, the booked bay, and Start charging that fills the ring and counts kWh.", why: "No range anxiety and no queuing at public chargers: charging is planned by dispatch.", fl: "Telematics if available; charger session via the hub's OCPP backend." }, () => {
-  const c = st.charge, off = 534 - 534 * c / 100;
+def("vehicle", { g: "Car & me", n: "Car health & charging", tab: "car", what: "The car from above (the top-down render) with live tyre pressures at each wheel, one flagged low; a battery bar that fills when charging starts and counts the kWh; range for the rest of the plan; the booked charging bay; and today's photo check.", why: "No range anxiety and no queuing at public chargers: charging is planned by dispatch. A low tyre is caught before the first rider, not after.", fl: "Telematics (TPMS, state of charge) if available; charger session via the hub's OCPP backend. Top-down sprite is the bundled render." }, () => {
+  const c = st.charge;
+  const ty = (k, psi, warn) => `<span class="dv-ty ${k} ${warn ? "w" : ""}"><b class="t-num">${psi}</b><small>psi</small></span>`;
   return `${bar(L("Your car", "మీ కారు", "आपकी गाड़ी"), { back: false, large: true, actions: bell() })}
   <div class="content"><div class="pad">
-    <div class="card center" style="border-radius:32px;padding:24px"><div class="ringc"><svg viewBox="0 0 200 200"><circle class="bg" cx="100" cy="100" r="85"/><circle class="fg" id="rfg" cx="100" cy="100" r="85" stroke-dasharray="534" stroke-dashoffset="${off}"/></svg><div class="c"><b id="rpct">${c}%</b><span class="t-sub" id="rkwh">${st.charging ? "+0.0 kWh" : L("about 210 km", "సుమారు 210 కి.మీ", "लगभग 210 किमी")}</span></div></div>
-      <p class="t-sub mt12">${L("Enough for your next 3 jobs (≈ 74 km). Plan needs 30% by 14:00.", "తదుపరి 3 పనులకు సరిపోతుంది (≈ 74 కి.మీ). 14:00కి 30% కావాలి.", "अगले 3 कामों के लिए काफ़ी (≈ 74 किमी)। 14:00 तक 30% चाहिए।")}</p>
-      <div class="mt16">${btn(st.charging ? L("Charging…", "ఛార్జ్ అవుతోంది…", "चार्ज हो रही है…") : L("Start charging (at the hub)", "ఛార్జింగ్ ప్రారంభించండి (హబ్ వద్ద)", "चार्जिंग शुरू करें (हब पर)"), { act: "charge", icon: "bolt", kind: st.charging ? "btn-secondary" : "btn-primary" })}</div></div>
+    <div class="dv-health">
+      <div class="dv-top"><img src="${SagaStage.src("top-down")}" alt="${V.short}">${ty("fl", 36)}${ty("fr", 36)}${ty("rl", 35)}${ty("rr", 31, 1)}<span class="dv-plate">${V.plate}</span></div>
+      <div class="dv-hside">
+        <span class="eyebrow">${V.short}</span>
+        <div class="dv-bat"><span class="dv-cell"><i id="rfill" style="transform:scaleX(${c / 100})"></i><b>${I("bolt", "sm")}</b></span><span class="dv-pct"><b class="t-num" id="rpct">${c}%</b><small id="rkwh">${st.charging ? "+0.0 kWh" : L("about 210 km", "సుమారు 210 కి.మీ", "लगभग 210 किमी")}</small></span></div>
+        <div class="dv-hrow"><span>${L("Cabin", "క్యాబిన్", "केबिन")}</span><b>22°</b></div>
+        <div class="dv-hrow"><span>${L("Odometer", "ఓడోమీటర్", "ओडोमीटर")}</span><b class="t-num">12,408 km</b></div>
+        <div class="dv-hrow w"><span>${L("Rear right tyre", "వెనుక కుడి టైరు", "पीछे दायाँ टायर")}</span><b>${L("Top up at hub", "హబ్‌లో గాలి", "हब पर हवा भरें")}</b></div>
+      </div>
+    </div>
+    <p class="t-sub mt12">${L("Enough for your next 3 jobs (≈ 74 km). The plan needs 30% by 14:00.", "తదుపరి 3 పనులకు సరిపోతుంది (≈ 74 కి.మీ). 14:00కి 30% కావాలి.", "अगले 3 कामों के लिए काफ़ी (≈ 74 किमी)। 14:00 तक 30% चाहिए।")}</p>
+    <div class="mt12">${btn(st.charging ? L("Charging…", "ఛార్జ్ అవుతోంది…", "चार्ज हो रही है…") : L("Start charging (at the hub)", "ఛార్జింగ్ ప్రారంభించండి (హబ్ వద్ద)", "चार्जिंग शुरू करें (हब पर)"), { act: "charge", icon: "bolt", kind: st.charging ? "btn-secondary" : "btn-primary" })}</div>
   </div>
   <div class="group mt16">
     ${row({ icon: "bolt", t: L("Booked: 14:00 · SAGA hub, Madhurawada", "బుక్: 14:00 · SAGA హబ్", "बुक: 14:00 · SAGA हब"), s: L("Fast charger 2 · 40 min · paid break", "ఫాస్ట్ ఛార్జర్ 2 · 40 నిమి · విరామం", "फ़ास्ट चार्जर 2 · 40 मिनट · ब्रेक"), toast: L("Directions to SAGA hub", "SAGA హబ్‌కు దారి", "SAGA हब का रास्ता") })}
-    ${row({ icon: "scan", t: L("Today's vehicle check", "ఈ రోజు వాహన తనిఖీ", "आज की गाड़ी जाँच"), s: L("9 photos · no new damage · 06:02", "9 ఫోటోలు · కొత్త నష్టం లేదు · 06:02", "9 फ़ोटो · कोई नया नुकसान नहीं · 06:02"), toast: L("Inspection report saved for ops", "తనిఖీ నివేదిక ఆప్స్‌కు సేవ్", "जाँच रिपोर्ट ऑप्स के लिए सेव") })}
-    ${row({ icon: "alert", lc: "grey", t: L("Report a problem with the car", "కారులో సమస్య తెలపండి", "गाड़ी में समस्या बताएँ"), toast: L("Ops will call you within 5 min", "ఆప్స్ 5 నిమిషాల్లో కాల్ చేస్తారు", "ऑप्स 5 मिनट में कॉल करेंगे") })}
+    ${row({ icon: "scan", t: L("Today's vehicle check", "ఈ రోజు వాహన తనిఖీ", "आज की गाड़ी जाँच"), s: L("9 photos · no new damage · 06:02", "9 ఫోటోలు · కొత్త నష్టం లేదు · 06:02", "9 फ़ोटो · कोई नया नुकसान नहीं · 06:02"), go: "checklist" })}
+    ${row({ icon: "alert", t: L("Report a problem with the car", "కారులో సమస్య తెలపండి", "गाड़ी में समस्या बताएँ"), toast: L("Ops will call you within 5 min", "ఆప్స్ 5 నిమిషాల్లో కాల్ చేస్తారు", "ऑप्स 5 मिनट में कॉल करेंगे") })}
   </div></div>`;
 });
 
-def("profile", { g: "Car & me", n: "Me · shift summary", tab: "me", what: "Shift summary (trips, on-time, rating, safety score), bonus progress, wallet with salary, bonus and rider tips, training, and settings: language, appearance, end shift with an end-of-shift photo check.", why: "Pay rewards what SAGA promises riders: safe, punctual service. Tips from riders land here instantly.", fl: "<code>GET /driver/summary</code>, <code>GET /driver/wallet</code>. Payouts via the payroll bank account." }, () => `
-  ${bar(L("Me", "నేను", "मैं"), { back: false, large: true, actions: bell() })}
+def("profile", { g: "Car & me", n: "Me · earnings and shift", tab: "me", what: "This week's earnings as lit bars that rise day by day with the total counting up, the shift summary (trips, safety, rating), November bonus progress, tips from riders, and settings: language, appearance, training, end shift with a 4-photo check.", why: "Pay rewards what SAGA promises riders: safe, punctual service. Tips from riders land here instantly.", fl: "<code>GET /driver/summary</code>, <code>GET /driver/earnings?week=</code>, <code>GET /driver/wallet</code>. Payouts via the payroll bank account." }, () => {
+  const wk = [["M", 1010], ["T", 1060], ["W", 990], ["T", 1090], ["F", 1120], ["S", 1040 + (st.tipToday || 0)], ["S", 0]], max = 1200, tot = wk.reduce((a, b) => a + b[1], 0);
+  const dl = { M: L("M", "సో", "सो"), T: L("T", "మం", "मं"), W: L("W", "బు", "बु"), F: L("F", "శు", "शु"), S: L("S", "శ", "श") };
+  return `${bar(L("Me", "నేను", "मैं"), { back: false, large: true, actions: bell() })}
   <div class="content"><div class="pad">
-    <div class="kpis"><div>${L("Trips", "ట్రిప్పులు", "ट्रिप")}<b data-count="31">31</b>${L("this week", "ఈ వారం", "इस हफ़्ते")}</div><div>${L("Safety", "భద్రత", "सुरक्षा")}<b data-count="98">98</b>/100</div><div>${L("Rating", "రేటింగ్", "रेटिंग")}<b data-count="4.9">4.9</b>★</div></div>
-    <div class="bonus mt12"><div class="row-flex"><span class="grow" style="font-weight:600">${L("November bonus", "నవంబర్ బోనస్", "नवंबर बोनस")}</span>${pill("trend", L("on track", "సరైన దారిలో", "सही राह पर"), "dark")}</div><div class="big mt12">₹<span data-count="1200">1,200</span> <span style="font-size:20px;opacity:.8">/ ₹1,500</span></div><div class="progress mt12"><i style="width:80%"></i></div><p class="t-sub mt8" style="color:inherit;opacity:.85">${L("For 98%+ on time and a safety score above 95.", "98%+ సమయానికి, 95కి మించి భద్రత స్కోర్‌కు.", "98%+ समय पर और 95 से ऊपर सुरक्षा स्कोर के लिए।")}</p></div>
-  </div>
-  ${sh(L("Wallet", "వాలెట్", "वॉलेट"))}
-  <div class="pad"><div class="wallet"><div class="row-flex"><span class="grow" style="color:var(--on-ink2)">${L("Tips from riders this month", "ఈ నెల రైడర్ల టిప్స్", "इस महीने सवारियों से टिप")}</span>${I("wallet")}</div><div class="big">₹<span data-count="${st.tips}">${st.tips}</span></div>
-    <div class="mt16" style="background:rgba(255,255,255,.06);border-radius:20px;padding:4px 14px">
-      <div class="tx" style="border-color:rgba(255,255,255,.1)"><span class="ti" style="background:rgba(255,255,255,.1)">${I("heart", "sm")}</span><span>${L("Tip · Ananya R.", "టిప్ · అనన్య", "टिप · अनन्या")}<span class="s" style="color:var(--on-ink2)">${L("Today", "ఈ రోజు", "आज")}</span></span><b>+₹50</b></div>
-      <div class="tx" style="border-color:rgba(255,255,255,.1)"><span class="ti" style="background:rgba(255,255,255,.1)">${I("building", "sm")}</span><span>${L("Salary · October", "జీతం · అక్టోబర్", "वेतन · अक्टूबर")}<span class="s" style="color:var(--on-ink2)">HDFC ••4410 · 1 Nov</span></span><b>₹28,500</b></div>
+    <div class="dv-week">
+      <div class="dv-wk-h"><div><small>${L("This week", "ఈ వారం", "इस हफ़्ते")}</small><b>₹<span class="t-num" data-count="${tot}">${tot.toLocaleString("en-IN")}</span></b></div><span class="dv-up">${I("trend", "sm")}+6%</span></div>
+      <div class="dv-bars">${wk.map(([d, v], i) => `<span class="${i === 5 ? "today" : ""} ${v ? "" : "off"}"><i style="--h:${v / max};--d:${120 + i * 70}ms"></i><small>${i === 6 ? L("Off", "సెలవు", "छुट्टी") : dl[d]}</small></span>`).join("")}</div>
+      <p class="dv-wk-f">${L("Day pay ₹950 + on-time bonus + tips · paid monthly to HDFC ••4410", "రోజు జీతం ₹950 + సమయ బోనస్ + టిప్స్ · నెలకు HDFC ••4410కి", "दिन का वेतन ₹950 + समय बोनस + टिप · हर महीने HDFC ••4410 में")}</p>
     </div>
-    <button class="btn btn-stage block mt16" data-toast="${esc(L("₹350 sent to HDFC ••4410", "₹350 HDFC ••4410కి పంపాం", "₹350 HDFC ••4410 में भेजे"))}">${I("download")}${L("Withdraw tips", "టిప్స్ తీసుకోండి", "टिप निकालें")}</button></div></div>
+    <div class="dv-kpis mt12">${kpi(L("Trips", "ట్రిప్పులు", "ट्रिप"), 31)}${kpi(L("Safety", "భద్రత", "सुरक्षा"), 98, "/100")}${kpi(L("Rating", "రేటింగ్", "रेटिंग"), 4.9, "★")}</div>
+    <div class="dv-bonus mt12 lg-brand"><div class="dv-wk-h"><div><small>${L("November bonus", "నవంబర్ బోనస్", "नवंबर बोनस")}</small><b>₹<span class="t-num" data-count="1200">1,200</span><i> / ₹1,500</i></b></div><span class="dv-up on">${L("on track", "సరైన దారిలో", "सही राह पर")}</span></div><div class="dv-bbar"><i style="transform:scaleX(.8)"></i></div><p>${L("For 98%+ on time and a safety score above 95.", "98%+ సమయానికి, 95కి మించి భద్రత స్కోర్‌కు.", "98%+ समय पर और 95 से ऊपर सुरक्षा स्कोर के लिए।")}</p></div>
+  </div>
+  ${sh(L("Tips from riders", "రైడర్ల టిప్స్", "सवारियों से टिप"))}
+  <div class="pad">${pane(`<div class="dv-tips"><div><b>₹<span class="t-num" data-count="${st.tips}">${st.tips}</span></b><small>${L("this month", "ఈ నెల", "इस महीने")}</small></div><button class="btn btn-secondary sm" data-toast="${esc(L(`₹${st.tips} sent to HDFC ••4410`, `₹${st.tips} HDFC ••4410కి పంపాం`, `₹${st.tips} HDFC ••4410 में भेजे`))}">${I("download", "sm")}<span>${L("Withdraw", "తీసుకోండి", "निकालें")}</span></button></div>
+    <div class="dv-tx"><span class="dv-ti">${I("heart", "sm")}</span><span class="grow">${L("Tip · Ananya R.", "టిప్ · అనన్య", "टिप · अनन्या")}<small>${L("Today", "ఈ రోజు", "आज")}</small></span><b>+₹50</b></div>
+    <div class="dv-tx"><span class="dv-ti">${I("building", "sm")}</span><span class="grow">${L("Salary · October", "జీతం · అక్టోబర్", "वेतन · अक्टूबर")}<small>HDFC ••4410 · 1 Nov</small></span><b>₹28,500</b></div>`)}</div>
   ${sh(L("Language", "భాష", "भाषा"))}
   <div class="pad">${seg(S.LANGS.map(l => [l.id, l.native]), S.state.lang, "lang")}</div>
   ${sh(L("Appearance", "రూపం", "रूप"))}
   <div class="pad">${seg([["light", L("Light", "లైట్", "लाइट")], ["dark", L("Dark", "డార్క్", "डार्क")], ["system", L("Auto", "ఆటో", "ऑटो")]], S.state.theme, "theme")}</div>
   <div class="group mt16">
     ${row({ icon: "spark", t: L("Training: Airport etiquette", "శిక్షణ: ఎయిర్‌పోర్ట్ మర్యాద", "प्रशिक्षण: एयरपोर्ट शिष्टाचार"), s: L("6 minutes · counts towards your bonus", "6 నిమిషాలు · బోనస్‌కు లెక్క", "6 मिनट · बोनस में गिना जाएगा"), toast: L("Opening module", "మాడ్యూల్ తెరుస్తున్నాం", "मॉड्यूल खुल रहा है") })}
-    ${row({ icon: "chat", t: L("Call ops", "ఆప్స్‌కు కాల్", "ऑप्स को कॉल"), toast: L("Calling SAGA control room", "SAGA కంట్రోల్ రూమ్‌కు కాల్", "SAGA कंट्रोल रूम को कॉल") })}
-    ${row({ icon: "logout", lc: "grey", t: L("End shift", "షిఫ్ట్ ముగించు", "शिफ़्ट खत्म करें"), s: L("4-photo check, then hand over the car", "4 ఫోటోల తనిఖీ, తర్వాత కారు అప్పగింత", "4 फ़ोटो जाँच, फिर गाड़ी सौंपें"), act: "endshift" })}
-  </div></div>`);
+    ${row({ icon: "phone", t: L("Call ops", "ఆప్స్‌కు కాల్", "ऑप्स को कॉल"), toast: L("Calling SAGA control room", "SAGA కంట్రోల్ రూమ్‌కు కాల్", "SAGA कंट्रोल रूम को कॉल") })}
+    ${row({ icon: "logout", t: L("End shift", "షిఫ్ట్ ముగించు", "शिफ़्ट खत्म करें"), s: L("4-photo check, then hand over the car", "4 ఫోటోల తనిఖీ, తర్వాత కారు అప్పగింత", "4 फ़ोटो जाँच, फिर गाड़ी सौंपें"), act: "endshift" })}
+  </div></div>`;
+});
 
-def("inbox", { g: "Car & me", n: "Notifications", nav: 1, what: "Everything dispatch, riders and the car told you today: new jobs, flight changes, rider messages, tips, charging slots, ops broadcasts.", why: "Nothing important is lost if a heads-up was missed while driving.", fl: "FCM, channels per type (jobs = urgent, rider messages = high, ops = default)." }, () => {
+def("inbox", { g: "Car & me", n: "Notifications", nav: 1, what: "Everything dispatch, riders and the car said today in glass cards, each with a tinted icon; new ones glow. New jobs, flight changes, rider messages, tips, charging slots, ops broadcasts.", why: "Nothing important is lost if a heads-up was missed while driving.", fl: "FCM, channels per type (jobs = urgent, rider messages = high, ops = default)." }, () => {
   const all = [...st.inbox, ...NOTIFS0.map(n => ({ icon: n[0], t: n[1], p: n[2], at: n[3] }))];
+  const tone = ic => ({ car: "brand", nav: "brand", chat: "live", plane: "live", landing: "live", bolt: "go", check: "go", star: "gold", heart: "warm", close: "warm" })[ic] || "brand";
   return `${bar(L("Notifications", "నోటిఫికేషన్లు", "नोटिफ़िकेशन"))}
-  <div class="content"><div class="pad">${all.map((n, i) => `<div class="nt ${i < st.inbox.length ? "new" : ""}"><span class="ni">${I(n.icon)}</span><div class="grow"><b>${n.t}</b><p>${n.p}</p><time>${n.at}</time></div></div>`).join("")}</div></div>`;
+  <div class="content"><div class="pad nf-list">${all.map((n, i) => `<div class="nf ${i < st.inbox.length ? "new" : ""}"><span class="nf-i ${tone(n.icon)}">${I(n.icon)}</span><div class="grow"><div class="nf-t"><b>${n.t}</b><time>${n.at}</time></div><p>${n.p}</p></div></div>`).join("")}</div></div>`;
 }, () => { st.notif = 0; });
 
 /* ---------------- chrome ---------------- */
@@ -470,6 +531,7 @@ function go(id, o = {}) {
   } else if (prev) prev.remove();
   S.enter(el);
   if (sc.mount) sc.mount(el);
+  try { if (!BARE && !EMBED) history.replaceState(null, "", location.pathname + location.search + "#" + id); } catch (e) {}
   try { if (parent !== window) parent.postMessage({ saga: "nav", app: "driver", id }, "*"); } catch (e) {}
 }
 const back = () => go(stack.pop() || "duty", { back: true });
@@ -488,11 +550,11 @@ const A = {
   startcheck() { st.mode = "start"; st.step = 0; st.shots = []; st.justShot = false; go("inspect"); },
   endshift() { st.mode = "end"; st.step = 0; st.shots = []; st.justShot = false; go("inspect"); },
   shoot() {
-    if (st.busy) return; st.flash = true; st.busy = true; st.justShot = false; rerender(); st.flash = false;
+    if (st.busy) return; st.flash = true; st.busy = true; st.justShot = false; rerender(); st.flash = false; if (st.shots.length >= shotSeq().length) { st.busy = false; return; }
     timer(() => {
-      const s = STEPS[st.step], r = s[5] || "ok"; st.shots.push(r); st.busy = false; st.justShot = true;
+      const s = STEPS[shotSeq()[st.step]], r = s[5] || "ok"; st.shots.push(r); st.busy = false; st.justShot = true;
       st.lastNote = r === "warn" ? L("Small scratch, rear bumper · already on record", "చిన్న గీత, వెనుక బంపర్ · ఇప్పటికే రికార్డులో", "छोटी खरोंच, पिछला बम्पर · पहले से दर्ज") : s[0] === "dash" ? L("92% charge · 12,408 km read", "92% ఛార్జ్ · 12,408 కి.మీ చదివాం", "92% चार्ज · 12,408 किमी पढ़ा") : L("Looks good", "బాగుంది", "सब ठीक");
-      const total = st.mode === "end" ? 4 : STEPS.length;
+      const total = shotSeq().length;
       if (st.shots.length >= total) { rerender(); timer(() => { if (st.mode === "end") { st.online = false; toast(L("Shift closed. Car handed over in good condition.", "షిఫ్ట్ ముగిసింది. కారు మంచి స్థితిలో అప్పగించారు.", "शिफ़्ट बंद। गाड़ी अच्छी हालत में सौंपी।")); go("profile", { tab: 1 }); } else go("checklist"); }, 1100); }
       else { st.step++; rerender(); }
     }, 900);
@@ -504,9 +566,9 @@ const A = {
   key(e) { const v = e.dataset.v; st.bad = false; if (v === "⌫") st.code = st.code.slice(0, -1); else if (st.code.length < 4) st.code += v; rerender();
     if (st.code === "4827") timer(() => { st.code = ""; S.live.send("start"); go("trip", { replace: true }); }, 1000);
     else if (st.code.length === 4) { st.bad = true; rerender(); timer(() => { st.code = ""; st.bad = false; if (cur === "code") rerender(); }, 1300); } },
-  rate(e) { st.rating = +e.dataset.v; rerender(); },
+  rate(e) { st.rating = +e.dataset.v; st._burst = true; rerender(); st._burst = false; },
   say(e) { S.chat.add({ who: "driver", k: e.dataset.v, at: "9:0" + (S.chat.get().length % 10) }); S.live.send("msg", { k: e.dataset.v }); rerender(); },
-  charge() { if (st.charging) return; st.charging = true; rerender(); const fg = $("#rfg"); requestAnimationFrame(() => { if (fg) fg.setAttribute("stroke-dashoffset", 534 - 534 * .92); }); const t0 = Date.now(); const tick = () => { const p = Math.min(1, (Date.now() - t0) / 3200); if ($("#rpct")) { $("#rpct").textContent = Math.round(64 + 28 * p) + "%"; $("#rkwh").textContent = "+" + (11 * p).toFixed(1) + " kWh"; } if (p < 1) setTimeout(tick, 40); else { st.charge = 92; st.charging = false; notify("bolt", L("Charged to 92%", "92% ఛార్జ్ అయింది", "92% चार्ज हुई"), L("Enough for the rest of your shift.", "మిగిలిన షిఫ్ట్‌కు సరిపోతుంది.", "बाकी शिफ़्ट के लिए काफ़ी।")); } }; tick(); }
+  charge() { if (st.charging) return; st.charging = true; rerender(); const fill = $("#rfill"); requestAnimationFrame(() => { if (fill) { fill.style.transition = "transform 3.2s cubic-bezier(.4,0,.2,1)"; fill.style.transform = "scaleX(.92)"; } }); const t0 = Date.now(); const tick = () => { const p = Math.min(1, (Date.now() - t0) / 3200); if ($("#rpct")) { $("#rpct").textContent = Math.round(64 + 28 * p) + "%"; $("#rkwh").textContent = "+" + (11 * p).toFixed(1) + " kWh"; } if (p < 1) setTimeout(tick, 40); else { st.charge = 92; st.charging = false; notify("bolt", L("Charged to 92%", "92% ఛార్జ్ అయింది", "92% चार्ज हुई"), L("Enough for the rest of your shift.", "మిగిలిన షిఫ్ట్‌కు సరిపోతుంది.", "बाकी शिफ़्ट के लिए काफ़ी।")); if (cur === "vehicle") rerender(); } }; tick(); }
 };
 S.initSliders(tr => {
   if (tr.dataset.after === "goonline") { st.online = true; st.autoAssign = true; notify("check", L("You're online", "మీరు ఆన్‌లైన్‌లో ఉన్నారు", "आप ऑनलाइन हैं"), L("Dispatch is planning your first job.", "డిస్పాచ్ మీ మొదటి పని ప్లాన్ చేస్తోంది.", "डिस्पैच आपका पहला काम तय कर रहा है।")); go("duty", { tab: 1 }); }
@@ -520,7 +582,7 @@ S.live.on(d => {
   if (d.t === "book") { st.riderLive = true; st.job = { ride: d.ride, rider: "Ananya Rao", ini: "AR", pick: "MVP Colony, Sector 4", drop: d.dest || "Dwaraka Nagar", km: 12.4, stops: d.stops || [] }; S.live.send("got"); notify("car", L("New job assigned", "కొత్త పని కేటాయించబడింది", "नया काम मिला"), `${st.job.rider} · ${st.job.pick} → ${st.job.drop}`); go("assigned"); }
   if (d.t === "msg") { notify("chat", st.job.rider, S.msg(d.k)); if (cur === "chat") rerender(); }
   if (d.t === "rated") notify("star", L(`${st.job.rider} rated you ${d.n}★`, `${st.job.rider} మీకు ${d.n}★ ఇచ్చారు`, `${st.job.rider} ने ${d.n}★ दिए`), L("Thank you for a great ride.", "మంచి ప్రయాణానికి ధన్యవాదాలు.", "बढ़िया सफ़र के लिए धन्यवाद।"));
-  if (d.t === "tip") { st.tips += d.amt; notify("heart", L(`${st.job.rider} tipped you ₹${d.amt}`, `${st.job.rider} మీకు ₹${d.amt} టిప్ ఇచ్చారు`, `${st.job.rider} ने ₹${d.amt} टिप दी`), L("Added to your wallet.", "మీ వాలెట్‌లో జమ.", "आपके वॉलेट में जुड़ गया।")); }
+  if (d.t === "tip") { st.tips += d.amt; st.tipToday = (st.tipToday || 0) + d.amt; notify("heart", L(`${st.job.rider} tipped you ₹${d.amt}`, `${st.job.rider} మీకు ₹${d.amt} టిప్ ఇచ్చారు`, `${st.job.rider} ने ₹${d.amt} टिप दी`), L("Added to your wallet.", "మీ వాలెట్‌లో జమ.", "आपके वॉलेट में जुड़ गया।")); }
   if (d.t === "cancel") { notify("close", L("Ride cancelled by rider", "రైడర్ రద్దు చేశారు", "सवारी ने राइड रद्द की"), L("Dispatch will plan your next job.", "డిస్పాచ్ తదుపరి పని ప్లాన్ చేస్తుంది.", "डिस्पैच अगला काम तय करेगा।")); if (["assigned", "topickup", "waiting"].includes(cur)) go("duty", { tab: 1 }); }
 });
 
