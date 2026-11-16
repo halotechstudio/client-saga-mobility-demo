@@ -26,7 +26,7 @@
   S.state = {
     hex: S.get("hex", "#3F51B5"),
     logo: S.get("logo", null),
-    theme: qs.get("theme") || S.get("theme", "dark"),
+    theme: qs.get("theme") || S.get("theme6", "dark"),
     lang: qs.get("lang") || S.get("lang", "en"),
     text: S.get("text", "standard"),
     os: qs.get("os") || "ios"
@@ -136,7 +136,7 @@
   S.onChange = fn => listeners.push(fn);
   S.set = function (patch, silent) {
     Object.assign(S.state, patch);
-    for (const k of ["hex", "logo", "theme", "lang", "text"]) if (k in patch) S.put(k, patch[k]);
+    for (const k of ["hex", "logo", "theme", "lang", "text"]) if (k in patch) S.put(k === "theme" ? "theme6" : k, patch[k]);
     listeners.forEach(fn => fn(patch));
     if (!silent) {
       try { S.bc && S.bc.postMessage(patch); } catch (e) {}
