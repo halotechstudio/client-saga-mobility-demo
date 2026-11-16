@@ -2385,3 +2385,19 @@ button.sc-time{border:0;font:inherit;cursor:pointer}
 #tabbar .tab-eco .ei .ic{width:24px;height:24px;filter:drop-shadow(0 0 6px rgba(190,255,215,.9))}
 #tabbar .tab-eco .ei::after{content:"";position:absolute;left:50%;top:50%;width:4px;height:4px;margin:-20px 0 0 12px;border-radius:50%;background:#fff;box-shadow:0 0 6px #fff;animation:twinkle 2.4s ease-in-out infinite}
 .svc-scene .svc-tag svg.ic{position:static!important;inset:auto!important;width:14px!important;height:14px!important;flex:none}
+
+/* ---------- v7.5 Home: one endless studio from top to bottom ---------- */
+.view.v-home{background:radial-gradient(85% 34% at 50% 27%,rgba(150,166,215,.22),rgba(150,166,215,0) 72%),radial-gradient(60% 9% at 50% 40%,rgba(255,255,255,.07),rgba(255,255,255,0) 75%),linear-gradient(180deg,#0B0D14 0%,#0F121B 26%,#0B0D14 48%,#08090E 72%,#07080C 100%)!important}
+.view.v-home::before{display:none!important}
+.view.v-home::after{background:linear-gradient(rgba(7,8,12,0),rgba(7,8,12,.94) 70%)!important}
+[data-theme=light] .view.v-home{background:radial-gradient(85% 34% at 50% 27%,#FFFFFF,rgba(255,255,255,0) 72%),linear-gradient(180deg,#EEF0F5 0%,#F4F5F8 30%,#ECEEF3 60%,#E6E8EE 100%)!important}
+[data-theme=light] .view.v-home::after{background:linear-gradient(rgba(230,232,238,0),rgba(230,232,238,.94) 70%)!important}
+.hm-stage3::before{background:radial-gradient(closest-side,rgba(59,234,104,.22),rgba(63,81,181,.14) 55%,transparent)!important;opacity:.8}
+/* intercity: brand cyan, luminous, so it reads apart from the glass banners below */
+.svc-int{background:radial-gradient(110% 90% at 85% 0%,#5FD9FF 0%,#1FA6DC 38%,#0D6FA3 72%,#0A4A72 100%)!important;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 22px 44px -22px rgba(31,166,220,.8),0 0 36px -14px rgba(95,217,255,.55)!important}
+.svc-int::after{background:conic-gradient(from 200deg at 50% 0%,transparent 0 40%,rgba(220,250,255,.22) 50%,transparent 62%)!important;animation:apSweep 8s linear infinite}
+.svc-int .svc-txt small,.svc-int .svc-txt span,.svc-int .eyebrow{color:rgba(255,255,255,.78)!important}
+.svc-int .it-bg{stroke:rgba(255,255,255,.22)}
+.svc-int .it-b{fill:#fff}
+.svc-int .onb-fare{color:#06331C;background:#7CF59E}
+.svc-int .svc-cta{background:#fff;color:#0A4A72}
