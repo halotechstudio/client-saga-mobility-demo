@@ -404,7 +404,7 @@ body.embed,body.bare{background:transparent}
 .upd-sheet{position:absolute;left:12px;right:12px;bottom:24px;padding:22px;border-radius:28px;background:var(--surface);box-shadow:0 20px 60px rgba(0,0,0,.25)}
 </style>
 <link rel="stylesheet" href="system.css?v=9"><link rel="stylesheet" href="system3.css?v=9"><link rel="stylesheet" href="system4.css?v=9"><link rel="stylesheet" href="system6.css?v=11"><link rel="stylesheet" href="system7.css?v=10">
-<link rel="stylesheet" href="ds.css?v=40">
+<link rel="stylesheet" href="ds.css?v=42">
 </head>
 <body>
 <div class="shell">
@@ -661,10 +661,60 @@ def("home", { g: "Ride", n: "Home", tab: "home", what: "A greeting and three qui
     <div class="hm-stage hm-stage3"><div class="hm-spin" data-car3d></div><button class="hm-about" data-go="vehicle">SAGA Luxe <em>${L("About the car", "కారు గురించి", "गाड़ी के बारे में")}</em>${I("chevr", "sm")}</button></div>
     <button class="search2 press hm-search" data-go="where"><span class="s-ic">${I("search")}</span><span class="ph">${L("Where to?", "ఎక్కడికి?", "कहाँ जाना है?")}<span class="ph-roll">${[L("VTZ Airport", "VTZ ఎయిర్‌పోర్ట్", "VTZ एयरपोर्ट"), L("Office", "ఆఫీస్", "ऑफ़िस"), "RK Beach", L("Araku Valley", "అరకు వ్యాలీ", "अराकू घाटी")].map((t, k) => `<i style="--k:${k}">${t}</i>`).join("")}</span></span><span class="s-now" data-go="schedule">${I("clock", "sm")}${L("Later", "తర్వాత", "बाद में")}</span><span class="s-mic" data-voice aria-label="${L("Speak to Saathi", "సాథీతో మాట్లాడండి", "साथी से बोलें")}">${I("mic", "sm")}</span></button>
 
-    <div class="sv sv-onb">
-      <button class="sv2" data-go="airport" style="--i:0">${chapCard(0).trim().replace("chap-card", "chap-card sv2-card").slice(0, -6) + (`<span class="sv2-cta">${L("Plan airport ride", "ఎయిర్‌పోర్ట్ రైడ్ ప్లాన్", "एयरपोर्ट राइड प्लान")}${I("arrowr", "sm")}</span></div>`)}</button>
-      <button class="sv2" data-go="schedule" style="--i:1">${chapCard(1).trim().replace("chap-card", "chap-card sv2-card").slice(0, -6) + (`<span class="sv2-cta">${L("Schedule rides", "రైడ్‌లు షెడ్యూల్", "राइड शेड्यूल करें")}${I("arrowr", "sm")}</span></div>`)}</button>
-      <button class="sv2" data-go="intercity" style="--i:2">${chapCard(2).trim().replace("chap-card", "chap-card sv2-card").slice(0, -6) + (`<span class="sv2-cta">${L("Plan a trip", "ప్రయాణం ప్లాన్", "यात्रा प्लान करें")}${I("arrowr", "sm")}</span></div>`)}</button>
+    <div class="svcs">
+      <button class="svc svc-air" data-go="airport" style="--i:0">
+        <span class="svc-scene" aria-hidden="true">
+          <svg viewBox="0 0 320 140" preserveAspectRatio="xMidYMax slice">
+            <defs>
+              <radialGradient id="apG" cx="50%" cy="0%" r="75%"><stop offset="0" stop-color="#7FA2FF" stop-opacity=".55"/><stop offset=".45" stop-color="#3550E8" stop-opacity=".35"/><stop offset="1" stop-color="#0B1350" stop-opacity="0"/></radialGradient>
+              <clipPath id="apC"><circle cx="160" cy="330" r="240"/></clipPath>
+            </defs>
+            <g class="ap-stars"><circle cx="28" cy="22" r="1"/><circle cx="96" cy="14" r="1.2"/><circle cx="214" cy="20" r="1"/><circle cx="288" cy="34" r="1.3"/><circle cx="250" cy="8" r=".8"/><circle cx="60" cy="48" r=".8"/></g>
+            <circle cx="160" cy="330" r="240" fill="url(#apG)"/>
+            <g clip-path="url(#apC)" class="ap-grid">
+              <ellipse cx="160" cy="330" rx="240" ry="200"/><ellipse cx="160" cy="330" rx="240" ry="150"/><ellipse cx="160" cy="330" rx="240" ry="100"/>
+              <ellipse cx="160" cy="330" rx="70" ry="240"/><ellipse cx="160" cy="330" rx="150" ry="240"/><ellipse cx="160" cy="330" rx="210" ry="240"/>
+            </g>
+            <circle cx="160" cy="330" r="240" class="ap-rim"/>
+            <path class="ap-trail0" d="M44.7 103.7A254 254 0 0 1 275.3 103.7"/>
+            <path class="ap-trail" pathLength="1" d="M44.7 103.7A254 254 0 0 1 275.3 103.7"/>
+            <g class="ap-pin"><circle cx="51" cy="116" r="7" class="ap-ring"/><circle cx="51" cy="116" r="3"/></g>
+            <g class="ap-pin b"><circle cx="269" cy="116" r="7" class="ap-ring"/><circle cx="269" cy="116" r="3"/></g>
+            <text x="51" y="134" class="ap-code">VTZ</text><text x="269" y="134" class="ap-code">HYD</text>
+            <g class="ap-car"><rect x="150" y="80.5" width="20" height="7" rx="3.5"/><rect x="155" y="78" width="10" height="4" rx="2"/><circle cx="170.5" cy="84" r="5" class="ap-beam"/></g>
+            <g class="ap-plane"><g class="ap-lift"><path transform="translate(320 0) scale(-1 1)" d="M148 75.2h8l6-7.5h3l-3 7.5h7l2.4-2.6h2l-1.4 3.4 1.4 3.4h-2l-2.4-2.6h-7l3 7.5h-3l-6-7.5h-8a.8.8 0 0 1 0-1.6z"/></g></g>
+          </svg>
+        </span>
+        <span class="svc-body"><span class="svc-txt"><small>${L("Airport rides", "ఎయిర్‌పోర్ట్ రైడ్‌లు", "एयरपोर्ट राइड")}</small><b>${L("Door to departures, on time", "ఇంటి నుండి డిపార్చర్స్‌కు, సమయానికి", "घर से डिपार्चर तक, समय पर")}</b><span>${L("Pickup timed to your flight, ₹1,140 fixed", "ఫ్లైట్‌కు తగ్గ పికప్, ₹1,140 స్థిరం", "फ़्लाइट के हिसाब से पिकअप, ₹1,140 तय")}</span></span><span class="svc-cta">${L("Book", "బుక్", "बुक")}${I("arrowr", "sm")}</span></span>
+      </button>
+
+      <button class="svc svc-sch" data-go="schedule" style="--i:1">
+        <span class="svc-scene" aria-hidden="true">
+          <span class="scx-time">9:00<small>AM</small></span>
+          <svg viewBox="0 0 320 96" preserveAspectRatio="xMidYMid meet" class="sc-svg">
+            <path class="sc-road" d="M58 58H262"/>
+            <path class="sc-road-lit" pathLength="1" d="M58 58H262"/>
+            <g class="sc-end"><circle cx="38" cy="58" r="19"/><path class="sc-glyph" d="M30 60l8-7 8 7M32.5 58v8h11v-8"/></g>
+            <g class="sc-end b"><circle cx="282" cy="58" r="19"/><path class="sc-glyph" d="M274 67V50h10v17M284 55h6v12M277 54h2M277 58h2M277 62h2"/></g>
+            <g class="sc-car"><rect x="52" y="51" width="22" height="8" rx="4"/><rect x="57" y="48" width="11" height="4.5" rx="2.2"/><circle cx="74" cy="55" r="5" class="sc-beam"/></g>
+          </svg>
+          <span class="sc-dest"><i style="--k:0">${L("Office", "ఆఫీస్", "ऑफ़िस")}</i><i style="--k:1">${L("College", "కాలేజీ", "कॉलेज")}</i><i style="--k:2">${L("Gym", "జిమ్", "जिम")}</i></span>
+          <span class="sc-days">${[1, 2, 3, 4, 5, 6, 0].map((d, k) => `<i class="${k < 5 ? "on" : ""}" style="--k:${k}">${dn[d]}</i>`).join("")}</span>
+        </span>
+        <span class="svc-body"><span class="svc-txt"><small>${L("Scheduled rides", "షెడ్యూల్ రైడ్‌లు", "शेड्यूल राइड")}</small><b>${L("Same time, every weekday", "ప్రతి వారపు రోజూ, అదే సమయం", "हर कार्यदिवस, वही समय")}</b><span>${L("Office, college, gym: set it once", "ఆఫీస్, కాలేజీ, జిమ్: ఒకసారి సెట్", "ऑफ़िस, कॉलेज, जिम: एक बार सेट")}</span></span><span class="svc-cta">${L("Set up", "సెట్", "सेट")}${I("arrowr", "sm")}</span></span>
+      </button>
+
+      <button class="svc svc-int" data-go="intercity" style="--i:2">
+        <span class="svc-scene" aria-hidden="true">
+          <span class="ic-sun"></span>
+          <span class="ic-l ic-far"><svg viewBox="0 0 640 140" preserveAspectRatio="none"><path d="M0 92L40 70 78 84 120 52 168 80 210 60 256 86 290 66 320 92 360 70 398 84 440 52 488 80 530 60 576 86 610 66 640 92V140H0Z"/></svg></span>
+          <span class="ic-l ic-mid"><svg viewBox="0 0 640 140" preserveAspectRatio="none"><g><path d="M0 108C40 96 70 98 110 104S190 112 230 100 290 98 320 108V140H0Z"/><path d="M86 104v-6h4v-6h3v-6h3v-6h2v-5h2v5h2v6h3v6h3v6h4v6z"/><path d="M98 69v-3h2v3z"/><path d="M196 104v-22M196 82c-6-1-10 2-12 5M196 82c5-2 10-1 13 3M196 82c-3-5-8-6-11-5M196 82c3-5 8-6 11-4" class="ic-palm"/><path d="M262 104v-16M262 88c-5 0-8 2-9 4M262 88c4-1 8 0 10 3M262 88c-2-4-6-5-8-4M262 88c2-4 6-4 8-3" class="ic-palm"/></g><g transform="translate(320 0)"><path d="M0 108C40 96 70 98 110 104S190 112 230 100 290 98 320 108V140H0Z"/><path d="M86 104v-6h4v-6h3v-6h3v-6h2v-5h2v5h2v6h3v6h3v6h4v6z"/><path d="M98 69v-3h2v3z"/><path d="M196 104v-22M196 82c-6-1-10 2-12 5M196 82c5-2 10-1 13 3M196 82c-3-5-8-6-11-5M196 82c3-5 8-6 11-4" class="ic-palm"/><path d="M262 104v-16M262 88c-5 0-8 2-9 4M262 88c4-1 8 0 10 3M262 88c-2-4-6-5-8-4M262 88c2-4 6-4 8-3" class="ic-palm"/></g></svg></span>
+          <span class="ic-l ic-road"><i></i></span>
+          <span class="ic-car"><i></i></span>
+          <span class="ic-dest"><i style="--k:0">${L("Araku Valley", "అరకు వ్యాలీ", "अराकू घाटी")} · 115 km</i><i style="--k:1">${L("Annavaram", "అన్నవరం", "अन्नवरम")} · 125 km</i><i style="--k:2">${L("Srikakulam", "శ్రీకాకుళం", "श्रीकाकुलम")} · 110 km</i><i style="--k:3">${L("Rajahmundry", "రాజమండ్రి", "राजमुंदरी")} · 195 km</i></span>
+        </span>
+        <span class="svc-body"><span class="svc-txt"><small>${L("Intercity", "ఇంటర్‌సిటీ", "इंटरसिटी")}</small><b>${L("Hills, temples, home town", "కొండలు, గుళ్ళు, సొంత ఊరు", "पहाड़, मंदिर, अपना शहर")}</b><span>${L("Long trips and pilgrimages, one fixed fare", "దూర ప్రయాణాలు, తీర్థయాత్రలు, ఒకే ఛార్జీ", "लंबी यात्राएँ और तीर्थ, एक तय किराया")}</span></span><span class="svc-cta">${L("Plan", "ప్లాన్", "प्लान")}${I("arrowr", "sm")}</span></span>
+      </button>
     </div>
 
     <div class="hm-sec"><span>${L("Make it effortless", "మరింత సులభంగా", "और आसान")}</span><small class="bn-dots"><i class="on"></i><i></i><i></i></small></div>
@@ -1632,7 +1682,7 @@ SC.home.mount = el => {
   }
   const tick = () => { if (cur !== "home") return; el.querySelectorAll("[data-cd]").forEach(x => (x.textContent = countdown())); timers.push(setTimeout(tick, 1000)); }; tick();
   // service cards lean toward the finger (transform only)
-  el.querySelectorAll(".sv-card,.sv2").forEach(c => {
+  el.querySelectorAll(".sv-card,.sv2,.svc").forEach(c => {
     const lean = e => { const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5; c.style.transform = `perspective(700px) rotateX(${(-y * 5).toFixed(2)}deg) rotateY(${(x * 6).toFixed(2)}deg) scale(.985)`; };
     c.addEventListener("pointermove", lean); c.addEventListener("pointerdown", lean);
     const rest = () => { c.style.transform = ""; }; c.addEventListener("pointerleave", rest); c.addEventListener("pointerup", rest); c.addEventListener("pointercancel", rest);

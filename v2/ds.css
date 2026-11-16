@@ -2092,3 +2092,100 @@ b,strong,.t-h3,.t1,.row .t1,.dv-job b,.tr-head b{font-weight:500}
 .ph-roll{position:relative;flex:1;height:20px;overflow:hidden;font-weight:400;color:var(--fg2)}
 .ph-roll i{position:absolute;left:0;top:0;font-style:normal;white-space:nowrap;opacity:0;transform:translateY(12px);animation:phRoll 10s calc(var(--k) * 2.5s) infinite}
 @keyframes phRoll{0%{opacity:0;transform:translateY(12px)}4%,22%{opacity:1;transform:none}26%,100%{opacity:0;transform:translateY(-12px)}}
+
+/* ---------- v7: service cards that explain themselves (airport, scheduled, intercity) ---------- */
+.svcs{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+.svc{position:relative;display:flex;flex-direction:column;padding:0;border:0;border-radius:26px;overflow:hidden;isolation:isolate;text-align:left;color:#fff;font:inherit;cursor:pointer;animation:rise .6s calc(var(--i) * 90ms + 120ms) both;transition:transform .35s cubic-bezier(.2,.8,.2,1);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),inset 0 0 0 1px rgba(255,255,255,.07),0 22px 44px -24px rgba(0,0,0,.9)}
+.svc-scene{position:relative;display:block;height:136px;overflow:hidden}
+.svc-scene svg{position:absolute;inset:0;width:100%;height:100%}
+.svc-body{display:flex;align-items:flex-end;gap:12px;padding:2px 16px 16px}
+.svc-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.svc-txt small{font-size:11.5px;font-weight:500;color:rgba(255,255,255,.62)}
+.svc-txt b{font-size:17px;font-weight:500;letter-spacing:-.015em;line-height:1.2}
+.svc-txt span{font-size:12.5px;color:rgba(255,255,255,.66)}
+.svc-cta{flex:none;display:inline-flex;align-items:center;gap:5px;height:36px;padding:0 13px 0 15px;border-radius:999px;background:#fff;color:#0A0E21;font-size:13px;font-weight:600;box-shadow:0 8px 20px -8px rgba(0,0,0,.6)}
+.svc-cta .ic{width:13px;height:13px;transition:transform .3s}
+.svc:active .svc-cta .ic,.svc.tapped .svc-cta .ic{transform:translateX(3px)}
+.svc::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;pointer-events:none}
+
+/* airport: brand blue, luminous; the car reaches VTZ and the flight crosses the globe */
+.svc-air{background:radial-gradient(110% 80% at 50% -10%,#4F6DFF 0%,#2541E0 38%,#152294 70%,#0B1257 100%)}
+.svc-air::after{background:conic-gradient(from 200deg at 50% 0%,transparent 0 40%,rgba(150,195,255,.28) 50%,transparent 62%);animation:apSweep 7s linear infinite}
+@keyframes apSweep{to{transform:rotate(360deg) scale(1.6)}}
+.svc-air .svc-scene{-webkit-mask:linear-gradient(180deg,#000 75%,transparent);mask:linear-gradient(180deg,#000 75%,transparent)}
+.ap-stars circle{fill:#fff;opacity:.6;animation:twinkle 3s ease-in-out infinite}
+.ap-stars circle:nth-child(2n){animation-delay:1.3s}
+.ap-stars circle:nth-child(3n){animation-delay:2.1s}
+@keyframes twinkle{50%{opacity:.15}}
+.ap-grid{fill:none;stroke:rgba(255,255,255,.13);stroke-width:1;transform-box:view-box;transform-origin:160px 330px;animation:apGlobe 14s ease-in-out infinite alternate}
+@keyframes apGlobe{from{transform:rotate(-5deg)}to{transform:rotate(5deg)}}
+.ap-rim{fill:none;stroke:rgba(170,205,255,.85);stroke-width:1.4;filter:drop-shadow(0 0 6px rgba(120,170,255,.9))}
+.ap-trail0{fill:none;stroke:rgba(255,255,255,.22);stroke-width:1.2;stroke-dasharray:2 5}
+.ap-trail{fill:none;stroke:#BFE9FF;stroke-width:1.8;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;filter:drop-shadow(0 0 4px #6FD3FF);animation:apTrail 7s infinite}
+@keyframes apTrail{0%,32%{stroke-dashoffset:1;opacity:1}86%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}
+.ap-pin circle{fill:#fff}
+.ap-pin .ap-ring{fill:none;stroke:#9FE8FF;stroke-width:1.5;transform-box:fill-box;transform-origin:center;animation:apRing 7s infinite}
+.ap-pin.b .ap-ring{animation-name:apRingB}
+@keyframes apRing{0%,22%{opacity:0;transform:scale(.4)}30%{opacity:1;transform:scale(1)}40%,100%{opacity:0;transform:scale(1.8)}}
+@keyframes apRingB{0%,80%{opacity:0;transform:scale(.4)}87%{opacity:1;transform:scale(1)}97%,100%{opacity:0;transform:scale(1.8)}}
+.ap-code{fill:rgba(255,255,255,.8);font-size:9px;font-weight:600;letter-spacing:.08em;text-anchor:middle}
+.ap-car{fill:#fff;transform-box:view-box;transform-origin:160px 330px;animation:apCar 7s cubic-bezier(.4,0,.3,1) infinite}
+.ap-beam{fill:#BFF3FF;opacity:.55;filter:blur(2px)}
+@keyframes apCar{0%{transform:rotate(-44deg);opacity:0}6%{opacity:1}30%{transform:rotate(-27deg);opacity:1}36%,100%{transform:rotate(-27deg);opacity:0}}
+.ap-plane{fill:#fff;transform-box:view-box;transform-origin:160px 330px;animation:apPlane 7s infinite;filter:drop-shadow(0 0 5px rgba(160,220,255,.9))}
+@keyframes apPlane{0%,31%{transform:rotate(-27deg);opacity:0;animation-timing-function:cubic-bezier(.45,0,.4,1)}35%{opacity:1}86%{transform:rotate(27deg);opacity:1}93%,100%{transform:rotate(27deg);opacity:0}}
+.ap-lift{transform-box:view-box;animation:apLift 7s infinite}
+@keyframes apLift{0%,32%{transform:translateY(13px)}46%,74%{transform:none}86%,100%{transform:translateY(13px)}}
+
+/* scheduled: home to office, college or gym, and the week fills in */
+.svc-sch{background:radial-gradient(90% 70% at 85% 0%,rgba(51,198,240,.45),transparent 60%),linear-gradient(165deg,#13305A,#0D1A3A 60%,#0A1129)}
+.svc-sch::after{background:radial-gradient(60% 50% at 10% 100%,rgba(59,234,104,.18),transparent)}
+.scx-time{position:absolute;right:16px;top:12px;font-size:22px;font-weight:300;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.scx-time small{font-size:11px;margin-left:3px;opacity:.7;font-weight:500}
+.sc-svg{top:6px!important;height:96px!important;bottom:auto!important}
+.sc-road{stroke:rgba(255,255,255,.2);stroke-width:2;stroke-dasharray:3 6;stroke-linecap:round}
+.sc-road-lit{fill:none;stroke:#7FE3FF;stroke-width:2.4;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;filter:drop-shadow(0 0 4px #33C6F0);animation:scLit 1.6s cubic-bezier(.45,0,.35,1) infinite}
+@keyframes scLit{0%{stroke-dashoffset:1;opacity:1}75%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}
+.sc-end circle{fill:rgba(255,255,255,.1);stroke:rgba(255,255,255,.3);stroke-width:1}
+.sc-end.b circle{fill:rgba(51,198,240,.18);stroke:#7FE3FF;animation:scArrive 1.6s infinite}
+@keyframes scArrive{0%,70%{filter:none}80%{filter:drop-shadow(0 0 8px #33C6F0)}100%{filter:none}}
+.sc-glyph{fill:none;stroke:#fff;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.sc-car{fill:#fff;transform-box:view-box;animation:scCar 1.6s cubic-bezier(.45,0,.35,1) infinite}
+.sc-beam{fill:#CFF7FF;opacity:.6;filter:blur(2px)}
+@keyframes scCar{0%{transform:translateX(0);opacity:0}10%{opacity:1}75%{transform:translateX(180px);opacity:1}88%,100%{transform:translateX(180px);opacity:0}}
+.sc-dest{position:absolute;right:8px;top:86px;width:80px;height:16px;text-align:center}
+.sc-dest i{position:absolute;inset:0;font-style:normal;font-size:11px;font-weight:500;color:#9FE8FF;opacity:0;animation:scDest 4.8s calc(var(--k) * 1.6s) infinite}
+@keyframes scDest{0%{opacity:0;transform:translateY(5px)}6%,30%{opacity:1;transform:none}34%,100%{opacity:0;transform:translateY(-5px)}}
+.sc-days{position:absolute;left:16px;right:16px;bottom:6px;display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.sc-days i{position:relative;height:24px;border-radius:999px;display:grid;place-items:center;font-style:normal;font-size:10.5px;font-weight:600;color:rgba(255,255,255,.4);background:rgba(255,255,255,.06);overflow:hidden}
+.sc-days i.on{color:#fff}
+.sc-days i.on::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,#5FD6FF,#2E7BD8);opacity:0;animation:scDay 8s calc(var(--k) * 1.6s - 8s) infinite}
+.sc-days i>*{position:relative}
+@keyframes scDay{0%{opacity:0}4%,100%{opacity:1}}
+.sc-days i.on{z-index:0}
+.sc-days i.on::before{z-index:-1}
+
+/* intercity: hills, a temple town, palms, and a long road */
+.svc-int{background:linear-gradient(180deg,#1B2B4A 0%,#173A3A 55%,#0C1F1C 100%)}
+.svc-int::after{background:radial-gradient(70% 60% at 80% 10%,rgba(255,190,120,.22),transparent 60%)}
+.ic-sun{position:absolute;right:42px;top:16px;width:34px;height:34px;border-radius:50%;background:radial-gradient(circle,#FFE2B0 0 40%,rgba(255,190,120,.35) 41%,transparent 70%);animation:breathe 6s ease-in-out infinite}
+.ic-l{position:absolute;left:0;bottom:0;width:200%;height:100%;animation:icPan linear infinite}
+.ic-l svg{width:100%;height:100%;position:absolute;inset:0}
+@keyframes icPan{to{transform:translateX(-50%)}}
+.ic-far{animation-duration:30s;opacity:.9}
+.ic-far path{fill:rgba(120,225,175,.16)}
+.ic-mid{animation-duration:11s}
+.ic-mid path{fill:#0E2A26}
+.ic-mid .ic-palm{fill:none;stroke:#0E2A26;stroke-width:2;stroke-linecap:round}
+.ic-road{height:auto;top:auto;bottom:12px;animation:none}
+.ic-road{position:absolute;left:0;right:0;width:100%;height:2px;background:rgba(255,255,255,.12)}
+.ic-road i{position:absolute;left:0;top:0;width:200%;height:2px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.55) 0 16px,transparent 16px 32px);animation:icRoad .9s linear infinite}
+@keyframes icRoad{to{transform:translateX(-32px)}}
+.ic-car{position:absolute;left:24%;bottom:14px;width:30px;height:10px;border-radius:6px 8px 3px 3px;background:#fff;animation:bob 1s ease-in-out infinite}
+.ic-car::before{content:"";position:absolute;left:7px;top:-4px;width:14px;height:6px;border-radius:4px 5px 0 0;background:#fff}
+.ic-car i{position:absolute;left:100%;top:1px;width:60px;height:8px;background:linear-gradient(90deg,rgba(255,240,200,.55),transparent);border-radius:0 8px 8px 0}
+.ic-car::after{content:"";position:absolute;left:-14px;top:3px;width:14px;height:4px;border-radius:2px;background:linear-gradient(270deg,rgba(255,90,90,.7),transparent)}
+.ic-dest{position:absolute;left:16px;top:14px;width:70%;height:24px}
+.ic-dest i{position:absolute;left:0;top:0;display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:999px;font-style:normal;font-size:11px;font-weight:600;color:#BFF5D0;background:rgba(59,234,104,.14);border:1px solid rgba(59,234,104,.35);white-space:nowrap;opacity:0;animation:icDest 12s calc(var(--k) * 3s) infinite}
+@keyframes icDest{0%{opacity:0;transform:translateY(6px)}4%,22%{opacity:1;transform:none}26%,100%{opacity:0;transform:translateY(-6px)}}
+@media (prefers-reduced-motion:reduce){.svc *,.svc::after{animation:none!important}}
