@@ -12,12 +12,12 @@
   const qs = (S.qs = new URLSearchParams(location.search));
 
   /* ---------- the one place the vehicle is described ----------
-     Seat layout follows the published spec of the XUV 3XO EV (5 seats incl. chauffeur).
+     SAGA Luxe: SAGA's 7-seat electric SUV (chauffeur + 6 riders). Never shown with a make or model name.
      If SAGA's cars are configured differently, change `rows` and everything follows. */
   S.VEHICLE = {
-    make: "Mahindra", model: "XUV 3XO EV", short: "XUV 3XO EV",
-    rows: [2, 3],              // front row (chauffeur + 1), rear row
-    bags: 2, colour: "Matte black",
+    make: "SAGA", model: "Luxe", short: "SAGA Luxe",
+    rows: [2, 3, 2],              // front row (chauffeur + 1), rear row
+    bags: 3, colour: "Matte black",
     plate: "AP 39 EV 2041"
   };
   S.riders = () => S.VEHICLE.rows.reduce((a, b) => a + b, 0) - 1;
@@ -338,7 +338,7 @@
   };
 
   /* ---------- vehicle illustration: compact electric SUV, side profile ----------
-     Drawn to the XUV 3XO proportions (3,990 mm long, 2,600 mm wheelbase, 1,647 mm tall): pearl body, black floating roof,
+     Neutral compact-SUV illustration used as the photo stand-in for SAGA Luxe.
      graphite aero wheels, LED signature front and rear. A neutral illustration, not a manufacturer drawing. Replace with SAGA's own photography when supplied. */
   let carN = 0;
   S.car = function (o = {}) {

@@ -97,7 +97,7 @@ P.flights = () => `${head("Flight watch", "Every flight linked to a booking, pol
     <tr><td class="m">AI 1912</td><td>DEL → VTZ</td><td>11:05</td><td>${stt("Landed 11:02", "ok")}</td><td>Mr. S. Sharma · hotel</td><td>At Arrivals · SG-01</td><td>Hotel booking</td></tr>
     <tr><td class="m">AI 1913</td><td>VTZ → DEL</td><td>13:10</td><td>${stt("On time", "ok")}</td><td>Mr. A. Mehta · hotel</td><td>11:40</td><td>Hotel booking</td></tr>
     <tr><td class="m">6E 1427</td><td>VTZ → MAA</td><td>15:20</td><td>${stt("On time", "ok")}</td><td>K. Srinivas</td><td>13:05</td><td>Mail filter (auto)</td></tr>
-    <tr><td class="m">6E 2134</td><td>VTZ → HYD</td><td>Fri 07:40</td><td>${stt("Scheduled")}</td><td>Ananya Rao</td><td>Fri 05:20</td><td>Calendar</td></tr>
+    <tr><td class="m">6E 2134</td><td>VTZ → HYD</td><td>Fri 07:40</td><td>${stt("Scheduled")}</td><td>Ananya Rao</td><td>Fri 05:20</td><td>Gmail</td></tr>
     <tr><td class="m">6E 571</td><td>VTZ → CCU</td><td>07:45</td><td>${stt("Departed", "ok")}</td><td>Mr. R. Iyer · hotel</td><td>Completed</td><td>Hotel booking</td></tr>
   </tbody></table></div></div>
   <div class="grid g3" style="margin-top:14px">
@@ -147,7 +147,7 @@ P.offers = () => `${head("Offers", "Create, target and cap offers. Riders see el
 P.notifications = () => {
   const N = [
     ["Pickup moved (flight change)", "Rider", "p,w,s", "Time-sensitive", { en: "Pickup moved to 5:50 AM. 6E 2134 is delayed 30 min. Nothing to do.", te: "పికప్ ఉ. 5:50కి మారింది. 6E 2134 30 నిమిషాలు ఆలస్యం. మీరేమీ చేయనక్కర్లేదు.", hi: "पिकअप सुबह 5:50 हुआ। 6E 2134 में 30 मिनट देरी। आपको कुछ नहीं करना।" }],
-    ["Chauffeur assigned", "Rider", "p,w", "High", { en: "Ravi Kumar will pick you up in a white XUV 3XO EV, AP 39 EV 2041. Code 4827.", te: "రవి కుమార్ తెల్ల XUV 3XO EV, AP 39 EV 2041లో వస్తారు. కోడ్ 4827.", hi: "रवि कुमार सफ़ेद XUV 3XO EV, AP 39 EV 2041 में आएँगे। कोड 4827।" }],
+    ["Chauffeur assigned", "Rider", "p,w", "High", { en: "Ravi Kumar will pick you up in a white SAGA Luxe, AP 39 EV 2041. Code 4827.", te: "రవి కుమార్ తెల్ల SAGA Luxe, AP 39 EV 2041లో వస్తారు. కోడ్ 4827.", hi: "रवि कुमार सफ़ेद SAGA Luxe, AP 39 EV 2041 में आएँगे। कोड 4827।" }],
     ["Chauffeur 2 min away / arrived", "Rider", "p", "Time-sensitive", { en: "Ravi has arrived at Gate 2. Free waiting until 9:10 AM.", te: "రవి గేట్ 2 వద్దకు వచ్చారు. ఉ. 9:10 వరకు ఉచిత వెయిటింగ్.", hi: "रवि गेट 2 पर पहुँच गए। सुबह 9:10 तक मुफ़्त इंतज़ार।" }],
     ["Flight found", "Rider", "p", "Normal", { en: "We found 6E 2134 on Fri 20 Nov. Book a pickup at 5:20 AM?", te: "శుక్ర 20 నవం 6E 2134 దొరికింది. ఉ. 5:20కి పికప్ బుక్ చేయాలా?", hi: "शुक्र 20 नवं को 6E 2134 मिली। सुबह 5:20 का पिकअप बुक करें?" }],
     ["Scheduled ride reminder", "Rider", "p", "Normal", { en: "Tomorrow 9:00 AM to Office with Ravi. Skip by 8 PM at no charge.", te: "రేపు ఉ. 9:00కి రవితో ఆఫీస్‌కి. రా. 8లోపు ఉచితంగా దాటవేయండి.", hi: "कल सुबह 9:00 रवि के साथ ऑफ़िस। रात 8 तक मुफ़्त में छोड़ें।" }],

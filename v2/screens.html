@@ -74,7 +74,7 @@ const R = {
   airport: ["Airport rides", "/airport", "GET /flights/board?airport=VTZ&date="], scan: ["Scan ticket", "/airport/scan", "on-device OCR + barcode → POST /flights/match"], flight: ["Pickup plan", "/airport/:flight", "GET /flights/{id}, POST /quotes"], booked: ["Pickup booked", "/airport/:id/booked", "POST /rides (scheduled, flight-linked)"],
   schedule: ["Scheduled rides", "/scheduled/new", "POST /series {rrule, exdates}"], intercity: ["Intercity", "/intercity", "POST /quotes {type: intercity}"], vehicle: ["The car", "/vehicle", "GET /fleet/profile (CMS)"],
   rides: ["Trips", "/trips", "GET /rides, GET /series"], offers: ["Offers", "/offers", "GET /offers, POST /promo/apply"], account: ["Account", "/account", "GET /me"],
-  language: ["Language", "/settings/language", "PATCH /me {locale}"], voicecfg: ["Voice", "/settings/voice", "POST /voice/intent"], travel: ["Find my flights", "/settings/flights", "Calendar (device), inbound email"],
+  language: ["Language", "/settings/language", "PATCH /me {locale}"], voicecfg: ["Voice", "/settings/voice", "POST /voice/intent"], travel: ["Find my flights", "/settings/flights", "Gmail forwarding filter (inbound email)"],
   notifications: ["Notifications", "/inbox", "GET /notifications"], wallet: ["Wallet", "/wallet", "GET /wallet, POST /wallet/topup"], chat: ["Chat with chauffeur", "/ride/:id/chat", "WS ride.{id}.chat"], lock: ["Lock screen", "(system)", "ActivityKit push / FCM Live Update"]
 };
 const LANES = [

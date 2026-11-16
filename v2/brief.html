@@ -79,14 +79,14 @@ tr:last-child td{border-bottom:0}
 <ul>
 <li><b>Logo and colour are SAGA's own.</b> Our earlier logo is gone. Until the files arrive, the apps use a neutral wordmark and a placeholder blue. Paste SAGA's hex code and upload the logo on the <a href="index.html">suite page</a> and every app re-themes, in light and dark, with text contrast checked.</li>
 <li><b>No 3D ride animation.</b> During a ride the rider sees a regular map in SAGA's colours: the route, the car marker and the ETA.</li>
-<li><b>The car is the Mahindra XUV 3XO EV</b>, presented as the premium product it is: on the welcome screen, on Home, in the ride sheet and on its own "The car" page.</li>
+<li><b>The car is the SAGA Luxe</b> (7 seats, no make or model shown), presented as the premium product it is: on the welcome screen, on Home, in the ride sheet and on its own "The car" page.</li>
 <li><b>An honest message when no car is free</b>, offering a place in line, a scheduled ride or a notification.</li>
 <li><b>Different iPhone and Android builds</b>, a hotel partner app, dark mode, three languages and voice.</li>
 </ul>
 
 <h2 id="s2"><span class="n">2</span>Assumptions to confirm</h2>
 <div class="tw"><table><thead><tr><th>Topic</th><th>What we assumed</th><th>Please confirm</th></tr></thead><tbody>
-<tr><td><b>Seats</b></td><td>The brief says 6-seater. Every published spec for the <b>XUV 3XO EV lists 5 seats</b>, which is the chauffeur plus 4 riders. The demo shows 4 riders. The seat plan, capacity checks and copy all come from one setting.</td><td>Which model and seating does the fleet actually have? If it's a 3-row model, we change one value.</td></tr>
+<tr><td><b>Seats</b></td><td>The fleet car is a 7-seater, shown everywhere as <b>SAGA Luxe</b>: the chauffeur plus 6 riders. The seat plan, capacity checks and copy all come from one setting.</td><td>Confirmed: 7 seats. One setting drives it.</td></tr>
 <tr><td><b>"Intercity regular ride hailing"</b></td><td>Built as two products: on-demand rides within the city, plus fixed-fare intercity trips (Araku, Vizianagaram, Srikakulam, Kakinada, Rajahmundry) with charging stops planned.</td><td>Is that the split you meant?</td></tr>
 <tr><td><b>Vehicle images</b></td><td>A neutral illustration of a compact electric SUV stands in for photos.</td><td>Official photos of SAGA's cars (see §13).</td></tr>
 <tr><td><b>Airport</b></td><td>Samples show Visakhapatnam (VTZ) and name the new airport "Bhogapuram International".</td><td>Which airport name and code should riders see?</td></tr>
@@ -323,7 +323,6 @@ tr:last-child td{border-bottom:0}
 
 <h2 id="s15"><span class="n">15</span>Sources</h2>
 <ul class="src">
-<li>Mahindra XUV 3XO EV specifications (5 seats, 39.4 kWh): <a href="https://www.autocarindia.com/car-news/mahindra-xuv-3xo-ev-launched-438746">Autocar India</a>, <a href="https://www.team-bhp.com/new-cars/mahindra/xuv-3xo-ev/specifications/">Team-BHP</a>, <a href="https://www.cardekho.com/mahindra/xuv-3xo-ev/specs">CarDekho</a></li>
 <li>aviationstack pricing: <a href="https://aviationstack.com/pricing">aviationstack.com/pricing</a></li>
 <li>FlightAware AeroAPI: <a href="https://flightaware.com/commercial/aeroapi/">flightaware.com/commercial/aeroapi</a>; tier summary: <a href="https://geekflare.com/dev/flight-data-api/">Geekflare, Best Flight Data APIs 2026</a></li>
 <li>AeroDataBox: <a href="https://alternativeto.net/software/aerodatabox-api/about">AlternativeTo listing</a></li>
@@ -350,7 +349,7 @@ const NEEDS = [
   ["Logo files", "SVG for the primary and single-colour versions, a 1024×1024 PNG app-icon master, and a splash version. Any usage rules.", "b"],
   ["Brand colours", "Primary hex code (plus secondary or neutral colours if any). We generate light/dark and iOS/Android palettes from it.", "b"],
   ["Vehicle facts", "Exact model and seat layout (5 or 6 seats), luggage capacity, and which amenities are really provided: water, chargers, Wi-Fi, child seat.", "b"],
-  ["Fleet photography", "XUV 3XO EV in SAGA livery: front ¾, side, rear ¾, front cabin, rear seats, boot. 4K, plain background preferred. Livery artwork.", "d"],
+  ["Fleet photography", "SAGA Luxe in SAGA livery: front ¾, side, rear ¾, front cabin, rear seats, boot. 4K, plain background preferred. Livery artwork.", "d"],
   ["Brand font", "Only if SAGA licenses one; otherwise system fonts (SF Pro / Roboto) are used.", "d"],
   ["Existing app and backend"],
   ["Flutter repository", "Access to the repo and a working branch. Flutter/Dart versions, state-management choice, architecture notes, package list, build flavours (dev/staging/prod), CI.", "b"],
