@@ -181,5 +181,5 @@ S.onChange(() => { S.state.os = "web"; S.apply(); controls(); });
 controls();
 })();
 </script>
-</body>
+<script>/* always load the newest app build inside the suite */(()=>{const T=Date.now();const fix=f=>{if(f.dataset.st)return;const a=f.getAttribute("src");if(!a||!/(rider|driver|hotel|ops|screens).html/.test(a))return;f.dataset.st=1;f.src=a+(a.includes("?")?"&":"?")+"t="+T;};const run=()=>document.querySelectorAll("iframe").forEach(fix);run();new MutationObserver(run).observe(document.documentElement,{childList:true,subtree:true});})();</script></body>
 </html>
