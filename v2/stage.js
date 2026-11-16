@@ -110,7 +110,7 @@
     // nearest angles first
     const startIdx = Math.round(pos * k) % n, order = [0]; for (let d = 1; d <= n / 2; d++) { order.push(d); if (n - d !== d) order.push(n - d); }
     let chain = Promise.resolve();
-    order.forEach(d => { const i = (startIdx + d) % n; chain = chain.then(() => bitmap(src(i)).then(img => { frames[i] = img; got++; el.style.setProperty("--p", Math.round(got / n * 100) + "%"); if (got === n) el.classList.add("ready"); draw(true); }).catch(() => {})); });
+    order.forEach(d => { const i = (startIdx + d) % n; chain = chain.then(() => bitmap(src(i)).then(img => { frames[i] = img; got++; el.style.setProperty("--p", Math.round(got / n * 100) + "%"); if (got === n) { el.classList.add("ready"); if (o.intro && api.target == null) api.target = pos + o.intro; } draw(true); }).catch(() => {})); });
     let last = performance.now();
     const tick = now => {
       raf = requestAnimationFrame(tick);

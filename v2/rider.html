@@ -404,7 +404,7 @@ body.embed,body.bare{background:transparent}
 .upd-sheet{position:absolute;left:12px;right:12px;bottom:24px;padding:22px;border-radius:28px;background:var(--surface);box-shadow:0 20px 60px rgba(0,0,0,.25)}
 </style>
 <link rel="stylesheet" href="system.css?v=9"><link rel="stylesheet" href="system3.css?v=9"><link rel="stylesheet" href="system4.css?v=9"><link rel="stylesheet" href="system6.css?v=11"><link rel="stylesheet" href="system7.css?v=10">
-<link rel="stylesheet" href="ds.css?v=26">
+<link rel="stylesheet" href="ds.css?v=31">
 </head>
 <body>
 <div class="shell">
@@ -428,7 +428,7 @@ body.embed,body.bare{background:transparent}
     </div>
   </main>
 </div>
-<script src="core.js?v=34"></script><script src="stage.js?v=8"></script>
+<script src="core.js?v=34"></script><script src="stage.js?v=9"></script>
 <script>
 (function () {
 const S = SAGA, L = S.L, I = S.icon, $ = (q, r = document) => r.querySelector(q), $$ = (q, r = document) => [...r.querySelectorAll(q)];
@@ -572,12 +572,12 @@ def("setup", { g: "Start", n: "Permissions", tabs: 0, nav: 1, foot: 1, what: "Ex
   const p = (k, icon, t, s) => `<div class="permrow"><span class="pico">${I(icon)}</span><div class="grow"><div class="t1">${t}</div><div class="t2">${s}</div></div>${tgl(app.perms[k], `data-act="perm" data-k="${k}"`)}</div>`;
   return `${bar(L("Set up", "సెటప్", "सेटअप"))}
   <div class="content">
-    <div class="pad"><h1 class="t-title">${L("Make SAGA <em>work for you</em>", "SAGA <em>మీకు సరిపోయేలా</em>", "SAGA को <em>अपने हिसाब से</em>")}</h1>
-    <p class="t-sub mt8">${L("Each permission is for one reason. Change them any time in Settings.", "ఒక్కో అనుమతికి ఒకే కారణం. సెట్టింగ్స్‌లో ఎప్పుడైనా మార్చవచ్చు.", "हर अनुमति की एक ही वजह। सेटिंग्स में कभी भी बदलें।")}</p></div>
+    <div class="pad"><h1 class="t-title">${L("Set up <em>SAGA</em>", "SAGA <em>సెటప్</em>", "SAGA <em>सेटअप</em>")}</h1>
+    <p class="t-sub mt8">${L("One reason each. Change any time.", "ఒక్కోదానికి ఒకే కారణం. ఎప్పుడైనా మార్చవచ్చు.", "हर एक का एक कारण। कभी भी बदलें।")}</p></div>
     <div class="permcard mt24">
-      ${p("loc", "pin", L("Location", "లొకేషన్", "लोकेशन"), L("Finds your pickup point. Used only while you book or ride.", "మీ పికప్ పాయింట్ కనుగొనడానికి. బుక్ చేసేటప్పుడు, ప్రయాణంలో మాత్రమే.", "आपका पिकअप पॉइंट ढूँढने के लिए। सिर्फ़ बुकिंग और सफ़र के दौरान।"))}
-      ${p("notif", "bell", L("Notifications", "నోటిఫికేషన్లు", "नोटिफ़िकेशन"), L("Chauffeur updates, and changes to your flight.", "డ్రైవర్ అప్‌డేట్‌లు, మీ ఫ్లైట్ మార్పులు.", "ड्राइवर की जानकारी और फ़्लाइट में बदलाव।"))}
-      ${p("cal", "mail", L("Flight emails", "ఫ్లైట్ ఈమెయిల్స్", "फ़्लाइट ईमेल"), L("One Gmail filter forwards airline tickets to SAGA so we can suggest a pickup. Nothing else is read.", "ఒక Gmail ఫిల్టర్ ఎయిర్‌లైన్ టికెట్లను SAGAకు పంపుతుంది. ఇంకేమీ చదవం.", "एक Gmail फ़िल्टर एयरलाइन टिकट SAGA को भेजता है। और कुछ नहीं पढ़ा जाता।"))}
+      ${p("loc", "pin", L("Location", "లొకేషన్", "लोकेशन"), L("Only while you book or ride", "బుక్ చేసేటప్పుడు, ప్రయాణంలో మాత్రమే", "सिर्फ़ बुकिंग और सफ़र के समय"))}
+      ${p("notif", "bell", L("Notifications", "నోటిఫికేషన్లు", "नोटिफ़िकेशन"), L("Chauffeur and flight updates", "డ్రైవర్, ఫ్లైట్ అప్‌డేట్‌లు", "ड्राइवर और फ़्लाइट अपडेट"))}
+      ${p("cal", "mail", L("Flight emails", "ఫ్లైట్ ఈమెయిల్స్", "फ़्लाइट ईमेल"), L("One Gmail filter. Nothing else is read.", "ఒక Gmail ఫిల్టర్. ఇంకేమీ చదవము.", "एक Gmail फ़िल्टर। और कुछ नहीं पढ़ते।"))}
     </div>
     <div class="group mt16">${row({ icon: "globe", t: L("Language", "భాష", "भाषा"), trail: S.LANGS.find(l => l.id === S.state.lang).native, go: "language" })}</div>
   </div>
@@ -727,7 +727,7 @@ def("flysoon", { g: "Start", n: "Flying soon?", tabs: 0, nav: 1, foot: 1, what: 
   <div class="content"><div class="pad">
     <div class="center" style="padding-top:6px"><span class="pico" style="width:84px;height:84px;border-radius:42px;margin:0 auto;display:flex;align-items:center;justify-content:center;background:var(--accent);color:var(--on-accent)">${I("plane", "xl")}</span></div>
     <h1 class="t-title center mt16">${L("Got a flight coming up?", "త్వరలో ఫ్లైట్ ఉందా?", "जल्द कोई फ़्लाइट है?")}</h1>
-    <p class="t-body muted center mt8">${L("Add it now and your airport ride is planned around it. If the flight moves, your pickup moves too.", "ఇప్పుడే జోడించండి, మీ ఎయిర్‌పోర్ట్ రైడ్ దానికి తగ్గట్టు ప్లాన్ అవుతుంది. ఫ్లైట్ మారితే పికప్ కూడా మారుతుంది.", "अभी जोड़ें, आपकी एयरपोर्ट राइड उसी के हिसाब से तय होगी। फ़्लाइट बदली तो पिकअप भी बदलेगा।")}</p>
+    <p class="t-body muted center mt8">${L("Your pickup follows the flight, even if it moves.", "ఫ్లైట్ మారినా పికప్ దానితోనే.", "फ़्लाइट बदले तो पिकअप भी बदलता है।")}</p>
   </div>
   <div class="group mt24">
     ${row({ icon: "scan", t: L("Scan or upload the ticket", "టికెట్ స్కాన్ లేదా అప్‌లోడ్", "टिकट स्कैन या अपलोड करें"), s: L("Screenshot, PDF or boarding pass", "స్క్రీన్‌షాట్, PDF లేదా బోర్డింగ్ పాస్", "स्क्रीनशॉट, PDF या बोर्डिंग पास"), go: "scan" })}
@@ -785,13 +785,12 @@ def("nocars", { g: "Ride", n: "No cars nearby", tabs: 0, nav: 1, foot: 1, what: 
         <img class="nc-car" src="${SagaStage.src("cut5-side")}" alt="${V.short}">
       </div>
       <h1 class="t-title mt8">${L("All our cars are on trips right now", "మా కార్లన్నీ ఇప్పుడు ప్రయాణాల్లో ఉన్నాయి", "हमारी सभी गाड़ियाँ अभी सफ़र पर हैं")}</h1>
-      <p class="t-body muted mt12">${L("We're a young company, adding new cars to our fleet month by month. Until then, busy hours can mean a short wait. We make it worth it with exceptional service and a truly premium ride.", "మేము కొత్త సంస్థ, నెల నెలా కొత్త కార్లను చేరుస్తున్నాం. అప్పటివరకు రద్దీ సమయంలో కొంచెం వేచి ఉండాల్సి రావచ్చు. అద్భుతమైన సేవ, ప్రీమియం ప్రయాణంతో ఆ ఎదురుచూపును విలువైనదిగా చేస్తాం.", "हम एक नई कंपनी हैं और हर महीने नई गाड़ियाँ जोड़ रहे हैं। तब तक भीड़ के समय थोड़ा इंतज़ार हो सकता है। बेहतरीन सेवा और प्रीमियम सफ़र से हम इस इंतज़ार को सार्थक बनाते हैं।")}</p>
-      <p class="t-body mt12 nc-thanks serif">${L("Thank you for staying with us.", "మాతో ఉన్నందుకు ధన్యవాదాలు.", "हमारे साथ बने रहने के लिए धन्यवाद।")}</p>
+      <p class="t-body muted mt12">${L("We're a young company adding cars every month. Your fare and your place in line are held.", "మేము నెల నెలా కార్లు చేరుస్తున్న కొత్త సంస్థ. మీ ఛార్జీ, మీ స్థానం అలాగే ఉంటాయి.", "हम हर महीने गाड़ियाँ जोड़ रही नई कंपनी हैं। आपका किराया और लाइन में जगह बनी रहेगी।")}</p>
     </div>
     <div class="pad mt16"><div class="nc-perks">
-      <div class="nc-perk">${I("snow")}<b>22°</b><small>${L("Cabin cooled before you get in", "మీరు ఎక్కేలోపే క్యాబిన్ చల్లగా", "बैठने से पहले केबिन ठंडा")}</small></div>
-      <div class="nc-perk">${I("tag")}<b>${S.inr(FARE)}</b><small>${L("Your fare stays fixed", "మీ ఛార్జీ మారదు", "आपका किराया तय रहेगा")}</small></div>
-      <div class="nc-perk">${I("gift")}<b>+50</b><small>${L("SAGA points for waiting", "వేచి ఉన్నందుకు SAGA పాయింట్లు", "इंतज़ार के लिए SAGA पॉइंट")}</small></div>
+      <div class="nc-perk">${I("snow")}<b>22°</b><small>${L("Cabin cooled", "చల్లని క్యాబిన్", "ठंडा केबिन")}</small></div>
+      <div class="nc-perk">${I("tag")}<b>${S.inr(FARE)}</b><small>${L("Fare held", "ఛార్జీ మారదు", "किराया तय")}</small></div>
+      <div class="nc-perk">${I("gift")}<b>+50</b><small>${L("Points for waiting", "వేచినందుకు పాయింట్లు", "इंतज़ार के पॉइंट")}</small></div>
     </div></div>
   </div>
   ${foot(`${btn(L("Wait for the next car", "తదుపరి కారు కోసం వేచి ఉంటాను", "अगली गाड़ी का इंतज़ार करूँगा"), { act: "waitline" })}<div class="btnrow mt8">${btn(L("Schedule", "షెడ్యూల్", "शेड्यूल"), { kind: "btn-secondary", go: "schedule" })}${btn(L("Notify me", "నాకు తెలపండి", "मुझे बताएँ"), { kind: "btn-secondary", act: "notifyme" })}</div>`)}`, el => {
@@ -877,7 +876,7 @@ def("arrived", { g: "Ride", n: "Arrived", tabs: 0, foot: 1, what: "The car from 
   return `
   <div class="content fit-s">
     <div class="ar-hero">
-      <div class="ar-car"><img src="${SagaStage.src("cut5-rear")}" alt="${V.short}"><i class="tl t1"></i><i class="tl t2"></i><i class="tl t3"></i><i class="tl t4"></i><i class="tl t5"></i></div>
+      <div class="ar-car"><img src="${SagaStage.src("cut5-rear")}" alt="${V.short}"><i class="tlg t1"></i><i class="tlg t2"></i><i class="tlg t3"></i><i class="tlg t4"></i><i class="tlg t5"></i></div>
       <div class="ar-h"><span class="eyebrow">${app.dest.split(" · ").pop()} · 7:41 PM</span><h1 class="serif">${L("You've <em>arrived.</em>", "మీరు <em>చేరుకున్నారు.</em>", "आप <em>पहुँच गए।</em>")}</h1></div>
     </div>
     <div class="pad"><div class="ar-rcpt">
@@ -937,7 +936,7 @@ def("airport", { g: "Airport", n: "Airport rides", tabs: 0, nav: 1, what: "Two s
     <div class="pad">${seg([["dep", L("To the airport", "ఎయిర్‌పోర్ట్‌కి", "एयरपोर्ट जाना")], ["arr", L("From the airport", "ఎయిర్‌పోర్ట్ నుండి", "एयरपोर्ट से आना")]], app.dir, "dir")}</div>
     <div class="pad mt16"><div class="ap-scan lg-brand">
       <span class="ap-scan-ic">${I("scan")}<i></i></span>
-      <div><b>${L("Scan your ticket", "మీ టికెట్ స్కాన్ చేయండి", "अपना टिकट स्कैन करें")}</b><small>${L("E-ticket, screenshot, PDF or boarding pass. We read the flight in a second.", "ఈ-టికెట్, స్క్రీన్‌షాట్, PDF లేదా బోర్డింగ్ పాస్. ఒక్క క్షణంలో ఫ్లైట్ చదువుతాం.", "ई-टिकट, स्क्रीनशॉट, PDF या बोर्डिंग पास। एक पल में फ़्लाइट पढ़ लेते हैं।")}</small></div>
+      <div><b>${L("Scan your ticket", "మీ టికెట్ స్కాన్ చేయండి", "अपना टिकट स्कैन करें")}</b><small>${L("Ticket, PDF or boarding pass.", "టికెట్, PDF లేదా బోర్డింగ్ పాస్.", "टिकट, PDF या बोर्डिंग पास।")}</small></div>
       <div class="ap-scan-b"><button class="btn sm" data-go="scan">${I("scan", "sm")}<span>${L("Scan", "స్కాన్", "स्कैन")}</span></button><button class="btn sm ghost" data-go="scan">${I("upload", "sm")}<span>${L("Upload", "అప్‌లోడ్", "अपलोड")}</span></button></div>
     </div></div>
     ${dep && app.travel.mail ? `${sh(L("Found for you", "మీ కోసం కనుగొన్నది", "आपके लिए मिली"))}<div class="pad"><button class="ap-found lg-live" data-act="pickf" data-no="6E 2134" data-t="07:40" data-day="20" data-city="HYD" data-dir="dep" data-pnr="K7QX2M"><span class="ap-f-ic">${I("mail")}</span><span class="grow"><b><span class="t-num">7:40 AM</span> · 6E 2134</b><small>${L("Fri 20 Nov", "శుక్ర 20 నవం", "शुक्र 20 नवं")} · VTZ → HYD · ${L("from your Gmail filter", "మీ Gmail ఫిల్టర్ నుండి", "आपके Gmail फ़िल्टर से")}</small></span>${I("chevr")}</button></div>` : ""}
@@ -948,9 +947,9 @@ def("airport", { g: "Airport", n: "Airport rides", tabs: 0, nav: 1, what: "Two s
       <div class="bd-h"><span class="bd-t">${I(dep ? "takeoff" : "landing", "sm")}${dep ? L("Departures", "బయలుదేరేవి", "प्रस्थान") : L("Arrivals", "వచ్చేవి", "आगमन")}</span><span class="bd-m">VTZ · ${dayLabel(app.aday)}</span></div>
       <div class="bd-cols"><span>${L("Time", "సమయం", "समय")}</span><span>${L("Flight", "ఫ్లైట్", "फ़्लाइट")}</span><span>${dep ? L("To", "కు", "को") : L("From", "నుండి", "से")}</span><span>${L("Status", "స్థితి", "स्थिति")}</span></div>
       ${list.map(([no, t], i) => `<button class="bd-row" data-act="pickf" data-no="${no}" data-t="${t}" data-day="${app.aday}" data-city="${app.acity}" data-dir="${app.dir}" data-pnr=""><span>${bflap(t, 150 + i * 160)}</span><span><b>${no}</b><small>${AL[no.split(" ")[0]]}</small></span><span>${bflap(app.acity, 300 + i * 160)}</span><span class="bd-st ${st(i)[1]}">${st(i)[0]}</span></button>`).join("") || `<div class="bd-empty">${L("No flights that day", "ఆ రోజు ఫ్లైట్లు లేవు", "उस दिन कोई फ़्लाइट नहीं")}</div>`}
-      <div class="bd-foot">${L("Vizag has one airport, so the day's list is short. Tap yours.", "విశాఖలో ఒకే ఎయిర్‌పోర్ట్, అందుకే రోజు జాబితా చిన్నది. మీ ఫ్లైట్ నొక్కండి.", "विज़ाग में एक ही एयरपोर्ट है, इसलिए दिन की सूची छोटी है। अपनी फ़्लाइट चुनें।")}</div>
+      <div class="bd-foot">${L("Tap your flight.", "మీ ఫ్లైట్ నొక్కండి.", "अपनी फ़्लाइट चुनें।")}</div>
     </div></div>
-    <div class="pad mt16"><div class="wh-note">${I("shield", "sm")}<span>${L("No PNR to type. Your ticket, or your flight, is all we need. We track it and move your pickup if it changes.", "PNR టైప్ చేయక్కర్లేదు. మీ టికెట్ లేదా మీ ఫ్లైట్ చాలు. దాన్ని ట్రాక్ చేసి, మారితే పికప్ మారుస్తాం.", "PNR लिखने की ज़रूरत नहीं। आपका टिकट या आपकी फ़्लाइट काफ़ी है। हम उसे ट्रैक करते हैं और बदलने पर पिकअप बदल देते हैं।")}</span></div></div>
+    <div class="pad mt16"><div class="wh-note">${I("shield", "sm")}<span>${L("No PNR needed. We track the flight and move your pickup.", "PNR అవసరం లేదు. ఫ్లైట్ ట్రాక్ చేసి పికప్ మారుస్తాం.", "PNR की ज़रूरत नहीं। फ़्लाइट ट्रैक करके पिकअप बदलते हैं।")}</span></div></div>
   </div>`;
 });
 
@@ -1119,7 +1118,6 @@ def("schedule", { g: "Scheduled", n: "Scheduled rides", tabs: 0, nav: 1, foot: 1
       <div class="row"><span class="lead">${I("user")}</span><span class="tx"><span class="t1" style="display:block">${L("Prefer the same chauffeur", "అదే డ్రైవర్ కావాలి", "वही ड्राइवर चाहिए")}</span><span class="t2" style="display:block">${L("We'll try every day", "ప్రతి రోజు ప్రయత్నిస్తాం", "हर दिन कोशिश करेंगे")}</span></span>${tgl(app.same, 'data-act="same"')}</div>
       ${row({ icon: "cal", t: L("Ends", "ముగింపు", "खत्म"), trail: L("Sat 12 Dec", "శని 12 డిసెం", "शनि 12 दिसं"), toast: L("Pick any end date, or keep it running until you stop it", "ఏ ముగింపు తేదీ అయినా ఎంచుకోండి, లేదా మీరు ఆపే వరకు కొనసాగించండి", "कोई भी आख़िरी तारीख़ चुनें, या रोकने तक चालू रखें") })}
     </div>
-    <p class="t-sub pad mt8">${L("Pay per ride or monthly. Reminders arrive the evening before.", "ప్రతి రైడ్‌కు లేదా నెలకు చెల్లించండి. ముందు రోజు సాయంత్రం గుర్తుచేస్తాం.", "हर राइड या महीने में भुगतान। एक शाम पहले याद दिलाएँगे।")}</p>
   </div>
   ${foot(btn(L(`Schedule ${rides} rides`, `${rides} రైడ్‌లు షెడ్యూల్ చేయండి`, `${rides} राइड शेड्यूल करें`), { act: "bookseries" }))}`;
 });
@@ -1209,7 +1207,7 @@ def("impact", { g: "Account", n: "Eco impact", tabs: 0, nav: 1, what: "The answe
       <b class="eco-big t-num"><span data-count="${e.kg}">${e.kg}</span><i> kg</i></b>
       <span>${L(`${e.trips} trips · ${e.km} electric km this year`, `${e.trips} ప్రయాణాలు · ఈ ఏడాది ${e.km} ఎలక్ట్రిక్ కి.మీ`, `${e.trips} यात्राएँ · इस साल ${e.km} इलेक्ट्रिक किमी`)}</span></div>
     <div class="eco-hero"><img src="${SagaStage.src("cut5-side")}" alt="${V.short}"><i></i></div>
-    <div class="eco-tank">${ecoVessel("big", 'tabindex="-1" aria-hidden="true"')}<div>${ecoFill() >= 1 ? `<b>${L("Your eco tank is full", "మీ ఎకో ట్యాంక్ నిండింది", "आपका इको टैंक भर गया")}</b><small>${L("Your next city ride is on us.", "మీ తదుపరి సిటీ రైడ్ మా తరఫున.", "आपकी अगली सिटी राइड हमारी ओर से।")}</small><button class="btn btn-primary" data-act="usefree">${I("car", "sm")}<span>${L("Book my free ride", "నా ఉచిత రైడ్ బుక్", "मेरी मुफ़्त राइड बुक करें")}</span></button>` : `<b>${L(`${FREE_AT - ecoBal()} points to a free ride`, `ఉచిత రైడ్‌కు ${FREE_AT - ecoBal()} పాయింట్లు`, `मुफ़्त राइड तक ${FREE_AT - ecoBal()} पॉइंट`)}</b><small>${L("Every electric ride fills the tank. About one more ride to go.", "ప్రతి ఎలక్ట్రిక్ రైడ్ ట్యాంక్ నింపుతుంది. ఇంకా ఒక రైడ్ చాలు.", "हर इलेक्ट्रिक राइड टैंक भरती है। बस एक राइड और।")}</small>`}</div></div>
+    <div class="eco-tank">${ecoVessel("big", 'tabindex="-1" aria-hidden="true"')}<div>${ecoFill() >= 1 ? `<b>${L("Your eco tank is full", "మీ ఎకో ట్యాంక్ నిండింది", "आपका इको टैंक भर गया")}</b><small>${L("Your next city ride is on us.", "మీ తదుపరి సిటీ రైడ్ మా తరఫున.", "आपकी अगली सिटी राइड हमारी ओर से।")}</small><button class="btn btn-primary" data-act="usefree">${I("car", "sm")}<span>${L("Book my free ride", "నా ఉచిత రైడ్ బుక్", "मेरी मुफ़्त राइड बुक करें")}</span></button>` : `<b>${L(`${FREE_AT - ecoBal()} points to a free ride`, `ఉచిత రైడ్‌కు ${FREE_AT - ecoBal()} పాయింట్లు`, `मुफ़्त राइड तक ${FREE_AT - ecoBal()} पॉइंट`)}</b><small>${L("About one more ride to go.", "ఇంకా ఒక్క రైడ్ చాలు.", "बस एक राइड और।")}</small>`}</div></div>
     <div class="eco-tiles">
       <div class="eco-t arc"><svg viewBox="0 0 100 60" aria-hidden="true"><path d="M8 54 A42 42 0 0 1 92 54" class="a0" pathLength="100"/><path d="M8 54 A42 42 0 0 1 92 54" class="a1" pathLength="100" stroke-dasharray="100 100"/></svg><b>100<i>%</i></b><small>${L("of your km were electric", "మీ కి.మీ అన్నీ ఎలక్ట్రిక్", "आपके सभी किमी इलेक्ट्रिक")}</small></div>
       <div class="eco-t"><small>${L("Clean energy used", "వాడిన శుభ్ర శక్తి", "इस्तेमाल हुई स्वच्छ ऊर्जा")}</small><b class="t-num">${e.kwh}<i> kWh</i></b></div>
@@ -1229,7 +1227,6 @@ def("impact", { g: "Account", n: "Eco impact", tabs: 0, nav: 1, what: "The answe
       ${[["leaf", L("Plant a tree on the Vizag coast", "విశాఖ తీరంలో ఒక మొక్క నాటండి", "विज़ाग तट पर एक पेड़ लगाएँ"), 150], ["tag", L("₹30 off your next city ride", "తదుపరి సిటీ రైడ్‌పై ₹30 తగ్గింపు", "अगली सिटी राइड पर ₹30 छूट"), 120], ["users", L("Support a beach clean-up at RK Beach", "RK బీచ్ శుభ్రతకు తోడ్పడండి", "RK बीच की सफ़ाई में मदद करें"), 80]].map(([ic, t, p]) => `<button class="eco-r ${e.pts >= p ? "" : "off"}" data-act="ecoredeem" data-v="${p}" data-t="${esc(t)}"><span class="eco-ri">${I(ic)}</span><span class="grow">${t}</span><b class="t-num">${p}</b></button>`).join("")}
     </div>
     <div class="eco-city"><span>${I("users")}</span><div><b>${L("Vizag's SAGA riders saved 1.6 tonnes of CO₂ this month", "ఈ నెల విశాఖ SAGA రైడర్లు 1.6 టన్నుల CO₂ ఆదా చేశారు", "इस महीने विज़ाग के SAGA राइडर्स ने 1.6 टन CO₂ बचाया")}</b><small>${L("About what 76 trees absorb in a year.", "సుమారు 76 చెట్లు ఏడాదిలో పీల్చుకునేంత.", "लगभग 76 पेड़ एक साल में जितना सोखते हैं।")}</small></div></div>
-    <p class="t-sub mt12">${L("Estimates: an electric SAGA Luxe compared with a petrol cab over the same distance, including the grid power used to charge it.", "అంచనాలు: అదే దూరానికి పెట్రోల్ క్యాబ్‌తో పోలిస్తే ఎలక్ట్రిక్ SAGA లక్స్, ఛార్జింగ్ విద్యుత్‌తో సహా.", "अनुमान: उतनी ही दूरी पर पेट्रोल कैब के मुकाबले इलेक्ट्रिक SAGA लक्स, चार्जिंग की बिजली सहित।")}</p>
   </div></div>`;
 });
 
@@ -1372,13 +1369,12 @@ def("voicecfg", { g: "Settings", n: "Voice", tabs: 0, nav: 1, what: "Saathi as a
     <div class="vc-hero">
       <button class="vc-orb" data-voice aria-label="${L("Talk to Saathi", "సాథీతో మాట్లాడండి", "साथी से बात करें")}">${orb("idle")}</button>
       <h1 class="serif">Saathi</h1>
-      <p>${L("Use every part of SAGA by voice, in English, Telugu or Hindi. Tap the light to talk.", "SAGAలో ప్రతిదీ మాటతో, ఇంగ్లీష్, తెలుగు లేదా హిందీలో. మాట్లాడేందుకు వెలుగును నొక్కండి.", "SAGA का हर काम आवाज़ से, अंग्रेज़ी, तेलुगु या हिंदी में। बात करने के लिए रोशनी दबाएँ।")}</p>
+      <p>${L("Ask in English, Telugu or Hindi. Tap the light.", "ఇంగ్లీష్, తెలుగు, హిందీలో అడగండి. వెలుగును నొక్కండి.", "अंग्रेज़ी, तेलुगु या हिंदी में पूछें। रोशनी दबाएँ।")}</p>
     </div>
     ${sh(L("Try saying", "ఇలా చెప్పండి", "ऐसे बोलें"))}
     <div class="pad vc-tries">${tries.map((t, i) => `<button data-say="${esc(t)}" style="--d:${i * 60}ms">${I("mic", "sm")}<span>“${t}”</span></button>`).join("")}</div>
     ${sh(ios() ? "Siri" : "Gemini")}
     <div class="group">${sys.map(([a, b]) => row({ icon: "spark", lc: "ink", t: `“${a}”`, s: b, chev: false, trail: `<span class="pill ok">${L("Ready", "సిద్ధం", "तैयार")}</span>` })).join("")}</div>
-    <p class="t-sub pad mt12">${ios() ? L("Siri shortcuts work from the lock screen. Siri understands English and Hindi; for Telugu, use Saathi inside the app.", "సిరి షార్ట్‌కట్‌లు లాక్ స్క్రీన్ నుండి పని చేస్తాయి. సిరి ఇంగ్లీష్, హిందీ అర్థం చేసుకుంటుంది; తెలుగు కోసం యాప్‌లో సాథీ వాడండి.", "Siri शॉर्टकट लॉक स्क्रीन से चलते हैं। Siri अंग्रेज़ी और हिंदी समझता है; तेलुगु के लिए ऐप में साथी चुनें।") : L("On supported Android phones, Gemini can open SAGA and fill in your booking. Saathi works on every phone.", "సపోర్ట్ ఉన్న ఆండ్రాయిడ్ ఫోన్లలో జెమినీ SAGA తెరిచి బుకింగ్ నింపుతుంది. సాథీ అన్ని ఫోన్లలో పని చేస్తుంది.", "समर्थित Android फ़ोन पर Gemini SAGA खोलकर बुकिंग भर सकता है। साथी हर फ़ोन पर चलता है।")}</p>
     <div class="group mt16"><div class="row"><span class="lead">${I("quiet")}</span><span class="tx"><span class="t1" style="display:block">${L("Read updates aloud", "అప్‌డేట్‌లు గట్టిగా చదువు", "अपडेट बोलकर सुनाएँ")}</span><span class="t2" style="display:block">${L("Chauffeur arriving, pickup moved", "డ్రైవర్ వస్తున్నారు, పికప్ మారింది", "ड्राइवर आ रहा है, पिकअप बदला")}</span></span>${tgl(app.read, 'data-act="read"')}</div></div>
   </div>`;
 });
@@ -1388,23 +1384,23 @@ def("travel", { g: "Settings", n: "Find my flights", tabs: 0, nav: 1, what: "Set
   const step = (n, t, body) => `<div class="tv-step"><span class="tv-n">${n}</span><div class="grow"><b>${t}</b>${body}</div></div>`;
   return `${bar(L("Find my flights", "నా ఫ్లైట్లు", "मेरी फ़्लाइट"))}
   <div class="content">
-    <div class="pad"><span class="eyebrow">${L("Gmail filter · 1 minute", "Gmail ఫిల్టర్ · 1 నిమిషం", "Gmail फ़िल्टर · 1 मिनट")}</span><h1 class="t-title serif mt8">${L("Let SAGA <em>spot your flights.</em>", "మీ ఫ్లైట్లను SAGA <em>గుర్తించనివ్వండి.</em>", "SAGA को आपकी <em>फ़्लाइट पहचानने दें।</em>")}</h1><p class="t-sub mt8">${L("Set this up once. Wherever you book, the ticket email reaches SAGA and we plan the ride.", "ఒక్కసారి సెటప్ చేయండి. ఎక్కడ బుక్ చేసినా, టికెట్ మెయిల్ SAGAకు చేరుతుంది, మేము రైడ్ ప్లాన్ చేస్తాం.", "एक बार सेट करें। कहीं से भी बुक करें, टिकट ईमेल SAGA तक पहुँचेगा और हम राइड प्लान करेंगे।")}</p></div>
+    <div class="pad"><span class="eyebrow">${L("Gmail filter · 1 minute", "Gmail ఫిల్టర్ · 1 నిమిషం", "Gmail फ़िल्टर · 1 मिनट")}</span><h1 class="t-title serif mt8">${L("Let SAGA <em>spot your flights.</em>", "మీ ఫ్లైట్లను SAGA <em>గుర్తించనివ్వండి.</em>", "SAGA को आपकी <em>फ़्लाइट पहचानने दें।</em>")}</h1><p class="t-sub mt8">${L("Once set, every ticket email plans its own ride.", "ఒక్కసారి సెటప్ చేస్తే, ప్రతి టికెట్ మెయిల్ రైడ్ ప్లాన్ చేస్తుంది.", "एक बार सेट करें, हर टिकट ईमेल अपनी राइड खुद तय करेगा।")}</p></div>
     <div class="pad mt16"><div class="tv-steps">
       ${step(1, L("Copy your travel address", "మీ ట్రావెల్ చిరునామా కాపీ చేయండి", "अपना ट्रैवल पता कॉपी करें"), `<button class="tv-addr" data-toast="${esc(L("Address copied", "చిరునామా కాపీ అయింది", "पता कॉपी हुआ"))}"><span>${addr}</span>${I("copy", "sm")}</button>`)}
       ${step(2, L("In Gmail, create a filter", "Gmailలో ఫిల్టర్ సృష్టించండి", "Gmail में फ़िल्टर बनाएँ"), `<div class="tv-gm"><div class="tv-gm-h">${I("filter", "sm")}<span>${L("Settings › Filters › Create new filter", "సెట్టింగ్‌లు › ఫిల్టర్లు › కొత్త ఫిల్టర్", "सेटिंग › फ़िल्टर › नया फ़िल्टर")}</span></div><div class="tv-gm-r"><small>${L("From", "నుండి", "से")}</small><code>goindigo.in OR airindia.com OR akasaair.com OR makemytrip.com</code></div><div class="tv-gm-r"><small>${L("Has the words", "పదాలు", "शब्द")}</small><code>PNR OR "e-ticket"</code></div></div>`)}
-      ${step(3, L("Forward to your SAGA address", "SAGA చిరునామాకు ఫార్వర్డ్ చేయండి", "SAGA पते पर फ़ॉरवर्ड करें"), `<p>${L("Tick “Forward it to” and pick the address from step 1. Gmail sends one confirmation code; SAGA confirms it for you.", "“Forward it to” టిక్ చేసి, 1వ దశ చిరునామా ఎంచుకోండి. Gmail ఒక కోడ్ పంపుతుంది; SAGA దాన్ని నిర్ధారిస్తుంది.", "“Forward it to” चुनें और पहले चरण का पता दें। Gmail एक पुष्टि कोड भेजता है; SAGA उसे खुद पुष्ट करता है।")}</p>`)}
+      ${step(3, L("Forward to your SAGA address", "SAGA చిరునామాకు ఫార్వర్డ్ చేయండి", "SAGA पते पर फ़ॉरवर्ड करें"), `<p>${L("Tick “Forward it to” and choose your SAGA address.", "“Forward it to” టిక్ చేసి మీ SAGA చిరునామా ఎంచుకోండి.", "“Forward it to” चुनें और अपना SAGA पता दें।")}</p>`)}
     </div></div>
     <div class="pad mt12"><button class="btn btn-primary block" data-toast="${esc(L("Opening the Gmail filter guide", "Gmail ఫిల్టర్ గైడ్ తెరుస్తున్నాం", "Gmail फ़िल्टर गाइड खुल रही है"))}">${I("mail", "sm")}<span>${L("Open Gmail with the filter filled in", "ఫిల్టర్ నింపిన Gmail తెరవండి", "भरे हुए फ़िल्टर के साथ Gmail खोलें")}</span></button></div>
     <div class="group mt16">
       <div class="row"><span class="lead ${app.travel.mail ? "wl-in" : ""}">${I("mail")}</span><span class="tx"><span class="t1" style="display:block">${L("Gmail forwarding", "Gmail ఫార్వర్డింగ్", "Gmail फ़ॉरवर्डिंग")}</span><span class="t2" style="display:block">${app.travel.mail ? L("Working · last found 6E 2134, 12 Nov", "పని చేస్తోంది · చివరిగా 6E 2134, 12 నవం", "चालू · पिछली बार 6E 2134, 12 नवं") : L("Paused", "ఆపివేశారు", "रुका हुआ")}</span></span>${tgl(app.travel.mail, 'data-act="tmail"')}</div>
-      <div class="row"><span class="lead">${I("spark")}</span><span class="tx"><span class="t1" style="display:block">${L("Book my airport rides automatically", "నా ఎయిర్‌పోర్ట్ రైడ్‌లు ఆటోమేటిక్‌గా బుక్ చేయండి", "मेरी एयरपोर्ट राइड अपने-आप बुक करें")}</span><span class="t2" style="display:block">${L("We book, then tell you. Cancel free until a chauffeur is assigned.", "మేము బుక్ చేసి మీకు తెలుపుతాం. డ్రైవర్‌ను కేటాయించే వరకు ఉచితంగా రద్దు.", "हम बुक करके बताएँगे। ड्राइवर तय होने तक मुफ़्त रद्द।")}</span></span>${tgl(app.travel.auto, 'data-act="tauto"')}</div>
+      <div class="row"><span class="lead">${I("spark")}</span><span class="tx"><span class="t1" style="display:block">${L("Book my airport rides automatically", "నా ఎయిర్‌పోర్ట్ రైడ్‌లు ఆటోమేటిక్‌గా బుక్ చేయండి", "मेरी एयरपोर्ट राइड अपने-आप बुक करें")}</span><span class="t2" style="display:block">${L("We book, then tell you.", "మేము బుక్ చేసి మీకు చెబుతాం.", "हम बुक करके बताते हैं।")}</span></span>${tgl(app.travel.auto, 'data-act="tauto"')}</div>
     </div>
     ${sh(L("Or, any time", "లేదా, ఎప్పుడైనా", "या, कभी भी"))}
     <div class="pad"><div class="wh-saved">
       <button class="wh-tile" data-go="scan"><span class="wh-ti">${I("scan")}</span><b>${L("Scan the ticket", "టికెట్ స్కాన్", "टिकट स्कैन")}</b><small>${L("E-ticket, PDF, boarding pass", "ఈ-టికెట్, PDF, బోర్డింగ్ పాస్", "ई-टिकट, PDF, बोर्डिंग पास")}</small></button>
       <button class="wh-tile" data-go="airport"><span class="wh-ti">${I("takeoff")}</span><b>${L("Pick from the board", "బోర్డు నుండి ఎంచుకోండి", "बोर्ड से चुनें")}</b><small>${L("Today's VTZ flights", "ఈరోజు VTZ ఫ్లైట్లు", "आज की VTZ फ़्लाइट")}</small></button>
     </div></div>
-    <div class="pad mt16"><div class="wh-note">${I("lock", "sm")}<span>${L("We never read your inbox. Only the emails your filter forwards reach SAGA, and anything that is not a flight is deleted straight away.", "మీ ఇన్‌బాక్స్ మేము ఎప్పుడూ చదవము. మీ ఫిల్టర్ ఫార్వర్డ్ చేసిన మెయిల్స్ మాత్రమే SAGAకు వస్తాయి; ఫ్లైట్ కానివి వెంటనే తొలగిస్తాం.", "हम आपका इनबॉक्स कभी नहीं पढ़ते। सिर्फ़ फ़िल्टर से फ़ॉरवर्ड हुए ईमेल SAGA तक आते हैं, और जो फ़्लाइट नहीं है वह तुरंत मिटा दिया जाता है।")}</span></div></div>
+    <div class="pad mt16"><div class="wh-note">${I("lock", "sm")}<span>${L("We never read your inbox. Only forwarded flight emails reach SAGA, then they're deleted.", "మీ ఇన్‌బాక్స్ మేము చదవము. ఫార్వర్డ్ చేసిన ఫ్లైట్ మెయిల్స్ మాత్రమే వస్తాయి, తర్వాత తొలగిస్తాం.", "हम आपका इनबॉक्स नहीं पढ़ते। सिर्फ़ फ़ॉरवर्ड हुए फ़्लाइट ईमेल आते हैं, फिर मिटा दिए जाते हैं।")}</span></div></div>
   </div>`;
 });
 
@@ -1523,7 +1519,7 @@ function toast(msg, title) {
   t.classList.add("on"); clearTimeout(tt); tt = setTimeout(() => t.classList.remove("on"), 2600);
 }
 
-SC.home.mount = el => { const box = el.querySelector(".hm-spin"); if (box) SagaStage.spin(box, { set: "hero", alpha: true, start: app.spinAt || 3, hint: false, fit: "contain", zoom: 1.32, oy: -.02 }); const tick = () => { if (cur !== "home") return; el.querySelectorAll("[data-cd]").forEach(x => (x.textContent = countdown())); timers.push(setTimeout(tick, 1000)); }; tick(); };
+SC.home.mount = el => { const box = el.querySelector(".hm-spin"); if (box) SagaStage.spin(box, { set: "hero", alpha: true, start: app.spinAt || 0, intro: app.spinAt ? 0 : 3, idle: false, ease: 2.2, hint: false, fit: "contain", zoom: 1.32, oy: -.02 }); const tick = () => { if (cur !== "home") return; el.querySelectorAll("[data-cd]").forEach(x => (x.textContent = countdown())); timers.push(setTimeout(tick, 1000)); }; tick(); };
 SC.options.mount = el => c3mount(el, "mini", { start: "three", distK: 1.0 });
 SC.assigned.mount = el => c3mount(el, "mini", { start: "three", distK: 0.95 });
 SC.welcome.mount = el => {
@@ -1556,7 +1552,7 @@ SC.intro2.mount = el => {
 SC.ready.mount = el => { const sp = SagaStage.spin(el.querySelector(".ready-spin"), { set: "hero", alpha: true, start: 18, hint: false, idle: false, fit: "contain", zoom: 1.45, oy: -.04, ease: 1.4 }); timers.push(setTimeout(() => sp.to(36), 500)); };
 SC.vehicle.mount = el => {
   SagaStage.unveil(el.querySelector("#luxstg"), { set: "p5" });
-  SagaStage.spin(el.querySelector(".lux-spin"), { set: "hero", alpha: true, fit: "contain", zoom: 1.25, oy: 0, hintText: L("Drag to turn", "తిప్పడానికి లాగండి", "घुमाने के लिए खींचें") });
+  SagaStage.spin(el.querySelector(".lux-spin"), { set: "hero", alpha: true, idle: false, intro: 4, ease: 2.2, fit: "contain", zoom: 1.25, oy: 0, hintText: L("Drag to turn", "తిప్పడానికి లాగండి", "घुमाने के लिए खींचें") });
 };
 document.addEventListener("click", e => {
   const b = e.target.closest("[data-lux]"); if (!b) return;

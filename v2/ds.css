@@ -533,13 +533,13 @@ button.or-ctl{cursor:pointer}
 .ar-car{position:absolute;left:50%;top:44px;width:370px;margin-left:-185px;aspect-ratio:1400/900;animation:arIn 1.4s var(--spring) both}
 .ar-car img{width:100%;height:100%;display:block;mix-blend-mode:normal}
 @keyframes arIn{from{opacity:0;transform:translateY(18px) scale(.94)}to{opacity:1;transform:none}}
-.tl{position:absolute;border-radius:50%;pointer-events:none;mix-blend-mode:screen;opacity:0;
+.tlg{position:absolute;border-radius:50%;pointer-events:none;mix-blend-mode:screen;opacity:0;
   background:radial-gradient(closest-side,rgba(255,90,80,1),rgba(255,30,40,.6) 40%,rgba(255,20,40,.15) 70%,transparent);animation:tlOn .5s 1s ease-out forwards,tlPulse 3.2s 1.6s ease-in-out infinite}
-.tl.t1{left:24%;top:23%;width:20%;height:6%}
-.tl.t2{left:13%;top:37.5%;width:9%;height:7%}
-.tl.t3{left:37%;top:37.5%;width:10%;height:7%}
-.tl.t4{left:15%;top:57%;width:10%;height:8%;animation-delay:1.15s,1.75s}
-.tl.t5{left:31%;top:59.5%;width:11%;height:8%;animation-delay:1.15s,1.75s}
+.tlg.t1{left:24%;top:23%;width:20%;height:6%}
+.tlg.t2{left:13%;top:37.5%;width:9%;height:7%}
+.tlg.t3{left:37%;top:37.5%;width:10%;height:7%}
+.tlg.t4{left:15%;top:57%;width:10%;height:8%;animation-delay:1.15s,1.75s}
+.tlg.t5{left:31%;top:59.5%;width:11%;height:8%;animation-delay:1.15s,1.75s}
 @keyframes tlOn{to{opacity:1}}
 @keyframes tlPulse{0%,100%{opacity:1}50%{opacity:.62}}
 .ar-h{position:absolute;left:20px;right:20px;bottom:6px;z-index:2;text-align:center}
@@ -1681,3 +1681,54 @@ b,strong,.t-h3,.t1,.row .t1,.dv-job b,.tr-head b{font-weight:500}
 .ob-eyebrow,.dv-role{text-transform:none!important;letter-spacing:0!important;font-weight:500!important;font-size:13.5px!important}
 .hm-spin.spin,.hm-spin,.lux-spin.spin,.ready-spin.spin{background:none!important;box-shadow:none!important}
 :is(.hm-spin,.lux-spin,.ready-spin) canvas{-webkit-mask-image:radial-gradient(ellipse 58% 62% at 50% 52%,#000 62%,transparent 100%);mask-image:radial-gradient(ellipse 58% 62% at 50% 52%,#000 62%,transparent 100%)}
+/* ===== v5.2 motion: everything on the compositor ===== */
+/* the car rests and floats; it turns only when touched (and once on arrival) */
+@keyframes carFloat{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-4px,0)}}
+:is(.hm-spin,.lux-spin,.ready-spin) canvas{-webkit-mask-image:none!important;mask-image:none!important;animation:carFloat 6s ease-in-out infinite;will-change:transform}
+/* live dots: a ring that scales and fades instead of a repainted box-shadow */
+.dotlive,.hh-live i,.jp-ok i,.tr-live i{animation:none!important;position:relative;box-shadow:none!important}
+.dotlive::after,.hh-live i::after,.jp-ok i::after,.tr-live i::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid currentColor;color:var(--live);animation:dotRing 1.8s ease-out infinite;will-change:transform,opacity}
+.tr-live i::after{color:#3BEA68}
+@keyframes dotRing{from{transform:scale(1);opacity:.8}to{transform:scale(2.6);opacity:0}}
+/* Saathi: bars scale, the mic breathes by transform */
+.voice.listening .wave i{animation:wvS 1s ease-in-out infinite!important;transform-origin:50% 50%}
+@keyframes wvS{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+.voice.listening .vmic{animation:micB 1.4s ease-in-out infinite!important}
+@keyframes micB{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+/* the reveal: headlights fade up softly; no giant scaled shutter layer */
+.stg .l-drl .shut{display:none!important}
+.stg.play .l-drl{animation:on .9s .5s cubic-bezier(.3,.6,.2,1) forwards,handOut 1.6s 2.9s linear forwards!important}
+/* glass bars: lighter blur is smoother on mid-range phones and looks the same */
+.tabbar,[data-os] .tabbar{-webkit-backdrop-filter:blur(16px) saturate(140%)!important;backdrop-filter:blur(16px) saturate(140%)!important}
+.voice .wave i{height:24px!important;transition:none!important}.voice:not(.listening) .wave i{transform:scaleY(.33)}
+/* ===== v5.2 density: Cubee's calm. Fewer, shorter lines; consistent rhythm ===== */
+.view .pad{padding-left:20px;padding-right:20px}
+[data-theme] .t-title{font-size:28px!important;line-height:1.12!important}
+.t-sub,p.t-sub,.t-body.muted{font-size:14.5px!important;line-height:1.45!important;color:var(--fg2)!important}
+.t-body{font-size:15.5px;line-height:1.5}
+.row .t1{font-size:15.5px!important;line-height:1.3!important}
+.row .t2{font-size:13px!important;line-height:1.35!important;color:var(--fg2)!important;display:-webkit-box!important;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.row{min-height:58px}
+.sh{margin-top:26px!important;margin-bottom:10px!important}
+.sh h2{font-size:17px!important}
+.mt24{margin-top:22px}
+/* intro: only the front card shows its content; the cards behind are quiet glass */
+.chap-card:not([data-pos="0"]) > *{visibility:hidden}
+/* arrived: tail-light glow placed on the v5 rear render */
+.tlg.t1{left:24%;top:26%;width:21%;height:6%}
+.tlg.t2{left:18.5%;top:38.5%;width:8%;height:7%}
+.tlg.t3{left:39.5%;top:38.5%;width:9%;height:7%}
+.tlg.t4{left:20%;top:55%;width:9%;height:8%}
+.tlg.t5{left:34%;top:56.5%;width:9%;height:8%}
+/* no-cars: room for the perks above the footer */
+.nc-stage{width:240px;height:240px}.nc-ring i{transform-origin:50% 120px}
+.nc-mid{top:44px}.nc-t{font-size:42px}.nc-car{width:200px;margin-left:-100px;bottom:22px}
+.view h1,.t-title,.t-hero,.ob-h,.hm-big+span,.t-sub,.ar-h h1{text-wrap:balance}
+/* v5.2 fit fixes found by the overlap audit */
+.wl-num{padding-right:96px;font-size:17px!important;letter-spacing:.08em!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.eco-big{margin-top:8px!important}
+.eco-head>small{line-height:1.2}
+.nt .grow{position:relative;padding-right:60px}
+.nt time{position:absolute;right:0;top:1px;font-size:12px;opacity:.7}
+.v-vehicle .content{padding-bottom:132px!important}
+.tv-addr{font-size:12.5px!important;letter-spacing:-.01em}.tv-addr span{word-break:normal!important;white-space:nowrap}
