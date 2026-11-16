@@ -2346,8 +2346,6 @@ button.sc-time{border:0;font:inherit;cursor:pointer}
 @keyframes itC{0%,40%{transform:scale(1)}46%,54%{transform:scale(1.6)}60%,100%{transform:scale(1)}}
 /* dock: pill ends, round centre key */
 .tabbar,[data-os] .tabbar,[data-os=android] .tabbar,[data-os=ios] .tabbar{border-radius:999px!important;padding:8px 10px!important}
-.tab-eco,[data-os] .tab-eco{border-radius:999px!important;overflow:hidden}
-.tab-eco *{border-radius:inherit}
 #tabbar.tabbar,[data-theme][data-os] #tabbar{border-radius:999px!important}
 /* intercity: frosted white glass */
 .svc-int{background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.10))!important;-webkit-backdrop-filter:blur(22px) saturate(1.4);backdrop-filter:blur(22px) saturate(1.4);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 0 0 1px rgba(255,255,255,.22),0 22px 44px -24px rgba(0,0,0,.8)!important}
@@ -2358,3 +2356,16 @@ button.sc-time{border:0;font:inherit;cursor:pointer}
 .svc-int .it-bg{stroke:rgba(255,255,255,.18)}
 .svc-int .it-lit{stroke:#fff}
 .svc-int .it-a{fill:#fff}
+
+/* ---------- v7.4 dock: one calm glass pill, round keys, and an eco orb with a progress ring ---------- */
+#tabbar.tabbar,[data-theme][data-os] #tabbar{border-radius:999px!important;padding:7px!important;gap:4px!important;align-items:center!important;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.06)),rgba(16,18,26,.72)!important;border:1px solid rgba(255,255,255,.12)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 18px 40px -16px rgba(0,0,0,.85)!important}
+[data-theme=light] #tabbar.tabbar,[data-theme=light][data-os] #tabbar{background:rgba(255,255,255,.82)!important;border-color:rgba(10,14,33,.08)!important;box-shadow:0 18px 40px -18px rgba(10,14,33,.35)!important}
+#tabbar .tab,[data-os] #tabbar .tab{flex:0 0 54px!important;width:54px!important;height:54px!important;border-radius:50%!important}
+#tabbar .tab-ind{border-radius:50%!important}
+#tabbar .tab-eco{flex:0 0 58px;width:58px;height:58px;margin:0!important;border-radius:50%!important;overflow:visible}
+#tabbar .tab-eco::before{content:"";position:absolute;inset:-3px;border-radius:50%;z-index:2;pointer-events:none;background:conic-gradient(from -90deg,#3BEA68 calc(var(--lvl) * 360deg),rgba(255,255,255,.14) 0);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2.6px),#000 calc(100% - 2.4px));mask:radial-gradient(farthest-side,transparent calc(100% - 2.6px),#000 calc(100% - 2.4px));filter:drop-shadow(0 0 4px rgba(59,234,104,.6))}
+#tabbar .tab-eco .ev{inset:3px;border-radius:50%}
+#tabbar .tab-eco .eh{border-radius:50%}
+#tabbar .tab-eco .ep{display:none}
+#tabbar .tab-eco.full::after{inset:-7px;border-radius:50%}
+#tabbar .tab-eco .ei .ic{width:22px;height:22px}
