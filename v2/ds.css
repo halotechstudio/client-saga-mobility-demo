@@ -2322,3 +2322,25 @@ button.sc-time{border:0;font:inherit;cursor:pointer}
 .svc-scene.onb .trip{height:62px}
 .svc-int .svc-scene.onb .row-flex{font-size:13px!important}
 .svc.pulse .svc-scene.onb{animation:cardPop .7s cubic-bezier(.3,1.4,.5,1)}
+/* v7.3: scheduled week animates; intercity is a white card with a car driving the route */
+.onb-top{display:flex;align-items:flex-end;justify-content:space-between}
+.onb-big{font-size:30px;font-weight:300;letter-spacing:-.02em;line-height:1}
+.onb-big small{font-size:12px;margin-left:3px;opacity:.7;font-weight:500}
+.wk-anim{display:flex;gap:6px}
+.wk-anim i{flex:1;height:46px;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-style:normal;font-size:11px;font-weight:600;background:rgba(255,255,255,.08);color:rgba(255,255,255,.5)}
+.wk-anim i b{font-size:15px}
+.wk-anim i.on{animation:wkLight 5.6s calc(var(--k) * .32s) infinite;background:rgba(255,255,255,.08);color:#fff}
+@keyframes wkLight{0%,4%{background:rgba(255,255,255,.08);color:#fff;transform:none;box-shadow:none}10%{background:#fff;color:#1B2470;transform:translateY(-4px) scale(1.06);box-shadow:0 8px 18px -6px rgba(255,255,255,.55)}16%,82%{background:#fff;color:#1B2470;transform:none;box-shadow:0 0 14px rgba(255,255,255,.25)}92%,100%{background:rgba(255,255,255,.08);color:#fff;transform:none;box-shadow:none}}
+.svc-int{background:linear-gradient(180deg,#FFFFFF,#EEF2F8)!important;color:#0A0E21}
+.svc-int::after{background:radial-gradient(70% 60% at 85% 0%,rgba(59,234,104,.16),transparent 60%)!important}
+.svc-int .svc-txt small,.svc-int .svc-txt span,.svc-int .eyebrow{color:rgba(10,14,33,.6)!important}
+.svc-int .svc-txt b{color:#0A0E21}
+.onb-fare{height:26px;padding:0 10px;border-radius:999px;display:inline-flex;align-items:center;font-size:12px;font-weight:600;color:#0E7A43;background:rgba(59,234,104,.16)}
+.ic-trip{position:relative;display:block;height:74px}
+.ic-trip svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.it-bg{fill:none;stroke:rgba(10,14,33,.14);stroke-width:7;stroke-linecap:round}
+.it-lit{fill:none;stroke:#2449F0;stroke-width:2.5;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:itLit 5.5s linear infinite}
+@keyframes itLit{0%{stroke-dashoffset:1}42%,56%{stroke-dashoffset:.53}100%{stroke-dashoffset:0}}
+.it-a{fill:#0A0E21}.it-b{fill:#2449F0}
+.it-c{fill:#3BEA68;transform-box:fill-box;transform-origin:center;animation:itC 5.5s infinite}
+@keyframes itC{0%,40%{transform:scale(1)}46%,54%{transform:scale(1.6)}60%,100%{transform:scale(1)}}
