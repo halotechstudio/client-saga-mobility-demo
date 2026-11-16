@@ -2344,3 +2344,8 @@ button.sc-time{border:0;font:inherit;cursor:pointer}
 .it-a{fill:#0A0E21}.it-b{fill:#2449F0}
 .it-c{fill:#3BEA68;transform-box:fill-box;transform-origin:center;animation:itC 5.5s infinite}
 @keyframes itC{0%,40%{transform:scale(1)}46%,54%{transform:scale(1.6)}60%,100%{transform:scale(1)}}
+/* dock: pill ends, round centre key */
+.tabbar,[data-os] .tabbar,[data-os=android] .tabbar,[data-os=ios] .tabbar{border-radius:999px!important;padding:8px 10px!important}
+.tab-eco,[data-os] .tab-eco{border-radius:999px!important;overflow:hidden}
+.tab-eco *{border-radius:inherit}
+#tabbar.tabbar,[data-theme][data-os] #tabbar{border-radius:999px!important}
