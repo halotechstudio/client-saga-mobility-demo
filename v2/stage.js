@@ -40,6 +40,7 @@
   /* ---------- unveil ---------- */
   const SETS = {
     p: { drl: "unveil-p-1-drl", led: "unveil-p-2-led", top: "unveil-p-3-top", lit: "unveil-p-4-lit", nose: [27, 49], cone: { x: .55, y: .32, w: .55, h: .45 } },
+    p5: { drl: "unveil5-p-1-drl", led: "unveil5-p-2-led", top: "unveil5-p-3-top", lit: "unveil5-p-4-lit", nose: [20, 47], cone: { x: .5, y: .3, w: .6, h: .4 } },
     l: { drl: "unveil-l-1-drl", led: "unveil-l-2-led", lit: "unveil-l-4-lit", nose: [33, 47], cone: { x: .5, y: .3, w: .4, h: .5 } }
   };
   function unveil(el, o = {}) {
@@ -78,12 +79,12 @@
 
   /* ---------- 360 spin ----------
      Positions are in 10° steps (0..36) whatever the frame count, so callers stay simple. */
-  const SPIN = { spin: 36, spin2: 72 };
+  const SPIN = { spin: 36, spin2: 72, hero: 72 };
   function spin(el, o = {}) {
     const set = o.set || "spin2", n = SPIN[set] || 36, k = n / 36, fit = o.fit || "cover", zoom = o.zoom || 1, oy = o.oy || 0;
     el.classList.add("spin");
     el.innerHTML = `<canvas></canvas><span class="spin-load"><i></i></span>${o.hint === false ? "" : `<span class="spin-hint">${o.hintText || "Drag to turn"}</span>`}`;
-    const cv = el.querySelector("canvas"), g = cv.getContext("2d", { alpha: false });
+    const cv = el.querySelector("canvas"), g = cv.getContext("2d", { alpha: !!o.alpha });
     cv.style.cssText = "position:absolute;inset:0;width:100%;height:100%";
     const frames = new Array(n); let got = 0;
     let pos = o.start || 0, vel = 0, drag = false, lx = 0, idle = o.idle !== false, lastTouch = 0, drawnAt = NaN, raf = 0;
@@ -101,7 +102,7 @@
       const a = Math.floor(f), b = (a + 1) % n, t = f - a, A = near(a); if (!A) return;
       const W = el.clientWidth, H = el.clientHeight;
       if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
-      g.setTransform(dpr, 0, 0, dpr, 0, 0); g.globalAlpha = 1; g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
+      g.setTransform(dpr, 0, 0, dpr, 0, 0); g.globalAlpha = 1; if (o.alpha) g.clearRect(0, 0, W, H); else { g.fillStyle = "#000"; g.fillRect(0, 0, W, H); }
       const r = rect(A); g.drawImage(A, r[0], r[1], r[2], r[3]);
       const B = frames[b]; if (B && t > .01) { g.globalAlpha = t; g.drawImage(B, r[0], r[1], r[2], r[3]); g.globalAlpha = 1; }
       drawnAt = f;

@@ -1521,3 +1521,163 @@ a.btn{text-decoration:none}
 :is(.lg-brand,.kpi.acc,.eco-pc,.dv-offer,.wx-hero,.ar-hero,.ob,.lux,.pc.blue,.wx-total,.sy-pass){--tx-answer:linear-gradient(180deg,#FFFFFF 18%,#CFF7DE 70%,#7FE3A8 100%)}
 [data-theme=light] .eco-hero img{filter:none}
 [data-theme=light] .eco-hero{background:radial-gradient(60% 50% at 50% 80%,rgba(59,234,104,.18),transparent 70%)}
+
+/* =====================================================================
+   v5.1: Cubee, properly. Same type, icons and glass as the reference; only the colours are SAGA's
+   (blue light with the logo's green as "green energy" from below).
+   Type: Inter. Light 300 for headlines and hero numbers, 400 for numbers in tiles, 500 for labels you tap.
+   Icons: hairline 1.5px strokes. Glass: tinted with the canvas hue, one even 1px hairline, no heavy shadow.
+   ===================================================================== */
+:root,[data-os=ios],[data-os=android]{--font:"Inter","Noto Sans Telugu","Noto Sans Devanagari",system-ui,sans-serif;--serif:var(--font);--ics:1.5}
+body,button,input,textarea,select{font-family:var(--font)!important;font-feature-settings:"cv11","ss01","ss03"}
+.ic{stroke-width:var(--ics,1.5)!important}
+.ic.sm{stroke-width:1.6!important}
+:root{--r2:16px;--r3:20px;--r4:28px;
+  --hair:1px solid rgba(255,255,255,.09);
+  --tile:linear-gradient(180deg,rgba(150,165,255,.085),rgba(120,225,175,.045));
+  --tx-answer:linear-gradient(180deg,#FFFFFF 30%,rgba(255,255,255,.78) 70%,rgba(190,245,215,.55) 100%)}
+[data-theme=light]{--hair:1px solid rgba(10,14,33,.07);--tile:linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,.78));--tx-answer:linear-gradient(180deg,#0A0E21 40%,rgba(10,14,33,.72))}
+
+/* type weights, as in the reference */
+.t-hero,.ob-h,.lux-h,.serif,.hd h1,.ar-h h1,.vc-hero h1,.wx-hero-in h1,.eco-big,.hm-big,.nf-move b,.tr-time,.sc-s-mid b,.wx-q-top b,.wx-total b,.dv-oc b{font-weight:300!important;letter-spacing:-.035em!important}
+.t-title,.large-title,[data-os=android] .tb-headline{font-weight:400!important;letter-spacing:-.03em!important}
+:is(.kpi .v,.as-eta b,.ar-tot>div>b,.or-min b,.dv-eta b,.wl-bal,.of-pts b,.dv-earn>b,.nc-t,.dv-wc b,.wh-fare b,.bk-price b,.ac-stats b,.dv-kpi b,.dv-wk-h b,.ic-fare b,.dv-tips b,.eco-t b,.eco-pts b,.eco-pc-n b,.dv-greenkm b,.wx-eco b){font-weight:400!important;letter-spacing:-.03em}
+.t-hero em,.t-title em,.ob-h em,.lux-h em,.serif em,.hd h1 em,.wx-hero-in h1 em,.ar-h h1 em{font-weight:300!important}
+.nav-title,.tb-title{font-weight:600!important;font-size:17px}
+b,strong,.t-h3,.t1,.row .t1,.dv-job b,.tr-head b{font-weight:500}
+.btn{font-weight:500!important;letter-spacing:-.01em}
+.eyebrow,.t-label,small{font-weight:400}
+
+/* glass: one recipe everywhere */
+[data-theme] :is(.group,.pcard,.card:not(.stage):not(.tint),.tile,.permcard,.offer,.ticket,.drv,.route,.tele,.tipbar,.field,.stepper,.lg:not(.btn),.panel,.kpi:not(.acc),.tr-card,.tr-past,.tr-fly,.ac-card,.otk-body,.of-field,.dv-glass,.dv-kpi,.dv-perm,.dv-job,.dv-radar,.dv-health,.dv-week,.ar-rcpt,.wh-tile:not(.lg-brand),.nc-perk,.nf,.tv-steps,.board,.eco-t,.eco-flow,.eco-chart,.eco-r,.hm-tile,.or-ctl,.wl-top-ups button,.ac-theme button,.vc-tries button,.ic-d:not(.on),.sc-time,.wk button:not(.on),.ln-next span,.dv-keys button,.dv-code span,.dv-otp span,.sy-facts,.wh-note,.ch-note){
+  background:var(--tile)!important;border:var(--hair)!important;box-shadow:none!important}
+[data-theme=dark] :is(.rsheet,.sheet){background:linear-gradient(180deg,rgba(22,28,52,.92),rgba(8,12,22,.96))!important;border-top:var(--hair)!important;box-shadow:0 -20px 50px -20px rgba(0,0,0,.8)!important}
+.group .row+.row,.group .row:not(:first-child){border-top:1px solid rgba(255,255,255,.06)!important}
+[data-theme=light] .group .row+.row{border-top-color:rgba(10,14,33,.06)!important}
+.row .lead,.pico{border-radius:12px!important;background:rgba(255,255,255,.06)!important;border:var(--hair)}
+[data-theme=light] .row .lead{background:#F1F3F8!important}
+
+/* lit cards: the same glass, washed with blue and green light instead of a solid fill */
+.lg-brand,.pc.blue,[data-os] .pc.blue,.kpi.acc,.wl-w,.sy-pass,.wx-total,.eco-pc,.dv-online.on,.tr-pass,.sc-series,.of-pts,.eco-pts,.dv-earn,.dv-bonus,.ap-scan,.wx-booked,.dv-badge{
+  background:radial-gradient(110% 80% at 50% 125%,rgba(59,234,104,.42),transparent 62%),radial-gradient(120% 110% at 30% 0%,rgba(110,128,255,.42),transparent 70%),rgba(16,22,48,.75)!important;
+  border:1px solid rgba(255,255,255,.14)!important;box-shadow:0 24px 50px -30px rgba(63,81,181,.9)!important;color:#fff}
+.lg-brand::after{background:linear-gradient(180deg,rgba(255,255,255,.10),transparent 30%)!important}
+.ch-msgs .bub.me,.tr-fly-ic,.wx-step b,.tv-n,.dv-tick.on .dv-box,.dv-perm.on .dv-perm-i,.dv-job.next .dv-node,.wk button.on i,.sc-cal .calg .cd.on,.ic-d.on,.dv-route i.s,.otk.brand .otk-stub{
+  background:linear-gradient(180deg,rgba(130,145,255,.55),rgba(63,81,181,.55)),rgba(20,26,60,.9)!important;border:1px solid rgba(255,255,255,.16)}
+
+/* actions: solid white pills; glass secondaries with a hairline */
+.btn-secondary,[data-os] .btn-secondary{background:rgba(255,255,255,.06)!important;border:var(--hair)!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.chip,[data-os] .chip{background:rgba(255,255,255,.05)!important;border:var(--hair)!important;box-shadow:none!important;font-weight:500}
+[data-theme=dark] .chip.on{background:#fff!important;color:#0A0E21!important;border-color:#fff!important}
+.seg,[data-os] .seg{background:rgba(255,255,255,.05)!important;border:var(--hair);border-radius:999px!important;padding:3px!important}
+.tgl.on{background:#fff!important}.tgl.on::after{background:#0A0E21!important}
+[data-theme=light] .tgl.on{background:#0A0E21!important}[data-theme=light] .tgl.on::after{background:#fff!important}
+
+/* ---------- the dock, as in the reference: square glass keys, no labels, the active one solid white ---------- */
+.tabbar,[data-os] .tabbar{display:flex!important;align-items:center;justify-content:space-between;gap:8px;padding:8px!important;height:auto!important;border-radius:26px!important;
+  background:rgba(12,16,30,.72)!important;border:var(--hair)!important;-webkit-backdrop-filter:blur(24px) saturate(150%);backdrop-filter:blur(24px) saturate(150%);box-shadow:0 20px 40px -18px rgba(0,0,0,.85)!important}
+[data-theme=light] .tabbar,[data-theme=light][data-os] .tabbar{background:rgba(255,255,255,.75)!important}
+.tabbar .tab,[data-os] .tabbar .tab{flex:0 0 56px!important;width:56px!important;height:56px!important;min-height:0!important;padding:0!important;margin:0!important;border-radius:18px!important;display:grid!important;place-items:center!important;
+  background:rgba(255,255,255,.05)!important;border:var(--hair)!important;color:var(--fg)!important}
+.tabbar .tab .ic,.tabbar .tab .ico{width:22px!important;height:22px!important;background:none!important;margin:0!important;padding:0!important}
+.tabbar .tab .ico{display:grid;place-items:center}
+.tabbar .tab>span:last-child:not(.ico){position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap}
+.tabbar .tab.on,[data-os] .tabbar .tab.on{background:#fff!important;color:#0A0E21!important;border-color:#fff!important;box-shadow:0 8px 20px -8px rgba(255,255,255,.35)!important}
+[data-theme=light] .tabbar .tab.on{background:#0A0E21!important;color:#fff!important;border-color:#0A0E21!important}
+.tabbar .tab-ride{display:none!important}
+
+/* the eco key: a glass vessel that fills with luminous green liquid, one ride at a time */
+.tab-eco{position:relative;flex:0 0 68px;width:68px;height:68px;margin:-14px 0 -4px;padding:0;border:0;border-radius:22px;cursor:pointer;isolation:isolate;
+  background:rgba(8,14,24,.9);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16),0 0 calc(10px + 26px * var(--lvl)) calc(-4px + 6px * var(--lvl)) rgba(59,234,104,calc(.25 + .5 * var(--lvl))),0 16px 30px -12px rgba(0,0,0,.9)}
+.tab-eco .ev{position:absolute;inset:3px;border-radius:19px;overflow:hidden;background:radial-gradient(80% 60% at 50% 0%,rgba(110,128,255,.25),transparent 70%),#060A14}
+.tab-eco .eq{position:absolute;left:0;right:0;bottom:0;height:100%;transform:translateY(calc((1 - var(--lvl)) * 100%));transition:transform 1.6s cubic-bezier(.2,.8,.2,1)}
+.tab-eco .eq b{position:absolute;inset:8px 0 0;background:linear-gradient(180deg,rgba(190,255,215,.95) 0%,#3BEA68 22%,#17B85A 60%,#0B6E3A 100%);box-shadow:inset 0 10px 18px rgba(255,255,255,.25)}
+.tab-eco .eq svg{position:absolute;left:0;top:0;width:200%;height:14px;animation:ecoWave 3.2s linear infinite}
+.tab-eco .eq svg.w2{opacity:.5;animation-duration:5.2s;animation-direction:reverse;top:-2px}
+.tab-eco .eq svg path{fill:rgba(190,255,215,.95)}
+.tab-eco .eq svg.w2 path{fill:#3BEA68}
+@keyframes ecoWave{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.tab-eco .bb{position:absolute;bottom:4px;width:4px;height:4px;border-radius:50%;background:rgba(230,255,240,.9);opacity:0;animation:ecoBub 3s ease-in infinite}
+.tab-eco .bb.b1{left:22%}.tab-eco .bb.b2{left:52%;animation-delay:1.1s;width:3px;height:3px}.tab-eco .bb.b3{left:74%;animation-delay:2s}
+@keyframes ecoBub{0%{opacity:0;transform:translateY(0)}15%{opacity:.9}90%{opacity:.4}100%{opacity:0;transform:translateY(calc(-44px * var(--lvl)))}}
+.tab-eco .eh{position:absolute;inset:0;border-radius:inherit;background:linear-gradient(160deg,rgba(255,255,255,.22),transparent 38%);pointer-events:none;z-index:2}
+.tab-eco .ei{position:absolute;inset:0;z-index:3;display:grid;place-items:center;color:#fff}
+.tab-eco .ei .ic{width:24px;height:24px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))}
+.tab-eco .ep{position:absolute;left:50%;bottom:-20px;transform:translateX(-50%);z-index:3;font-size:10.5px;font-weight:600;color:#3BEA68;white-space:nowrap;letter-spacing:.02em}
+.tab-eco.full::after{content:"";position:absolute;inset:-6px;border-radius:26px;border:1.5px solid rgba(59,234,104,.7);animation:ecoRing 1.8s ease-out infinite}
+@keyframes ecoRing{from{opacity:.9;transform:scale(.94)}to{opacity:0;transform:scale(1.18)}}
+.tab-eco.full .ep{color:#fff;background:#17B85A;padding:2px 7px;border-radius:8px;bottom:-18px}
+.tab-eco:active{transform:scale(.95)}
+
+/* eco tank on the impact screen: same vessel, large */
+.eco-tank{position:relative;display:flex;align-items:center;gap:16px;padding:16px;border-radius:var(--r3);background:var(--tile);border:var(--hair);margin-top:14px}
+.eco-tank .tab-eco{flex:0 0 96px;width:96px;height:120px;margin:0;border-radius:28px;cursor:default}
+.eco-tank .tab-eco .ev{border-radius:25px}
+.eco-tank .tab-eco .ei .ic{width:30px;height:30px}
+.eco-tank b{display:block;font-size:20px;font-weight:500;letter-spacing:-.02em}
+.eco-tank small{display:block;font-size:13.5px;color:var(--fg2);margin-top:2px}
+.eco-tank .btn{margin-top:10px;width:auto;padding:0 18px;height:44px;display:inline-flex;align-items:center;gap:6px}
+
+/* ---------- Home, laid out like the reference ---------- */
+.v-home .content,.v-home{background:var(--glow-up),linear-gradient(180deg,#030409,#05070F 55%,#071025)!important}
+.hm{padding:54px 16px 130px;display:flex;flex-direction:column}
+[data-os=android] .hm{padding-top:44px}
+.hm-top{display:flex;align-items:center;justify-content:space-between}
+.hm-av{width:44px;height:44px;border-radius:50%;border:var(--hair);background:rgba(255,255,255,.05);color:var(--fg);font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.hm-logo .logo-svg,.hm-logo .wordmark{height:20px;width:auto}
+.hm-top .bellwrap .gbtn,.hm-top .bellwrap .ibtn{background:rgba(255,255,255,.05)!important;border:var(--hair)!important}
+.hm-ans{display:flex;flex-direction:column;align-items:center;text-align:center;margin-top:18px}
+.hm-ans>small{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--fg2)}
+.hm-ans>small button{border:0;background:none;color:var(--fg);font:inherit;font-size:14px;cursor:pointer;padding:6px 0}
+.hm-big{font-size:68px;line-height:1;margin-top:4px;background:var(--tx-answer);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hm-big i{font-style:normal;font-size:24px;-webkit-text-fill-color:var(--fg2);margin-left:4px}
+.hm-ans>span{font-size:13.5px;color:var(--fg2);margin-top:6px}
+.hm-stage{position:relative;height:210px;margin:6px -16px 0;isolation:isolate}
+.hm-stage::before{content:"";position:absolute;left:14%;right:14%;bottom:18px;height:70px;border-radius:50%;z-index:-1;background:radial-gradient(closest-side,rgba(59,234,104,.45),rgba(63,81,181,.3) 55%,transparent);animation:breathe 5s ease-in-out infinite}
+.hm-spin{position:absolute;inset:0}
+.hm-stage .hh-live{left:50%;bottom:-2px;transform:translateX(-50%);white-space:nowrap}
+.hm-search{margin-top:14px}
+.hm .quick{margin-top:12px}
+.hm-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.hm-tile{position:relative;display:flex;flex-direction:column;gap:3px;min-height:112px;padding:14px;border-radius:var(--r3);font:inherit;text-align:left;color:var(--fg);cursor:pointer;overflow:hidden}
+.hm-tile.wide{grid-column:span 2;min-height:0}
+.hm-tile.tall{grid-row:span 2}
+.hm-tile>small{font-size:13px;color:var(--fg2)}
+.hm-tile>b{font-size:26px;font-weight:400;letter-spacing:-.03em;margin-top:auto}
+.hm-tile>b i{font-style:normal;font-size:14px;color:var(--fg2);margin-left:2px}
+.hm-tile>span{font-size:12.5px;color:var(--fg2)}
+.hm-tile .ht-ic{position:absolute;right:12px;top:12px;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;color:var(--fg2);border:var(--hair);background:rgba(255,255,255,.04)}
+.hm-fl{display:flex;align-items:center;justify-content:space-between;margin:6px 0 2px}
+.hm-fl b{font-size:22px;font-weight:400;letter-spacing:-.02em}
+.hm-fl i{flex:1;height:1px;margin:0 8px;border-top:1px dashed rgba(255,255,255,.25);position:relative}
+.hm-fl i .ic{position:absolute;left:50%;top:-9px;margin-left:-8px;width:16px;height:16px;color:#fff;background:#0E1428;border-radius:50%}
+.hm-cd{font-size:28px!important;font-weight:300!important;letter-spacing:-.03em;margin-top:auto;font-variant-numeric:tabular-nums}
+.hm-eco{display:flex;align-items:flex-end;gap:10px;margin-top:auto}
+.hm-eco .lvl{position:relative;width:12px;height:52px;border-radius:6px;overflow:hidden;background:rgba(255,255,255,.08);border:var(--hair)}
+.hm-eco .lvl i{position:absolute;left:0;right:0;bottom:0;height:100%;transform-origin:50% 100%;transform:scaleY(var(--lvl));background:linear-gradient(180deg,#CFFFE0,#3BEA68 40%,#0F8F4A);box-shadow:0 0 12px rgba(59,234,104,.7)}
+.hm-eco b{font-size:26px;font-weight:400;letter-spacing:-.03em;line-height:1}
+.hm-week{display:flex;gap:5px;margin-top:8px}
+.hm-week span{flex:1;height:30px;border-radius:9px;display:grid;place-items:center;font-size:12px;font-weight:500;color:var(--fg2);border:var(--hair)}
+.hm-week span.on{background:#fff;color:#0A0E21;border-color:#fff}
+[data-theme=light] .hm-week span.on{background:#0A0E21;color:#fff}
+.hm-flow{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
+.hm-flow span{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12px;color:var(--fg2)}
+.hm-flow span b{font-size:15px;font-weight:500;color:var(--fg)}
+.hm-flow span.g b{color:#3BEA68}
+.hm-flow>i{color:var(--fg2);opacity:.5}
+[data-theme=light] .v-home,[data-theme=light] .v-home .content{background:radial-gradient(120% 50% at 50% 112%,rgba(59,234,104,.22),transparent 62%),radial-gradient(130% 60% at 50% 108%,rgba(63,81,181,.18),transparent 72%),linear-gradient(180deg,#F5F7FB,#EAF3F0)!important}
+/* v5.1 tweaks: quick places on the same hairline glass as the tiles */
+.qk-c,[data-os] .qk-c,[data-theme] .qk-c,[data-theme] .qk-c.dark{background:var(--tile)!important;border:var(--hair)!important;box-shadow:none!important;border-radius:18px!important;color:var(--fg)!important}
+.qk-l{font-weight:500}
+.hm-stage{height:224px}
+.search2 .s-mic{background:#fff!important;color:#0A0E21!important;box-shadow:none!important}
+[data-theme=light] .search2 .s-mic{background:#0A0E21!important;color:#fff!important}
+.home .search2,.hm-search{background:var(--tile)!important;border:var(--hair)!important;box-shadow:none!important}
+.lux-stage .stg img{object-position:50% 8%}
+/* v5.1: headings as light as the reference, everywhere */
+[data-theme] :is(.t-title,.large-title,.tb-headline,.lux .t-title,.v-intro3 .t-title,.v-signin .t-title,.v-setup .t-title){font-weight:400!important;letter-spacing:-.03em!important}
+[data-theme] .view h2:not(.serif),[data-theme] .sh h2{font-weight:500!important;letter-spacing:-.02em!important}
+[data-theme] .view h3,.t-h3{font-weight:500!important}
+.ob-eyebrow,.dv-role{text-transform:none!important;letter-spacing:0!important;font-weight:500!important;font-size:13.5px!important}
+.hm-spin.spin,.hm-spin,.lux-spin.spin,.ready-spin.spin{background:none!important;box-shadow:none!important}
+:is(.hm-spin,.lux-spin,.ready-spin) canvas{-webkit-mask-image:radial-gradient(ellipse 58% 62% at 50% 52%,#000 62%,transparent 100%);mask-image:radial-gradient(ellipse 58% 62% at 50% 52%,#000 62%,transparent 100%)}

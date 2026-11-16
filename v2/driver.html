@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>SAGA Chauffeur</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Serif+Telugu:wght@500;600&family=Noto+Serif+Devanagari:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Serif+Telugu:wght@500;600&family=Noto+Serif+Devanagari:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="core.css">
 <style>
 body{background:#E4E4E8;color:var(--fg);overflow:hidden}
@@ -165,7 +165,7 @@ body.embed,body.bare{background:transparent}
 .nt b{font-size:16px;display:block}.nt p{font-size:14.5px;color:var(--fg2);margin-top:2px;line-height:1.4}.nt time{font-size:13px;color:var(--fg2);display:block;margin-top:4px}
 </style>
 <link rel="stylesheet" href="system.css?v=9">
-<link rel="stylesheet" href="ds.css?v=20">
+<link rel="stylesheet" href="ds.css?v=26">
 </head>
 <body>
 <div class="shell">
@@ -180,8 +180,8 @@ body.embed,body.bare{background:transparent}
     <div class="homebar"></div>
   </div></div></div></main>
 </div>
-<script src="core.js?v=33"></script>
-<script src="stage.js?v=6"></script>
+<script src="core.js?v=34"></script>
+<script src="stage.js?v=8"></script>
 <script>
 (function () {
 const S = SAGA; S.state.os = "android"; S.apply();
@@ -235,7 +235,7 @@ def("welcome", { g: "Onboarding", n: "Welcome · the unveil", sb: "light", what:
       <p class="ob-p ob-in" style="animation-delay:2.5s">${L("Dispatch plans every job, every charge and every break. You drive; we handle the rest.", "ప్రతి పని, ఛార్జింగ్, విరామం డిస్పాచ్ ప్లాన్ చేస్తుంది. మీరు నడపండి; మిగతాది మేము.", "हर काम, चार्जिंग और ब्रेक डिस्पैच तय करता है। आप चलाइए; बाकी हम।")}</p>
       <div class="ob-cta ob-in" style="animation-delay:2.7s">${btn(L("Sign in with employee ID", "ఉద్యోగి IDతో సైన్ ఇన్", "कर्मचारी ID से साइन इन"), { go: "signin", icon: "user" })}</div>
     </div>
-  </div>`, el => { const s = SagaStage.unveil(el.querySelector("#unv"), { set: "p", autoplay: false, instant: st.unveiled }); s.ready.then(() => s.play()); st.unveiled = 1; });
+  </div>`, el => { const s = SagaStage.unveil(el.querySelector("#unv"), { set: "p5", autoplay: false, instant: st.unveiled }); s.ready.then(() => s.play()); st.unveiled = 1; });
 
 def("signin", { g: "Onboarding", n: "Sign in", nav: 1, foot: 1, what: "Employee ID on a glass badge with the chauffeur's photo, the registered mobile, and the SMS code filling itself digit by digit.", why: "Only SAGA staff can use this app, and the phone stays tied to the chauffeur.", fl: "<code>POST /driver/auth</code> + SMS Retriever." }, () => `
   ${bar(L("Sign in", "సైన్ ఇన్", "साइन इन"))}

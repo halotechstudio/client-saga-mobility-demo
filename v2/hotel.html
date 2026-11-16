@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SAGA for Hotels</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Serif+Telugu:wght@500;600&family=Noto+Serif+Devanagari:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Serif+Telugu:wght@500;600&family=Noto+Serif+Devanagari:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="core.css">
 <link rel="stylesheet" href="web.css">
-<link rel="stylesheet" href="ds.css?v=20">
+<link rel="stylesheet" href="ds.css?v=26">
 </head>
 <body>
 <div class="app">
@@ -17,8 +17,8 @@
 </div>
 <div class="drawer" id="drawer"></div>
 <div class="toastw" id="toast"></div>
-<script src="core.js?v=33"></script>
-<script src="stage.js?v=6"></script>
+<script src="core.js?v=34"></script>
+<script src="stage.js?v=8"></script>
 <script>
 (function () {
 const S = SAGA; S.state.os = "web"; S.apply();
@@ -112,7 +112,7 @@ P.book = () => {
     </div>
     <div class="grid" style="align-content:start">
       <div class="panel wx-quote">
-        <img src="${SagaStage.src("cut-side")}" alt="${S.VEHICLE.short}">
+        <img src="${SagaStage.src("cut5-side")}" alt="${S.VEHICLE.short}">
         <div class="wx-q-top"><div><span class="eyebrow">${S.VEHICLE.short} · 6 riders · ${S.VEHICLE.bags} bags</span><b class="serif">${inr(fare)}</b><small>Fixed fare, includes GST</small></div></div>
         <div class="li"><div style="flex:1"><b>Your commission (${RATE * 100}%)</b><span class="s">Credited in the monthly statement</span></div><b class="wx-plus">+ ${inr(com)}</b></div>
         <div class="li"><div style="flex:1"><b>Guest sees</b><span class="s">${st.pay === "room" ? "On their room bill" : st.pay === "guest" ? "In the UPI link" : "Nothing to pay"}</span></div><b>${st.pay === "account" ? "Complimentary" : inr(fare)}</b></div>
@@ -139,7 +139,7 @@ P.track = () => {
       </div>
     </div>
     <div class="grid" style="align-content:start">
-      <div class="panel wx-chauf"><img src="${SagaStage.src("cut-front")}" alt="${S.VEHICLE.short}"><div><span class="eyebrow">Your guest's chauffeur</span><b>Kiran B.</b><small>★ 4.9 · ${S.VEHICLE.short} · <span class="t-num">${S.VEHICLE.plate}</span></small></div></div>
+      <div class="panel wx-chauf"><img src="${SagaStage.src("cut5-front")}" alt="${S.VEHICLE.short}"><div><span class="eyebrow">Your guest's chauffeur</span><b>Kiran B.</b><small>★ 4.9 · ${S.VEHICLE.short} · <span class="t-num">${S.VEHICLE.plate}</span></small></div></div>
       <div class="panel"><h2>Progress</h2>
         <div class="wx-steps">${TRK.map(([ic, t, s], i) => `<div class="${i < k ? "done" : i === k ? "now" : ""}"><span>${I(i < k ? "check" : ic, "sm")}</span><div><b>${t}</b><small>${s}</small></div></div>`).join("")}</div>
       </div>

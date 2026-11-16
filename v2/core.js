@@ -348,7 +348,7 @@
      Neutral compact-SUV illustration used as the photo stand-in for SAGA Luxe.
      graphite aero wheels, LED signature front and rear. A neutral illustration, not a manufacturer drawing. Replace with SAGA's own photography when supplied. */
   let carN = 0;
-  S.car = (o = {}) => `<img class="carimg ${o.cls || ""}" src="assets/render/cut-side.webp" alt="SAGA Luxe" draggable="false" loading="lazy">`;
+  S.car = (o = {}) => `<img class="carimg ${o.cls || ""}" src="assets/render/cut5-side.webp" alt="SAGA Luxe" draggable="false" loading="lazy">`;
   S.carSvg = function (o = {}) {
     const id = "c" + (++carN);
     const reflect = o.reflect !== false;
