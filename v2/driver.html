@@ -165,7 +165,7 @@ body.embed,body.bare{background:transparent}
 .nt b{font-size:16px;display:block}.nt p{font-size:14.5px;color:var(--fg2);margin-top:2px;line-height:1.4}.nt time{font-size:13px;color:var(--fg2);display:block;margin-top:4px}
 </style>
 <link rel="stylesheet" href="system.css?v=9">
-<link rel="stylesheet" href="ds.css?v=16">
+<link rel="stylesheet" href="ds.css?v=20">
 </head>
 <body>
 <div class="shell">
@@ -424,6 +424,7 @@ def("done", { g: "On the job", n: "Trip complete", foot: 1, what: "A glowing che
     <p class="t-sub mt4">${L("Paid by UPI · nothing to collect", "UPI ద్వారా చెల్లించారు · వసూలు లేదు", "UPI से भुगतान · कुछ लेना नहीं")}</p>
     <div class="dv-earn lg-brand mt16"><small>${L("Earned today", "ఈ రోజు సంపాదన", "आज की कमाई")}</small><b>₹<span class="t-num" data-count="${1040 + (st.tipToday || 0)}">${(1040 + (st.tipToday || 0)).toLocaleString("en-IN")}</span></b>
       <div class="dv-earn-r"><span>${L("Day pay", "రోజు జీతం", "दिन का वेतन")}<b>₹950</b></span><span>${L("On-time bonus", "సమయ బోనస్", "समय बोनस")}<b>+₹40</b></span><span>${L("Tips", "టిప్స్", "टिप")}<b>+₹${50 + (st.tipToday || 0)}</b></span></div></div>
+    <button class="dv-eco mt12" data-toast="${esc(L("Counted in your green-km bonus", "మీ గ్రీన్ కి.మీ బోనస్‌లో లెక్కించాం", "आपके ग्रीन किमी बोनस में गिना गया"))}">${I("leaf", "sm")}<span><b>1.6 kg CO₂</b> ${L("kept out of the air on this trip", "ఈ ట్రిప్‌లో గాలిలోకి చేరలేదు", "इस ट्रिप में हवा में नहीं गई")}</span></button>
     <div class="dv-kpis mt12">${kpi(L("Distance", "దూరం", "दूरी"), 12.4, "km")}${kpi(L("Time", "సమయం", "समय"), 27, "min")}${kpi(L("Fare", "ఛార్జీ", "किराया"), "₹287", "", false)}</div>
     <div class="t-h3 mt20">${L("Rate", "రేటింగ్", "रेट करें")} ${st.job.rider.split(" ")[0]}</div>
     <div class="ar-stars mt8 ${st._burst ? "rated" : ""}">${[1, 2, 3, 4, 5].map(n => `<button class="${n <= st.rating ? "on" : ""}" style="--d:${(n - 1) * 60}ms" data-act="rate" data-v="${n}" aria-label="${n}">${I("star")}<i></i></button>`).join("")}</div>
@@ -477,6 +478,7 @@ def("profile", { g: "Car & me", n: "Me · earnings and shift", tab: "me", what: 
       <p class="dv-wk-f">${L("Day pay ₹950 + on-time bonus + tips · paid monthly to HDFC ••4410", "రోజు జీతం ₹950 + సమయ బోనస్ + టిప్స్ · నెలకు HDFC ••4410కి", "दिन का वेतन ₹950 + समय बोनस + टिप · हर महीने HDFC ••4410 में")}</p>
     </div>
     <div class="dv-kpis mt12">${kpi(L("Trips", "ట్రిప్పులు", "ट्रिप"), 31)}${kpi(L("Safety", "భద్రత", "सुरक्षा"), 98, "/100")}${kpi(L("Rating", "రేటింగ్", "रेटिंग"), 4.9, "★")}</div>
+    <div class="dv-greenkm mt12"><span class="eco-ri">${I("leaf")}</span><div class="grow"><small>${L("Your electric km this month", "ఈ నెల మీ ఎలక్ట్రిక్ కి.మీ", "इस महीने आपके इलेक्ट्रिक किमी")}</small><b class="t-num"><span data-count="1240">1,240</span> km</b><span>${L("161 kg CO₂ kept out of Vizag's air for your riders", "మీ రైడర్ల కోసం 161 కిలో CO₂ ఆదా", "आपकी सवारियों के लिए 161 किलो CO₂ बचाई")}</span></div></div>
     <div class="dv-bonus mt12 lg-brand"><div class="dv-wk-h"><div><small>${L("November bonus", "నవంబర్ బోనస్", "नवंबर बोनस")}</small><b>₹<span class="t-num" data-count="1200">1,200</span><i> / ₹1,500</i></b></div><span class="dv-up on">${L("on track", "సరైన దారిలో", "सही राह पर")}</span></div><div class="dv-bbar"><i style="transform:scaleX(.8)"></i></div><p>${L("For 98%+ on time and a safety score above 95.", "98%+ సమయానికి, 95కి మించి భద్రత స్కోర్‌కు.", "98%+ समय पर और 95 से ऊपर सुरक्षा स्कोर के लिए।")}</p></div>
   </div>
   ${sh(L("Tips from riders", "రైడర్ల టిప్స్", "सवारियों से टिप"))}

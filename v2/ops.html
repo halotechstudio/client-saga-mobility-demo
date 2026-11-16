@@ -22,7 +22,7 @@
 .form2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media (max-width:820px){.cmdmap{height:360px}.form2{grid-template-columns:1fr}}
 </style>
-<link rel="stylesheet" href="ds.css?v=16">
+<link rel="stylesheet" href="ds.css?v=20">
 </head>
 <body>
 <div class="app">
@@ -102,7 +102,7 @@ P.command = () => {
   <div class="grid g3" style="margin-top:14px">
     <div class="panel"><h2>Next 2 hours</h2><div class="li"><span class="ico">${I("takeoff")}</span><div style="flex:1"><b>9 airport drops</b><span class="s">all flights on time</span></div></div><div class="li"><span class="ico">${I("landing")}</span><div style="flex:1"><b>4 airport pickups</b><span class="s">1 delayed, adjusted</span></div></div><div class="li"><span class="ico">${I("repeat")}</span><div style="flex:1"><b>14 scheduled rides</b><span class="s">12 same-chauffeur matches</span></div></div></div>
     <div class="panel wx-lit"><h2>Demand vs. fleet</h2><p class="note">Peak forecast 17:30–19:30: 31 requests for 14 cars on shift. Suggest moving SG-14's shift to start at 16:00.</p><button class="btn btn-secondary sm" style="margin-top:12px" data-toast="Shift change sent to Kumar S.">Propose shift change</button></div>
-    <div class="panel"><h2>Service today</h2><div class="li"><div style="flex:1"><b>On-time pickups</b></div><b>97%</b></div><div class="li"><div style="flex:1"><b>Avg. rating</b></div><b>4.86</b></div><div class="li"><div style="flex:1"><b>Waitlist kept (not lost)</b></div><b>8 of 9</b></div></div>
+    <div class="panel"><h2>Service today</h2><div class="li"><div style="flex:1"><b>On-time pickups</b></div><b>97%</b></div><div class="li"><div style="flex:1"><b>Avg. rating</b></div><b>4.86</b></div><div class="li"><div style="flex:1"><b>Waitlist kept (not lost)</b></div><b>8 of 9</b></div><div class="li"><div style="flex:1"><b>CO₂ avoided today</b><span class="s">1,320 electric km · vs petrol cabs</span></div><b style="color:#3BEA68">172 kg</b></div></div>
   </div>`;
 };
 

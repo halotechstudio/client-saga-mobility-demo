@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Serif+Telugu:wght@500;600&family=Noto+Serif+Devanagari:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="core.css">
 <link rel="stylesheet" href="web.css">
-<link rel="stylesheet" href="ds.css?v=16">
+<link rel="stylesheet" href="ds.css?v=20">
 </head>
 <body>
 <div class="app">
@@ -182,6 +182,7 @@ P.earnings = () => {
       <div class="wx-total"><span>Net to pay SAGA</span><b class="serif">${inr(91432)}</b><small>Due 7 Dec · UPI or NEFT</small></div>
     </div>
   </div>
+  <div class="panel wx-eco" style="margin-top:14px"><div class="wx-eco-in"><span class="eco-ri">${I("leaf")}</span><div><small>Your guests' impact, November</small><b>214 kg CO₂ avoided</b><span>142 electric rides, 1,650 km instead of petrol cabs. About what 10 trees absorb in a year.</span></div></div><button class="btn btn-secondary" data-toast="Impact certificate (PDF) downloaded for your sustainability report">${I("download")}Impact certificate</button></div>
   <div class="panel" style="margin-top:14px"><h2>Statements</h2>
     <div class="tablewrap"><table class="tb"><thead><tr><th>Month</th><th class="r">Rides</th><th class="r">Gross</th><th class="r">Commission</th><th class="r">Settled</th><th>Status</th><th></th></tr></thead><tbody>
       <tr><td><b>November 2026</b><span class="sub">so far</span></td><td class="r">142</td><td class="r">${inr(184200)}</td><td class="r wx-plus">${inr(18420)}</td><td class="r">${inr(91432)}</td><td>${status(["Due 7 Dec", "acc"])}</td><td class="r"><button class="btn btn-text sm" data-toast="Draft statement opened">View</button></td></tr>

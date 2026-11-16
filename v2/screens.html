@@ -42,7 +42,7 @@ td code{font-family:var(--mono);font-size:13px}
 .webc a{color:var(--accent-ink);font-weight:600}
 @media (max-width:760px){.wrap{padding:0 16px 60px}.top{padding:12px 16px}h1{font-size:32px}.web{grid-template-columns:1fr}table{font-size:13px}th,td{padding:8px}}
 </style>
-<link rel="stylesheet" href="ds.css?v=16">
+<link rel="stylesheet" href="ds.css?v=20">
 </head>
 <body>
 <header class="top"><span id="logo"></span><b>Screen map</b><a href="index.html">← Suite</a><a href="brief.html">Client brief</a>
@@ -93,6 +93,7 @@ const R = {
   rides: ["Trips", "/trips", "GET /rides, GET /series", "Airport pass, weekday series with week dots and the car, past trips with invoices"],
   offers: ["Offers", "/offers", "GET /offers, POST /promo/apply", "Points ring, promo field, luminous tickets with copyable codes (FLYSAGA)"],
   account: ["Account", "/account", "GET /me", "Profile with counting stats, theme previews, settings, signed with the client logo"],
+  impact: ["Eco impact", "/impact", "GET /me/impact, POST /eco/redeem", "CO₂ saved as the big answer, electric km, kWh, petrol avoided, a tree's work, monthly chart, eco points and green rewards"],
   wallet: ["Wallet", "/wallet", "GET /wallet, POST /wallet/topup", "Stack of glass cards; tap one to make it default; balance counts up"],
   chat: ["Chat with chauffeur", "/ride/:id/chat", "WS ride.{id}.chat", "Glass bubbles, quick replies, translated for each side"],
   language: ["Language", "/settings/language", "PATCH /me {locale}", "Large cards in each script with a sample line"],
@@ -116,6 +117,7 @@ const LANES = [
   ["The car", "premium showcase", ["home", "vehicle", "where"]],
   ["Account and settings", "theme, language, voice, flights", ["account", "language", "voicecfg", "travel", "notifications", "lock"]],
   ["Offers and wallet", "points, offers, wallet, chat", ["offers", "wallet", "chat"]],
+  ["Eco impact", "every ride is electric: see it and earn for it", ["home", "impact", "offers"]],
   ["System states", "never a blank screen", ["loading", "offline", "payfail", "softupdate", "update"]]
 ];
 const DL = [["Onboarding", "unveil, staff sign-in, checks, permissions", ["welcome", "signin", "verify", "perms"]], ["Start of shift", "9-photo check on real angles, checklist, slide to go online", ["inspect", "checklist", "duty"]], ["A job", "offer ring → turn cards → free wait → code → trip → earnings", ["assigned", "topickup", "chat", "waiting", "code", "trip", "done"]], ["Car and me", "car health, earnings week, notifications", ["vehicle", "profile", "inbox"]]];

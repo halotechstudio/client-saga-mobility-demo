@@ -404,7 +404,7 @@ body.embed,body.bare{background:transparent}
 .upd-sheet{position:absolute;left:12px;right:12px;bottom:24px;padding:22px;border-radius:28px;background:var(--surface);box-shadow:0 20px 60px rgba(0,0,0,.25)}
 </style>
 <link rel="stylesheet" href="system.css?v=9"><link rel="stylesheet" href="system3.css?v=9"><link rel="stylesheet" href="system4.css?v=9"><link rel="stylesheet" href="system6.css?v=11"><link rel="stylesheet" href="system7.css?v=10">
-<link rel="stylesheet" href="ds.css?v=16">
+<link rel="stylesheet" href="ds.css?v=20">
 </head>
 <body>
 <div class="shell">
@@ -624,6 +624,7 @@ const homeCards = () => {
       <div class="pc-scan"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span><span class="scanline"></span>${I("ticket", "xl")}</div>
       <div class="pc-foot"><span class="pc-cta">${L("Scan your ticket", "టికెట్ స్కాన్ చేయండి", "टिकट स्कैन करें")}</span></div></div>`);
   }
+  { const e = ECO(); out.push(`<div class="pc eco-pc" data-go="impact" role="button"><div class="pc-top"><span class="pc-tag glass">${I("leaf", "sm")}${L("Your impact", "మీ ప్రభావం", "आपका असर")}</span><span class="pc-when">${e.pts} ${L("eco pts", "ఎకో పా.", "इको पॉ.")}</span></div><div class="eco-pc-n"><small>${L("CO₂ saved by riding electric", "ఎలక్ట్రిక్ ప్రయాణంతో ఆదా అయిన CO₂", "इलेक्ट्रिक सफ़र से बची CO₂")}</small><b class="t-num">${e.kg}<i> kg</i></b></div><div class="pc-foot"><span class="pc-t">${L(`≈ ${e.petrol} L of petrol not burnt`, `≈ ${e.petrol} లీ. పెట్రోల్ ఆదా`, `≈ ${e.petrol} ली. पेट्रोल बचा`)}</span>${I("chevr", "sm")}</div></div>`); }
   const dn = [L("S", "ఆ", "र"), L("M", "సో", "सो"), L("T", "మం", "मं"), L("W", "బు", "बु"), L("T", "గు", "गु"), L("F", "శు", "शु"), L("S", "శ", "श")];
   out.push(`<div class="pc" data-go="schedule" role="button"><div class="pc-top"><span class="pc-tag soft">${I("repeat", "sm")}${L("Scheduled", "షెడ్యూల్", "शेड्यूल")}</span><span class="pc-when">${app.series ? "9:00 AM" : ""}</span></div>
     <div class="pc-days">${dn.map((d, i) => `<span class="${app.days.includes(i) ? "on" : ""}">${d}</span>`).join("")}</div>
@@ -870,7 +871,7 @@ def("arrived", { g: "Ride", n: "Arrived", tabs: 0, foot: 1, what: "The car from 
       <div class="ar-h"><span class="eyebrow">${app.dest.split(" · ").pop()} · 7:41 PM</span><h1 class="serif">${L("You've <em>arrived.</em>", "మీరు <em>చేరుకున్నారు.</em>", "आप <em>पहुँच गए।</em>")}</h1></div>
     </div>
     <div class="pad"><div class="ar-rcpt">
-      <div class="ar-tot"><div><small>${L("Paid with", "చెల్లింపు", "भुगतान")} ${pays}</small><b>₹<span class="t-num" data-count="${total}">${total}</span></b></div><span class="ar-co2">${I("leaf", "sm")}<span><b>1.6 kg</b> ${L("CO₂ saved", "CO₂ ఆదా", "CO₂ बचा")}</span></span></div>
+      <div class="ar-tot"><div><small>${L("Paid with", "చెల్లింపు", "भुगतान")} ${pays}</small><b>₹<span class="t-num" data-count="${total}">${total}</span></b></div><button class="ar-co2" data-go="impact">${I("leaf", "sm")}<span><b>1.6 kg</b> ${L("CO₂ saved", "CO₂ ఆదా", "CO₂ बचा")}<small>+16 ${L("eco points", "ఎకో పాయింట్లు", "इको पॉइंट")} ›</small></span></button></div>
       <div class="ar-perf" aria-hidden="true"></div>
       <button class="ar-more" data-act="rcpt">${app.rcpt ? L("Hide fare details", "వివరాలు దాచండి", "विवरण छिपाएँ") : L("Fare details", "ఛార్జీ వివరాలు", "किराये का विवरण")}${I(app.rcpt ? "chevu" : "chevd", "sm")}</button>
       ${app.rcpt ? `<div class="ar-list"><div><span>${L("Base fare", "బేస్ ఛార్జీ", "बेस किराया")}</span><b class="t-num">₹50</b></div><div><span>${L("12.4 km × ₹18", "12.4 కి.మీ × ₹18", "12.4 किमी × ₹18")}</span><b class="t-num">₹223</b></div>${app.stops.length ? `<div><span>${app.stops.length} ${L("stops", "స్టాప్‌లు", "स्टॉप")} × ₹40</span><b class="t-num">₹${app.stops.length * 40}</b></div>` : ""}<div><span>GST 5%</span><b class="t-num">₹14</b></div></div>` : ""}
@@ -1174,6 +1175,44 @@ def("vehicle", { g: "Ride", n: "The car", tabs: 0, sb: "light", foot: 1, what: "
   <div class="mapbtns" style="z-index:40">${hbtn(ios() ? "chevl" : "arrowl", "data-back", "Back")}</div>
   ${foot(btn(L("Book a ride", "రైడ్ బుక్ చేయండి", "राइड बुक करें"), { go: "where", cls: "lg" }))}`);
 
+/* ---------- eco impact + eco points ----------
+   Estimates, shown as such: a SAGA Luxe uses ~0.15 kWh/km; a comparable petrol cab burns ~7 L/100 km (≈ 0.163 kg CO₂/km);
+   charging on the Indian grid emits ~0.033 kg CO₂/km of that back → ~0.13 kg CO₂ avoided per km. One tree absorbs ~21 kg CO₂ a year.
+   10 eco points per kg avoided. */
+const ECO = () => { const km = 142 + (app.ecoKm || 0), kg = Math.round(km * 0.13 * 10) / 10; return { km, kg, kwh: Math.round(km * 0.15 * 10) / 10, petrol: Math.round(km * 0.07 * 10) / 10, pts: Math.round(kg * 10), tree: Math.round(kg / 21 * 12 * 10) / 10, trips: 23 + (app.ecoTrips || 0) }; };
+const ecoLevel = p => p < 150 ? [L("Seedling", "మొలక", "अंकुर"), 150] : p < 400 ? [L("Sapling", "మొక్క", "पौधा"), 400] : [L("Grove", "తోట", "उपवन"), 1000];
+def("impact", { g: "Account", n: "Eco impact", tabs: 0, nav: 1, what: "The answer first: CO₂ the rider has kept out of Vizag's air by riding electric, as one big number, over the car in a pool of green light. Then four tiles (electric km, clean energy used, petrol avoided, a tree's work), the flow from trips to eco points, a month-by-month chart, the eco points level with green rewards, and how Vizag's riders did together.", why: "Every SAGA ride is electric, but riders can't see that. Showing the effect in plain equivalents (litres of petrol, months of a tree's work) makes the choice feel real, and eco points reward it.", fl: "<code>GET /me/impact</code> (km, kWh, CO₂ avoided, points) computed server-side per ride from distance and the published emission factors; method shown in the app. Eco points ledger alongside SAGA points; rewards via <code>POST /eco/redeem</code>." }, () => {
+  const e = ECO(), [lv, next] = ecoLevel(e.pts), months = [["Jul", 1.9], ["Aug", 3.2], ["Sep", 4.0], ["Oct", 5.3], ["Nov", Math.round((e.kg - 14.4) * 10) / 10]], mx = 6;
+  return `
+  ${bar(L("Eco impact", "పర్యావరణ ప్రభావం", "पर्यावरण पर असर"))}
+  <div class="content"><div class="pad eco">
+    <div class="eco-head"><small>${L("CO₂ kept out of Vizag's air", "విశాఖ గాలిలోకి చేరని CO₂", "विज़ाग की हवा से बचाई CO₂")} <button class="eco-how" data-toast="${esc(L("Estimate: an electric SAGA Luxe vs a petrol cab over the same km, including the grid power used to charge it.", "అంచనా: అదే దూరానికి పెట్రోల్ క్యాబ్‌తో పోలిస్తే, ఛార్జింగ్ విద్యుత్‌తో సహా.", "अनुमान: उतनी ही दूरी पर पेट्रोल कैब की तुलना में, चार्जिंग की बिजली सहित।"))}" aria-label="${L("How we calculate", "ఎలా లెక్కిస్తాం", "कैसे गिनते हैं")}">${I("info", "sm")}</button></small>
+      <b class="eco-big t-num"><span data-count="${e.kg}">${e.kg}</span><i> kg</i></b>
+      <span>${L(`${e.trips} trips · ${e.km} electric km this year`, `${e.trips} ప్రయాణాలు · ఈ ఏడాది ${e.km} ఎలక్ట్రిక్ కి.మీ`, `${e.trips} यात्राएँ · इस साल ${e.km} इलेक्ट्रिक किमी`)}</span></div>
+    <div class="eco-hero"><img src="${SagaStage.src("cut-side")}" alt="${V.short}"><i></i></div>
+    <div class="eco-tiles">
+      <div class="eco-t arc"><svg viewBox="0 0 100 60" aria-hidden="true"><path d="M8 54 A42 42 0 0 1 92 54" class="a0" pathLength="100"/><path d="M8 54 A42 42 0 0 1 92 54" class="a1" pathLength="100" stroke-dasharray="100 100"/></svg><b>100<i>%</i></b><small>${L("of your km were electric", "మీ కి.మీ అన్నీ ఎలక్ట్రిక్", "आपके सभी किमी इलेक्ट्रिक")}</small></div>
+      <div class="eco-t"><small>${L("Clean energy used", "వాడిన శుభ్ర శక్తి", "इस्तेमाल हुई स्वच्छ ऊर्जा")}</small><b class="t-num">${e.kwh}<i> kWh</i></b></div>
+      <div class="eco-t"><small>${L("Petrol not burnt", "కాల్చని పెట్రోల్", "नहीं जला पेट्रोल")}</small><b class="t-num">${e.petrol}<i> L</i></b></div>
+      <div class="eco-t"><small>${L("A tree's work", "ఒక చెట్టు పని", "एक पेड़ का काम")}</small><b class="t-num">${e.tree}<i> ${L("months", "నెలలు", "महीने")}</i></b></div>
+    </div>
+    <div class="eco-flow"><small>${L("How it adds up", "ఎలా లెక్క", "कैसे जुड़ता है")}</small><div>
+      <span>${I("route", "sm")}<b class="t-num">${e.km}</b><small>km</small></span><i>${I("arrowr", "sm")}</i>
+      <span>${I("bolt", "sm")}<b class="t-num">${e.kwh}</b><small>kWh</small></span><i>${I("arrowr", "sm")}</i>
+      <span>${I("leaf", "sm")}<b class="t-num">${e.kg}</b><small>kg CO₂</small></span><i>${I("arrowr", "sm")}</i>
+      <span class="g">${I("spark", "sm")}<b class="t-num">${e.pts}</b><small>${L("points", "పాయింట్లు", "पॉइंट")}</small></span></div></div>
+    <div class="eco-chart"><div class="eco-ch-h"><small>${L("CO₂ saved by month", "నెలవారీ ఆదా అయిన CO₂", "महीने के हिसाब से बची CO₂")}</small><span>${I("trend", "sm")}+${Math.round((months[4][1] / months[3][1] - 1) * 100)}%</span></div>
+      <div class="eco-bars">${months.map(([m, v], i) => `<div class="${i === 4 ? "now" : ""}"><b class="t-num">${v.toFixed(1)}</b><i style="--h:${Math.min(1, v / mx)};--d:${i * 70}ms"></i><small>${m}</small></div>`).join("")}</div></div>
+    <div class="eco-pts lg-brand"><div class="eco-pts-h"><div><small>${L("Eco points", "ఎకో పాయింట్లు", "इको पॉइंट")}</small><b class="t-num" data-count="${e.pts}">${e.pts}</b></div><span class="eco-lv">${I("leaf", "sm")}${lv}</span></div>
+      <div class="eco-pbar"><i style="transform:scaleX(${Math.min(1, e.pts / next)})"></i></div><p>${L(`${next - e.pts} more to the next level. You earn 10 points for every kg of CO₂ saved.`, `తదుపరి స్థాయికి ఇంకా ${next - e.pts}. ఆదా అయిన ప్రతి కిలో CO₂కు 10 పాయింట్లు.`, `अगले स्तर के लिए ${next - e.pts} और। हर किलो बची CO₂ पर 10 पॉइंट।`)}</p></div>
+    <div class="eco-rw">
+      ${[["leaf", L("Plant a tree on the Vizag coast", "విశాఖ తీరంలో ఒక మొక్క నాటండి", "विज़ाग तट पर एक पेड़ लगाएँ"), 150], ["tag", L("₹30 off your next city ride", "తదుపరి సిటీ రైడ్‌పై ₹30 తగ్గింపు", "अगली सिटी राइड पर ₹30 छूट"), 120], ["users", L("Support a beach clean-up at RK Beach", "RK బీచ్ శుభ్రతకు తోడ్పడండి", "RK बीच की सफ़ाई में मदद करें"), 80]].map(([ic, t, p]) => `<button class="eco-r ${e.pts >= p ? "" : "off"}" data-act="ecoredeem" data-v="${p}" data-t="${esc(t)}"><span class="eco-ri">${I(ic)}</span><span class="grow">${t}</span><b class="t-num">${p}</b></button>`).join("")}
+    </div>
+    <div class="eco-city"><span>${I("users")}</span><div><b>${L("Vizag's SAGA riders saved 1.6 tonnes of CO₂ this month", "ఈ నెల విశాఖ SAGA రైడర్లు 1.6 టన్నుల CO₂ ఆదా చేశారు", "इस महीने विज़ाग के SAGA राइडर्स ने 1.6 टन CO₂ बचाया")}</b><small>${L("About what 76 trees absorb in a year.", "సుమారు 76 చెట్లు ఏడాదిలో పీల్చుకునేంత.", "लगभग 76 पेड़ एक साल में जितना सोखते हैं।")}</small></div></div>
+    <p class="t-sub mt12">${L("Estimates: an electric SAGA Luxe compared with a petrol cab over the same distance, including the grid power used to charge it.", "అంచనాలు: అదే దూరానికి పెట్రోల్ క్యాబ్‌తో పోలిస్తే ఎలక్ట్రిక్ SAGA లక్స్, ఛార్జింగ్ విద్యుత్‌తో సహా.", "अनुमान: उतनी ही दूरी पर पेट्रोल कैब के मुकाबले इलेक्ट्रिक SAGA लक्स, चार्जिंग की बिजली सहित।")}</p>
+  </div></div>`;
+});
+
 def("rides", { g: "Tabs", n: "Trips", tab: "rides", what: "Upcoming: the airport pickup as a lit pass (time in the serif, live flight tracking), the weekday series with its week dots and the car, and any intercity trip. Past: trip cards with a small render of the car, the route, the fare and the emailed invoice.", why: "Scheduled and airport rides live here, so riders can check them days ahead. The car on every card is a quiet reminder that every ride is the same premium car.", fl: "<code>GET /rides?status=upcoming|past</code>. Series shown as one card, expanded server-side. Car thumbnails are the bundled cut-out renders." }, () => {
   const car = (k = "cut-side") => `<img class="tr-car" src="${SagaStage.src(k)}" alt="" loading="lazy">`;
   const wd = [L("M", "సో", "सो"), L("T", "మం", "मं"), L("W", "బు", "बु"), L("T", "గు", "गु"), L("F", "శు", "शु"), L("S", "శ", "श"), L("S", "ఆ", "र")];
@@ -1194,7 +1233,7 @@ def("rides", { g: "Tabs", n: "Trips", tab: "rides", what: "Upcoming: the airport
     ${pastTrip("Dwaraka Nagar", L("Today, 7:41 PM", "ఈ రోజు, రా. 7:41", "आज, शाम 7:41"), S.inr(FARE), "mail")}
     ${pastTrip(L("Bhogapuram Airport", "భోగాపురం ఎయిర్‌పోర్ట్", "भोगापुरम एयरपोर्ट"), "8 Nov, 5:20 AM", S.inr(AIRFARE), "mail")}
     ${pastTrip("RK Beach", "2 Nov, 6:05 PM", "₹164", "mail")}
-    <div class="tr-impact"><span class="tr-leaf">${I("leaf")}</span><span><b>4.1 kg</b> ${L("CO₂ saved on your SAGA trips this month", "ఈ నెల మీ SAGA ప్రయాణాల్లో CO₂ ఆదా", "इस महीने आपकी SAGA यात्राओं से CO₂ बचा")}</span></div>`;
+    <div class="tr-impact" data-go="impact" role="button"><span class="tr-leaf">${I("leaf")}</span><span><b>4.1 kg</b> ${L("CO₂ saved on your SAGA trips this month", "ఈ నెల మీ SAGA ప్రయాణాల్లో CO₂ ఆదా", "इस महीने आपकी SAGA यात्राओं से CO₂ बचा")}</span></div>`;
   return `${bar(L("Trips", "ప్రయాణాలు", "यात्राएँ"), { large: true, back: false })}
   <div class="content"><div class="pad">${seg([["up", L("Upcoming", "రాబోయేవి", "आने वाली")], ["past", L("Past", "గతం", "पिछली")]], app.tripSeg, "tripseg")}<div class="mt16 tr-list">${app.tripSeg === "up" ? up : past}</div></div></div>`;
 });
@@ -1209,6 +1248,7 @@ def("offers", { g: "Tabs", n: "Offers", tab: "offers", what: "SAGA points in a l
       <div class="of-ring" style="--p:.62"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" class="r0"/><circle cx="40" cy="40" r="34" class="r1" pathLength="100" stroke-dasharray="62 100"/></svg>${I("gift")}</div>
       <div class="grow"><span class="eyebrow">${L("SAGA points", "SAGA పాయింట్లు", "SAGA पॉइंट")}</span><b class="t-num" data-count="1240">1,240</b><small>${L("Worth ₹124 · 760 more for a free city ride", "₹124 విలువ · ఉచిత సిటీ రైడ్‌కు ఇంకా 760", "₹124 के बराबर · मुफ़्त सिटी राइड के लिए 760 और")}</small></div>
     </div>
+    <button class="eco-of mt12" data-go="impact"><span class="eco-ri">${I("leaf")}</span><span class="grow"><b>${ECO().pts} ${L("eco points", "ఎకో పాయింట్లు", "इको पॉइंट")}</b><small>${L("Earned by riding electric · plant a tree or take ₹30 off", "ఎలక్ట్రిక్ ప్రయాణంతో · మొక్క నాటండి లేదా ₹30 తగ్గింపు", "इलेक्ट्रिक सफ़र से · पेड़ लगाएँ या ₹30 छूट")}</small></span>${I("chevr")}</button>
     <div class="field of-field mt16">${I("tag", "sm")}<input id="promo" autocomplete="off" spellcheck="false" placeholder="${L("Have a code? e.g. FLYSAGA", "కోడ్ ఉందా? ఉదా. FLYSAGA", "कोड है? जैसे FLYSAGA")}" style="text-transform:uppercase" aria-label="${L("Promo code", "ప్రోమో కోడ్", "प्रोमो कोड")}"><button class="btn btn-primary sm" data-act="promo">${L("Apply", "వర్తించు", "लगाएँ")}</button></div>
   </div>
   ${sh(L("For you", "మీ కోసం", "आपके लिए"))}
@@ -1226,10 +1266,11 @@ def("account", { g: "Tabs", n: "Account & settings", tab: "account", what: "A pr
   <div class="content">
     <div class="pad"><div class="ac-card">
       <div class="ac-top"><span class="ac-av"><i></i><b>AR</b></span><div class="grow"><b class="ac-name">Ananya Rao</b><small>+91 98480 12345 · ${L("Member since Aug 2026", "ఆగ 2026 నుండి సభ్యురాలు", "अग 2026 से सदस्य")}</small></div><button class="ac-edit" data-toast="${esc(L("Edit your name, email and photo", "పేరు, ఇమెయిల్, ఫోటో మార్చండి", "नाम, ईमेल और फ़ोटो बदलें"))}" aria-label="${L("Edit profile", "ప్రొఫైల్ మార్చు", "प्रोफ़ाइल बदलें")}">${I("edit", "sm")}</button></div>
-      <div class="ac-stats"><div><b class="t-num" data-count="23">23</b><small>${L("trips", "ప్రయాణాలు", "यात्राएँ")}</small></div><div><b class="t-num"><span data-count="18.4">18.4</span> kg</b><small>${L("CO₂ saved", "CO₂ ఆదా", "CO₂ बचा")}</small></div><div><b class="t-num" data-count="1240">1,240</b><small>${L("points", "పాయింట్లు", "पॉइंट")}</small></div></div>
+      <div class="ac-stats"><div><b class="t-num" data-count="23">23</b><small>${L("trips", "ప్రయాణాలు", "यात्राएँ")}</small></div><button class="ac-eco" data-go="impact"><b class="t-num"><span data-count="${ECO().kg}">${ECO().kg}</span> kg</b><small>${L("CO₂ saved", "CO₂ ఆదా", "CO₂ बचा")} ›</small></button><div><b class="t-num" data-count="1240">1,240</b><small>${L("points", "పాయింట్లు", "पॉइंट")}</small></div></div>
     </div></div>
     <div class="group mt16">
       ${row({ icon: "pin", t: L("Saved places", "సేవ్ చేసిన స్థలాలు", "सेव की गई जगहें"), trail: "2", toast: L("Home and Office saved", "ఇల్లు, ఆఫీస్ సేవ్ అయ్యాయి", "घर और ऑफ़िस सेव हैं") })}
+      ${row({ icon: "leaf", lc: "eco", t: L("Eco impact and eco points", "పర్యావరణ ప్రభావం, ఎకో పాయింట్లు", "पर्यावरण असर और इको पॉइंट"), trail: `${ECO().pts} ${L("pts", "పా.", "पॉ.")}`, go: "impact" })}
       ${row({ icon: "wallet", t: L("Wallet and payments", "వాలెట్, చెల్లింపులు", "वॉलेट और भुगतान"), trail: S.inr(app.wallet), go: "wallet" })}
       ${row({ icon: "plane", t: L("Find my flights", "నా ఫ్లైట్లు కనుగొను", "मेरी फ़्लाइट ढूँढें"), s: L("Gmail filter, ticket scan", "Gmail ఫిల్టర్, టికెట్ స్కాన్", "Gmail फ़िल्टर, टिकट स्कैन"), trail: `<span class="ac-on">${L("On", "ఆన్", "चालू")}</span>`, go: "travel" })}
     </div>
@@ -1570,6 +1611,7 @@ const A = {
   textsize() { S.set({ text: S.state.text === "large" ? "standard" : "large" }); },
   when(e) { if (e.dataset.v === "later") go("schedule"); },
   tcal() { app.travel.cal = !app.travel.cal; rerender(); },
+  ecoredeem(e) { const p = +e.dataset.v; if (ECO().pts - (app.ecoSpent || 0) < p) { toast(L("Not enough eco points yet. Keep riding electric.", "ఇంకా సరిపడా ఎకో పాయింట్లు లేవు.", "अभी पर्याप्त इको पॉइंट नहीं।")); return; } app.ecoSpent = (app.ecoSpent || 0) + p; toast(L(`Done: ${e.dataset.t}. ${p} eco points used.`, `పూర్తి: ${e.dataset.t}. ${p} ఎకో పాయింట్లు వాడారు.`, `हो गया: ${e.dataset.t}। ${p} इको पॉइंट इस्तेमाल हुए।`)); },
   tmail() { app.travel.mail = !app.travel.mail; rerender(); },
   tnotif() { app.travel.notif = !app.travel.notif; rerender(); },
   tauto() { app.travel.auto = !app.travel.auto; rerender(); if (app.travel.auto) toast(L("Found flights will be booked for you. We always tell you first.", "కనిపించిన ఫ్లైట్లకు రైడ్ బుక్ చేస్తాం. ముందే మీకు తెలుపుతాం.", "मिली फ़्लाइट के लिए राइड बुक होगी। हम पहले आपको बताएँगे।")); }
