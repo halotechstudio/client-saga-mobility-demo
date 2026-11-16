@@ -2401,3 +2401,22 @@ button.sc-time{border:0;font:inherit;cursor:pointer}
 .svc-int .it-b{fill:#fff}
 .svc-int .onb-fare{color:#06331C;background:#7CF59E}
 .svc-int .svc-cta{background:#fff;color:#0A4A72}
+
+/* ---------- v7.6 dock, after the reference: a compact glass tray of rounded-square keys ---------- */
+#tabbar.tabbar,[data-theme][data-os] #tabbar{left:50%!important;right:auto!important;width:auto!important;transform:translateX(-50%)!important;justify-content:center!important;gap:6px!important;padding:6px!important;border-radius:24px!important;background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.05)),rgba(14,16,22,.84)!important;border:1px solid rgba(255,255,255,.1)!important;-webkit-backdrop-filter:blur(20px) saturate(150%)!important;backdrop-filter:blur(20px) saturate(150%)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 16px 36px -14px rgba(0,0,0,.85)!important}
+[data-theme=light] #tabbar.tabbar,[data-theme=light][data-os] #tabbar{background:rgba(255,255,255,.7)!important;border-color:rgba(10,14,33,.07)!important}
+#tabbar .tab,[data-os] #tabbar .tab{flex:0 0 50px!important;width:50px!important;height:50px!important;border-radius:17px!important;background:rgba(255,255,255,.07)!important;border:1px solid rgba(255,255,255,.08)!important;color:rgba(255,255,255,.82)!important}
+[data-theme=light] #tabbar .tab{background:rgba(10,14,33,.04)!important;border-color:rgba(10,14,33,.06)!important;color:#0A0E21!important}
+#tabbar .tab.on,#tabbar.has-ind .tab.on{color:#0A0E21!important}
+#tabbar .tab-ind{border-radius:17px!important;background:#fff!important;box-shadow:0 6px 16px -6px rgba(255,255,255,.4)!important}
+[data-theme=light] #tabbar .tab-ind{background:#0A0E21!important}
+[data-theme=light] #tabbar .tab.on{color:#fff!important}
+#tabbar .dk{width:21px;height:21px}
+/* eco: same key shape, filled with liquid light */
+#tabbar .tab-eco{flex:0 0 50px!important;width:50px!important;height:50px!important;margin:0!important;border-radius:17px!important;animation:none!important;overflow:visible;box-shadow:0 0 0 1px rgba(59,234,104,.45),0 6px 20px -6px rgba(59,234,104,.7)!important}
+#tabbar .tab-eco::before{display:none}
+#tabbar .tab-eco .ev{inset:0;border-radius:17px}
+#tabbar .tab-eco .eh{border-radius:17px;-webkit-mask:none;mask:none;background:linear-gradient(160deg,rgba(255,255,255,.28),transparent 42%);animation:none}
+#tabbar .tab-eco .ei::after{display:none}
+#tabbar .tab-eco .ei .ic{width:21px;height:21px;filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))}
+#tabbar .tab-eco.full::after{inset:-5px;border-radius:21px}
