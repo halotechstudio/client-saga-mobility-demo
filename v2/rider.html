@@ -395,9 +395,9 @@ body.embed,body.bare{background:transparent}
 .bub small{display:block;font-size:12px;opacity:.7;margin-top:4px}
 .vnote{font-size:13.5px;color:var(--fg2);max-width:230px;line-height:1.35}
 </style>
-<link rel="stylesheet" href="system.css"><link rel="stylesheet" href="system3.css"><link rel="stylesheet" href="system4.css">
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
-<script type="module" src="car3d.js"></script>
+<link rel="stylesheet" href="system.css?v=9"><link rel="stylesheet" href="system3.css?v=9"><link rel="stylesheet" href="system4.css?v=9"><link rel="stylesheet" href="system5.css?v=9"><link rel="stylesheet" href="system6.css?v=11"><link rel="stylesheet" href="system7.css?v=10">
+<script type="importmap">{"imports":{"three":"./lib/three/build/three.module.js","three/addons/":"./lib/three/examples/jsm/"}}</script>
+<script type="module" src="car3d.js?v=14"></script>
 </head>
 <body>
 <div class="shell">
@@ -472,18 +472,31 @@ const promo = k => { const [h, sub, to] = PROMOS[k]; return `<div class="promo" 
 const SC = {};
 const def = (id, meta, render, mount) => (SC[id] = Object.assign({ id, render, mount }, meta));
 
-def("welcome", { g: "Start", n: "Welcome", tabs: 0, sb: "light", mount: () => { app.otp = 0; }, what: "Full-bleed dark stage with the SUV, one promise, one button. Language can be chosen before anything else.", why: "Sets the premium tone in the first second and lets Telugu and Hindi speakers switch before reading a word.", fl: "Route <code>/welcome</code>. Logo is the client's SVG asset; colours from <code>SagaTokens</code>." }, () => `
-  <div class="view-in stage wl">
-    <div class="wl-top">${S.logo()}</div>
-    <div class="wl-car">${S.car()}</div>
-    <div class="wl-body">
-      ${pill("bolt", L("All-electric · chauffeur-driven", "పూర్తి ఎలక్ట్రిక్ · మా డ్రైవర్‌తో", "पूरी तरह इलेक्ट्रिक · हमारे ड्राइवर के साथ"), "dark")}
-      <h1 class="t-hero mt16">${L("Arrive in quiet comfort.", "నిశ్శబ్దంగా, హాయిగా చేరుకోండి.", "सुकून से, आराम से पहुँचिए।")}</h1>
-      <p class="t-body mt12">${L("Airport rides that follow your flight, rides on repeat, and trips across the city and beyond. In an electric SUV, with our own chauffeur.", "మీ ఫ్లైట్‌ను అనుసరించే ఎయిర్‌పోర్ట్ రైడ్‌లు, రోజూ వచ్చే రైడ్‌లు, నగరంలో మరియు బయట ప్రయాణాలు. ఎలక్ట్రిక్ SUVలో, మా సొంత డ్రైవర్‌తో.", "आपकी फ़्लाइट के हिसाब से एयरपोर्ट राइड, रोज़ की राइड, और शहर के अंदर-बाहर के सफ़र। इलेक्ट्रिक SUV में, हमारे अपने ड्राइवर के साथ।")}</p>
-      <div class="mt24">${btn(L("Continue with phone number", "ఫోన్ నంబర్‌తో కొనసాగండి", "फ़ोन नंबर से आगे बढ़ें"), { go: "signin", kind: "btn-stage", cls: "lg" })}</div>
-      <div class="wl-langs mt16">${S.LANGS.map(l => `<button class="${S.state.lang === l.id ? "on" : ""}" data-setlang="${l.id}">${l.native}</button>`).join("")}</div>
-    </div>
-  </div>`);
+const INTRO = [
+  { k: "airport", view: "front", icon: "plane", tag: ["Airport rides", "ఎయిర్‌పోర్ట్ రైడ్‌లు", "एयरपोर्ट राइड"], h: ["We follow your flight.", "మేము మీ ఫ్లైట్‌ను అనుసరిస్తాం.", "हम आपकी फ़्लाइट के साथ चलते हैं।"], p: ["Show us your ticket. Your pickup is timed to the flight and moves by itself if it is delayed.", "మీ టికెట్ చూపించండి. పికప్ ఫ్లైట్‌కు తగ్గట్టు ఉంటుంది; ఆలస్యమైతే మారుతుంది.", "अपना टिकट दिखाइए। पिकअप फ़्लाइट के हिसाब से तय होगा और देरी पर ख़ुद बदलेगा।"] },
+  { k: "series", view: "side", icon: "repeat", tag: ["Scheduled rides", "షెడ్యూల్ రైడ్‌లు", "शेड्यूल राइड"], h: ["Same car. Every weekday.", "అదే కారు. ప్రతి వారపు రోజు.", "वही गाड़ी। हर कार्यदिवस।"], p: ["Set a ride once and it repeats on your calendar, with the same chauffeur whenever possible.", "ఒకసారి సెట్ చేయండి, మీ క్యాలెండర్ ప్రకారం రిపీట్ అవుతుంది, వీలైనంత వరకు అదే డ్రైవర్‌తో.", "एक बार तय करें, राइड कैलेंडर पर दोहराई जाएगी, जहाँ हो सके उसी ड्राइवर के साथ।"] },
+  { k: "inter", view: "rear", icon: "route", tag: ["Intercity", "ఇంటర్‌సిటీ", "इंटरसिटी"], h: ["Beyond the city.", "నగరం దాటి కూడా.", "शहर के पार भी।"], p: ["Araku, Vizianagaram, Srikakulam and more at a fixed fare, in the same quiet electric SUV.", "అరకు, విజయనగరం, శ్రీకాకుళం మరియు మరిన్ని స్థిర ఛార్జీతో, అదే నిశ్శబ్ద ఎలక్ట్రిక్ SUVలో.", "अरकू, विजयनगरम, श्रीकाकुलम और भी, तय किराये पर, उसी शांत इलेक्ट्रिक SUV में।"] }
+];
+const introScreen = n => {
+  const it = INTRO[n], last = n === 2;
+  const chip = n === 0 ? `<span class="in-chip"><b>6E 2134</b><span class="in-r">VTZ ${I("plane", "sm")} HYD</span><small>${L("Pickup 5:20 AM · tracking", "పికప్ ఉ. 5:20 · ట్రాకింగ్", "पिकअप सुबह 5:20 · ट्रैकिंग")}</small></span>`
+    : n === 1 ? `<span class="in-chip"><div class="in-days">${["M", "T", "W", "T", "F"].map(d => `<i>${d}</i>`).join("")}<i class="o">S</i><i class="o">S</i></div><small>${L("Every weekday · 9:00 AM", "ప్రతి వారపు రోజు · ఉ. 9:00", "हर कार्यदिवस · सुबह 9:00")}</small></span>`
+    : `<span class="in-chip"><b>Araku Valley</b><small>115 km · ${L("fixed fare", "స్థిర ఛార్జీ", "तय किराया")}</small></span>`;
+  return `<div class="intro">
+    <div class="in-top">${S.logo()}<button class="in-skip" data-go="signin">${L("Skip", "స్కిప్", "छोड़ें")}</button></div>
+    <div class="in-car c3root"><div class="c3box in3" data-car3d><div class="c3-fallback">${S.car()}</div></div>${chip}</div>
+    <div class="in-body">
+      <span class="in-tag">${I(it.icon, "sm")}${L(...it.tag)}</span>
+      <h1 class="in-h">${L(...it.h)}</h1>
+      <p class="in-p">${L(...it.p)}</p>
+      <div class="in-dots">${[0, 1, 2].map(i => `<button class="${i === n ? "on" : ""}" data-go="${["welcome", "intro2", "intro3"][i]}" aria-label="${i + 1}"></button>`).join("")}</div>
+      ${btn(last ? L("Get started", "ప్రారంభించండి", "शुरू करें") : L("Next", "తర్వాత", "आगे"), { go: last ? "signin" : ["intro2", "intro3"][n], cls: "lg" })}
+      ${n === 0 ? `<div class="wl-langs mt12">${S.LANGS.map(l => `<button class="${S.state.lang === l.id ? "on" : ""}" data-setlang="${l.id}">${l.native}</button>`).join("")}</div>` : ""}
+    </div></div>`;
+};
+def("welcome", { g: "Start", n: "Welcome 1 · Airport", tabs: 0, sb: "light", what: "First of three intro screens. The real car in interactive 3D (drag to turn) with a boarding-pass chip: airport rides that follow your flight. Language can be chosen here.", why: "Opens with the product, not a form. Each intro screen shows one service on the car itself.", fl: "Same 3D widget as Home (model_viewer or flutter_scene with the GLB). Language list from the client." }, () => introScreen(0));
+def("intro2", { g: "Start", n: "Welcome 2 · Scheduled", tabs: 0, sb: "light", what: "Second intro: the car from the side with a weekday strip. Rides on repeat, same chauffeur where possible.", why: "Shows the repeat-ride business in one glance.", fl: "Static copy; the 3D camera preset is a parameter." }, () => introScreen(1));
+def("intro3", { g: "Start", n: "Welcome 3 · Intercity", tabs: 0, sb: "light", what: "Third intro: the car from behind, leaving, with an Araku Valley fare chip. Then straight to sign-in.", why: "Closes the story: city, airport, beyond. One button to start.", fl: "Static copy." }, () => introScreen(2));
 
 def("signin", { g: "Start", n: "Sign in", tabs: 0, nav: 1, foot: 1, what: "Type a mobile number, tap Send code, and the 6-digit code fills itself in from the SMS.", why: "No passwords. Matches how the existing app signs people in.", fl: "Android: SMS Retriever API (no SMS permission). iOS: <code>oneTimeCode</code> autofill. Backend OTP endpoint from the client." }, () => `
   ${bar(L("Sign in", "సైన్ ఇన్", "साइन इन"))}
@@ -515,24 +528,24 @@ def("setup", { g: "Start", n: "Permissions", tabs: 0, nav: 1, foot: 1, what: "Ex
   ${foot(btn(L("Continue", "కొనసాగండి", "आगे बढ़ें"), { go: "flysoon" }))}`;
 });
 
-const paints = () => [["#F4F5F7", L("Pearl white", "పెర్ల్ వైట్", "पर्ल व्हाइट")], ["#16181D", L("Obsidian black", "ఆబ్సిడియన్ బ్లాక్", "ऑब्सीडियन ब्लैक")], [S.state.hex, L("SAGA blue", "SAGA బ్లూ", "SAGA ब्लू")]];
-const paintRow = () => `<div class="c3-paint">${paints().map(([h, n], i) => `<button class="c3-sw ${i === 0 ? "on" : ""}" data-c3paint="${h}" style="--c:${h}" aria-label="${n}"></button>`).join("")}</div>`;
+const paints = () => [["#0A0A0C", L("Matte black", "మ్యాట్ బ్లాక్", "मैट ब्लैक"), "matte"], ["#F2F3F5", L("Pearl white", "పెర్ల్ వైట్", "पर्ल व्हाइट"), "gloss"], [S.state.hex, L("SAGA blue", "SAGA బ్లూ", "SAGA ब्लू"), "satin"]];
+const paintRow = () => `<div class="c3-paint">${paints().map(([h, n, k], i) => `<button class="c3-sw ${i === 0 ? "on" : ""}" data-c3paint="${h}" data-kind="${k}" style="--c:${h}" aria-label="${n}" title="${n}"></button>`).join("")}</div>`;
 const c3hot = () => [
   { id: "lamp", at: [0.98, 0.5, 0.35], n: [1, 0, 0.25], label: L("LED light signature", "LED లైట్ సిగ్నేచర్", "LED लाइट सिग्नेचर") },
   { id: "wheel", at: [0.62, 0.22, 1.02], n: [0.2, 0, 1], label: L("Silent electric drive", "నిశ్శబ్ద ఎలక్ట్రిక్ డ్రైవ్", "शांत इलेक्ट्रिक ड्राइव") },
   { id: "boot", at: [-1.0, 0.62, 0], n: [-1, 0.2, 0], label: L("Boot: 2 bags", "బూట్: 2 బ్యాగులు", "बूट: 2 बैग") }
 ];
-const c3mount = (el, mode) => {
+const c3mount = (el, mode, extra = {}) => {
   const box = el && el.querySelector("[data-car3d]"); if (!box) return;
   const go = () => {
-    const api = window.SagaCar3D.mount(box, { mode, hot: mode === "full" ? c3hot() : [], onTap: on => toast(on ? L("Lights on", "లైట్లు ఆన్", "लाइट चालू") : L("Lights off", "లైట్లు ఆఫ్", "लाइट बंद")) });
+    const api = window.SagaCar3D.mount(box, { mode, distK: mode === "hero" ? 1.0 : 1, ...extra, hot: mode === "full" ? c3hot() : [], onTap: on => toast(on ? L("Lights on", "లైట్లు ఆన్", "लाइट चालू") : L("Lights off", "లైట్లు ఆఫ్", "लाइट बंद")) });
     if (!api || box.__wired) return; box.__wired = 1;
   };
   if (window.SagaCar3D) go(); else window.addEventListener("saga-car3d", go, { once: true });
 };
 document.addEventListener("click", e => {
   const root = e.target.closest(".c3root"); if (!root) return; const box = root.querySelector("[data-car3d]"), api = box && box.__c3;
-  const p = e.target.closest("[data-c3paint]"); if (p) { if (api) api.paint(p.dataset.c3paint); root.querySelectorAll(".c3-sw").forEach(b => b.classList.toggle("on", b === p)); return; }
+  const p = e.target.closest("[data-c3paint]"); if (p) { if (api) api.paint(p.dataset.c3paint, false, p.dataset.kind); root.querySelectorAll(".c3-sw").forEach(b => b.classList.toggle("on", b === p)); return; }
   const v = e.target.closest("[data-c3view]"); if (v) { if (api) api.view(v.dataset.c3view); root.querySelectorAll("[data-c3view]").forEach(b => b.classList.toggle("on", b === v)); return; }
   if (e.target.closest("[data-c3light]")) { if (api) { const on = api.toggleLights(); e.target.closest("[data-c3light]").classList.toggle("on", on); } return; }
   const z = e.target.closest("[data-c3zoom]"); if (z && api) api.zoom(+z.dataset.c3zoom);
@@ -569,7 +582,7 @@ const homeCards = () => {
 def("home", { g: "Ride", n: "Home", tab: "home", what: "The map is the home screen: you, the SAGA cars around you and the nearest car's real ETA. One search bar, four one-tap places, and a swipe row of what's coming up (flight found, scheduled rides, intercity, an offer). No greeting, no lists.", why: "Show, don't tell: the rider sees a live fleet and a ready-to-book flight instead of reading about them. One thing to do, everything else a swipe away.", fl: "Route <code>/</code>. Map: google_maps_flutter with the SAGA style. Cards from <code>GET /home/cards</code> (flight detected, series, offers); nearby from <code>GET /fleet/nearby</code>." }, () => `
   <div class="home">
     <div class="home-hero c3root"><span class="hh-glow"></span><span class="hh-floor"></span>
-      <div class="hh-t"><small>${V.make} · ${V.colour}</small><b>${V.model}</b></div>
+      <div class="hh-t"><small>${V.make} · ${L("Matte black", "మ్యాట్ బ్లాక్", "मैट ब्लैक")}</small><b>${V.model}</b></div>
       <div class="hh-car c3box" data-car3d><div class="c3-fallback">${S.car({ cls: "car-in" })}</div><span class="c3-hint">${L("Drag to turn", "తిప్పడానికి లాగండి", "घुमाने के लिए खींचें")}</span></div>
       ${paintRow()}<button class="hh-look" data-go="vehicle">${L("Look inside", "లోపల చూడండి", "अंदर देखें")}${I("chevr", "sm")}</button>
       <div class="hh-spec"><span>${I("leaf", "sm")}${L("100% electric", "100% ఎలక్ట్రిక్", "100% इलेक्ट्रिक")}</span><span>${I("quiet", "sm")}${L("Silent cabin", "నిశ్శబ్ద క్యాబిన్", "शांत केबिन")}</span><span>${I("snow", "sm")}${L("Pre-cooled", "ముందే చల్లగా", "पहले से ठंडी")}</span></div></div>
@@ -661,7 +674,7 @@ def("options", { g: "Ride", n: "Confirm ride", tabs: 0, map: 1, what: "Route and
     <div class="grabber"></div>
     <div class="row-flex"><div class="grow"><div class="t-label">${L("To", "", "")} ${to}${L("", " వైపు", " की ओर")} · 18 ${L("min", "నిమి", "मिन")}</div><div class="t-title mt4">SAGA EV</div></div><div class="price"><div class="t-title t-num">${S.inr(fare)}</div><div class="t-label">${L("Fixed fare", "స్థిర ఛార్జీ", "तय किराया")}</div></div></div>
     <div class="chain mt12">${n ? app.stops.map((s, i) => `<span class="ch-s"><i>${i + 1}</i>${s.n}</span>`).join("") : ""}<button class="ch-add" data-act="addfromopt">${I("plus", "sm")}${n ? L("Add stop", "స్టాప్", "स्टॉप") : L("Add a stop", "స్టాప్ జోడించండి", "स्टॉप जोड़ें")}</button></div>
-    <div class="optcar">${S.car({ reflect: false, cls: "car-in" })}</div>
+    <div class="optcar c3box" data-car3d><div class="c3-fallback">${S.car({ reflect: false })}</div></div>
     <div class="tele"><span>${I("battery", "sm")}<b data-count="86">86</b>%</span><span>${I("route", "sm")}268 km</span><span>${I("snow", "sm")}22°C</span><small>${L("your car, live", "మీ కారు, లైవ్", "आपकी गाड़ी, लाइव")}</small></div>
     <div class="paychips mt12">${[["upi", "device", "UPI"], ["wallet", "wallet", `${L("Wallet", "వాలెట్", "वॉलेट")}`], ["card", "card", L("Card", "కార్డు", "कार्ड")], ["cash", "receipt", L("Cash", "నగదు", "नकद")]].map(([v, ic, t]) => `<button class="chip ${app.pay === v ? "on" : ""}" data-act="pay" data-v="${v}">${I(ic)}${t}</button>`).join("")}</div>
     <div class="mt16">${S.slider(L(`Slide to book · ${S.inr(fare)}`, `బుక్ చేయడానికి స్లైడ్ · ${S.inr(fare)}`, `बुक करने के लिए स्लाइड · ${S.inr(fare)}`), 'data-go-after="finding"')}</div>
@@ -719,7 +732,7 @@ def("assigned", { g: "Ride", n: "Chauffeur on the way", tabs: 0, live: 1, map: 1
       <div class="grow"><div class="eta-h">${here ? L("Ravi is here", "రవి వచ్చారు", "रवि पहुँच गए") : L("Your SAGA is arriving", "మీ SAGA వస్తోంది", "आपकी SAGA आ रही है")}</div><div class="eta-s"><span class="dotlive"></span>${here ? L("At Gate 2 · free waiting 10 min", "గేట్ 2 వద్ద · 10 నిమి ఉచిత వెయిటింగ్", "गेट 2 पर · 10 मिनट मुफ़्त इंतज़ार") : L("On Beach Road · 1.6 km away", "బీచ్ రోడ్‌లో · 1.6 కి.మీ", "बीच रोड पर · 1.6 किमी")}</div></div></div>
     ${steps4(here ? 3 : 2)}
     <div class="codecard2"><div class="cc2-top"><span>${L("Your ride code", "మీ రైడ్ కోడ్", "आपका राइड कोड")}</span><small>${L("Tell Ravi when you get in", "ఎక్కాక రవికి చెప్పండి", "बैठकर रवि को बताएँ")}</small></div><div class="cc2-d">${"4827".split("").map((d, i) => `<span style="animation:popin .4s ${250 + i * 90}ms both">${d}</span>`).join("")}</div></div>
-    <div class="pcard"><div class="cc-row"><div class="cc-car">${S.car({ reflect: false, cls: "car-in" })}</div><div class="grow">${plateEl()}<b class="cc-n">${V.colour} ${V.short}</b><small>${L("SAGA blue line · 86% charged", "SAGA నీలి గీత · 86% ఛార్జ్", "SAGA नीली लाइन · 86% चार्ज")}</small></div></div>${driverRow()}</div>
+    <div class="pcard"><div class="cc-row"><div class="cc-car c3box" data-car3d><div class="c3-fallback">${S.car({ reflect: false })}</div></div><div class="grow">${plateEl()}<b class="cc-n">${V.short}</b><small>${L("Matte black · 86% charged", "మ్యాట్ బ్లాక్ · 86% ఛార్జ్", "मैट ब्लैक · 86% चार्ज")}</small></div></div>${driverRow()}</div>
     <button class="btn btn-text btn-danger block" data-act="cancelride">${L("Cancel ride", "రైడ్ రద్దు", "राइड रद्द करें")}</button>
   </div>`;
 });
@@ -945,7 +958,8 @@ def("vehicle", { g: "Ride", n: "The car", tabs: 0, sb: "light", foot: 1, what: "
       <div class="vt">${pill("spark", L("Every SAGA ride", "ప్రతి SAGA రైడ్", "हर SAGA राइड"), "dark")}<h1 class="t-hero mt12">${V.make}<br>${V.model}</h1><p class="t-sub mt8">${L(`${V.colour} · SAGA livery · chauffeur-driven`, `${V.colour} · SAGA రంగుల్లో · డ్రైవర్‌తో`, `${V.colour} · SAGA लिवरी · ड्राइवर के साथ`)}</p></div>
       <div class="vstage c3root"><div class="vcar c3box full" data-car3d><div class="c3-fallback">${S.car()}</div><span class="c3-hint">${L("Drag to turn · pinch to zoom · tap for lights", "తిప్పడానికి లాగండి · జూమ్ చేయండి · లైట్లకు నొక్కండి", "घुमाने के लिए खींचें · ज़ूम करें · लाइट के लिए टैप")}</span></div>
         <div class="c3-ctl"><div class="c3-views">${[["three", L("3/4", "3/4", "3/4")], ["side", L("Side", "పక్కన", "साइड")], ["front", L("Front", "ముందు", "आगे")], ["rear", L("Rear", "వెనుక", "पीछे")], ["top", L("Top", "పైన", "ऊपर")]].map(([k, n], i) => `<button class="${i === 0 ? "on" : ""}" data-c3view="${k}">${n}</button>`).join("")}</div>
-        <div class="c3-row">${paintRow()}<button class="c3-lt on" data-c3light>${I("bolt", "sm")}${L("Lights", "లైట్లు", "लाइट")}</button><span class="c3-zm"><button data-c3zoom="-0.8" aria-label="Zoom in">+</button><button data-c3zoom="0.8" aria-label="Zoom out">−</button></span></div></div></div>
+        <div class="c3-row">${paintRow()}<button class="c3-lt on" data-c3light>${I("bolt", "sm")}${L("Lights", "లైట్లు", "लाइट")}</button><span class="c3-zm"><button data-c3zoom="-0.8" aria-label="Zoom in">+</button><button data-c3zoom="0.8" aria-label="Zoom out">−</button></span></div></div>
+        <div class="c3-feats">${[["bolt", L("Signature DRL", "సిగ్నేచర్ DRL", "सिग्नेचर DRL"), L("LED light signature, always on", "LED లైట్ సిగ్నేచర్, ఎల్లప్పుడూ ఆన్", "LED लाइट सिग्नेचर, हमेशा चालू"), "front"], ["quiet", L("Silent electric", "నిశ్శబ్ద ఎలక్ట్రిక్", "शांत इलेक्ट्रिक"), L("No engine note, no vibration", "ఇంజిన్ శబ్దం లేదు", "इंजन की आवाज़ नहीं"), "side"], ["snow", L("Cabin pre-cooled", "ముందే చల్లని క్యాబిన్", "पहले से ठंडा केबिन"), L("Ready before you step in", "మీరు ఎక్కేలోపే సిద్ధం", "बैठने से पहले तैयार"), "top"], ["bag", L("Boot for 2 bags", "2 బ్యాగుల బూట్", "2 बैग का बूट"), L("Your chauffeur loads them", "మీ డ్రైవర్ లోడ్ చేస్తారు", "आपके ड्राइवर रखेंगे"), "rear"], ["battery", "86% · 268 km", L("Live from the car", "కారు నుండి లైవ్", "गाड़ी से लाइव"), "three"]].map(([ic, t, d, v]) => `<button class="c3-f" data-c3view="${v}"><span>${I(ic)}</span><b>${t}</b><small>${d}</small></button>`).join("")}</div></div>
     </div>
     <div class="pad mt16"><div class="spec4">
       <div>${I("users")}<b>${RIDERS}</b>${L("riders", "మంది", "यात्री")}</div><div>${I("bag")}<b>${V.bags}</b>${L("bags", "బ్యాగులు", "बैग")}</div><div>${I("bolt")}<b>EV</b>${L("electric", "ఎలక్ట్రిక్", "इलेक्ट्रिक")}</div><div>${I("quiet")}<b>${L("Quiet", "నిశ్శబ్దం", "शांत")}</b>${L("cabin", "క్యాబిన్", "केबिन")}</div>
@@ -1199,7 +1213,7 @@ function go(id, o = {}) {
   try { if (parent !== window) parent.postMessage({ saga: "nav", app: "rider", os: S.state.os, id }, "*"); } catch (e) {}
 }
 const back = () => { const p = stack.pop(); go(p || "home", { back: true }); };
-const rerender = () => { const v = views.lastElementChild; if (!v) return; const st = v.querySelector(".content")?.scrollTop || 0; const n = build(cur); views.replaceChild(n, v); const c = n.querySelector(".content"); if (c) c.scrollTop = st; chrome(); syncPanel(); if (SC[cur].mount && (cur === "home" || cur === "vehicle")) SC[cur].mount(n); };
+const rerender = () => { const v = views.lastElementChild; if (!v) return; const st = v.querySelector(".content")?.scrollTop || 0; const n = build(cur); views.replaceChild(n, v); const c = n.querySelector(".content"); if (c) c.scrollTop = st; chrome(); syncPanel(); if (SC[cur].mount && ["home", "vehicle", "options", "assigned"].includes(cur)) SC[cur].mount(n); };
 
 /* ---------- toast ---------- */
 let tt;
@@ -1210,6 +1224,11 @@ function toast(msg, title) {
 }
 
 SC.home.mount = el => c3mount(el, "hero");
+SC.options.mount = el => c3mount(el, "mini", { start: "three", distK: 1.0 });
+SC.assigned.mount = el => c3mount(el, "mini", { start: "three", distK: 0.95 });
+SC.welcome.mount = el => { app.otp = 0; c3mount(el, "intro", { start: "front", distK: 1.3 }); };
+SC.intro2.mount = el => c3mount(el, "intro", { start: "side", distK: 1.3 });
+SC.intro3.mount = el => c3mount(el, "intro", { start: "rear", distK: 1.3 });
 SC.vehicle.mount = el => c3mount(el, "full");
 SC.nocars.mount = () => timers.push(setTimeout(() => { if (cur === "nocars") A.waitdlg(); }, 700));
 { const fm = SC.finding.mount; SC.finding.mount = el => { fm(el); timers.push(setTimeout(() => { if (cur === "finding" && app.driverLive) A.waitdlg(); }, 8000)); }; }

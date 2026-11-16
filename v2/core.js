@@ -17,7 +17,7 @@
   S.VEHICLE = {
     make: "Mahindra", model: "XUV 3XO EV", short: "XUV 3XO EV",
     rows: [2, 3],              // front row (chauffeur + 1), rear row
-    bags: 2, colour: "Pearl white",
+    bags: 2, colour: "Matte black",
     plate: "AP 39 EV 2041"
   };
   S.riders = () => S.VEHICLE.rows.reduce((a, b) => a + b, 0) - 1;
@@ -77,11 +77,11 @@
     let t;
     if (os === "android") {
       t = dark
-        ? { bg: T(.16, .012), surface: T(.205, .015), surface2: T(.25, .018), surface3: T(.295, .02), fg: T(.94, .008), fg2: T(.8, .014), fg3: T(.62, .014), hair: T(.33, .014) }
+        ? { bg: "#000000", surface: "#0E0E10", surface2: "#18181B", surface3: "#242428", fg: "#F5F5F7", fg2: "#B4B6BF", fg3: "#72747D", hair: "#232327" }
         : { bg: T(.925, .012), surface: "#FFFFFF", surface2: T(.895, .016), surface3: T(.85, .02), fg: T(.18, .012), fg2: T(.4, .016), fg3: T(.58, .016), hair: T(.83, .012) };
     } else {
       t = dark
-        ? { bg: "#000000", surface: "#1C1C1E", surface2: "#2C2C2E", surface3: "#3A3A3C", fg: "#F5F5F7", fg2: "#AEAEB2", fg3: "#6E6E73", hair: "#38383A" }
+        ? { bg: "#000000", surface: "#0E0E10", surface2: "#18181B", surface3: "#242428", fg: "#F5F5F7", fg2: "#B4B6BF", fg3: "#72747D", hair: "#232327" }
         : { bg: "#E7E8EE", surface: "#FFFFFF", surface2: "#DFE0E7", surface3: "#D0D2DB", fg: "#0A0A0C", fg2: "#55575F", fg3: "#8E909A", hair: "#C8CAD3" };
     }
     const accent = dark ? okHex(Math.min(Math.max(L, .6), .78), C, H) : hex;

@@ -8,7 +8,8 @@ import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 const URL_GLB = new URL("assets/car.glb", import.meta.url).href;
 let gltfP = null;
 const loadGLB = () => (gltfP ||= new Promise((res, rej) => new GLTFLoader().load(URL_GLB, res, undefined, rej)));
-let paintHex = "#F4F5F7", lightsOn = false;
+let paintHex = "#0A0A0C", paintK = "matte", lightsOn = true;
+const PAINT = { matte: { r: 0.58, cc: 0, m: 0 }, satin: { r: 0.36, cc: 0.4, m: 0.5 }, gloss: { r: 0.1, cc: 1, m: 0.6 } };
 
 const VIEWS = { three: { yaw: 0.7, pitch: 0.16, dist: 6.5 }, side: { yaw: 0, pitch: 0.06, dist: 7.6 }, front: { yaw: Math.PI / 2, pitch: 0.1, dist: 7.2 }, rear: { yaw: -Math.PI / 2, pitch: 0.1, dist: 7.2 }, top: { yaw: 0.2, pitch: 1.25, dist: 8.2 } };
 const ease = t => 1 - Math.pow(1 - t, 3);
@@ -38,7 +39,8 @@ function mount(el, opts = {}) {
   const shadow = new THREE.Mesh(new THREE.PlaneGeometry(6.4, 3.2), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(sc), transparent: true, depthWrite: false, opacity: 0.8 }));
   shadow.rotation.x = -Math.PI / 2; shadow.position.y = 0.005; scene.add(shadow);
 
-  const st = { yaw: 1.9, pitch: 0.16, dist: 9, ty: VIEWS.three.yaw, tp: VIEWS.three.pitch, td: VIEWS.three.dist, vel: 0, drag: false, last: performance.now(), idle: true, intro: 0, spin: 0 };
+  const K = opts.distK || 1, v0 = VIEWS[opts.start] || VIEWS.three;
+  const st = { yaw: 1.9, pitch: 0.16, dist: 9 * K, ty: v0.yaw, tp: v0.pitch, td: v0.dist * K, vel: 0, drag: false, last: performance.now(), idle: true, intro: 0, spin: 0 };
   const api = { el, wheels: [], head: [], tail: [], paintMats: [], hot: [], dead: false };
   const tags = [];
   const loading = document.createElement("div"); loading.className = "c3-load"; el.appendChild(loading);
@@ -48,17 +50,22 @@ function mount(el, opts = {}) {
     const car = gl.scene.clone(true);
     const box = new THREE.Box3().setFromObject(car), size = box.getSize(new THREE.Vector3()), c = box.getCenter(new THREE.Vector3());
     const s = 4.2 / size.x; car.scale.setScalar(s); car.position.set(-c.x * s, -box.min.y * s, -c.z * s);
-    const pivot = new THREE.Group(); pivot.add(car); turn.add(pivot);
+    const pivot = new THREE.Group(); pivot.add(car); turn.add(pivot); api.car = car;
     const h = size.y * s, w = size.z * s, L = 4.2;
     car.traverse(o => {
       if (!o.isMesh) return;
       const n = (o.name || "").toLowerCase(), mn = (o.material.name || "").toLowerCase().trim();
       if (/wheel/.test(n) && !/brake/.test(n)) api.wheels.push(o);
-      if (mn === "car paint") { o.material = o.material.clone(); o.material.map = null; o.material.envMapIntensity = 1.7; api.paintMats.push(o.material); }
+      if (mn === "car paint" || mn === "plastic") { o.material = o.material.clone(); o.material.map = null; o.material.envMapIntensity = 1.7; api.paintMats.push(o.material); }
       if (mn === "head light") { o.material = o.material.clone(); api.head.push(o.material); }
       if (mn === "tail light") { o.material = o.material.clone(); api.tail.push(o.material); }
     });
     api.paint(paintHex, true); api.lights(lightsOn, true);
+    // DRL glow: soft additive flares at the lamp signature, visible from the front
+    const gc = document.createElement("canvas"); gc.width = gc.height = 64; const gg = gc.getContext("2d"); const gz = gg.createRadialGradient(32, 32, 0, 32, 32, 32); gz.addColorStop(0, "rgba(255,255,255,1)"); gz.addColorStop(.25, "rgba(200,220,255,.6)"); gz.addColorStop(1, "rgba(120,160,255,0)"); gg.fillStyle = gz; gg.fillRect(0, 0, 64, 64);
+    const gtex = new THREE.CanvasTexture(gc);
+    api.glow = [];
+    for (const z of [-1, 1]) for (const dy of [0, 1]) { const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: gtex, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true, opacity: 0.0 })); sp.scale.set(0.55, 0.32, 1); sp.position.set(L / 2 * 0.99, (dy ? 0.60 : 0.55) * h, z * w / 2 * 0.62); pivot.add(sp); api.glow.push(sp); }
     // hotspots in pivot space
     const P = (fx, fy, fz) => new THREE.Vector3(fx * L / 2, fy * h, fz * w / 2);
     (opts.hot || []).forEach(hs => {
@@ -70,10 +77,10 @@ function mount(el, opts = {}) {
     if (opts.onReady) opts.onReady(api);
   }).catch(() => { loading.remove(); el.classList.add("c3-failed"); });
 
-  api.paint = (hex, instant) => { paintHex = hex; const col = new THREE.Color(hex); api.paintMats.forEach(m => { m.userData.to = col; if (instant) m.color.copy(col); if ("clearcoat" in m) { m.clearcoat = 1; m.clearcoatRoughness = 0.06; } }); };
-  api.lights = (on, instant) => { lightsOn = on; const f = (m, c) => { m.emissive = new THREE.Color(c); m.userData.ei = on ? 3.2 : 0; if (instant) m.emissiveIntensity = m.userData.ei; }; api.head.forEach(m => f(m, 0xffffff)); api.tail.forEach(m => f(m, 0xff2a1f)); rim.intensity = on ? 90 : 60; return on; };
-  api.view = k => { const v = VIEWS[k] || VIEWS.three; st.idle = false; st.last = performance.now(); st.ty = v.yaw; st.tp = v.pitch; st.td = v.dist; };
-  api.zoom = d => { st.td = Math.min(11, Math.max(4.6, st.td + d)); };
+  api.paint = (hex, instant, kind) => { paintHex = hex; if (kind) paintK = kind; const pk = PAINT[paintK] || PAINT.matte; const col = new THREE.Color(hex); api.paintMats.forEach(m => { m.userData.to = col; if (instant) m.color.copy(col); m.roughness = pk.r; m.metalness = pk.m; m.envMapIntensity = pk.cc ? 1.6 : 0.22; if ("specularIntensity" in m) m.specularIntensity = pk.cc ? 1 : 0.35; if ("clearcoat" in m) { m.clearcoat = pk.cc; m.clearcoatRoughness = pk.cc ? 0.08 : 0.5; } }); };
+  api.lights = (on, instant) => { lightsOn = on; const f = (m, c) => { m.emissive = new THREE.Color(c); m.userData.ei = on ? 3.2 : 0; if (instant) m.emissiveIntensity = m.userData.ei; }; api.head.forEach(m => f(m, 0xffffff)); api.tail.forEach(m => f(m, 0xff2a1f)); rim.intensity = on ? 90 : 60; (api.glow || []).forEach(g => (g.userData.to = on ? 0.9 : 0)); return on; };
+  api.view = k => { const v = VIEWS[k] || VIEWS.three; st.idle = false; st.last = performance.now(); st.ty = v.yaw; st.tp = v.pitch; st.td = v.dist * K; };
+  api.zoom = d => { st.td = Math.min(11 * K, Math.max(4.6 * K, st.td + d)); };
   api.spin = () => { st.spin = 1; };
   api.toggleLights = () => api.lights(!lightsOn);
 
@@ -108,6 +115,7 @@ function mount(el, opts = {}) {
     }
     if (st.spin > 0) { api.wheels.forEach(w => (w.rotation.z -= ease(st.spin) * dt * 14)); st.spin = Math.max(0, st.spin - dt * 0.7); }
     api.paintMats.forEach(m => { if (m.userData.to) m.color.lerp(m.userData.to, Math.min(1, dt * 6)); });
+    (api.glow || []).forEach(g => { const f = Math.max(0, st.yaw - Math.PI * 2 * Math.round(st.yaw / (Math.PI * 2))); const front = Math.cos(st.yaw - Math.PI / 2 + 0.2); const t = (g.userData.to || 0) * Math.max(0, front) * 0.9; g.material.opacity += (t - g.material.opacity) * Math.min(1, dt * 8); });
     [...api.head, ...api.tail].forEach(m => { m.emissiveIntensity += ((m.userData.ei || 0) - m.emissiveIntensity) * Math.min(1, dt * 8); });
     cam.position.set(Math.sin(st.yaw) * Math.cos(st.pitch) * st.dist, tgt.y + Math.sin(st.pitch) * st.dist, Math.cos(st.yaw) * Math.cos(st.pitch) * st.dist);
     cam.lookAt(tgt);

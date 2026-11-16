@@ -1,0 +1,38 @@
+/* SAGA v2.7 · onboarding with the 3D car, feature cards. Loaded last. */
+.intro{position:absolute;inset:0;display:flex;flex-direction:column;background:radial-gradient(100% 55% at 50% 38%,#171A22 0%,#06070A 62%,#000 100%);color:#fff}
+.in-top{display:flex;justify-content:space-between;align-items:center;padding:62px 24px 0}
+.in-top .wordmark,.in-top *{color:#fff}
+.in-skip{height:40px;padding:0 16px;border-radius:20px;background:rgba(255,255,255,.1);font-size:15px;font-weight:600;color:#fff!important}
+.in-car{position:relative;flex:1;min-height:300px;margin-top:6px}
+.in-car .in3{position:absolute;left:-10px;right:-10px;top:0;bottom:0}
+.in-chip{position:absolute;left:24px;top:16px;display:flex;flex-direction:column;gap:6px;padding:12px 16px;border-radius:18px;background:rgba(20,22,28,.8);border:1px solid rgba(255,255,255,.14);font-size:15px;z-index:3;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.in-chip b{font-family:var(--mono);font-weight:500;letter-spacing:.04em;font-size:16px;display:inline-flex;align-items:center;gap:8px}
+.in-chip small{font-size:13.5px;color:#A9ABB3;font-weight:500}
+.in-days{display:flex;gap:6px}.in-days i{width:30px;height:30px;border-radius:15px;background:#fff;color:#0A0B0F;font-style:normal;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.in-days i.o{background:rgba(255,255,255,.12);color:#9EA3B0}
+.in-body{padding:0 24px 40px}
+.in-tag{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:15px;background:rgba(255,255,255,.1);font-size:13.5px;font-weight:600;color:#fff}
+.in-tag .ic{color:var(--accent-ink)}
+.in-h{font-family:var(--display);font-size:34px;font-weight:600;letter-spacing:-.04em;line-height:1.05;margin-top:14px}
+.in-p{font-size:16px;line-height:1.5;color:#A9ABB3;margin-top:10px;min-height:72px}
+.in-dots{display:flex;gap:8px;margin:14px 0 16px}
+.in-dots button{width:8px;height:8px;border-radius:4px;background:rgba(255,255,255,.28);transition:width .3s,background .3s;padding:0}
+.in-dots button.on{width:26px;background:var(--accent)}
+.intro .btn{width:100%;display:flex}
+.intro .wl-langs{justify-content:center}
+.view.enter .in-h,.view.enter .in-p,.view.enter .in-tag{animation:rise .6s both}.view.enter .in-h{animation-delay:.1s}.view.enter .in-p{animation-delay:.18s}
+
+/* feature cards on the car screen */
+.c3-feats{display:flex;gap:10px;overflow-x:auto;padding:16px 20px 26px;margin:0 -20px;scrollbar-width:none;scroll-snap-type:x mandatory}
+.c3-feats::-webkit-scrollbar{display:none}
+.c3-f{flex:none;width:164px;text-align:left;padding:14px;border-radius:20px;background:#0E0E10;border:1px solid #232327;color:#fff;scroll-snap-align:start;transition:border-color .25s,transform .2s}
+.c3-f span{width:40px;height:40px;border-radius:12px;background:#1B1B1F;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.c3-f b{display:block;font-size:15.5px;font-weight:600;letter-spacing:-.01em}
+.c3-f small{display:block;font-size:13.5px;color:#9EA3B0;margin-top:4px;line-height:1.35}
+.c3-f.on{border-color:var(--accent)}
+.c3-f.on span{background:var(--accent)}
+.c3-f:active{transform:scale(.97)}
+.c3-ctl{padding-bottom:0}
+[data-os] .home-hero,[data-theme=dark][data-os=ios] .home-hero,[data-theme=dark] .home-hero{background:radial-gradient(75% 62% at 50% 64%,#2A3040 0%,#0E1117 58%,#000 100%)!important}
+.hh-floor{background:linear-gradient(90deg,transparent,rgba(120,150,255,.45),transparent)}
+.in-r{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600}
