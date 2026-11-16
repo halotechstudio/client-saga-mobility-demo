@@ -568,7 +568,7 @@ def("signin", { g: "Start", n: "Sign in", tabs: 0, nav: 1, foot: 1, what: "Type 
   </div></div>
   ${foot(app.otp ? btn(L("Verify and continue", "ధృవీకరించి కొనసాగండి", "पुष्टि करें और आगे बढ़ें"), { go: "setup" }) : btn(L("Send code", "కోడ్ పంపండి", "कोड भेजें"), { act: "sendotp" }))}`);
 
-def("setup", { g: "Start", n: "Permissions", tabs: 0, nav: 1, foot: 1, what: "Explains each permission in one plain sentence before the system prompt appears.", why: "Asking with a reason raises opt-in for notifications and calendar, which the flight features depend on.", fl: "<code>permission_handler</code>. Calendar: EventKit (iOS) / CalendarContract (Android), read-only." }, () => {
+def("setup", { g: "Start", n: "Permissions", tabs: 0, nav: 1, foot: 1, what: "Explains each permission in one plain sentence before the system prompt appears.", why: "Asking with a reason raises opt-in for notifications, which flight changes and chauffeur updates depend on. Flight emails need no phone permission: one Gmail filter does it.", fl: "<code>permission_handler</code> for location and notifications. Flight emails: a per-rider forwarding address; the Gmail filter guide opens from here." }, () => {
   const p = (k, icon, t, s) => `<div class="permrow"><span class="pico">${I(icon)}</span><div class="grow"><div class="t1">${t}</div><div class="t2">${s}</div></div>${tgl(app.perms[k], `data-act="perm" data-k="${k}"`)}</div>`;
   return `${bar(L("Set up", "సెటప్", "सेटअप"))}
   <div class="content">
@@ -578,7 +578,6 @@ def("setup", { g: "Start", n: "Permissions", tabs: 0, nav: 1, foot: 1, what: "Ex
       ${p("loc", "pin", L("Location", "లొకేషన్", "लोकेशन"), L("Finds your pickup point. Used only while you book or ride.", "మీ పికప్ పాయింట్ కనుగొనడానికి. బుక్ చేసేటప్పుడు, ప్రయాణంలో మాత్రమే.", "आपका पिकअप पॉइंट ढूँढने के लिए। सिर्फ़ बुकिंग और सफ़र के दौरान।"))}
       ${p("notif", "bell", L("Notifications", "నోటిఫికేషన్లు", "नोटिफ़िकेशन"), L("Chauffeur updates, and changes to your flight.", "డ్రైవర్ అప్‌డేట్‌లు, మీ ఫ్లైట్ మార్పులు.", "ड्राइवर की जानकारी और फ़्लाइट में बदलाव।"))}
       ${p("cal", "mail", L("Flight emails", "ఫ్లైట్ ఈమెయిల్స్", "फ़्लाइट ईमेल"), L("One Gmail filter forwards airline tickets to SAGA so we can suggest a pickup. Nothing else is read.", "ఒక Gmail ఫిల్టర్ ఎయిర్‌లైన్ టికెట్లను SAGAకు పంపుతుంది. ఇంకేమీ చదవం.", "एक Gmail फ़िल्टर एयरलाइन टिकट SAGA को भेजता है। और कुछ नहीं पढ़ा जाता।"))}
-      ${ios() ? "" : p("flight", "plane", L("Flight alerts", "ఫ్లైట్ అలర్ట్‌లు", "फ़्लाइट अलर्ट"), L("Reads only airline SMS and app alerts on this phone, so your airport ride plans itself. Nothing else.", "మీ ఎయిర్‌పోర్ట్ రైడ్ దానంతట అదే ప్లాన్ అయ్యేలా, ఈ ఫోన్‌లో ఎయిర్‌లైన్ SMS, యాప్ అలర్ట్‌లు మాత్రమే చదువుతుంది. ఇంకేమీ కాదు.", "इस फ़ोन पर सिर्फ़ एयरलाइन SMS और ऐप अलर्ट पढ़ता है, ताकि एयरपोर्ट राइड अपने-आप प्लान हो। और कुछ नहीं।"))}
     </div>
     <div class="group mt16">${row({ icon: "globe", t: L("Language", "భాష", "भाषा"), trail: S.LANGS.find(l => l.id === S.state.lang).native, go: "language" })}</div>
   </div>
@@ -712,7 +711,7 @@ def("where", { g: "Ride", n: "Where to", tabs: 0, nav: 1, what: "A live route pr
   </div>`;
 }, (el) => { const i = el.querySelector("#destin"); if (i && !BARE && !EMBED) setTimeout(() => { try { i.focus({ preventScroll: true }); } catch (e) {} }, 450); });
 
-def("flysoon", { g: "Start", n: "Flying soon?", tabs: 0, nav: 1, foot: 1, what: "The last onboarding step: add the next flight now by scanning the ticket or picking the flight, or skip. Also offers to catch future bookings automatically.", why: "Airport rides are SAGA's core business, so the first session ends with an airport ride ready to book.", fl: "Same scan and pick components as the Airport screen; the auto-catch toggle maps to notification access (Android) or the Shortcuts guide (iPhone)." }, () => `
+def("flysoon", { g: "Start", n: "Flying soon?", tabs: 0, nav: 1, foot: 1, what: "The last onboarding step: add the next flight now by scanning the ticket or picking it from the VTZ board, or skip. Also offers the one-minute Gmail filter so future bookings are caught automatically.", why: "Airport rides are SAGA's core business, so the first session ends with an airport ride ready to book.", fl: "Same scan and pick components as the Airport screen; the auto-catch option opens the Gmail filter guide (Find my flights)." }, () => `
   ${bar(L("One last thing", "చివరిగా ఒక్కటి", "आख़िरी एक बात"))}
   <div class="content"><div class="pad">
     <div class="center" style="padding-top:6px"><span class="pico" style="width:84px;height:84px;border-radius:42px;margin:0 auto;display:flex;align-items:center;justify-content:center;background:var(--accent);color:var(--on-accent)">${I("plane", "xl")}</span></div>
@@ -723,7 +722,7 @@ def("flysoon", { g: "Start", n: "Flying soon?", tabs: 0, nav: 1, foot: 1, what: 
     ${row({ icon: "scan", t: L("Scan or upload the ticket", "టికెట్ స్కాన్ లేదా అప్‌లోడ్", "टिकट स्कैन या अपलोड करें"), s: L("Screenshot, PDF or boarding pass", "స్క్రీన్‌షాట్, PDF లేదా బోర్డింగ్ పాస్", "स्क्रीनशॉट, PDF या बोर्डिंग पास"), go: "scan" })}
     ${row({ icon: "plane", t: L("Pick my flight", "నా ఫ్లైట్ ఎంచుకోండి", "मेरी फ़्लाइट चुनें"), s: L("Choose the date and city, then tap your flight", "తేదీ, నగరం ఎంచుకుని మీ ఫ్లైట్ నొక్కండి", "तारीख़ और शहर चुनें, फिर अपनी फ़्लाइट दबाएँ"), go: "airport" })}
   </div>
-  <div class="pad mt16"><div class="card tint row-flex"><span class="grow"><b style="display:block;font-size:16.5px">${L("Catch my future bookings", "నా తదుపరి బుకింగ్‌లను గుర్తించు", "आगे की बुकिंग अपने-आप पकड़ें")}</b><span style="font-size:14.5px">${ios() ? L("Uses a 1-minute Shortcuts set-up", "1 నిమిషం Shortcuts సెటప్‌తో", "1 मिनट के Shortcuts सेटअप से") : L("Reads only airline SMS and app alerts", "ఎయిర్‌లైన్ SMS, యాప్ అలర్ట్‌లు మాత్రమే చదువుతుంది", "सिर्फ़ एयरलाइन SMS और ऐप अलर्ट पढ़ता है")}</span></span>${tgl(app.travel.notif, 'data-act="tnotif"')}</div></div>
+  <div class="pad mt16"><div class="card tint row-flex"><span class="grow"><b style="display:block;font-size:16.5px">${L("Catch my future bookings", "నా తదుపరి బుకింగ్‌లను గుర్తించు", "आगे की बुकिंग अपने-आप पकड़ें")}</b><span style="font-size:14.5px">${L("One Gmail filter, set up in a minute", "ఒక Gmail ఫిల్టర్, నిమిషంలో సెటప్", "एक Gmail फ़िल्टर, एक मिनट में सेटअप")}</span></span>${tgl(app.travel.mail, 'data-act="tmail"')}</div></div>
   </div>
   ${foot(btn(L("Skip for now", "ఇప్పటికి వద్దు", "अभी छोड़ें"), { kind: "btn-secondary", go: "home", attr: 'data-reset="1"' }))}`);
 

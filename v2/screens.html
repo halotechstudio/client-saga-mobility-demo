@@ -51,12 +51,12 @@ td code{font-family:var(--mono);font-size:13px}
   <h1>Every screen, end to end</h1>
   <p class="lede">The schema for the Flutter build, drawn with the live screens from the simulation. Click any screen to open it. Switch iPhone / Android above to see both builds. Route names are proposals for <code>go_router</code>; endpoints are what each screen needs from SAGA's backend.</p>
   <div id="rider"></div>
-  <h2>Chauffeur app · Android</h2><p>Company phones, dark by default, Telugu / Hindi / English.</p>
+  <h2>Chauffeur app · Android</h2><p>Company phones, cockpit tone, dark by default, Telugu / Hindi / English. 17 screens; the vehicle check uses real rendered angles of the car.</p>
   <div id="driver"></div>
   <h2>Hotel app and ops dashboard</h2><p>Responsive web (tablet and desktop). Same tokens and components, so a Flutter Web or React build both work.</p>
   <div class="web">
-    <div class="webc"><b>SAGA for Hotels</b><ol><li><a href="hotel.html#today">Today</a>: KPIs, today's guest rides, live tracking</li><li><a href="hotel.html#book">Book a ride</a>: guest, room, flight (scan the ticket or pick it), payment mode, quote with commission, WhatsApp preview</li><li><a href="hotel.html#bookings">Bookings</a>: filters, detail drawer with map, resend / cancel</li><li><a href="hotel.html#earnings">Commission and statements</a>: money flow, netting, GST/TDS lines, past statements</li><li><a href="hotel.html#settings">Settings</a>: property, staff access, partner terms, guest perks</li></ol></div>
-    <div class="webc"><b>Ops dashboard</b><ol><li><a href="ops.html#command">Command</a>: fleet, waitlist, flights, revenue, live map, alerts with one-click actions</li><li><a href="ops.html#bookings">Bookings</a>: live, scheduled, waitlist</li><li><a href="ops.html#flights">Flight watch</a>: every linked flight and how its pickup moved</li><li><a href="ops.html#fleet">Fleet and chauffeurs</a>: status, charge, location, next job</li><li><a href="ops.html#hotels">Hotel partners</a>: rides, gross, rate, commission</li><li><a href="ops.html#offers">Offers</a>: running offers, budget caps, new-offer builder</li><li><a href="ops.html#notifications">Notifications</a>: event catalogue with channels and templates in 3 languages</li></ol></div>
+    <div class="webc"><b>SAGA for Hotels</b><ol><li><a href="hotel.html#today">Today</a>: the car revealed on a landscape stage, KPIs that count up, today's guest rides, live map</li><li><a href="hotel.html#book">Book a ride</a>: guest, room, flight (scan the ticket or pick it), payment mode, quote with commission, WhatsApp preview</li><li><a href="hotel.html#track">Live tracking</a>: the guest's car on its route, progress steps, chauffeur, the message the guest received</li><li><a href="hotel.html#bookings">Bookings</a>: filters, detail drawer with map, resend / cancel</li><li><a href="hotel.html#earnings">Commission and statements</a>: commission by month, payment mix, netting with GST/TDS, past statements</li><li><a href="hotel.html#settings">Settings</a>: property, staff access, partner terms, guest perks</li></ol></div>
+    <div class="webc"><b>Ops dashboard</b><ol><li><a href="ops.html#command">Command</a>: lit KPIs, fleet map with car sprites and IDs, alerts with one-click actions, flight timeline, live waitlist, charging bays</li><li><a href="ops.html#bookings">Bookings</a>: live, scheduled, waitlist</li><li><a href="ops.html#flights">Flight watch</a>: today's flight timeline, every linked flight and how its pickup moved</li><li><a href="ops.html#fleet">Fleet and chauffeurs</a>: status, charge, location, next job</li><li><a href="ops.html#hotels">Hotel partners</a>: rides, gross, rate, commission</li><li><a href="ops.html#offers">Offers</a>: running offers, budget caps, new-offer builder</li><li><a href="ops.html#notifications">Notifications</a>: event catalogue with channels and templates in 3 languages</li></ol></div>
   </div>
   <h2>Route table</h2><p>One row per rider screen: route, purpose and the backend it depends on.</p>
   <div style="overflow-x:auto"><table id="routes"></table></div>
@@ -68,37 +68,66 @@ const S = SAGA; let os = S.qs.get("os") || "ios"; S.state.os = "web"; S.apply();
 const $ = q => document.querySelector(q), I = S.icon;
 $("#logo").innerHTML = S.logo();
 const R = {
-  welcome: ["Welcome", "/welcome", "—"], signin: ["Sign in", "/signin", "POST /auth/otp, /auth/verify"], setup: ["Permissions", "/setup", "PATCH /me/prefs"], flysoon: ["Flying soon?", "/welcome/flight", "—"],
-  home: ["Home", "/", "GET /trips/detected, /fleet/nearby, /rides?upcoming"], where: ["Where to", "/ride/where", "Places Autocomplete"], options: ["Confirm ride", "/ride/confirm", "POST /quotes"],
-  finding: ["Finding a car", "/ride/finding", "POST /rides, WS ride.{id}"], nocars: ["No cars nearby", "/ride/waitlist", "POST /rides/{id}/waitlist"], assigned: ["Chauffeur on the way", "/ride/:id", "WS ride.{id} (position, ETA)"],
-  onride: ["On the ride", "/ride/:id/live", "WS ride.{id}, POST /rides/{id}/requests"], arrived: ["Arrived", "/ride/:id/done", "GET /rides/{id}/receipt, POST rating"],
-  airport: ["Airport rides", "/airport", "GET /flights/board?airport=VTZ&date="], scan: ["Scan ticket", "/airport/scan", "on-device OCR + barcode → POST /flights/match"], flight: ["Pickup plan", "/airport/:flight", "GET /flights/{id}, POST /quotes"], booked: ["Pickup booked", "/airport/:id/booked", "POST /rides (scheduled, flight-linked)"],
-  schedule: ["Scheduled rides", "/scheduled/new", "POST /series {rrule, exdates}"], intercity: ["Intercity", "/intercity", "POST /quotes {type: intercity}"], vehicle: ["The car", "/vehicle", "GET /fleet/profile (CMS)"],
-  rides: ["Trips", "/trips", "GET /rides, GET /series"], offers: ["Offers", "/offers", "GET /offers, POST /promo/apply"], account: ["Account", "/account", "GET /me"],
-  language: ["Language", "/settings/language", "PATCH /me {locale}"], voicecfg: ["Voice", "/settings/voice", "POST /voice/intent"], travel: ["Find my flights", "/settings/flights", "Gmail forwarding filter (inbound email)"],
-  notifications: ["Notifications", "/inbox", "GET /notifications"], wallet: ["Wallet", "/wallet", "GET /wallet, POST /wallet/topup"], chat: ["Chat with chauffeur", "/ride/:id/chat", "WS ride.{id}.chat"], lock: ["Lock screen", "(system)", "ActivityKit push / FCM Live Update"]
+  welcome: ["Welcome · the unveil", "/welcome", "—", "Logo builds itself, then the SAGA Luxe is revealed: DRLs, LED livery, ceiling light (Cycles render layers)"],
+  intro2: ["Three services", "/welcome/services", "—", "Fanned glass chapter cards over renders: airport, scheduled, intercity"],
+  intro3: ["Language", "/welcome/language", "—", "English, Telugu, Hindi in their own scripts; Saathi follows the choice"],
+  signin: ["Sign in", "/signin", "POST /auth/otp, /auth/verify", "Rear-livery hero, mobile + auto-filled code, Apple / Google"],
+  setup: ["Permissions", "/setup", "PATCH /me/prefs", "One plain sentence per permission before the system prompt"],
+  flysoon: ["Flying soon?", "/welcome/flight", "—", "Add the next flight now: scan the ticket or pick it from the VTZ board"],
+  ready: ["Ready", "/welcome/ready", "—", "The car turns on the spot to face the rider"],
+  home: ["Home", "/", "GET /trips/detected, /fleet/nearby, /rides?upcoming", "Showroom 360° hero, live chip, glass search, animated flight card, dock with glowing Ride"],
+  where: ["Where to", "/ride/where", "Places Autocomplete, POST /quotes", "Route preview with fixed fare, glass route card, up to 3 stops (+₹40), lit saved places, recents"],
+  options: ["Confirm ride", "/ride/confirm", "POST /quotes", "Car cut-out, fare counts up, one Pay with row, slide to book"],
+  finding: ["Finding a car", "/ride/finding", "POST /rides, WS ride.{id}", "Ticking checklist while dispatch matches"],
+  nocars: ["No cars nearby", "/ride/waitlist", "POST /rides/{id}/waitlist", "Honest start-up message, car in a 60-tick waitlist clock, fare locked, +50 points"],
+  assigned: ["Chauffeur on the way", "/ride/:id", "WS ride.{id} (position, ETA)", "ETA, cut-out, plate, ride code digits, chauffeur with chat and call"],
+  onride: ["On the ride", "/ride/:id/live", "WS ride.{id}, POST /rides/{id}/requests", "Progress arc, next stop, cabin temperature and quiet ride, SOS, Live Activity"],
+  arrived: ["Arrived", "/ride/:id/done", "GET /rides/{id}/receipt, POST rating", "Rear view with glowing tail lights, glass receipt, light-burst stars, tip, invoice emailed"],
+  airport: ["Airport rides", "/airport", "GET /flights/board?airport=VTZ&date=", "Lit scan card, Gmail-found flight, VTZ departures/arrivals board with split-flap times"],
+  scan: ["Scan ticket", "/airport/scan", "on-device OCR + barcode → POST /flights/match", "Scan light sweeps; each field locks; the found flight slides up as a pass"],
+  flight: ["Pickup plan", "/airport/:flight", "GET /flights/{id}, POST /quotes", "Journey pass: the car drives Home → VTZ, the plane takes off"],
+  booked: ["Pickup booked", "/airport/:id/booked", "POST /rides (scheduled, flight-linked)", "Ride pass prints from a slot: QR, perforation, Wallet"],
+  schedule: ["Scheduled rides", "/scheduled/new", "POST /series {rrule, exdates}", "Week strip lights up day by day, lit series card, glass calendar to skip dates"],
+  intercity: ["Intercity", "/intercity", "POST /quotes {type: intercity}", "Lit road with the car driving it, charging stop over 150 km, fare counts"],
+  vehicle: ["The car", "/vehicle", "GET /fleet/profile (CMS)", "Expo unveil with Lights / Showroom switches, 360° walk-around, specs"],
+  rides: ["Trips", "/trips", "GET /rides, GET /series", "Airport pass, weekday series with week dots and the car, past trips with invoices"],
+  offers: ["Offers", "/offers", "GET /offers, POST /promo/apply", "Points ring, promo field, luminous tickets with copyable codes (FLYSAGA)"],
+  account: ["Account", "/account", "GET /me", "Profile with counting stats, theme previews, settings, signed with the client logo"],
+  wallet: ["Wallet", "/wallet", "GET /wallet, POST /wallet/topup", "Stack of glass cards; tap one to make it default; balance counts up"],
+  chat: ["Chat with chauffeur", "/ride/:id/chat", "WS ride.{id}.chat", "Glass bubbles, quick replies, translated for each side"],
+  language: ["Language", "/settings/language", "PATCH /me {locale}", "Large cards in each script with a sample line"],
+  voicecfg: ["Voice", "/settings/voice", "POST /voice/intent", "Saathi's luminous orb, phrases to try, Siri / Gemini route"],
+  travel: ["Find my flights", "/settings/flights", "Gmail forwarding filter (inbound email)", "Three-step Gmail filter guide with a preview of the filter; scan or board as alternatives"],
+  notifications: ["Notifications", "/inbox", "GET /notifications", "Live card for a moved pickup, tinted glass inbox"],
+  lock: ["Lock screen", "(system)", "ActivityKit push / FCM Live Update", "Live Activity / Live Update over a car wallpaper"],
+  offline: ["No connection", "(state)", "connectivity_plus", "Quiet orb; the booked pickup still shown as a saved pass"],
+  payfail: ["Payment failed", "(state)", "POST /rides/{id}/pay (retry)", "Amber orb and plain facts: not charged, refund rule, not blocked"],
+  update: ["Update required", "(state)", "Remote Config min_version", "Brand orb, version step, what's new"],
+  softupdate: ["Update available", "(state)", "Remote Config latest_version", "Lit sheet over the waiting home screen"],
+  loading: ["Loading", "(state)", "GET /home/cards", "Home-shaped skeleton with a sweeping band of light"]
 };
 const LANES = [
-  ["Start", "first launch", ["welcome", "signin", "setup", "flysoon", "home"]],
+  ["Start", "logo, unveil, chapters, language, sign in", ["welcome", "intro2", "intro3", "signin", "setup", "flysoon", "ready", "home"]],
   ["Ride now", "city and on-demand", ["home", "where", "options", "finding", "assigned", "onride", "arrived"]],
-  ["When no car is free", "honest wait", ["finding", "nocars", "assigned"]],
-  ["Airport", "scan the ticket or pick the flight → pickup", ["home", "airport", "scan", "flight", "booked", "rides"]],
+  ["When no car is free", "honest wait with a real countdown", ["finding", "nocars", "assigned"]],
+  ["Airport", "Gmail filter, scan the ticket or pick the flight → pickup", ["home", "airport", "scan", "flight", "booked", "rides"]],
   ["Scheduled rides", "repeat on a calendar", ["home", "schedule", "rides"]],
   ["Intercity", "fixed fare, charging planned", ["home", "intercity", "rides"]],
   ["The car", "premium showcase", ["home", "vehicle", "where"]],
   ["Account and settings", "theme, language, voice, flights", ["account", "language", "voicecfg", "travel", "notifications", "lock"]],
-  ["Offers and wallet", "points, offers, wallet, chat", ["offers", "wallet", "chat"]]
+  ["Offers and wallet", "points, offers, wallet, chat", ["offers", "wallet", "chat"]],
+  ["System states", "never a blank screen", ["loading", "offline", "payfail", "softupdate", "update"]]
 ];
-const DL = [["Onboarding", "first day", ["welcome", "signin", "verify", "perms"]], ["Start of shift", "9-photo inspection, checklist, slide to go online", ["inspect", "checklist", "duty"]], ["A job", "assigned → pickup → code → trip → next job", ["assigned", "topickup", "chat", "waiting", "code", "trip", "done"]], ["Car and me", "charging, wallet, notifications", ["vehicle", "profile", "inbox"]]];
-const DN = { welcome: "Welcome", signin: "Sign in", verify: "Profile checks", perms: "Permissions", inspect: "Vehicle check", checklist: "Ready to go", chat: "Chat with rider", inbox: "Notifications", assigned: "Job assigned", duty: "Duty", topickup: "To pickup", waiting: "At pickup", code: "Start with code", trip: "On trip", done: "Trip complete", vehicle: "Charging", profile: "Me · summary & wallet" };
+const DL = [["Onboarding", "unveil, staff sign-in, checks, permissions", ["welcome", "signin", "verify", "perms"]], ["Start of shift", "9-photo check on real angles, checklist, slide to go online", ["inspect", "checklist", "duty"]], ["A job", "offer ring → turn cards → free wait → code → trip → earnings", ["assigned", "topickup", "chat", "waiting", "code", "trip", "done"]], ["Car and me", "car health, earnings week, notifications", ["vehicle", "profile", "inbox"]]];
+const DN = { welcome: "Welcome · the unveil", signin: "Sign in", verify: "Profile checks", perms: "Permissions", inspect: "Vehicle check · 9 photos", checklist: "Ready to go", chat: "Chat with rider", inbox: "Notifications", assigned: "Job offer", duty: "Duty", topickup: "To pickup", waiting: "At pickup", code: "Start with code", trip: "On trip", done: "Trip complete", vehicle: "Car health & charging", profile: "Me · earnings & shift" };
 const node = (app, id, name, route) => `<a class="node" href="${app}.html?os=${os}#${id}"><div class="thumb"><iframe loading="lazy" tabindex="-1" title="${name}" src="${app}.html?os=${os}&bare=1&screen=${id}"></iframe></div><b>${name}</b><code>${route}</code></a>`;
 const arrow = `<span class="arr">${I("arrowr")}</span>`;
 function draw() {
   $("#os").innerHTML = ["ios", "android"].map(o => `<button class="${os === o ? "on" : ""}" data-setos="${o}">${o === "ios" ? "iPhone" : "Android"}</button>`).join("");
-  $("#rider").innerHTML = `<h2>Rider app</h2><p>${os === "ios" ? "iPhone build" : "Android build"} · 29 screens plus the Saathi voice layer, which opens over any screen.</p>` + LANES.map(([t, s, ids]) => `<div class="lane"><h3>${t}<span>${s}</span></h3><div class="flow">${ids.map((id, i) => (i ? arrow : "") + node("rider", id, R[id][0], R[id][1])).join("")}${t === "Account and settings" ? "" : ""}</div></div>`).join("")
+  $("#rider").innerHTML = `<h2>Rider app</h2><p>${os === "ios" ? "iPhone build" : "Android build"} · ${Object.keys(R).length} screens plus the Saathi voice layer, which opens over any screen.</p>` + LANES.map(([t, s, ids]) => `<div class="lane"><h3>${t}<span>${s}</span></h3><div class="flow">${ids.map((id, i) => (i ? arrow : "") + node("rider", id, R[id][0], R[id][1])).join("")}${t === "Account and settings" ? "" : ""}</div></div>`).join("")
     + `<div class="lane"><h3>Saathi voice<span>over any screen, in English, Telugu or Hindi</span></h3><div class="flow"><a class="node" href="rider.html?os=${os}&voice=1#home"><div class="thumb"><iframe loading="lazy" tabindex="-1" title="Voice" src="rider.html?os=${os}&bare=1&screen=home&voice=1"></iframe></div><b>Saathi listening</b><code>overlay</code></a>${arrow}<span class="branch">intent →<br>screen</span>${arrow}${node("rider", "flight", "Opens the right screen", "/airport/:flight")}</div></div>`;
   $("#driver").innerHTML = DL.map(([t, s, ids]) => `<div class="lane"><h3>${t}<span>${s}</span></h3><div class="flow">${ids.map((id, i) => (i ? arrow : "") + node("driver", id, DN[id], "/driver/" + id)).join("")}</div></div>`).join("");
-  $("#routes").innerHTML = `<thead><tr><th>Screen</th><th>Route</th><th>Needs from backend</th></tr></thead><tbody>${Object.entries(R).map(([id, [n, r, api]]) => `<tr><td><a href="rider.html?os=${os}#${id}" style="color:inherit;font-weight:600">${n}</a></td><td><code>${r}</code></td><td><code>${api}</code></td></tr>`).join("")}</tbody>`;
+  $("#routes").innerHTML = `<thead><tr><th>Screen</th><th>Route</th><th>What it shows (v4)</th><th>Needs from backend</th></tr></thead><tbody>${Object.entries(R).map(([id, [n, r, api, note]]) => `<tr><td><a href="rider.html?os=${os}#${id}" style="color:inherit;font-weight:600">${n}</a></td><td><code>${r}</code></td><td style="font-size:13.5px;color:var(--fg2)">${note || ""}</td><td><code>${api}</code></td></tr>`).join("")}</tbody>`;
 }
 document.addEventListener("click", e => { const b = e.target.closest("[data-setos]"); if (b) { os = b.dataset.setos; draw(); } });
 S.onChange(() => { S.state.os = "web"; S.apply(); $("#logo").innerHTML = S.logo(); });

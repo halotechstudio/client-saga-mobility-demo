@@ -77,8 +77,8 @@ tr:last-child td{border-bottom:0}
 </ul>
 <h3>What changed since the first concept</h3>
 <ul>
-<li><b>Logo and colour are SAGA's own.</b> Our earlier logo is gone. Until the files arrive, the apps use a neutral wordmark and a placeholder blue. Paste SAGA's hex code and upload the logo on the <a href="index.html">suite page</a> and every app re-themes, in light and dark, with text contrast checked.</li>
-<li><b>No 3D ride animation.</b> During a ride the rider sees a regular map in SAGA's colours: the route, the car marker and the ETA.</li>
+<li><b>Logo and colour are SAGA's own.</b> The logo is traced exactly from SAGA's artwork (one vector, never redrawn) and the palette is SAGA's: primary #3F51B5, secondary #6E759E, tertiary #8F4700, neutral #0A0E21, with the logo's cyan and green used as light. Every app re-themes from these, in light and dark, with text contrast checked.</li>
+<li><b>A photo-real car, not real-time 3D.</b> The SAGA Luxe appears as studio renders of SAGA's own model: an expo-style unveil, a 360° walk-around, cut-outs and a map sprite (section 12). During a ride the rider sees a regular map in SAGA's colours.</li><li><b>The "Luminous" look:</b> a black canvas, SAGA's blue glowing inside thick glass, Instrument Serif for big moments and Manrope for everything you read and tap. Light mode is fully supported.</li>
 <li><b>The car is the SAGA Luxe</b> (7 seats, no make or model shown), presented as the premium product it is: on the welcome screen, on Home, in the ride sheet and on its own "The car" page.</li>
 <li><b>An honest message when no car is free</b>, offering a place in line, a scheduled ride or a notification.</li>
 <li><b>Different iPhone and Android builds</b>, a hotel partner app, dark mode, three languages and voice.</li>
@@ -88,9 +88,9 @@ tr:last-child td{border-bottom:0}
 <div class="tw"><table><thead><tr><th>Topic</th><th>What we assumed</th><th>Please confirm</th></tr></thead><tbody>
 <tr><td><b>Seats</b></td><td>The fleet car is a 7-seater, shown everywhere as <b>SAGA Luxe</b>: the chauffeur plus 6 riders. The seat plan, capacity checks and copy all come from one setting.</td><td>Confirmed: 7 seats. One setting drives it.</td></tr>
 <tr><td><b>"Intercity regular ride hailing"</b></td><td>Built as two products: on-demand rides within the city, plus fixed-fare intercity trips (Araku, Vizianagaram, Srikakulam, Kakinada, Rajahmundry) with charging stops planned.</td><td>Is that the split you meant?</td></tr>
-<tr><td><b>Vehicle images</b></td><td>A neutral illustration of a compact electric SUV stands in for photos.</td><td>Official photos of SAGA's cars (see §13).</td></tr>
+<tr><td><b>Vehicle images</b></td><td>Studio renders of SAGA's supplied model, in the SAGA livery, with maker badges removed. The cabin is not shown (the model's interior is a placeholder).</td><td>Real cabin photographs (see §14).</td></tr>
 <tr><td><b>Airport</b></td><td>Samples show Visakhapatnam (VTZ) and name the new airport "Bhogapuram International".</td><td>Which airport name and code should riders see?</td></tr>
-<tr><td><b>Fares</b></td><td>₹18/km, ₹50 base, 5% GST, fixed at booking, no surge. Airport ₹1,140. Weekday plan 10% off.</td><td>The real fare rules (see §13).</td></tr>
+<tr><td><b>Fares</b></td><td>₹18/km, ₹50 base, 5% GST, fixed at booking, no surge. Airport ₹1,140. Weekday plan 10% off.</td><td>The real fare rules (see §14).</td></tr>
 <tr><td><b>Free waiting</b></td><td>10 min in the city, 45 min after landing at the airport, 30 min for hotel bookings.</td><td>Your waiting policy and charges.</td></tr>
 <tr><td><b>Hotel commission</b></td><td>10% of fare, settled monthly (sample).</td><td>Rates per partner and the settlement terms.</td></tr>
 <tr><td><b>Voice for chauffeurs</b></td><td>Not included. Chauffeurs get turn-by-turn navigation voice only, as agreed earlier.</td><td>Still correct?</td></tr>
@@ -280,7 +280,7 @@ tr:last-child td{border-bottom:0}
 <h2 id="s11"><span class="n">11</span>iPhone and Android: one app, two native feels</h2>
 <div class="tw"><table><thead><tr><th></th><th>iPhone</th><th>Android</th></tr></thead><tbody>
 <tr><td>Navigation</td><td>Floating glass tab bar with a separate Saathi button, swipe-back, large titles</td><td>Navigation bar with pill indicators, Saathi FAB, predictive back</td></tr>
-<tr><td>Type</td><td>SF Pro (system font)</td><td>Roboto Flex, Material type scale</td></tr>
+<tr><td>Type</td><td>Manrope for UI, Instrument Serif for big moments; Liquid Glass materials</td><td>Manrope for UI, Instrument Serif for big moments; Material 3 Expressive shapes and motion</td></tr>
 <tr><td>Colour</td><td>Neutral greys, brand colour as tint</td><td>Surfaces tinted from the brand colour</td></tr>
 <tr><td>Lists, sheets</td><td>Inset grouped lists, floating sheets</td><td>Segmented lists, attached bottom sheets</td></tr>
 <tr><td>Controls</td><td>iOS switches, segmented control, haptics</td><td>M3 switches, connected button groups, ripple</td></tr>
@@ -288,7 +288,28 @@ tr:last-child td{border-bottom:0}
 </tbody></table></div>
 <p><b>How it's built in Flutter:</b> shared business logic and design tokens; a platform layer that uses Cupertino widgets on iPhone and Material 3 on Android; and small native pieces where Flutter can't reach. Those are the Live Activity widget (Swift), Android Live Updates and full-screen job alerts (Kotlin), the share extension, Siri App Intents and Android App Actions. Flutter draws its own UI, so the iOS 26 glass effect is recreated with background blur; system sheets, permission prompts, share sheets and haptics stay native.</p>
 
-<h2 id="s12"><span class="n">12</span>Colour, dark mode and languages</h2>
+<h2 id="s12"><span class="n">12</span>The car on screen: photo-real renders, not real-time 3D</h2>
+<p>SAGA asked for the car to look real. Real-time 3D (a WebGL or Flutter 3D scene) looks game-like on mid-range Android phones, adds a heavy engine and a 5 MB model, and costs battery. So every image of the SAGA Luxe in the apps is a <b>pre-rendered photograph</b>: the client's own model, in the SAGA livery, lit like a studio shoot in Blender's Cycles renderer. The app only plays images, so it runs at 60 fps on any phone.</p>
+<div class="tw"><table><thead><tr><th style="width:26%">Render set</th><th>What it is</th><th style="width:28%">How it ships</th></tr></thead><tbody>
+<tr><td><b>Expo unveil</b></td><td>4 light layers: daytime-running lights, LED livery, ceiling light, fully lit. Portrait (780 × 1688) for phones, landscape (1920 × 1080) for the hotel app.</td><td>Bundled in the app</td></tr>
+<tr><td><b>Hero stills</b></td><td>Front-low, side and rear on the dark stage (sign-in, lock screen, car page).</td><td>Bundled</td></tr>
+<tr><td><b>Cut-outs</b></td><td>Side, front and rear on a transparent background with a soft contact shadow. Used on any surface: confirm ride, chauffeur on the way, arrived, trips, hotel quote.</td><td>Bundled</td></tr>
+<tr><td><b>Map sprite</b></td><td>The car seen from above, nose up, for map markers and the chauffeur's car-health screen.</td><td>Bundled</td></tr>
+<tr><td><b>360° pack</b></td><td>72 frames, one every 5°, crossfaded as the rider drags (Home and the car page). The chauffeur's 9-photo vehicle check uses 8 of these angles.</td><td>Downloaded on demand, about 2.1 MB (WebP)</td></tr>
+</tbody></table></div>
+<p>Everything bundled comes to about <b>0.65 MB</b>. The 360° pack loads after first launch; until it arrives, the hero still stands in.</p>
+<h3>How to build it in Flutter</h3>
+<ul>
+<li><b>The unveil:</b> a <code>Stack</code> of the four layers. The light layers are painted with <code>BlendMode.plus</code> (a <code>CustomPainter</code> drawing each <code>ui.Image</code> with an additive <code>Paint</code>), and revealed by animated "shutters": <code>Transform</code> and <code>Opacity</code> driven by one <code>AnimationController</code> (0.6 s DRLs, 1.8 s livery, 2.8 s ceiling light). Only transform and opacity animate, so it stays smooth. Reduced motion shows the final frame.</li>
+<li><b>The 360°:</b> decode the 72 frames to <code>ui.Image</code> once, then a <code>CustomPainter</code> draws the two frames nearest the drag angle, crossfading between them. A drag gesture plus a <code>FrictionSimulation</code> gives the inertia.</li>
+<li><b>Delivery:</b> the pack as Play Asset Delivery (Android) and On-Demand Resources (iOS), or a plain download cached with <code>flutter_cache_manager</code>. A new livery or angle means re-rendering and shipping a new pack, with no app release.</li>
+<li><b>Maps:</b> the top-down sprite as a <code>BitmapDescriptor</code> on <code>google_maps_flutter</code>, rotated by the car's heading.</li>
+</ul>
+<h3>How the renders are made</h3>
+<p>A single Blender 5.2 script (<code>stage.py</code>) builds the stage, cameras and lights and renders each set as a job (<code>unveil_p</code>, <code>unveil_l</code>, <code>stills</code>, <code>cutouts</code>, <code>topdown</code>, <code>spin72</code>). On HALO Studio's GPU a 360° frame takes about 15 seconds, so the whole set renders in under an hour. Maker badges are removed from the model. <b>The cabin is not rendered:</b> the supplied model's interior is a placeholder, so cabin views need real photographs from SAGA (see section 14).</p>
+<div class="callout"><b>Recommendation:</b> ship the pre-rendered image sequences above. Keep a real-time 3D viewer off the roadmap unless SAGA later wants riders to configure cars, which a single-model fleet doesn't need.</div>
+
+<h2 id="s13"><span class="n">13</span>Colour, dark mode and languages</h2>
 <p>Every colour in every app comes from one function, fed by SAGA's single brand colour. The palettes below are generated live. Paste SAGA's hex code to preview them, and check the contrast of text on the brand colour.</p>
 <div class="hexin"><input id="hx" spellcheck="false" aria-label="Brand hex"><span id="hxc" style="font-size:14px;color:var(--fg2)"></span></div>
 <div class="tok" id="tok"></div>
@@ -298,11 +319,11 @@ tr:last-child td{border-bottom:0}
 <li>Odia, Tamil and Kannada can be added later without code changes; they're already listed as "coming next".</li>
 </ul>
 
-<h2 id="s13"><span class="n">13</span>What we need from SAGA</h2>
+<h2 id="s14"><span class="n">14</span>What we need from SAGA</h2>
 <p><span class="tag b">Blocker</span> needed before the build starts · <span class="tag d">Build</span> needed during the build · <span class="tag l">Launch</span> needed before store submission</p>
 <div class="tw"><table id="needs"><thead><tr><th style="width:26%">Item</th><th>Details and format</th><th style="width:90px">When</th></tr></thead><tbody></tbody></table></div>
 
-<h2 id="s14"><span class="n">14</span>Build and handover to testing</h2>
+<h2 id="s15"><span class="n">15</span>Build and handover to testing</h2>
 <div class="tw"><table><thead><tr><th>Phase</th><th>Scope</th><th>Indicative</th></tr></thead><tbody>
 <tr><td><b>0 · Set-up</b></td><td>Repository and API access, mapping screens to existing endpoints (gaps listed), tokens and component library in Flutter, light/dark, i18n scaffolding</td><td>Week 1</td></tr>
 <tr><td><b>1 · Ride core</b></td><td>Sign in, Home, Where to, Confirm, branded map, tracking with ride code, Arrived, payments, Trips, Account</td><td>Weeks 2–5</td></tr>
@@ -321,7 +342,7 @@ tr:last-child td{border-bottom:0}
 <li>iPhone builds through TestFlight; Android builds through Play internal testing.</li>
 </ul>
 
-<h2 id="s15"><span class="n">15</span>Sources</h2>
+<h2 id="s16"><span class="n">16</span>Sources</h2>
 <ul class="src">
 <li>aviationstack pricing: <a href="https://aviationstack.com/pricing">aviationstack.com/pricing</a></li>
 <li>FlightAware AeroAPI: <a href="https://flightaware.com/commercial/aeroapi/">flightaware.com/commercial/aeroapi</a>; tier summary: <a href="https://geekflare.com/dev/flight-data-api/">Geekflare, Best Flight Data APIs 2026</a></li>
@@ -348,8 +369,8 @@ const NEEDS = [
   ["Brand"],
   ["Logo files", "SVG for the primary and single-colour versions, a 1024×1024 PNG app-icon master, and a splash version. Any usage rules.", "b"],
   ["Brand colours", "Primary hex code (plus secondary or neutral colours if any). We generate light/dark and iOS/Android palettes from it.", "b"],
-  ["Vehicle facts", "Exact model and seat layout (5 or 6 seats), luggage capacity, and which amenities are really provided: water, chargers, Wi-Fi, child seat.", "b"],
-  ["Fleet photography", "SAGA Luxe in SAGA livery: front ¾, side, rear ¾, front cabin, rear seats, boot. 4K, plain background preferred. Livery artwork.", "d"],
+  ["Vehicle facts", "Confirm the 7-seat layout (chauffeur + 6 riders) and 3 bags, and which amenities are really provided: water, chargers, Wi-Fi, child seat.", "b"],
+  ["Cabin photography", "The exterior is rendered from SAGA's model. We still need real photos of the cabin: front seats and dashboard, rear seats, third row, boot. 4K, daylight, plain and tidy.", "d"],
   ["Brand font", "Only if SAGA licenses one; otherwise system fonts (SF Pro / Roboto) are used.", "d"],
   ["Existing app and backend"],
   ["Flutter repository", "Access to the repo and a working branch. Flutter/Dart versions, state-management choice, architecture notes, package list, build flavours (dev/staging/prod), CI.", "b"],
