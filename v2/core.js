@@ -319,8 +319,10 @@
   }
   function carMark(p, ang, kind) {
     const [x, y] = p;
-    return `<g class="m-car ${kind === "me" || kind === "free" ? "m-car-me" : ""} ${kind === "busy" ? "m-car-busy" : ""}" transform="translate(${x} ${y}) rotate(${ang})">
-      <rect x="-7.5" y="-13" width="15" height="26" rx="5" class="body"/><rect x="-5.5" y="-6.5" width="11" height="6" rx="1.6" class="glass"/><rect x="-5.5" y="5" width="11" height="4" rx="1.4" class="glass"/></g>`;
+    // the real car seen from above (Cycles render), nose up; free cars get a soft brand glow
+    const mine = kind === "me" || kind === "free";
+    return `<g class="m-car ${mine ? "m-car-me" : ""} ${kind === "busy" ? "m-car-busy" : ""}" transform="translate(${x} ${y}) rotate(${ang})">
+      ${mine ? `<ellipse rx="15" ry="22" fill="#7C89FF" opacity=".75" style="filter:blur(5px)"/>` : ""}<image href="assets/render/top-down.webp" x="-16" y="-16" width="32" height="32" ${kind === "busy" ? 'opacity=".55"' : ""}/></g>`;
   }
 
   /* the map in SAGA's dark style, whatever the app theme (for hero map cards) */
@@ -346,7 +348,7 @@
      Neutral compact-SUV illustration used as the photo stand-in for SAGA Luxe.
      graphite aero wheels, LED signature front and rear. A neutral illustration, not a manufacturer drawing. Replace with SAGA's own photography when supplied. */
   let carN = 0;
-  S.car = (o = {}) => `<img class="carimg ${o.cls || ""}" src="assets/render/still-side.webp" alt="SAGA Luxe" draggable="false" loading="lazy">`;
+  S.car = (o = {}) => `<img class="carimg ${o.cls || ""}" src="assets/render/cut-side.webp" alt="SAGA Luxe" draggable="false" loading="lazy">`;
   S.carSvg = function (o = {}) {
     const id = "c" + (++carN);
     const reflect = o.reflect !== false;

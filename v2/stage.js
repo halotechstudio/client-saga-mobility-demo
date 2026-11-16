@@ -1,9 +1,10 @@
-/* SAGA · rendered-car stage (replaces the real-time three.js car).
-   Two pieces, both driven by Cycles renders in assets/render/:
-   - unveil(el, opts): the expo reveal. Separate light layers (DRL, LED livery, fully lit) are stacked with
-     additive blending and choreographed in CSS (ds.css .stg): dark → DRL sweep → LEDs run → top light flickers on.
-   - spin(el, opts): a photo-real 360°, 36 frames, drawn to a canvas; drag with inertia, idle turntable.
-   Flutter equivalent: Stack + AnimatedOpacity/ShaderMask for the layers; GestureDetector + precached frames for the spin. */
+/* SAGA · rendered-car stage (Cycles renders in assets/render/). Built for 60 fps:
+   - unveil(el, opts): the expo reveal. Light layers (DRL, LED livery, fully lit) are stacked with additive blending.
+     The DRL sweep and LED run are "shutters" (black covers with a soft hole) that only animate transform and opacity,
+     so the GPU composites every frame; nothing repaints.
+   - spin(el, opts): a photo-real 360°. Frames are pre-decoded to ImageBitmaps and drawn to a canvas with a crossfade
+     between neighbouring angles, so turning glides instead of stepping. Drag with inertia; slow idle turntable.
+   Flutter: Stack + BlendMode.plus + AnimatedBuilder transforms for the unveil; precacheImage + CustomPainter for the spin. */
 (function () {
   const R = "assets/render/";
   const cache = new Map();
@@ -11,29 +12,26 @@
     if (!cache.has(src)) cache.set(src, new Promise((res, rej) => { const i = new Image(); i.decoding = "async"; i.onload = () => (i.decode ? i.decode().catch(() => {}) : Promise.resolve()).then(() => res(i)); i.onerror = rej; i.src = src; }));
     return cache.get(src);
   };
+  const bitmap = src => load(src).then(img => (window.createImageBitmap ? createImageBitmap(img).catch(() => img) : img));
   const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* ---------- dust motes in the top light: tiny, slow, only inside the cone ---------- */
+  /* dust in the top light: few, slow, drawn only while the stage is on screen */
   function motes(canvas, cone) {
-    const g = canvas.getContext("2d"); let W = 0, H = 0, raf = 0;
+    const g = canvas.getContext("2d"); let W = 0, H = 0, raf = 0, last = performance.now();
     const dpr = Math.min(devicePixelRatio || 1, 2);
-    const P = Array.from({ length: 70 }, () => ({ x: Math.random(), y: Math.random(), r: .4 + Math.random() * 1.3, a: .08 + Math.random() * .35, vx: (Math.random() - .5) * .006, vy: -.004 - Math.random() * .01, t: Math.random() * 6 }));
-    const size = () => { W = canvas.clientWidth; H = canvas.clientHeight; canvas.width = W * dpr; canvas.height = H * dpr; };
-    size();
-    let last = performance.now();
+    const P = Array.from({ length: 34 }, () => ({ x: Math.random(), y: Math.random(), r: .5 + Math.random() * 1.2, a: .1 + Math.random() * .3, vx: (Math.random() - .5) * .005, vy: -.004 - Math.random() * .008, t: Math.random() * 6 }));
     const tick = now => {
       raf = requestAnimationFrame(tick);
       if (!canvas.isConnected) { cancelAnimationFrame(raf); return; }
+      if (document.hidden) return;
       const dt = Math.min(.05, (now - last) / 1000); last = now;
-      if (canvas.clientWidth !== W) size();
-      g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, H);
+      if (canvas.clientWidth !== W) { W = canvas.clientWidth; H = canvas.clientHeight; canvas.width = W * dpr; canvas.height = H * dpr; }
+      g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, H); g.fillStyle = "#fff";
       for (const p of P) {
-        p.x += p.vx * dt; p.y += p.vy * dt; p.t += dt;
-        if (p.y < -.02) { p.y = 1.02; p.x = Math.random(); }
-        const dx = (p.x - cone.x) / cone.w, dy = (p.y - cone.y) / cone.h, inCone = Math.max(0, 1 - Math.sqrt(dx * dx + dy * dy));
-        if (inCone <= 0) continue;
-        g.globalAlpha = p.a * inCone * (.6 + .4 * Math.sin(p.t * 1.7));
-        g.fillStyle = "#fff"; g.beginPath(); g.arc(p.x * W, p.y * H, p.r, 0, 6.283); g.fill();
+        p.x += p.vx * dt; p.y += p.vy * dt; p.t += dt; if (p.y < -.02) { p.y = 1.02; p.x = Math.random(); }
+        const dx = (p.x - cone.x) / cone.w, dy = (p.y - cone.y) / cone.h, k = 1 - Math.sqrt(dx * dx + dy * dy);
+        if (k <= 0) continue;
+        g.globalAlpha = p.a * k * (.6 + .4 * Math.sin(p.t * 1.7)); g.beginPath(); g.arc(p.x * W, p.y * H, p.r, 0, 6.283); g.fill();
       }
     };
     raf = requestAnimationFrame(tick);
@@ -41,36 +39,34 @@
 
   /* ---------- unveil ---------- */
   const SETS = {
-    p: { drl: "unveil-p-1-drl", led: "unveil-p-2-led", lit: "unveil-p-4-lit", top: "unveil-p-3-top", nose: [27, 49], cone: { x: .55, y: .32, w: .55, h: .45 } },
+    p: { drl: "unveil-p-1-drl", led: "unveil-p-2-led", top: "unveil-p-3-top", lit: "unveil-p-4-lit", nose: [27, 49], cone: { x: .55, y: .32, w: .55, h: .45 } },
     l: { drl: "unveil-l-1-drl", led: "unveil-l-2-led", lit: "unveil-l-4-lit", nose: [33, 47], cone: { x: .5, y: .3, w: .4, h: .5 } }
   };
   function unveil(el, o = {}) {
-    const s = SETS[o.set || "p"];
+    const s = SETS[o.set || "p"], nose = o.nose || s.nose;
     el.classList.add("stg");
-    const nose = o.nose || s.nose; el.style.setProperty("--nx", nose[0] + "%"); el.style.setProperty("--ny", nose[1] + "%");
-    el.innerHTML = `<div class="cam"><img class="l-top" alt="" style="opacity:0"><img class="l-add l-drl" alt=""><img class="l-add l-led" alt=""><img class="l-lit" alt="SAGA Luxe"></div><canvas class="motes"></canvas>`;
-    const [tp, di, li, ti] = el.querySelectorAll("img");
+    el.style.setProperty("--nx", nose[0] + "%"); el.style.setProperty("--ny", nose[1] + "%");
+    el.innerHTML = `<div class="cam"><img class="l-top" alt=""><div class="l-add l-drl"><img alt=""><i class="shut"></i></div><div class="l-add l-led"><img alt=""><i class="shut"></i></div><img class="l-lit" alt="SAGA Luxe"></div><canvas class="motes"></canvas>`;
+    const tp = el.querySelector(".l-top"), dw = el.querySelector(".l-drl"), lw = el.querySelector(".l-led"), ti = el.querySelector(".l-lit");
+    const di = dw.querySelector("img"), li = lw.querySelector("img");
     let hasTop = false;
     const api = {
       el,
       ready: Promise.all([load(R + s.drl + ".webp"), load(R + s.led + ".webp"), load(R + s.lit + ".webp")]).then(() => { di.src = R + s.drl + ".webp"; li.src = R + s.led + ".webp"; ti.src = R + s.lit + ".webp"; }),
       play() {
-        [tp, di, li, ti].forEach(i => { i.style.opacity = i === tp ? 0 : ""; i.style.transition = ""; });
+        el.classList.remove("open"); [tp, dw, lw, ti].forEach(x => { x.style.opacity = ""; x.style.transition = ""; });
         if (reduced() || o.instant) { el.classList.add("lit"); return api; }
         el.classList.remove("lit", "play"); void el.offsetWidth; el.classList.add("play");
         clearTimeout(api._t); api._t = setTimeout(() => { el.classList.add("lit"); el.classList.remove("play"); o.onLit && o.onLit(); }, 4600);
         return api;
       },
-      /* light switches for The car page:
-         lamps + showroom = the full render; lamps only = DRL + LED layers; showroom only = top-light layer; neither = dark stage */
+      /* light switches: lamps + showroom = full render; lamps only = DRL + LED; showroom only = top-light render; neither = dark */
       set(lights, top) {
-        el.classList.remove("play", "lit"); clearTimeout(api._t);
-        const showTop = top && !lights && hasTop;
-        [tp, di, li, ti].forEach(i => (i.style.transition = "opacity .9s cubic-bezier(.4,0,.2,1)"));
-        di.style.setProperty("--drl", "120%"); li.style.setProperty("--led", "110%");
-        di.style.opacity = lights && !top ? 1 : 0; li.style.opacity = lights && !top ? 1 : 0;
+        el.classList.remove("play", "lit"); el.classList.add("open"); clearTimeout(api._t);
+        [tp, dw, lw, ti].forEach(x => (x.style.transition = "opacity .9s cubic-bezier(.4,0,.2,1)"));
+        dw.style.opacity = lw.style.opacity = lights && !top ? 1 : 0;
         ti.style.opacity = (lights && top) || (top && !hasTop) ? 1 : 0;
-        tp.style.opacity = showTop ? 1 : 0;
+        tp.style.opacity = top && !lights && hasTop ? 1 : 0;
       }
     };
     if (s.top) load(R + s.top + ".webp").then(() => { tp.src = R + s.top + ".webp"; hasTop = true; }).catch(() => {});
@@ -80,64 +76,57 @@
     return api;
   }
 
-  /* ---------- 360 spin ---------- */
+  /* ---------- 360 spin ----------
+     Positions are in 10° steps (0..36) whatever the frame count, so callers stay simple. */
+  const SPIN = { spin: 36, spin2: 72 };
   function spin(el, o = {}) {
-    const n = o.n || 36, set = o.set || "spin", fit = o.fit || "cover", zoom = o.zoom || 1, oy = o.oy || 0;
+    const set = o.set || "spin2", n = SPIN[set] || 36, k = n / 36, fit = o.fit || "cover", zoom = o.zoom || 1, oy = o.oy || 0;
     el.classList.add("spin");
     el.innerHTML = `<canvas></canvas><span class="spin-load"><i></i></span>${o.hint === false ? "" : `<span class="spin-hint">${o.hintText || "Drag to turn"}</span>`}`;
-    const cv = el.querySelector("canvas"), g = cv.getContext("2d");
+    const cv = el.querySelector("canvas"), g = cv.getContext("2d", { alpha: false });
     cv.style.cssText = "position:absolute;inset:0;width:100%;height:100%";
     const frames = new Array(n); let got = 0;
-    let pos = o.start || 0, vel = 0, drag = false, lx = 0, idle = o.idle !== false, lastTouch = 0, drawn = -1, raf = 0;
+    let pos = o.start || 0, vel = 0, drag = false, lx = 0, idle = o.idle !== false, lastTouch = 0, drawnAt = NaN, raf = 0;
     const src = i => `${R}${set}-${String(i).padStart(2, "0")}.webp`;
     const dpr = Math.min(devicePixelRatio || 1, 2);
-    const draw = () => {
-      const i = ((Math.round(pos) % n) + n) % n;
-      let img = frames[i];
-      if (!img) { for (let k = 1; k < n && !img; k++) img = frames[(i + k) % n] || frames[(i - k + n) % n]; }
-      if (!img) return;
-      const W = el.clientWidth, H = el.clientHeight;
-      if (cv.width !== Math.round(W * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); drawn = -1; }
-      if (drawn === i && img === frames[i]) return;
-      const ir = img.width / img.height, er = W / H;
+    const near = i => { if (frames[i]) return frames[i]; for (let d = 1; d < n; d++) { const a = frames[(i + d) % n] || frames[(i - d + n) % n]; if (a) return a; } return null; };
+    const rect = img => {
+      const W = el.clientWidth, H = el.clientHeight, ir = img.width / img.height, er = W / H;
       let w, h; if ((fit === "cover") === (ir > er)) { h = H; w = H * ir; } else { w = W; h = W / ir; }
-      w *= zoom; h *= zoom;
-      g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, H);
-      g.drawImage(img, (W - w) / 2, (H - h) / 2 + oy * H, w, h);
-      // feather the photo into the page so the stage has no visible edges
-      const fe = o.feather == null ? .16 : o.feather, bg = o.bg || "#000";
-      if (fe) {
-        const x = (W - w) / 2, y = (H - h) / 2 + oy * H, clear = bg === "#000" ? "rgba(0,0,0,0)" : "rgba(242,243,247,0)";
-        const lin = (x0, y0, x1, y1) => { const gr = g.createLinearGradient(x0, y0, x1, y1); gr.addColorStop(0, bg); gr.addColorStop(1, clear); return gr; };
-        g.fillStyle = bg; g.fillRect(0, 0, W, Math.max(0, y)); g.fillRect(0, y + h, W, Math.max(0, H - y - h)); g.fillRect(0, 0, Math.max(0, x), H); g.fillRect(x + w, 0, Math.max(0, W - x - w), H);
-        g.fillStyle = lin(x, 0, x + w * fe, 0); g.fillRect(x, y, w * fe, h);
-        g.fillStyle = lin(x + w, 0, x + w - w * fe, 0); g.fillRect(x + w - w * fe, y, w * fe, h);
-        g.fillStyle = lin(0, y, 0, y + h * fe); g.fillRect(x, y, w, h * fe);
-        g.fillStyle = lin(0, y + h, 0, y + h - h * fe * 1.4); g.fillRect(x, y + h - h * fe * 1.4, w, h * fe * 1.4);
-      }
-      drawn = frames[i] ? i : -1;
+      w *= zoom; h *= zoom; return [(W - w) / 2, (H - h) / 2 + oy * H, w, h];
     };
-    // load the first frame now, then the rest outward from it so the nearest angles arrive first
-    const order = [0]; for (let k = 1; k <= n / 2; k++) { order.push(k % n); if (n - k !== k) order.push((n - k) % n); }
-    const startIdx = pos;
+    const draw = force => {
+      const f = ((pos * k) % n + n) % n;
+      if (!force && Math.abs(f - drawnAt) < .004) return;
+      const a = Math.floor(f), b = (a + 1) % n, t = f - a, A = near(a); if (!A) return;
+      const W = el.clientWidth, H = el.clientHeight;
+      if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+      g.setTransform(dpr, 0, 0, dpr, 0, 0); g.globalAlpha = 1; g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
+      const r = rect(A); g.drawImage(A, r[0], r[1], r[2], r[3]);
+      const B = frames[b]; if (B && t > .01) { g.globalAlpha = t; g.drawImage(B, r[0], r[1], r[2], r[3]); g.globalAlpha = 1; }
+      drawnAt = f;
+    };
+    // nearest angles first
+    const startIdx = Math.round(pos * k) % n, order = [0]; for (let d = 1; d <= n / 2; d++) { order.push(d); if (n - d !== d) order.push(n - d); }
     let chain = Promise.resolve();
-    order.forEach(k => { const i = (startIdx + k) % n; chain = chain.then(() => load(src(i)).then(img => { frames[i] = img; got++; el.style.setProperty("--p", Math.round(got / n * 100) + "%"); if (got === n) el.classList.add("ready"); draw(); }).catch(() => {})); });
+    order.forEach(d => { const i = (startIdx + d) % n; chain = chain.then(() => bitmap(src(i)).then(img => { frames[i] = img; got++; el.style.setProperty("--p", Math.round(got / n * 100) + "%"); if (got === n) el.classList.add("ready"); draw(true); }).catch(() => {})); });
     let last = performance.now();
     const tick = now => {
       raf = requestAnimationFrame(tick);
       if (!el.isConnected) { cancelAnimationFrame(raf); return; }
+      if (document.hidden) return;
       const dt = Math.min(.05, (now - last) / 1000); last = now;
       if (!drag) {
-        if (Math.abs(vel) > .02) { pos += vel; vel *= Math.pow(.05, dt); }
-        else if (api.target != null) { const d = api.target - pos; if (Math.abs(d) < .05) { pos = api.target; api.target = null; } else pos += d * Math.min(1, dt * (o.ease || 3.2)); }
-        else if (idle && got === n && now - lastTouch > 3500) pos += dt * (o.speed || 2.2);
+        if (Math.abs(vel) > .002) { pos += vel * dt * 60; vel *= Math.pow(.04, dt); }
+        else if (api.target != null) { const d = api.target - pos; if (Math.abs(d) < .01) { pos = api.target; api.target = null; } else pos += d * Math.min(1, dt * (o.ease || 3)); }
+        else if (idle && got === n && now - lastTouch > 3500) pos += dt * (o.speed || 1.1);
       }
       draw();
     };
     raf = requestAnimationFrame(tick);
-    const ppf = () => Math.max(6, el.clientWidth / 40); // pixels per frame
+    const ppu = () => Math.max(5, el.clientWidth / 36); // pixels per 10°
     el.addEventListener("pointerdown", e => { drag = true; lx = e.clientX; vel = 0; api.target = null; el.setPointerCapture(e.pointerId); el.classList.add("touched"); });
-    el.addEventListener("pointermove", e => { if (!drag) return; const dx = e.clientX - lx; lx = e.clientX; const df = -dx / ppf(); pos += df; vel = df; lastTouch = performance.now(); });
+    el.addEventListener("pointermove", e => { if (!drag) return; const dx = e.clientX - lx; lx = e.clientX; const du = -dx / ppu(); pos += du; vel = vel * .5 + du * .5; lastTouch = performance.now(); });
     const up = () => { drag = false; lastTouch = performance.now(); };
     el.addEventListener("pointerup", up); el.addEventListener("pointercancel", up);
     const api = { el, target: null, to(i) { api.target = i; return api; }, get pos() { return pos; }, set pos(v) { pos = v; }, stopIdle() { idle = false; } };

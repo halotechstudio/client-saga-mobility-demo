@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>SAGA Chauffeur</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Manjari:wght@400;700&family=Roboto+Flex:opsz,wght@8..144,400;8..144,500;8..144,600;8..144,700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Serif+Telugu:wght@500;600&family=Noto+Serif+Devanagari:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="core.css">
 <style>
 body{background:#E4E4E8;color:var(--fg);overflow:hidden}
@@ -165,7 +165,7 @@ body.embed,body.bare{background:transparent}
 .nt b{font-size:16px;display:block}.nt p{font-size:14.5px;color:var(--fg2);margin-top:2px;line-height:1.4}.nt time{font-size:13px;color:var(--fg2);display:block;margin-top:4px}
 </style>
 <link rel="stylesheet" href="system.css?v=9"><link rel="stylesheet" href="system3.css?v=9"><link rel="stylesheet" href="system4.css?v=9">
-<link rel="stylesheet" href="ds.css?v=9">
+<link rel="stylesheet" href="ds.css?v=13">
 </head>
 <body>
 <div class="shell">
@@ -180,7 +180,7 @@ body.embed,body.bare{background:transparent}
     <div class="homebar"></div>
   </div></div></div></main>
 </div>
-<script src="core.js?v=31"></script>
+<script src="core.js?v=33"></script>
 <script>
 (function () {
 const S = SAGA; S.state.os = "android"; S.apply();
@@ -513,8 +513,11 @@ S.initSliders(tr => {
   if (tr.dataset.after === "endtrip") { S.live.send("end"); go("done", { replace: true }); }
 });
 /* live link with the rider app */
+/* the chauffeur stamps every message with the ride it is driving, and ignores rider messages about other rides */
+const _dsend = S.live.send; S.live.send = (t, data = {}) => _dsend(t, Object.assign({ ride: st.job && st.job.ride }, data));
 S.live.on(d => {
-  if (d.t === "book") { st.riderLive = true; st.job = { rider: "Ananya Rao", ini: "AR", pick: "MVP Colony, Sector 4", drop: d.dest || "Dwaraka Nagar", km: 12.4, stops: d.stops || [] }; S.live.send("got"); notify("car", L("New job assigned", "కొత్త పని కేటాయించబడింది", "नया काम मिला"), `${st.job.rider} · ${st.job.pick} → ${st.job.drop}`); go("assigned"); }
+  if (d.t !== "book" && (!st.job || !st.job.ride || d.ride !== st.job.ride)) return;
+  if (d.t === "book") { st.riderLive = true; st.job = { ride: d.ride, rider: "Ananya Rao", ini: "AR", pick: "MVP Colony, Sector 4", drop: d.dest || "Dwaraka Nagar", km: 12.4, stops: d.stops || [] }; S.live.send("got"); notify("car", L("New job assigned", "కొత్త పని కేటాయించబడింది", "नया काम मिला"), `${st.job.rider} · ${st.job.pick} → ${st.job.drop}`); go("assigned"); }
   if (d.t === "msg") { notify("chat", st.job.rider, S.msg(d.k)); if (cur === "chat") rerender(); }
   if (d.t === "rated") notify("star", L(`${st.job.rider} rated you ${d.n}★`, `${st.job.rider} మీకు ${d.n}★ ఇచ్చారు`, `${st.job.rider} ने ${d.n}★ दिए`), L("Thank you for a great ride.", "మంచి ప్రయాణానికి ధన్యవాదాలు.", "बढ़िया सफ़र के लिए धन्यवाद।"));
   if (d.t === "tip") { st.tips += d.amt; notify("heart", L(`${st.job.rider} tipped you ₹${d.amt}`, `${st.job.rider} మీకు ₹${d.amt} టిప్ ఇచ్చారు`, `${st.job.rider} ने ₹${d.amt} टिप दी`), L("Added to your wallet.", "మీ వాలెట్‌లో జమ.", "आपके वॉलेट में जुड़ गया।")); }

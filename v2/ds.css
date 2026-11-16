@@ -1,7 +1,6 @@
 /* SAGA "Luminous" design system (v4). Loaded last in every app; replaces tron.css and system5-7.
    Ideas: a black canvas; one brand hue used as light *inside* thick glass; photo-real renders behind the glass;
    an elegant serif for moments, Manrope for everything you read and tap. Cyan = live (like the car's LEDs). */
-@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&family=Noto+Serif+Telugu:wght@500;600&family=Noto+Serif+Devanagari:wght@500;600&display=swap");
 
 :root{
   --serif:"Instrument Serif","Noto Serif Telugu","Noto Serif Devanagari",Georgia,serif;
@@ -24,10 +23,13 @@ body{font-family:var(--font)}
 [data-theme=light] .view{background:radial-gradient(90% 38% at 50% -6%,rgba(63,81,181,.10),transparent 70%),#F2F3F7}
 
 /* ---------- type: serif for moments, Manrope for reading ---------- */
-.t-hero,.t-title,.large-title,.promo-h,.ob-h,.lux-h{font-family:var(--serif);font-weight:400;letter-spacing:-.012em}
+.t-hero,.promo-h,.ob-h,.lux-h,.expo-h,.serif{font-family:var(--serif);font-weight:400;letter-spacing:-.012em}
+.t-title,.large-title{font-family:var(--font);font-weight:800;letter-spacing:-.025em}
+.v-intro3 .t-title,.v-signin .t-title,.v-setup .t-title,.lux .t-title{font-family:var(--serif);font-weight:400;letter-spacing:-.012em}
 .t-hero{font-size:46px;line-height:1}
-.t-title{font-size:36px;line-height:1.04}
-.large-title{font-size:40px;line-height:1.05}
+.t-title{font-size:30px;line-height:1.08}
+.v-intro3 .t-title,.v-signin .t-title,.v-setup .t-title{font-size:36px}
+.large-title{font-size:34px;line-height:1.08}
 [data-os=android] .tb-headline{font-family:var(--font);font-weight:800;letter-spacing:-.02em}
 .t-hero em,.t-title em,.ob-h em,.lux-h em{font-style:italic;color:var(--brand-ink)}
 [data-theme=light] .t-hero em,[data-theme=light] .t-title em,[data-theme=light] .ob-h em{color:var(--brand)}
@@ -38,8 +40,7 @@ body{font-family:var(--font)}
 /* neutral glass: info surfaces */
 [data-theme=dark] :is(.group,.pcard,.card:not(.stage):not(.tint),.tile,.permcard,.offer,.ticket,.drv,.route,.tele,.tipbar,.field,.stepper,.rsheet,.sheet,.permrow-card,.lg){
   background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.025)) ,rgba(13,14,20,.78);
-  box-shadow:var(--edge),var(--bloom);border:0;
-  -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%)}
+  box-shadow:var(--edge),var(--bloom);border:0}
 [data-theme=light] :is(.group,.pcard,.card:not(.stage):not(.tint),.tile,.permcard,.offer,.ticket,.drv,.route,.tele,.tipbar,.field,.stepper,.rsheet,.sheet,.lg){
   background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.82));
   box-shadow:inset 0 1px 0 #fff,inset 0 0 0 1px rgba(10,14,33,.06),0 18px 40px -22px rgba(10,14,33,.28);border:0}
@@ -120,30 +121,32 @@ body{font-family:var(--font)}
 @keyframes lgUp{to{opacity:1;transform:none}}
 @keyframes lgDot{0%{opacity:0;filter:drop-shadow(0 0 0 #18B8F3)}60%{opacity:1;filter:drop-shadow(0 0 22px #18B8F3)}100%{opacity:1;filter:drop-shadow(0 0 6px #18B8F3)}}
 
-/* ---------- stage: rendered car (unveil + 360 spin) ---------- */
-@property --drl{syntax:"<percentage>";inherits:false;initial-value:0%}
-@property --led{syntax:"<percentage>";inherits:false;initial-value:-30%}
-.stg{position:relative;overflow:hidden;background:#000;isolation:isolate}
+/* ---------- stage: rendered car (unveil + 360 spin) — transform/opacity only, so it composites at 60 fps ---------- */
+.stg{position:relative;overflow:hidden;background:#000;isolation:isolate;contain:paint}
 .stg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;user-select:none;-webkit-user-drag:none;pointer-events:none}
-.stg .l-add{mix-blend-mode:plus-lighter;opacity:0}
-.stg .cam{position:absolute;inset:0;transform-origin:42% 52%;transform:translate(var(--camX,0%),var(--camY,0%))}
-.stg.play .cam{animation:push 9s var(--soft) forwards}
-@keyframes push{from{transform:translate(var(--camX,0%),var(--camY,0%)) scale(1)}to{transform:translate(var(--camX,0%),var(--camY,0%)) scale(1.07)}}
-/* DRL: welcome light opens from the car's nose outward */
-.stg .l-drl{-webkit-mask-image:radial-gradient(circle at var(--nx,27%) var(--ny,49%),#000 var(--drl),transparent calc(var(--drl) + 14%));mask-image:radial-gradient(circle at var(--nx,27%) var(--ny,49%),#000 var(--drl),transparent calc(var(--drl) + 14%))}
-.stg.play .l-drl{animation:drlOn 1.3s .6s var(--soft) forwards,handOut 1.6s 2.9s linear forwards}
-@keyframes drlOn{0%{opacity:1;--drl:0%}100%{opacity:1;--drl:120%}}
-/* LED livery: runs front to back along the body */
-.stg .l-led{-webkit-mask-image:linear-gradient(90deg,#000 var(--led),transparent calc(var(--led) + 22%));mask-image:linear-gradient(90deg,#000 var(--led),transparent calc(var(--led) + 22%))}
-.stg.play .l-led{animation:ledRun 1.5s 1.8s var(--soft) forwards,handOut 1.6s 2.9s linear forwards}
-@keyframes ledRun{0%{opacity:1;--led:-30%}100%{opacity:1;--led:110%}}
-/* top light: a soft double flicker, then on; the separate DRL/LED layers hand over to the full render */
+.stg .cam{position:absolute;inset:0;transform-origin:42% 52%;transform:translate3d(var(--camX,0%),var(--camY,0%),0);will-change:transform}
+.stg.play .cam{animation:push 9s cubic-bezier(.25,.1,.25,1) forwards}
+@keyframes push{from{transform:translate3d(var(--camX,0%),var(--camY,0%),0) scale(1)}to{transform:translate3d(var(--camX,0%),var(--camY,0%),0) scale(1.06)}}
+.stg .l-top,.stg .l-lit{opacity:0;will-change:opacity}
+.stg .l-add{position:absolute;inset:0;mix-blend-mode:plus-lighter;isolation:isolate;overflow:hidden;opacity:0;will-change:opacity}
+.stg .shut{position:absolute;display:block;will-change:transform}
+/* DRL: a black cover with a soft hole at the nose; scaling it opens the welcome light outward */
+.stg .l-drl .shut{width:400%;height:400%;left:calc(var(--nx) - 200%);top:calc(var(--ny) - 200%);background:radial-gradient(circle closest-side,transparent 0,transparent 5%,#000 9%);transform:scale(.5)}
+/* LED: a black cover with a soft leading edge; sliding it runs the livery light front to back */
+.stg .l-led .shut{width:300%;height:100%;left:0;top:0;background:linear-gradient(90deg,transparent 0,transparent 30%,#000 38%);transform:translate3d(-33.34%,0,0)}
+.stg.open .l-drl .shut{transform:scale(14)}.stg.open .l-led .shut{transform:none}
+.stg.play .l-drl{animation:on .35s .6s ease-out forwards,handOut 1.6s 2.9s linear forwards}
+.stg.play .l-drl .shut{animation:drlOpen 1.5s .6s cubic-bezier(.3,.6,.2,1) forwards}
+.stg.play .l-led{animation:on .3s 1.8s ease-out forwards,handOut 1.6s 2.9s linear forwards}
+.stg.play .l-led .shut{animation:ledRun 1.5s 1.8s cubic-bezier(.45,.05,.2,1) forwards}
 .stg.play .l-lit{animation:topOn 1.6s 2.9s linear forwards}
+@keyframes on{to{opacity:1}}
+@keyframes drlOpen{from{transform:scale(.5)}to{transform:scale(14)}}
+@keyframes ledRun{from{transform:translate3d(-33.34%,0,0)}to{transform:none}}
 @keyframes topOn{0%{opacity:0}8%{opacity:.32}13%{opacity:.06}22%{opacity:.5}28%{opacity:.22}100%{opacity:1}}
 /* the full render already contains the lamps, so the separate layers hand over in exact inverse */
 @keyframes handOut{0%{opacity:1}8%{opacity:.68}13%{opacity:.94}22%{opacity:.5}28%{opacity:.78}100%{opacity:0}}
-.stg .l-lit{opacity:0}
-.stg.lit .l-lit{opacity:1}.stg.lit .l-drl,.stg.lit .l-led{opacity:0!important}
+.stg.lit .l-lit{opacity:1}.stg.lit .l-add{opacity:0}
 .stg .motes{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;opacity:0;transition:opacity 2s 3.2s}
 .stg.play .motes,.stg.lit .motes{opacity:.9}
 /* 360 spin */
@@ -308,3 +311,125 @@ body{font-family:var(--font)}
 .si-or{display:flex;align-items:center;gap:12px;margin:22px 0 14px;color:var(--fg3);font-size:13px;font-weight:600}
 .si-or::before,.si-or::after{content:"";flex:1;height:1px;background:var(--hair)}
 .v-signin .nav{background:transparent!important}
+
+/* ================= v4.1 booking flow: clean sheets ================= */
+.rsheet.bk,.sheet.bk{padding-bottom:22px}
+.bk-route{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;min-width:0}
+.bk-route b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:42%}
+.bk-dot{width:10px;height:10px;border-radius:5px;flex:none;background:var(--fg);box-shadow:0 0 0 3px color-mix(in srgb,var(--fg) 14%,transparent)}
+.bk-dot.to{background:var(--brand-hi);box-shadow:0 0 0 3px rgba(91,108,255,.25)}
+.bk-line{flex:1;min-width:16px;height:2px;border-radius:1px;background:linear-gradient(90deg,var(--fg3),var(--brand-hi))}
+.bk-meta{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:13.5px;color:var(--fg2);font-weight:600}
+.bk-add{margin-left:auto;display:inline-flex;align-items:center;gap:4px;height:30px;padding:0 10px;border-radius:15px;font-size:13px;font-weight:700;color:var(--fg);background:color-mix(in srgb,var(--fg) 7%,transparent)}
+.bk-car{position:relative;margin-top:12px;padding:6px 16px 14px;border-radius:var(--r3);overflow:hidden;
+  background:radial-gradient(90% 70% at 50% 62%,color-mix(in srgb,var(--brand-hi) 16%,transparent),transparent 70%),color-mix(in srgb,var(--fg) 4%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--fg) 8%,transparent)}
+.bk-carimg{display:block;width:96%;margin:0 auto -6px;height:auto;aspect-ratio:1600/760;object-fit:contain;
+  -webkit-mask-image:linear-gradient(180deg,#000 74%,transparent 94%);mask-image:linear-gradient(180deg,#000 74%,transparent 94%);animation:carIn .9s var(--spring) both}
+@keyframes carIn{from{opacity:0;transform:translate3d(28px,0,0)}to{opacity:1;transform:none}}
+.bk-row{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.bk-name{display:block;font-size:22px;font-weight:800;letter-spacing:-.02em}
+.bk-row small{display:block;font-size:13.5px;color:var(--fg2);font-weight:600;margin-top:2px}
+.bk-price{text-align:right}.bk-price b{display:block;font-size:30px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
+.bk-feats{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.bk-feats span{display:inline-flex;align-items:center;gap:5px;height:28px;padding:0 10px;border-radius:14px;font-size:12.5px;font-weight:700;color:var(--fg2);background:color-mix(in srgb,var(--fg) 6%,transparent)}
+.bk-feats .ic{width:14px;height:14px}
+.bk-pay{display:flex;align-items:center;gap:12px;width:100%;margin-top:12px;padding:10px 14px 10px 10px;border-radius:20px;text-align:left;background:color-mix(in srgb,var(--fg) 5%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--fg) 8%,transparent)}
+.bk-pi{width:40px;height:40px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex:none;background:linear-gradient(180deg,#6F7DFF,#3F51B5);color:#fff}
+.bk-pay small{display:block;font-size:12px;color:var(--fg2);font-weight:600}.bk-pay b{display:block;font-size:15px;font-weight:700}
+.bk-chg{font-size:13.5px;font-weight:700;color:var(--brand-hi)}
+[data-theme=light] .bk-chg{color:var(--brand)}
+.bk-h{font-size:24px;font-weight:800;letter-spacing:-.02em}
+.bf-bar{height:4px;border-radius:2px;overflow:hidden;background:color-mix(in srgb,var(--fg) 8%,transparent);position:relative}
+.bf-bar i{position:absolute;inset:0;width:40%;border-radius:2px;background:linear-gradient(90deg,transparent,var(--brand-hi),var(--live),transparent);animation:bfrun 1.4s cubic-bezier(.45,.05,.55,.95) infinite;will-change:transform}
+@keyframes bfrun{from{transform:translate3d(-100%,0,0)}to{transform:translate3d(260%,0,0)}}
+.bf-steps{display:grid;gap:10px;margin-top:16px}
+.bf-s{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600;opacity:0;animation:obIn .6s var(--spring) forwards;animation-delay:var(--d)}
+.bf-s span{width:24px;height:24px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--go);color:#03210E;transform:scale(0);animation:pop .4s var(--spring) forwards;animation-delay:calc(var(--d) + 350ms)}
+@keyframes pop{to{transform:scale(1)}}
+/* assigned */
+.as-head{display:flex;align-items:center;gap:8px}
+.as-eta{font-size:22px;font-weight:800;letter-spacing:-.02em;margin-top:4px}
+.as-eta b{font-size:40px;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.as-sub{display:block;font-size:13.5px;color:var(--fg2);font-weight:600}
+.as-car{width:46%;max-width:180px;height:auto;margin:-10px -12px -6px 0;-webkit-mask-image:linear-gradient(180deg,#000 72%,transparent 96%);mask-image:linear-gradient(180deg,#000 72%,transparent 96%);animation:carIn 1s var(--spring) both}
+.as-prog{height:4px;border-radius:2px;margin:12px 0 4px;background:color-mix(in srgb,var(--fg) 8%,transparent);overflow:hidden}
+.as-prog i{display:block;height:100%;width:100%;transform-origin:left;transform:scaleX(calc(var(--w) / 100%));border-radius:2px;background:linear-gradient(90deg,var(--brand-hi),var(--live));animation:grow 1.2s var(--spring) both}
+@keyframes grow{from{transform:scaleX(0)}}
+.as-code{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;padding:14px 16px;border-radius:20px;background:color-mix(in srgb,var(--fg) 5%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--fg) 8%,transparent)}
+.as-code span{display:block;font-size:15px;font-weight:700}.as-code small{display:block;font-size:12.5px;color:var(--fg2);margin-top:2px}
+.as-digits{display:flex;gap:6px}
+.as-digits b{width:38px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;color:#fff;background:radial-gradient(120% 140% at 50% 120%,#7C89FF,#3F51B5 55%,#27327F);box-shadow:inset 0 1px 0 rgba(255,255,255,.35);opacity:0;transform:translate3d(0,10px,0);animation:obIn .5s var(--spring) forwards;animation-delay:var(--d)}
+.as-card{margin-top:12px;padding:14px 16px;border-radius:20px;background:color-mix(in srgb,var(--fg) 5%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--fg) 8%,transparent)}
+.as-plate{display:flex;align-items:center;gap:12px;padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid color-mix(in srgb,var(--fg) 8%,transparent)}
+.as-plate b{display:block;font-size:15px}.as-plate small{display:block;font-size:12.5px;color:var(--fg2)}
+.as-card .drvrow{padding:0;background:none;box-shadow:none}
+
+/* ================= visibility: onboarding is always a dark stage ================= */
+.ob,.chap{color-scheme:dark}
+.chap .chap-card.lg,[data-theme=light] .chap .chap-card.lg{background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.04)),rgba(10,11,16,.72)!important;color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),inset 0 0 0 1px rgba(255,255,255,.08),0 24px 50px -20px #000!important;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+.chap .eyebrow,.ob .eyebrow{color:rgba(255,255,255,.72)}
+[data-theme=light] .lang.lg .ck{background:#EEF0F7}
+[data-theme=light] .lang.on .ck{background:var(--brand);color:#fff}
+/* the old feathered still is replaced by cut-outs everywhere it shows inline */
+.carimg{-webkit-mask-image:none;mask-image:none}
+
+/* ================= airport experience ================= */
+.jpass{padding:18px 18px 14px;border-radius:var(--r3);color:#fff;overflow:hidden}
+.jp-top{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;color:rgba(255,255,255,.8)}
+.jp-ok{display:inline-flex;align-items:center;gap:6px;color:#A6F0FF}.jp-ok i{width:7px;height:7px;border-radius:4px;background:var(--live);box-shadow:0 0 10px var(--live);animation:livep 1.8s infinite}
+.jp-cities{display:flex;justify-content:space-between;margin-top:12px}
+.jp-cities b{display:block;font-size:40px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.jp-cities small{display:block;font-size:12.5px;color:rgba(255,255,255,.7);margin-top:4px}
+.jr{position:relative;margin:4px -6px 0}
+.jr-svg{width:100%;height:auto;display:block;overflow:visible}
+.jr-base{fill:none;stroke:rgba(255,255,255,.28);stroke-width:2;stroke-dasharray:2 6;stroke-linecap:round}
+.jr-lit{fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1}
+.jr-lit.road{animation:jrdraw 2.2s .5s cubic-bezier(.45,0,.2,1) forwards}
+.jr-lit.air{stroke:url(#none);stroke:#A6F0FF;animation:jrdraw 2.4s 2.7s cubic-bezier(.5,0,.3,1) forwards;filter:drop-shadow(0 0 3px rgba(166,240,255,.8))}
+@keyframes jrdraw{to{stroke-dashoffset:0}}
+.jr-dot{fill:#1B2470;stroke:rgba(255,255,255,.6);stroke-width:2}
+.jr-dot.d0{animation:dotOn .4s .4s forwards}.jr-dot.d1{animation:dotOn .4s 2.7s forwards}.jr-dot.d2{animation:dotOn .4s 5.1s forwards}
+@keyframes dotOn{to{fill:#fff;stroke:#fff}}
+.jr-plane{opacity:0;animation:on .3s 2.7s forwards}
+.jr-labels{position:relative;height:40px;margin-top:-14px}
+.jr-l{position:absolute;top:0;transform:translateX(-50%);text-align:center;opacity:.35;transition:opacity .4s}
+.jr-l.l0{transform:none;text-align:left}.jr-l.l2{transform:translateX(-100%);text-align:right}
+.jr-l b{display:block;font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}.jr-l small{display:block;font-size:11.5px;color:rgba(255,255,255,.7);font-weight:600}
+.jr-l.l0{animation:on .4s .4s forwards}.jr-l.l1{animation:on .4s 2.6s forwards}.jr-l.l2{animation:on .4s 5.1s forwards}
+.jp-bot{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding-top:12px;margin-top:4px;border-top:1px dashed rgba(255,255,255,.25)}
+.jp-bot small{display:block;font-size:12px;color:rgba(255,255,255,.7)}.jp-bot b{display:block;font-size:16px;font-weight:800}
+.jp-replay{width:34px;height:34px;border-radius:17px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.14);color:#fff;flex:none}
+/* the ride pass prints up out of a slot */
+.pp-slot{height:10px;margin:0 6px;border-radius:5px;background:linear-gradient(180deg,#000,#1d1f2b);box-shadow:inset 0 2px 4px #000,0 1px 0 rgba(255,255,255,.08)}
+[data-theme=light] .pp-slot{background:linear-gradient(180deg,#9aa0b8,#d8dbe6)}
+.pp-clip{overflow:hidden;margin:-5px 14px 0;padding:0 0 30px}
+.ppass{position:relative;border-radius:0 0 24px 24px;padding:20px 20px 16px;color:#0A0E21;background:linear-gradient(180deg,#fff,#F4F5FB);box-shadow:0 24px 44px -20px rgba(0,0,0,.55);transform:translate3d(0,-102%,0);animation:print 1.6s .35s cubic-bezier(.3,.7,.2,1) forwards;overflow:hidden}
+@keyframes print{0%{transform:translate3d(0,-102%,0)}70%{transform:translate3d(0,2%,0)}100%{transform:none}}
+.pp-head{display:flex;align-items:center;justify-content:space-between}
+.pp-head .logo-svg{height:16px;color:#0A0E21}.pp-head span{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#3F51B5}
+.pp-time{margin-top:14px}.pp-time small{display:block;font-size:13px;color:#4B5170;font-weight:600}
+.pp-time b{display:block;font-family:var(--serif);font-weight:400;font-size:54px;line-height:1;letter-spacing:-.02em}
+.pp-route{display:flex;align-items:flex-end;justify-content:space-between;margin-top:12px}
+.pp-route small{display:block;font-size:11.5px;color:#7C819A;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.pp-route b{display:block;font-size:22px;font-weight:800}.pp-route span{display:block;font-size:12.5px;color:#4B5170}
+.pp-arrow{color:#3F51B5;padding-bottom:12px}
+.pp-perf{height:18px;margin:14px -20px;background:radial-gradient(circle at 0 50%,var(--bg) 8px,transparent 9px),radial-gradient(circle at 100% 50%,var(--bg) 8px,transparent 9px);position:relative}
+.pp-perf::after{content:"";position:absolute;left:18px;right:18px;top:50%;border-top:2px dashed #D9DCE6}
+.pp-foot{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.pp-meta{display:grid;gap:8px}.pp-meta small{display:block;font-size:11px;color:#7C819A;font-weight:700;letter-spacing:.06em;text-transform:uppercase}.pp-meta b{display:block;font-size:14px}
+.qr{width:96px;height:96px;flex:none;border-radius:8px}
+.pp-sheen{position:absolute;inset:-20% auto -20% -40%;width:30%;transform:skewX(-18deg) translate3d(0,0,0);background:linear-gradient(90deg,transparent,rgba(255,255,255,.85),transparent);animation:ppsheen 1.4s 2.1s ease-in-out forwards;opacity:.9}
+@keyframes ppsheen{to{transform:skewX(-18deg) translate3d(560%,0,0)}}
+/* home flight card: plane flies the arc, split-flap digits, a light sheen, a live countdown */
+.pc-fly{opacity:.95}
+.pc-plane{display:none}
+.flap{display:inline-flex;gap:2px}
+.flap i{font-style:normal;display:inline-block;min-width:.62em;text-align:center;padding:1px 2px;border-radius:4px;background:rgba(0,0,0,.28);color:#fff;font-weight:800;transform-origin:50% 50%;animation:flip .5s cubic-bezier(.3,.7,.2,1) both;animation-delay:var(--d)}
+.flap i.fc{background:none;min-width:auto;padding:0;animation:none}
+@keyframes flip{0%{transform:perspective(200px) rotateX(-90deg);opacity:0}60%{transform:perspective(200px) rotateX(12deg);opacity:1}100%{transform:none}}
+.pc.blue{overflow:hidden}
+.pc.blue::before{content:"";position:absolute;top:-30%;bottom:-30%;left:-40%;width:28%;transform:skewX(-18deg) translate3d(0,0,0);background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);animation:cardsheen 6s 1.5s ease-in-out infinite;pointer-events:none;z-index:2}
+@keyframes cardsheen{0%{transform:skewX(-18deg) translate3d(0,0,0)}25%,100%{transform:skewX(-18deg) translate3d(700%,0,0)}}
+.pc-foot{gap:10px}
+.pc-cd{margin-left:auto;text-align:right}.pc-cd small{display:block;font-size:11px;color:rgba(255,255,255,.7);font-weight:600}.pc-cd b{display:block;font-size:14px;font-weight:800;font-variant-numeric:tabular-nums;color:#fff}
+.pc-cd b,.pc-cd small{white-space:nowrap}.pc-cta{white-space:nowrap}
