@@ -403,10 +403,8 @@ body.embed,body.bare{background:transparent}
 .inv-mail{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:13px;color:var(--fg2)}
 .upd-sheet{position:absolute;left:12px;right:12px;bottom:24px;padding:22px;border-radius:28px;background:var(--surface);box-shadow:0 20px 60px rgba(0,0,0,.25)}
 </style>
-<link rel="stylesheet" href="system.css?v=9"><link rel="stylesheet" href="system3.css?v=9"><link rel="stylesheet" href="system4.css?v=9"><link rel="stylesheet" href="system5.css?v=9"><link rel="stylesheet" href="system6.css?v=11"><link rel="stylesheet" href="system7.css?v=10">
-<script type="importmap">{"imports":{"three":"./lib/three/build/three.module.js","three/addons/":"./lib/three/examples/jsm/"}}</script>
-<script type="module" src="car3d.js?v=16"></script>
-<link rel="stylesheet" href="tron.css?v=6">
+<link rel="stylesheet" href="system.css?v=9"><link rel="stylesheet" href="system3.css?v=9"><link rel="stylesheet" href="system4.css?v=9"><link rel="stylesheet" href="system6.css?v=11"><link rel="stylesheet" href="system7.css?v=10">
+<link rel="stylesheet" href="ds.css?v=9">
 </head>
 <body>
 <div class="shell">
@@ -430,7 +428,7 @@ body.embed,body.bare{background:transparent}
     </div>
   </main>
 </div>
-<script src="core.js?v=30"></script>
+<script src="core.js?v=31"></script><script src="stage.js?v=5"></script>
 <script>
 (function () {
 const S = SAGA, L = S.L, I = S.icon, $ = (q, r = document) => r.querySelector(q), $$ = (q, r = document) => [...r.querySelectorAll(q)];
@@ -481,42 +479,92 @@ const promo = k => { const [h, sub, to] = PROMOS[k]; return `<div class="promo" 
 const SC = {};
 const def = (id, meta, render, mount) => (SC[id] = Object.assign({ id, render, mount }, meta));
 
-const INTRO = [
-  { k: "airport", view: "front", icon: "plane", tag: ["Airport rides", "ఎయిర్‌పోర్ట్ రైడ్‌లు", "एयरपोर्ट राइड"], h: ["We follow your flight.", "మేము మీ ఫ్లైట్‌ను అనుసరిస్తాం.", "हम आपकी फ़्लाइट के साथ चलते हैं।"], p: ["Show us your ticket. Your pickup is timed to the flight and moves by itself if it is delayed.", "మీ టికెట్ చూపించండి. పికప్ ఫ్లైట్‌కు తగ్గట్టు ఉంటుంది; ఆలస్యమైతే మారుతుంది.", "अपना टिकट दिखाइए। पिकअप फ़्लाइट के हिसाब से तय होगा और देरी पर ख़ुद बदलेगा।"] },
-  { k: "series", view: "side", icon: "repeat", tag: ["Scheduled rides", "షెడ్యూల్ రైడ్‌లు", "शेड्यूल राइड"], h: ["Same car. Every weekday.", "అదే కారు. ప్రతి వారపు రోజు.", "वही गाड़ी। हर कार्यदिवस।"], p: ["Set a ride once and it repeats on your calendar, with the same chauffeur whenever possible.", "ఒకసారి సెట్ చేయండి, మీ క్యాలెండర్ ప్రకారం రిపీట్ అవుతుంది, వీలైనంత వరకు అదే డ్రైవర్‌తో.", "एक बार तय करें, राइड कैलेंडर पर दोहराई जाएगी, जहाँ हो सके उसी ड्राइवर के साथ।"] },
-  { k: "inter", view: "rear", icon: "route", tag: ["Intercity", "ఇంటర్‌సిటీ", "इंटरसिटी"], h: ["Beyond the city.", "నగరం దాటి కూడా.", "शहर के पार भी।"], p: ["Araku, Vizianagaram, Srikakulam and more at a fixed fare, in the same quiet electric SUV.", "అరకు, విజయనగరం, శ్రీకాకుళం మరియు మరిన్ని స్థిర ఛార్జీతో, అదే నిశ్శబ్ద ఎలక్ట్రిక్ SUVలో.", "अरकू, विजयनगरम, श्रीकाकुलम और भी, तय किराये पर, उसी शांत इलेक्ट्रिक SUV में।"] }
+/* ---------- onboarding: logo build → expo unveil → three chapters → language → sign in → permissions → ready ----------
+   Why: the first minute should feel like the car being revealed at a launch, then explain the three services
+   on real renders of the car, then get out of the way. Every step can be skipped. */
+const langChips = () => `<div class="ob-langs">${S.LANGS.map(l => `<button class="${S.state.lang === l.id ? "on" : ""}" data-setlang="${l.id}">${l.native}</button>`).join("")}</div>`;
+def("welcome", { g: "Start", n: "Welcome · the unveil", tabs: 0, sb: "light", what: "Opens on black. The SAGA logo builds itself, then the car is revealed like a launch at an auto expo: the DRLs sweep on, the LED livery runs along the body, and the ceiling light warms up. Then one line and two buttons.", why: "The car is the product. Revealing it the way a launch would makes SAGA feel premium before a single word. Tap anywhere to skip.", fl: "Light layers are Cycles renders (DRL, LED, fully lit) stacked in a <code>Stack</code> with <code>BlendMode.plus</code>; <code>AnimationController</code> drives a <code>ShaderMask</code> sweep per layer. Logo is the client's vector (flutter_svg)." }, () => `
+  <div class="ob ${app.unveiled ? "go done" : ""}">
+    <div class="stg" id="unv"></div>
+    <div class="ob-shade"></div>
+    <div class="ob-top ob-in" style="animation-delay:3.95s">${S.logo()}${langChips()}</div>
+    <div class="ob-body">
+      <span class="ob-eyebrow ob-in" style="animation-delay:3.3s"><i></i>${L("Chauffeur-driven · 100% electric", "డ్రైవర్‌తో · 100% ఎలక్ట్రిక్", "ड्राइवर के साथ · 100% इलेक्ट्रिक")}</span>
+      <h1 class="ob-h ob-in" style="animation-delay:3.45s">${L("Arrive,<br><em>beautifully.</em>", "అందంగా<br><em>చేరుకోండి.</em>", "शान से<br><em>पहुँचिए।</em>")}</h1>
+      <p class="ob-p ob-in" style="animation-delay:3.6s">${L("Vizag's premium electric rides. Our own chauffeurs, fixed fares, and airport pickups timed to your flight.", "విశాఖలో ప్రీమియం ఎలక్ట్రిక్ రైడ్‌లు. మా సొంత డ్రైవర్లు, స్థిర ఛార్జీలు, మీ ఫ్లైట్‌కు తగ్గ ఎయిర్‌పోర్ట్ పికప్.", "विज़ाग की प्रीमियम इलेक्ट्रिक राइड। हमारे अपने ड्राइवर, तय किराया, और आपकी फ़्लाइट के हिसाब से एयरपोर्ट पिकअप।")}</p>
+      <div class="ob-cta ob-in" style="animation-delay:3.8s">${btn(L("Get started", "ప్రారంభించండి", "शुरू करें"), { go: "intro2" })}${btn(L("I already have an account", "నాకు ఇప్పటికే ఖాతా ఉంది", "मेरा खाता पहले से है"), { go: "signin", kind: "btn-secondary" })}</div>
+    </div>
+    ${app.unveiled ? "" : `<div class="ob-splash">${S.logoSvg("logo-build")}</div>`}
+  </div>`);
+
+const CHAPS = [
+  { bg: "still-front-low", eyebrow: ["Airport rides", "ఎయిర్‌పోర్ట్ రైడ్‌లు", "एयरपोर्ट राइड"], h: ["We follow<br><em>your flight.</em>", "మీ ఫ్లైట్‌ను<br><em>అనుసరిస్తాం.</em>", "हम आपकी<br><em>फ़्लाइट देखते हैं।</em>"], p: ["Scan your ticket once. Pickup is timed to the flight and moves by itself if it's delayed.", "టికెట్ ఒకసారి స్కాన్ చేయండి. పికప్ ఫ్లైట్‌కు తగ్గట్టు; ఆలస్యమైతే దానంతట అదే మారుతుంది.", "टिकट एक बार स्कैन करें। पिकअप फ़्लाइट के हिसाब से, देरी पर अपने-आप बदलेगा।"] },
+  { bg: "still-side", eyebrow: ["Scheduled rides", "షెడ్యూల్ రైడ్‌లు", "शेड्यूल राइड"], h: ["Same car.<br><em>Every weekday.</em>", "అదే కారు.<br><em>ప్రతి వారపు రోజు.</em>", "वही गाड़ी।<br><em>हर कार्यदिवस।</em>"], p: ["Set your office run once. It repeats, with the same chauffeur whenever possible.", "ఆఫీస్ ప్రయాణం ఒకసారి సెట్ చేయండి. వీలైనంత వరకు అదే డ్రైవర్‌తో రిపీట్.", "ऑफ़िस की राइड एक बार तय करें। जहाँ हो सके उसी ड्राइवर के साथ दोहराई जाएगी।"] },
+  { bg: "still-rear", eyebrow: ["Intercity", "ఇంటర్‌సిటీ", "इंटरसिटी"], h: ["Beyond<br><em>the city.</em>", "నగరం<br><em>దాటి కూడా.</em>", "शहर के<br><em>पार भी।</em>"], p: ["Araku, Vizianagaram, Srikakulam at a fixed fare. Charging stops are planned for you.", "అరకు, విజయనగరం, శ్రీకాకుళం స్థిర ఛార్జీతో. ఛార్జింగ్ స్టాప్‌లు మేమే ప్లాన్ చేస్తాం.", "अरकू, विजयनगरम, श्रीकाकुलम तय किराये पर। चार्जिंग स्टॉप हम प्लान करते हैं।"] }
 ];
-const introScreen = n => {
-  const it = INTRO[n], last = n === 2;
-  const chip = n === 0 ? `<span class="in-chip"><b>6E 2134</b><span class="in-r">VTZ ${I("plane", "sm")} HYD</span><small>${L("Pickup 5:20 AM · tracking", "పికప్ ఉ. 5:20 · ట్రాకింగ్", "पिकअप सुबह 5:20 · ट्रैकिंग")}</small></span>`
-    : n === 1 ? `<span class="in-chip"><div class="in-days">${["M", "T", "W", "T", "F"].map(d => `<i>${d}</i>`).join("")}<i class="o">S</i><i class="o">S</i></div><small>${L("Every weekday · 9:00 AM", "ప్రతి వారపు రోజు · ఉ. 9:00", "हर कार्यदिवस · सुबह 9:00")}</small></span>`
-    : `<span class="in-chip"><b>Araku Valley</b><small>115 km · ${L("fixed fare", "స్థిర ఛార్జీ", "तय किराया")}</small></span>`;
-  return `<div class="intro">
-    <div class="in-top">${S.logo()}<button class="in-skip" data-go="signin">${L("Skip", "స్కిప్", "छोड़ें")}</button></div>
-    <div class="in-car c3root"><div class="c3box in3" data-car3d><div class="c3-fallback">${S.car()}</div></div>${chip}</div>
-    <div class="in-body">
-      <span class="in-tag">${I(it.icon, "sm")}${L(...it.tag)}</span>
-      <h1 class="in-h">${L(...it.h)}</h1>
-      <p class="in-p">${L(...it.p)}</p>
-      <div class="in-dots">${[0, 1, 2].map(i => `<button class="${i === n ? "on" : ""}" data-go="${["welcome", "intro2", "intro3"][i]}" aria-label="${i + 1}"></button>`).join("")}</div>
-      ${btn(last ? L("Get started", "ప్రారంభించండి", "शुरू करें") : L("Next", "తర్వాత", "आगे"), { go: last ? "signin" : ["intro2", "intro3"][n], cls: "lg" })}
-      ${n === 0 ? `<div class="wl-langs mt12">${S.LANGS.map(l => `<button class="${S.state.lang === l.id ? "on" : ""}" data-setlang="${l.id}">${l.native}</button>`).join("")}</div>` : ""}
-    </div></div>`;
+const chapCard = i => {
+  if (i === 0) return `<div class="chap-card lg-brand" data-i="0">
+    <div class="row-flex" style="justify-content:space-between"><span class="eyebrow" style="color:rgba(255,255,255,.75)">${L("Boarding pass", "బోర్డింగ్ పాస్", "बोर्डिंग पास")}</span><span class="pill" style="background:rgba(255,255,255,.14);color:#fff;height:28px">6E 2134</span></div>
+    <div class="bp"><div><b>VTZ</b><small>Vizag · 7:40</small></div><div class="bp-arc"><svg viewBox="0 0 160 54"><path class="a0" d="M6 48C44 0 116 0 154 48"/><path class="a1" pathLength="1" d="M6 48C44 0 116 0 154 48"/></svg></div><div style="text-align:right"><b>HYD</b><small>Hyderabad · 8:55</small></div></div>
+    <div class="row-flex" style="justify-content:space-between;font-size:14px;font-weight:600"><span>${L("Pickup 5:20 AM", "పికప్ ఉ. 5:20", "पिकअप सुबह 5:20")}</span><span style="display:flex;align-items:center;gap:7px;color:#9FE8FF"><i style="width:7px;height:7px;border-radius:4px;background:var(--live);box-shadow:0 0 10px var(--live)"></i>${L("On time · tracking", "సమయానికి · ట్రాకింగ్", "समय पर · ट्रैकिंग")}</span></div></div>`;
+  if (i === 1) return `<div class="chap-card lg" data-i="1" style="color:#fff">
+    <div class="row-flex" style="justify-content:space-between"><span class="eyebrow" style="color:rgba(255,255,255,.7)">${L("Home → Office", "ఇల్లు → ఆఫీస్", "घर → ऑफ़िस")}</span><span style="font-family:var(--serif);font-size:30px">9:00</span></div>
+    <div class="week">${[["M", 13], ["T", 14], ["W", 15], ["T", 16], ["F", 17], ["S", 18], ["S", 19]].map(([d, n], k) => `<i class="${k < 5 ? "on" : ""}" style="transition-delay:${k * 90}ms">${d}<b>${n}</b></i>`).join("")}</div>
+    <div class="row-flex" style="gap:12px;font-size:14px"><span style="width:38px;height:38px;border-radius:19px;background:linear-gradient(180deg,#6F7DFF,#3F51B5);display:flex;align-items:center;justify-content:center;font-weight:800">RK</span><span>${L("Ravi Kumar drives you<br>most weekdays", "చాలా రోజులు<br>రవి కుమార్ నడుపుతారు", "ज़्यादातर दिन<br>रवि कुमार चलाएँगे")}</span></div></div>`;
+  return `<div class="chap-card lg" data-i="2" style="color:#fff">
+    <div class="row-flex" style="justify-content:space-between"><span class="eyebrow" style="color:rgba(255,255,255,.7)">Vizag → Araku Valley</span><span class="pill" style="background:rgba(59,234,104,.16);color:#7CF59E;height:28px">${L("Fixed fare", "స్థిర ఛార్జీ", "तय किराया")}</span></div>
+    <div class="trip"><svg viewBox="0 0 300 70"><path d="M10 52C70 52 80 18 140 22S230 60 290 16" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="2" stroke-dasharray="2 6" stroke-linecap="round"/><path class="tripd" pathLength="1" d="M10 52C70 52 80 18 140 22S230 60 290 16" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" style="stroke-dasharray:1;stroke-dashoffset:1;animation:arcd 2.4s .3s var(--soft) forwards"/><circle cx="10" cy="52" r="5" fill="#fff"/><circle cx="148" cy="23" r="5" fill="#3BEA68"/><circle cx="290" cy="16" r="5" fill="#fff"/></svg></div>
+    <div class="row-flex" style="justify-content:space-between;font-size:14px;font-weight:600"><span>115 km · ${L("charge stop at Tagarapuvalasa", "తగరపువలసలో ఛార్జ్ స్టాప్", "तगरपुवलसा में चार्ज स्टॉप")}</span><span style="font-family:var(--serif);font-size:28px;font-weight:400">₹2,070</span></div></div>`;
 };
-def("welcome", { g: "Start", n: "Welcome 1 · Airport", tabs: 0, sb: "light", what: "First of three intro screens. The real car in interactive 3D (drag to turn) with a boarding-pass chip: airport rides that follow your flight. Language can be chosen here.", why: "Opens with the product, not a form. Each intro screen shows one service on the car itself.", fl: "Same 3D widget as Home (model_viewer or flutter_scene with the GLB). Language list from the client." }, () => introScreen(0));
-def("intro2", { g: "Start", n: "Welcome 2 · Scheduled", tabs: 0, sb: "light", what: "Second intro: the car from the side with a weekday strip. Rides on repeat, same chauffeur where possible.", why: "Shows the repeat-ride business in one glance.", fl: "Static copy; the 3D camera preset is a parameter." }, () => introScreen(1));
-def("intro3", { g: "Start", n: "Welcome 3 · Intercity", tabs: 0, sb: "light", what: "Third intro: the car from behind, leaving, with an Araku Valley fare chip. Then straight to sign-in.", why: "Closes the story: city, airport, beyond. One button to start.", fl: "Static copy." }, () => introScreen(2));
+def("intro2", { g: "Start", n: "Welcome · three services", tabs: 0, sb: "light", what: "Three glass cards fanned over real renders of the car: a live boarding pass (airport), a week that lights up (scheduled), and a route with a charging stop (intercity). Cards advance on their own, or swipe and tap.", why: "One idea per card, each shown as the thing itself (a pass, a week, a route) rather than described.", fl: "<code>PageView</code> with a custom stacked transform; backgrounds are bundled stills; progress bars are <code>TweenAnimationBuilder</code>." }, () => {
+  const i = app.chap || 0, c = CHAPS[i];
+  return `<div class="chap">
+    ${CHAPS.map((ch, k) => `<div class="chap-bg ${k === i ? "on" : ""}" style="background-image:url(${SagaStage.src(ch.bg)})"></div>`).join("")}
+    <div class="ob-shade"></div>
+    <div class="ob-top">${S.logo()}<button class="btn btn-text sm" data-go="intro3" style="color:#fff;width:auto">${L("Skip", "స్కిప్", "छोड़ें")}</button></div>
+    <div class="chap-deck">${[0, 1, 2].map(chapCard).join("")}</div>
+    <div class="ob-body">
+      <div class="chap-dots">${[0, 1, 2].map(k => `<i class="${k < i ? "done" : k === i ? "on" : ""}"></i>`).join("")}</div>
+      <span class="ob-eyebrow mt16" data-ch="eyebrow"><i></i>${L(...c.eyebrow)}</span>
+      <h1 class="ob-h" data-ch="h" style="font-size:48px">${L(...c.h)}</h1>
+      <p class="ob-p" data-ch="p">${L(...c.p)}</p>
+      <div class="ob-cta">${btn(L("Continue", "కొనసాగండి", "आगे बढ़ें"), { act: "chapnext" })}</div>
+    </div></div>`;
+});
+def("intro3", { g: "Start", n: "Welcome · language", tabs: 0, nav: 1, foot: 1, what: "Choose English, Telugu or Hindi. Each option is written in its own script, large, so it's recognisable at a glance. Saathi, the voice assistant, follows the same choice.", why: "Language before sign-in means every following screen (and the OTP SMS) is already in the rider's language.", fl: "<code>flutter_localizations</code> + ARB files; choice saved locally and on the profile." }, () => `
+  ${bar("")}
+  <div class="content"><div class="pad">
+    <span class="eyebrow">${L("Language", "భాష", "भाषा")}</span>
+    <h1 class="t-title mt8">${L("Which language<br><em>feels like home?</em>", "మీకు ఏ భాష<br><em>సౌకర్యం?</em>", "कौन सी भाषा<br><em>अपनी लगती है?</em>")}</h1>
+    <p class="t-sub mt8">${L("Saathi, your voice assistant, will speak it too. Change it any time.", "మీ వాయిస్ అసిస్టెంట్ సాథీ కూడా అదే మాట్లాడుతుంది. ఎప్పుడైనా మార్చవచ్చు.", "आपका वॉइस असिस्टेंट साथी भी यही बोलेगा। कभी भी बदलें।")}</p>
+    <div class="langs mt24 stagger">${S.LANGS.map((l, k) => `<button class="lang lg ${S.state.lang === l.id ? "on" : ""}" data-setlang="${l.id}" style="--i:${k}"><span><b>${l.native}</b><small>${l.name}</small></span><span class="ck">${I("check", "sm")}</span></button>`).join("")}</div>
+  </div></div>
+  ${foot(btn(L("Continue", "కొనసాగండి", "आगे बढ़ें"), { go: "signin" }))}`);
+def("ready", { g: "Start", n: "Ready", tabs: 0, sb: "light", what: "The car turns on the spot to face the rider, and the app says it's ready. One button books the first ride; a second line offers to plan an airport pickup.", why: "Ends set-up on a moment, not a form, and lands the rider on Home already knowing the car.", fl: "The same 360° frames as Home, animated from 180° to the front with a spring." }, () => `
+  <div class="ob go">
+    <div class="ready-spin" data-car3d style="position:absolute;inset:0"></div>
+    <div class="ob-shade"></div>
+    <div class="ob-top">${S.logo()}</div>
+    <div class="ob-body">
+      <span class="ob-eyebrow ob-in" style="animation-delay:.9s"><i></i>${L("You're all set", "అంతా సిద్ధం", "सब तैयार")}</span>
+      <h1 class="ob-h ob-in" style="animation-delay:1.05s">${L("Your SAGA<br><em>is ready.</em>", "మీ SAGA<br><em>సిద్ధంగా ఉంది.</em>", "आपकी SAGA<br><em>तैयार है।</em>")}</h1>
+      <p class="ob-p ob-in" style="animation-delay:1.2s">${L("First ride: 20% off with FLYSAGA. The nearest car is 4 minutes away.", "మొదటి రైడ్: FLYSAGAతో 20% తగ్గింపు. దగ్గరి కారు 4 నిమిషాల్లో.", "पहली राइड: FLYSAGA से 20% छूट। नज़दीकी गाड़ी 4 मिनट दूर।")}</p>
+      <div class="ob-cta ob-in" style="animation-delay:1.35s">${btn(L("Book my first ride", "నా మొదటి రైడ్ బుక్ చేయండి", "पहली राइड बुक करें"), { go: "home", attr: 'data-reset="1"' })}${btn(L("Flying soon? Plan the airport ride", "త్వరలో ఫ్లైట్? ఎయిర్‌పోర్ట్ రైడ్ ప్లాన్", "जल्द फ़्लाइट? एयरपोर्ट राइड प्लान करें"), { go: "flysoon", kind: "btn-secondary" })}</div>
+    </div></div>`);
 
 def("signin", { g: "Start", n: "Sign in", tabs: 0, nav: 1, foot: 1, what: "Type a mobile number, tap Send code, and the 6-digit code fills itself in from the SMS.", why: "No passwords. Matches how the existing app signs people in.", fl: "Android: SMS Retriever API (no SMS permission). iOS: <code>oneTimeCode</code> autofill. Backend OTP endpoint from the client." }, () => `
-  ${bar(L("Sign in", "సైన్ ఇన్", "साइन इन"))}
-  <div class="content"><div class="pad">
-    <h1 class="t-title">${L("Your mobile number", "మీ మొబైల్ నంబర్", "आपका मोबाइल नंबर")}</h1>
+  ${bar("")}
+  <div class="content" style="padding-top:0"><div class="si-hero"><img src="${SagaStage.src("still-rear")}" alt=""></div><div class="pad si-body">
+    <span class="eyebrow" style="color:var(--live)">${L("Welcome aboard", "స్వాగతం", "स्वागत है")}</span>
+    <h1 class="t-title mt8">${L("Your mobile <em>number</em>", "మీ మొబైల్ <em>నంబర్</em>", "आपका मोबाइल <em>नंबर</em>")}</h1>
     <p class="t-sub mt8">${L("We'll send a 6-digit code by SMS.", "SMS ద్వారా 6 అంకెల కోడ్ పంపుతాం.", "हम SMS से 6 अंकों का कोड भेजेंगे।")}</p>
     <div class="field mt24"><b>+91</b><span class="vline"></span><input id="phone" type="tel" inputmode="numeric" maxlength="11" autocomplete="tel-national" value="${app.phone}" aria-label="Mobile number" style="font-size:19px;letter-spacing:.04em"></div>
     ${app.otp ? `<p class="t-label mt24">${L("Code from SMS", "SMS లోని కోడ్", "SMS वाला कोड")}</p>
     <div class="boxes otpfill mt8">${"427190".split("").map((d, i) => `<span class="f" style="animation-delay:${200 + i * 110}ms">${d}</span>`).join("")}</div>
     <p class="t-sub mt12">${L("Filled in automatically from your SMS.", "మీ SMS నుండి ఆటోమేటిక్‌గా నింపబడింది.", "आपके SMS से अपने-आप भर गया।")}</p>`
-    : `<p class="t-sub mt16">${L("Any 10-digit number works in this demo.", "ఈ డెమోలో ఏ 10 అంకెల నంబర్ అయినా సరిపోతుంది.", "इस डेमो में कोई भी 10 अंकों का नंबर चलेगा।")}</p>`}
+    : `<p class="t-sub mt16">${L("Any 10-digit number works in this demo.", "ఈ డెమోలో ఏ 10 అంకెల నంబర్ అయినా సరిపోతుంది.", "इस डेमो में कोई भी 10 अंकों का नंबर चलेगा।")}</p>
+    <div class="si-or"><span>${L("or", "లేదా", "या")}</span></div>
+    <div class="btnrow">${ios() ? btn(L("Apple", "Apple", "Apple"), { kind: "btn-secondary", toast: L("Sign in with Apple, then we confirm your number once", "Appleతో సైన్ ఇన్, తర్వాత నంబర్ ఒకసారి ధృవీకరణ", "Apple से साइन इन, फिर नंबर एक बार पुष्टि") }) : ""}${btn("Google", { kind: "btn-secondary", toast: L("Sign in with Google, then we confirm your number once", "Googleతో సైన్ ఇన్, తర్వాత నంబర్ ఒకసారి ధృవీకరణ", "Google से साइन इन, फिर नंबर एक बार पुष्टि") })}</div>`}
   </div></div>
   ${foot(app.otp ? btn(L("Verify and continue", "ధృవీకరించి కొనసాగండి", "पुष्टि करें और आगे बढ़ें"), { go: "setup" }) : btn(L("Send code", "కోడ్ పంపండి", "कोड भेजें"), { act: "sendotp" }))}`);
 
@@ -524,7 +572,7 @@ def("setup", { g: "Start", n: "Permissions", tabs: 0, nav: 1, foot: 1, what: "Ex
   const p = (k, icon, t, s) => `<div class="permrow"><span class="pico">${I(icon)}</span><div class="grow"><div class="t1">${t}</div><div class="t2">${s}</div></div>${tgl(app.perms[k], `data-act="perm" data-k="${k}"`)}</div>`;
   return `${bar(L("Set up", "సెటప్", "सेटअप"))}
   <div class="content">
-    <div class="pad"><h1 class="t-title">${L("Make SAGA work for you", "SAGA మీకు సరిపోయేలా", "SAGA को अपने हिसाब से सेट करें")}</h1>
+    <div class="pad"><h1 class="t-title">${L("Make SAGA <em>work for you</em>", "SAGA <em>మీకు సరిపోయేలా</em>", "SAGA को <em>अपने हिसाब से</em>")}</h1>
     <p class="t-sub mt8">${L("Each permission is for one reason. Change them any time in Settings.", "ఒక్కో అనుమతికి ఒకే కారణం. సెట్టింగ్స్‌లో ఎప్పుడైనా మార్చవచ్చు.", "हर अनुमति की एक ही वजह। सेटिंग्स में कभी भी बदलें।")}</p></div>
     <div class="permcard mt24">
       ${p("loc", "pin", L("Location", "లొకేషన్", "लोकेशन"), L("Finds your pickup point. Used only while you book or ride.", "మీ పికప్ పాయింట్ కనుగొనడానికి. బుక్ చేసేటప్పుడు, ప్రయాణంలో మాత్రమే.", "आपका पिकअप पॉइंट ढूँढने के लिए। सिर्फ़ बुकिंग और सफ़र के दौरान।"))}
@@ -534,7 +582,7 @@ def("setup", { g: "Start", n: "Permissions", tabs: 0, nav: 1, foot: 1, what: "Ex
     </div>
     <div class="group mt16">${row({ icon: "globe", t: L("Language", "భాష", "भाषा"), trail: S.LANGS.find(l => l.id === S.state.lang).native, go: "language" })}</div>
   </div>
-  ${foot(btn(L("Continue", "కొనసాగండి", "आगे बढ़ें"), { go: "flysoon" }))}`;
+  ${foot(btn(L("Continue", "కొనసాగండి", "आगे बढ़ें"), { go: "ready" }))}`;
 });
 
 const paints = () => [["#0A0A0C", L("Matte black", "మ్యాట్ బ్లాక్", "मैट ब्लैक"), "matte"], ["#F2F3F5", L("Pearl white", "పెర్ల్ వైట్", "पर्ल व्हाइट"), "gloss"], [S.state.hex, L("SAGA blue", "SAGA బ్లూ", "SAGA ब्लू"), "satin"]];
@@ -544,13 +592,11 @@ const c3hot = () => [
   { id: "wheel", at: [0.62, 0.22, 1.02], n: [0.2, 0, 1], label: L("Silent electric drive", "నిశ్శబ్ద ఎలక్ట్రిక్ డ్రైవ్", "शांत इलेक्ट्रिक ड्राइव") },
   { id: "boot", at: [-1.0, 0.62, 0], n: [-1, 0.2, 0], label: L("Boot: 2 bags", "బూట్: 2 బ్యాగులు", "बूट: 2 बैग") }
 ];
+/* rendered car: the hero is a photo-real 360° (Cycles frames); small slots use the rendered stills already in the markup */
+const spinSet = () => "spin"; // the hero is a dark showroom window in both themes; the sheet below follows the theme
 const c3mount = (el, mode, extra = {}) => {
-  const box = el && el.querySelector("[data-car3d]"); if (!box) return;
-  const go = () => {
-    const api = window.SagaCar3D.mount(box, { mode, distK: mode === "hero" ? 1.0 : 1, ...extra, hot: mode === "full" ? c3hot() : [], onTap: on => toast(on ? L("Lights on", "లైట్లు ఆన్", "लाइट चालू") : L("Lights off", "లైట్లు ఆఫ్", "लाइट बंद")) });
-    if (!api || box.__wired) return; box.__wired = 1;
-  };
-  if (window.SagaCar3D) go(); else window.addEventListener("saga-car3d", go, { once: true });
+  const box = el && el.querySelector("[data-car3d]"); if (!box || mode !== "hero") return;
+  SagaStage.spin(box, { set: spinSet(), start: app.spinAt || 0, hint: false, fit: "contain", zoom: 1.12, oy: .17, ...extra });
 };
 document.addEventListener("click", e => {
   const root = e.target.closest(".c3root"); if (!root) return; const box = root.querySelector("[data-car3d]"), api = box && box.__c3;
@@ -588,13 +634,13 @@ const homeCards = () => {
   return out.join("");
 };
 
-def("home", { g: "Ride", n: "Home", tab: "home", what: "The map is the home screen: you, the SAGA cars around you and the nearest car's real ETA. One search bar, four one-tap places, and a swipe row of what's coming up (flight found, scheduled rides, intercity, an offer). No greeting, no lists.", why: "Show, don't tell: the rider sees a live fleet and a ready-to-book flight instead of reading about them. One thing to do, everything else a swipe away.", fl: "Route <code>/</code>. Map: google_maps_flutter with the SAGA style. Cards from <code>GET /home/cards</code> (flight detected, series, offers); nearby from <code>GET /fleet/nearby</code>." }, () => `
+def("home", { g: "Ride", n: "Home", tab: "home", what: "A photo-real 360° of the SAGA Luxe on a dark showroom stage (drag to turn), with a live chip for the nearest car. Below: one glass search bar, four one-tap places, and luminous cards for what is coming up (flight found, scheduled rides, intercity, an offer).", why: "The car is the product, so it leads. The rider can book in one tap from here; everything else is a swipe away.", fl: "Hero: 36 Cycles frames (about 1.6 MB WebP) cached after first launch, drawn on a <code>CustomPainter</code> with a <code>GestureDetector</code> for drag and inertia. Cards from <code>GET /home/cards</code>; nearest car from <code>GET /fleet/nearby</code>." }, () => `
   <div class="home">
-    <div class="home-hero c3root"><span class="hh-glow"></span><span class="hh-floor"></span>
-      <div class="hh-t"><small>${V.make} · ${L("Matte black", "మ్యాట్ బ్లాక్", "मैट ब्लैक")}</small><b>${V.model}</b></div>
-      <div class="hh-car c3box" data-car3d><div class="c3-fallback">${S.car({ cls: "car-in" })}</div><span class="c3-hint">${L("Drag to turn", "తిప్పడానికి లాగండి", "घुमाने के लिए खींचें")}</span></div>
-      ${paintRow()}<button class="hh-look" data-go="vehicle">${L("View in 3D", "3Dలో చూడండి", "3D में देखें")}${I("chevr", "sm")}</button>
-      <div class="hh-spec"><span>${I("leaf", "sm")}${L("100% electric", "100% ఎలక్ట్రిక్", "100% इलेक्ट्रिक")}</span><span>${I("quiet", "sm")}${L("Silent cabin", "నిశ్శబ్ద క్యాబిన్", "शांत केबिन")}</span><span>${I("snow", "sm")}${L("Pre-cooled", "ముందే చల్లగా", "पहले से ठंडी")}</span></div></div>
+    <div class="home-hero c3root">
+      <div class="hh-spin" data-car3d></div>
+      <div class="hh-name"><small>${V.make} · ${L("7 seats · electric", "7 సీట్లు · ఎలక్ట్రిక్", "7 सीट · इलेक्ट्रिक")}</small><b>${V.model}</b></div>
+      <button class="hh-look" data-go="vehicle">${L("Explore", "చూడండి", "देखें")}${I("chevr", "sm")}</button>
+      <span class="hh-live"><i></i>${L("Nearest SAGA · 4 min away", "దగ్గరి SAGA · 4 నిమిషాలు", "नज़दीकी SAGA · 4 मिनट")}</span></div>
     <div class="home-top"><span class="hpill">${S.logo()}</span><div class="r"><span class="bellwrap">${hbtn("bell", 'data-go="notifications"', "Notifications")}<i></i></span><button class="avatar" data-tab="account" aria-label="Account">AR</button></div></div>
     <div class="home-sheet">
       <button class="search2 press" data-go="where"><span class="s-ic">${I("search")}</span><span class="ph">${L("Where to?", "ఎక్కడికి?", "कहाँ जाना है?")}</span><span class="s-now" data-go="schedule">${I("clock", "sm")}${L("Now", "ఇప్పుడే", "अभी")}</span><span class="s-mic" data-voice aria-label="${L("Speak to Saathi", "సాథీతో మాట్లాడండి", "साथी से बोलें")}">${I("mic")}</span></button>
@@ -969,17 +1015,22 @@ def("intercity", { g: "Intercity", n: "Intercity", tabs: 0, nav: 1, foot: 1, wha
   ${foot(btn(L("Book intercity ride", "ఇంటర్‌సిటీ రైడ్ బుక్", "इंटरसिटी राइड बुक करें"), { act: "bookinter", cls: "lg" }))}`;
 });
 
-def("vehicle", { g: "Ride", n: "The car", tabs: 0, sb: "light", foot: 1, what: "The SUV on a dark stage, then seats and bags, what's inside, the seat plan and the chauffeur promise.", why: "Every booking is in the same premium car. Showing it builds the value that justifies the fare.", fl: "Static content from CMS (<code>GET /fleet/profile</code>) so the client can update photos and amenities without an app release." }, () => `
+def("vehicle", { g: "Ride", n: "The car", tabs: 0, sb: "light", foot: 1, what: "The SAGA Luxe revealed on a dark expo stage (Cycles renders), with switches for the lights and the showroom light, then a photo-real 360° walk-around, the cabin, seats and bags, and the chauffeur promise.", why: "Every booking is in the same premium car. Showing it builds the value that justifies the fare.", fl: "Static content from CMS (<code>GET /fleet/profile</code>) so the client can update photos and amenities without an app release." }, () => `
   <div class="content" style="padding-top:0">
-    <div class="vhero stage">
-      <div class="vt">${pill("spark", L("Every SAGA ride", "ప్రతి SAGA రైడ్", "हर SAGA राइड"), "dark")}<h1 class="t-hero mt12">${V.make}<br>${V.model}</h1><p class="t-sub mt8">${L(`${V.colour} · SAGA livery · chauffeur-driven`, `${V.colour} · SAGA రంగుల్లో · డ్రైవర్‌తో`, `${V.colour} · SAGA लिवरी · ड्राइवर के साथ`)}</p></div>
-      <div class="vstage c3root"><div class="vcar c3box full" data-car3d><div class="c3-fallback">${S.car()}</div><span class="c3-hint">${L("Drag to turn · pinch to zoom · tap for lights", "తిప్పడానికి లాగండి · జూమ్ చేయండి · లైట్లకు నొక్కండి", "घुमाने के लिए खींचें · ज़ूम करें · लाइट के लिए टैप")}</span></div>
-        <div class="c3-ctl"><div class="c3-views">${[["three", L("3/4", "3/4", "3/4")], ["side", L("Side", "పక్కన", "साइड")], ["front", L("Front", "ముందు", "आगे")], ["rear", L("Rear", "వెనుక", "पीछे")], ["top", L("Top", "పైన", "ऊपर")]].map(([k, n], i) => `<button class="${i === 0 ? "on" : ""}" data-c3view="${k}">${n}</button>`).join("")}</div>
-        <div class="c3-row">${paintRow()}<button class="c3-lt on" data-c3light>${I("bolt", "sm")}${L("Lights", "లైట్లు", "लाइट")}</button><span class="c3-zm"><button data-c3zoom="-0.8" aria-label="Zoom in">+</button><button data-c3zoom="0.8" aria-label="Zoom out">−</button></span></div></div>
-        <div class="c3-feats">${[["bolt", L("Signature DRL", "సిగ్నేచర్ DRL", "सिग्नेचर DRL"), L("LED light signature, always on", "LED లైట్ సిగ్నేచర్, ఎల్లప్పుడూ ఆన్", "LED लाइट सिग्नेचर, हमेशा चालू"), "front"], ["quiet", L("Silent electric", "నిశ్శబ్ద ఎలక్ట్రిక్", "शांत इलेक्ट्रिक"), L("No engine note, no vibration", "ఇంజిన్ శబ్దం లేదు", "इंजन की आवाज़ नहीं"), "side"], ["snow", L("Cabin pre-cooled", "ముందే చల్లని క్యాబిన్", "पहले से ठंडा केबिन"), L("Ready before you step in", "మీరు ఎక్కేలోపే సిద్ధం", "बैठने से पहले तैयार"), "top"], ["bag", L(`Boot for ${V.bags} bags`, `${V.bags} బ్యాగుల బూట్`, `${V.bags} बैग का बूट`), L("Your chauffeur loads them", "మీ డ్రైవర్ లోడ్ చేస్తారు", "आपके ड्राइवर रखेंगे"), "rear"], ["battery", "86% · 268 km", L("Live from the car", "కారు నుండి లైవ్", "गाड़ी से लाइव"), "three"]].map(([ic, t, d, v]) => `<button class="c3-f" data-c3view="${v}"><span>${I(ic)}</span><b>${t}</b><small>${d}</small></button>`).join("")}</div></div>
+    <div class="lux">
+    <div class="lux-stage"><div class="stg" id="luxstg"></div><div class="ob-shade" style="background:linear-gradient(180deg,rgba(0,0,0,.65),rgba(0,0,0,0) 32%,rgba(0,0,0,0) 72%,#000)"></div>
+      <div class="lux-top"><span class="eyebrow" style="color:var(--live)">${L("Every SAGA ride", "ప్రతి SAGA రైడ్", "हर SAGA राइड")}</span><h1 class="lux-h mt8">${V.make}<br><em>${V.model}</em></h1><p class="mt8" style="font-size:15px;color:rgba(255,255,255,.7)">${L("7 seats · electric · chauffeur-driven", "7 సీట్లు · ఎలక్ట్రిక్ · డ్రైవర్‌తో", "7 सीट · इलेक्ट्रिक · ड्राइवर के साथ")}</p></div>
+      <div class="lux-ctl"><button class="on" data-lux="lights"><i></i>${L("Lights", "లైట్లు", "लाइट")}</button><button class="on" data-lux="top"><i></i>${L("Showroom", "షోరూమ్", "शोरूम")}</button><button data-lux="replay">${I("refresh", "sm")}${L("Replay", "మళ్ళీ", "फिर से")}</button></div>
     </div>
-    <div class="pad mt16"><div class="spec4">
-      <div>${I("users")}<b>${RIDERS}</b>${L("riders", "మంది", "यात्री")}</div><div>${I("bag")}<b>${V.bags}</b>${L("bags", "బ్యాగులు", "बैग")}</div><div>${I("bolt")}<b>EV</b>${L("electric", "ఎలక్ట్రిక్", "इलेक्ट्रिक")}</div><div>${I("quiet")}<b>${L("Quiet", "నిశ్శబ్దం", "शांत")}</b>${L("cabin", "క్యాబిన్", "केबिन")}</div>
+    <div class="pad mt16"><span class="eyebrow">360°</span><h2 class="t-title mt4" style="font-size:32px">${L("Walk around it.", "చుట్టూ చూడండి.", "चारों ओर देखिए।")}</h2></div>
+    <div class="lux-spin" data-car3d></div>
+    
+  </div>
+<div class="pad mt16"><div class="lux-specs stagger">
+      <div class="lux-spec lg" style="--i:0"><b>${RIDERS}</b><small>${L("riders, plus your chauffeur", "రైడర్లు, డ్రైవర్ కాకుండా", "यात्री, ड्राइवर के अलावा")}</small></div>
+      <div class="lux-spec lg" style="--i:1"><b>${V.bags}</b><small>${L("large bags in the boot", "బూట్‌లో పెద్ద బ్యాగులు", "बूट में बड़े बैग")}</small></div>
+      <div class="lux-spec lg" style="--i:2"><b>0 g</b><small>${L("tailpipe emissions", "పొగ ఉద్గారాలు", "धुआँ उत्सर्जन")}</small></div>
+      <div class="lux-spec lg" style="--i:3"><b>22°</b><small>${L("cabin, cooled before pickup", "పికప్‌కు ముందే చల్లని క్యాబిన్", "पिकअप से पहले ठंडा केबिन")}</small></div>
     </div></div>
     ${sh(L("Inside your ride", "లోపల ఏముంది", "अंदर क्या है"))}
     <div class="pad"><div class="amen">
@@ -1183,7 +1234,9 @@ function statusbar() {
 const TABS = [["home", "home", () => L("Home", "హోమ్", "होम")], ["rides", "cal", () => L("Trips", "ప్రయాణాలు", "यात्राएँ")], ["offers", "tag", () => L("Offers", "ఆఫర్లు", "ऑफ़र")], ["account", "user", () => L("Account", "ఖాతా", "खाता")]];
 function chrome() {
   const sc = SC[cur], t = sc.tab;
-  $("#tabbar").innerHTML = TABS.map(([id, ic, lb]) => `<button class="tab ${t === id ? "on" : ""}" data-tab="${id}">${ios() ? I(ic) : `<span class="ico">${I(ic)}</span>`}<span>${lb()}</span></button>`).join("");
+  const tb = TABS.map(([id, ic, lb]) => `<button class="tab ${t === id ? "on" : ""}" data-tab="${id}">${ios() ? I(ic) : `<span class="ico">${I(ic)}</span>`}<span>${lb()}</span></button>`);
+  tb.splice(2, 0, `<button class="tab-ride" data-go="where" aria-label="${L("Book a ride", "రైడ్ బుక్ చేయండి", "राइड बुक करें")}"><span>${I("car")}</span></button>`);
+  $("#tabbar").innerHTML = tb.join("");
   $("#tabbar").classList.toggle("hide", !t);
   $("#tabvoice").classList.add("hide");
   $("#fab").classList.add("hide");
@@ -1230,7 +1283,7 @@ function go(id, o = {}) {
   try { if (parent !== window) parent.postMessage({ saga: "nav", app: "rider", os: S.state.os, id }, "*"); } catch (e) {}
 }
 const back = () => { const p = stack.pop(); go(p || "home", { back: true }); };
-const rerender = () => { const v = views.lastElementChild; if (!v) return; const st = v.querySelector(".content")?.scrollTop || 0; const n = build(cur); views.replaceChild(n, v); const c = n.querySelector(".content"); if (c) c.scrollTop = st; chrome(); syncPanel(); if (SC[cur].mount && ["home", "vehicle", "options", "assigned"].includes(cur)) SC[cur].mount(n); };
+const rerender = () => { const v = views.lastElementChild; if (!v) return; const st = v.querySelector(".content")?.scrollTop || 0; const n = build(cur); views.replaceChild(n, v); const c = n.querySelector(".content"); if (c) c.scrollTop = st; chrome(); syncPanel(); if (SC[cur].mount && ["home", "vehicle", "options", "assigned", "welcome", "intro2", "ready"].includes(cur)) SC[cur].mount(n); };
 
 /* ---------- toast ---------- */
 let tt;
@@ -1243,14 +1296,51 @@ function toast(msg, title) {
 SC.home.mount = el => c3mount(el, "hero");
 SC.options.mount = el => c3mount(el, "mini", { start: "three", distK: 1.0 });
 SC.assigned.mount = el => c3mount(el, "mini", { start: "three", distK: 0.95 });
-SC.welcome.mount = el => { app.otp = 0; c3mount(el, "intro", { start: "front", distK: 1.3 }); };
-SC.intro2.mount = el => c3mount(el, "intro", { start: "side", distK: 1.3 });
-SC.intro3.mount = el => c3mount(el, "intro", { start: "rear", distK: 1.3 });
-SC.vehicle.mount = el => c3mount(el, "full");
+SC.welcome.mount = el => {
+  app.otp = 0;
+  const ob = el.querySelector(".ob"), st = SagaStage.unveil(el.querySelector("#unv"), { set: "p", autoplay: false, instant: app.unveiled });
+  if (app.unveiled) { st.ready.then(() => st.play()); return; }
+  const splash = el.querySelector(".ob-splash"); let started = false;
+  const start = () => { if (started) return; started = true; splash && splash.classList.add("out"); ob.classList.add("go"); st.ready.then(() => st.play()); timers.push(setTimeout(() => { app.unveiled = 1; ob.classList.add("done"); }, 4700)); };
+  timers.push(setTimeout(start, 2100));
+  ob.addEventListener("click", e => { if (app.unveiled) return; e.stopPropagation(); e.preventDefault(); app.unveiled = 1; started = true; splash && splash.classList.add("out"); ob.classList.add("go", "done"); st.ready.then(() => st.set(true, true)); }, true);
+};
+SC.intro2.mount = el => {
+  const cards = [...el.querySelectorAll(".chap-card")], bgs = [...el.querySelectorAll(".chap-bg")], dots = [...el.querySelectorAll(".chap-dots i")];
+  const show = i => {
+    app.chap = i;
+    cards.forEach((c, k) => (c.dataset.pos = k < i ? -1 : k - i));
+    bgs.forEach((b, k) => b.classList.toggle("on", k === i));
+    dots.forEach((d, k) => { d.className = k < i ? "done" : k === i ? "on" : ""; });
+    const c = CHAPS[i];
+    [["eyebrow", `<i></i>${L(...c.eyebrow)}`], ["h", L(...c.h)], ["p", L(...c.p)]].forEach(([k, html], n) => { const t = el.querySelector(`[data-ch="${k}"]`); if (t.innerHTML === html) return; t.animate([{ opacity: 1 }, { opacity: 0, transform: "translateY(-8px)" }], { duration: 180, fill: "forwards" }).finished.then(() => { t.innerHTML = html; t.animate([{ opacity: 0, transform: "translateY(12px)" }, { opacity: 1, transform: "none" }], { duration: 520, delay: n * 60, easing: "cubic-bezier(.2,.9,.25,1)", fill: "forwards" }); }); });
+    if (i === 1) { const days = cards[1].querySelectorAll(".week i"); days.forEach(d => d.classList.remove("on")); setTimeout(() => days.forEach((d, k) => k < 5 && d.classList.add("on")), 300); }
+    clearTimeout(app._chapT); app._chapT = setTimeout(() => cur === "intro2" && adv(), 4200);
+  };
+  const adv = () => (app.chap || 0) < 2 ? show((app.chap || 0) + 1) : go("intro3");
+  app._chapAdv = adv;
+  el.querySelector(".chap-deck").addEventListener("click", adv);
+  let sx = 0; el.addEventListener("pointerdown", e => (sx = e.clientX)); el.addEventListener("pointerup", e => { const dx = e.clientX - sx; if (dx < -40) adv(); else if (dx > 40 && app.chap > 0) show(app.chap - 1); });
+  show(app.chap || 0);
+};
+SC.ready.mount = el => { const sp = SagaStage.spin(el.querySelector(".ready-spin"), { set: "spin", start: 18, hint: false, idle: false, fit: "contain", zoom: 1.7, oy: -.12, ease: 1.4 }); timers.push(setTimeout(() => sp.to(36), 500)); };
+SC.vehicle.mount = el => {
+  SagaStage.unveil(el.querySelector("#luxstg"), { set: "p", nose: [27, 59] });
+  SagaStage.spin(el.querySelector(".lux-spin"), { set: "spin", fit: "contain", zoom: 1.3, oy: .02, hintText: L("Drag to turn", "తిప్పడానికి లాగండి", "घुमाने के लिए खींचें") });
+};
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-lux]"); if (!b) return;
+  const st = document.querySelector("#luxstg")?.__stage; if (!st) return;
+  if (b.dataset.lux === "replay") { document.querySelectorAll("[data-lux]").forEach(x => x.dataset.lux !== "replay" && x.classList.add("on")); st.play(); return; }
+  b.classList.toggle("on");
+  const on = k => document.querySelector(`[data-lux="${k}"]`).classList.contains("on");
+  st.set(on("lights"), on("top"));
+});
 SC.nocars.mount = () => timers.push(setTimeout(() => { if (cur === "nocars") A.waitdlg(); }, 700));
 { const fm = SC.finding.mount; SC.finding.mount = el => { fm(el); timers.push(setTimeout(() => { if (cur === "finding" && app.driverLive) A.waitdlg(); }, 8000)); }; }
 /* ---------- actions ---------- */
 const A = {
+  chapnext() { app._chapAdv ? app._chapAdv() : go("intro3"); },
   waitdlg() {
     const m = $("#modal"); if (!m) return;
     m.innerHTML = `<div class="grabber"></div><div class="dlg"><div class="dlg-car">${S.car({ reflect: false })}</div>
