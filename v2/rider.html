@@ -404,7 +404,7 @@ body.embed,body.bare{background:transparent}
 .upd-sheet{position:absolute;left:12px;right:12px;bottom:24px;padding:22px;border-radius:28px;background:var(--surface);box-shadow:0 20px 60px rgba(0,0,0,.25)}
 </style>
 <link rel="stylesheet" href="system.css?v=9"><link rel="stylesheet" href="system3.css?v=9"><link rel="stylesheet" href="system4.css?v=9"><link rel="stylesheet" href="system6.css?v=11"><link rel="stylesheet" href="system7.css?v=10">
-<link rel="stylesheet" href="ds.css?v=38">
+<link rel="stylesheet" href="ds.css?v=39">
 </head>
 <body>
 <div class="shell">
@@ -661,26 +661,10 @@ def("home", { g: "Ride", n: "Home", tab: "home", what: "A greeting and three qui
     <div class="hm-stage hm-stage3"><div class="hm-spin" data-car3d></div><button class="hm-about" data-go="vehicle">SAGA Luxe <em>${L("About the car", "కారు గురించి", "गाड़ी के बारे में")}</em>${I("chevr", "sm")}</button></div>
     <button class="search2 press hm-search" data-go="where"><span class="s-ic">${I("search")}</span><span class="ph">${L("Where to?", "ఎక్కడికి?", "कहाँ जाना है?")}</span><span class="s-now" data-go="schedule">${I("clock", "sm")}${L("Later", "తర్వాత", "बाद में")}</span><span class="s-mic" data-voice aria-label="${L("Speak to Saathi", "సాథీతో మాట్లాడండి", "साथी से बोलें")}">${I("mic", "sm")}</span></button>
 
-    <div class="sv">
-      <button class="sv-card sv-air" data-go="airport" style="--i:0">
-        <span class="sv-head"><span class="sv-ic">${I("plane", "sm")}</span><small>${L("Airport", "ఎయిర్‌పోర్ట్", "एयरपोर्ट")}</small><span class="sv-tag">${air.tag}</span></span>
-        <b class="sv-t">${air.t}</b>
-        <span class="sv-route"><b>VTZ</b><span class="sv-path"><i class="sv-dash"></i><span class="sv-plane">${I("plane", "sm")}</span></span><b>${air.to}</b></span>
-        <span class="sv-foot"><span>${air.meta}</span><span class="sv-cd">${air.cd}</span></span>
-        <span class="sv-go" data-go="${air.go}">${app.booked ? L("View pickup", "పికప్ చూడండి", "पिकअप देखें") : L("Plan pickup", "పికప్ ప్లాన్", "पिकअप प्लान")}${I("arrowr", "sm")}</span>
-      </button>
-      <button class="sv-card sv-sch" data-go="schedule" style="--i:1">
-        <span class="sv-head"><span class="sv-ic sv-clock"><i></i></span><small>${L("Scheduled", "షెడ్యూల్", "शेड्यूल")}</small><span class="sv-tag">${app.series ? L("On", "ఆన్", "चालू") : L("Set once", "ఒకసారి సెట్", "एक बार सेट")}</span></span>
-        <b class="sv-t">${app.series ? L("Weekdays at 9:00 AM", "వారపు రోజులు ఉ. 9:00", "सोम–शुक्र सुबह 9:00") : L("Your week, on autopilot", "మీ వారం, ఆటోపైలట్‌లో", "आपका हफ़्ता, ऑटोपायलट पर")}</b>
-        <span class="sv-week">${[1, 2, 3, 4, 5, 6, 0].map((d, i) => `<i class="${app.days.includes(d) ? "on" : ""}" style="--i:${i}">${dn[d]}</i>`).join("")}</span>
-        <span class="sv-foot"><span>${L("Home → Office · same chauffeur", "ఇల్లు → ఆఫీస్ · అదే డ్రైవర్", "घर → ऑफ़िस · वही ड्राइवर")}</span></span>
-      </button>
-      <button class="sv-card sv-int" data-go="intercity" style="--i:2">
-        <span class="sv-head"><span class="sv-ic">${I("route", "sm")}</span><small>${L("Intercity", "ఇంటర్‌సిటీ", "इंटरसिटी")}</small><span class="sv-tag">${L("from", "నుండి", "से")} ${from}</span></span>
-        <b class="sv-t">${L(`${tname(app.idest) || "Araku"} in ${hrs} h ${mn ? mn + " min" : ""}`, `${hrs} గం ${mn ? mn + " ని" : ""}లో ${tname(app.idest) || "అరకు"}`, `${hrs} घं ${mn ? mn + " मि" : ""} में ${tname(app.idest) || "अराकू"}`)}</b>
-        <span class="sv-road"><svg class="sv-hills" viewBox="0 0 320 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40 L0 26 C30 14 52 10 80 20 C104 28 120 6 150 8 C182 10 196 26 226 22 C252 18 272 4 300 12 L320 16 L320 40Z"/></svg><span class="sv-lane"><i class="sv-lines"></i></span><span class="sv-car"></span></span>
-        <span class="sv-towns">${towns.map(t => `<span class="sv-town ${t === app.idest ? "on" : ""}" data-act="itown" data-v="${t}">${tname(t)}<em>${KM[t]} km</em></span>`).join("")}</span>
-      </button>
+    <div class="sv sv-onb">
+      <button class="sv2" data-go="airport" style="--i:0"><span class="sv2-bg" style="background-image:url(${SagaStage.src("still-front-low")})"></span>${chapCard(0).replace("chap-card", "chap-card sv2-card")}<span class="sv2-cta">${L("Plan airport ride", "ఎయిర్‌పోర్ట్ రైడ్ ప్లాన్", "एयरपोर्ट राइड प्लान")}${I("arrowr", "sm")}</span></button>
+      <button class="sv2" data-go="schedule" style="--i:1"><span class="sv2-bg" style="background-image:url(${SagaStage.src("still-side")})"></span>${chapCard(1).replace("chap-card", "chap-card sv2-card")}<span class="sv2-cta">${L("Schedule rides", "రైడ్‌లు షెడ్యూల్", "राइड शेड्यूल करें")}${I("arrowr", "sm")}</span></button>
+      <button class="sv2" data-go="intercity" style="--i:2"><span class="sv2-bg" style="background-image:url(${SagaStage.src("still-rear")})"></span>${chapCard(2).replace("chap-card", "chap-card sv2-card")}<span class="sv2-cta">${L("Plan a trip", "ప్రయాణం ప్లాన్", "यात्रा प्लान करें")}${I("arrowr", "sm")}</span></button>
     </div>
 
     <div class="hm-sec"><span>${L("Make it effortless", "మరింత సులభంగా", "और आसान")}</span><small class="bn-dots"><i class="on"></i><i></i><i></i></small></div>
@@ -1641,14 +1625,14 @@ function toast(msg, title) {
 SC.home.mount = el => {
   const box = el.querySelector(".hm-spin");
   if (box) {
-    const api = SagaStage.spin(box, { set: "hero", alpha: true, start: app.spinAt || 0, intro: app.spinAt ? 0 : 3, idle: false, ease: 2.2, hint: false, fit: "contain", zoom: 1.2, oy: -.02 });
+    const api = SagaStage.spin(box, { set: "hero", alpha: true, start: app.spinAt || 0, intro: app.spinAt ? 0 : 3, idle: false, ease: 2.2, hint: false, fit: "contain", zoom: 1.5, oy: -.04 });
     let dx = 0, dy = 0;   // a tap (not a drag) gives the car a quarter turn
     box.addEventListener("pointerdown", e => { dx = e.clientX; dy = e.clientY; });
     box.addEventListener("pointerup", e => { if (Math.abs(e.clientX - dx) < 6 && Math.abs(e.clientY - dy) < 6 && api && api.to) { api.to(Math.round(api.pos) + 18); box.classList.add("spun"); setTimeout(() => box.classList.remove("spun"), 900); } });
   }
   const tick = () => { if (cur !== "home") return; el.querySelectorAll("[data-cd]").forEach(x => (x.textContent = countdown())); timers.push(setTimeout(tick, 1000)); }; tick();
   // service cards lean toward the finger (transform only)
-  el.querySelectorAll(".sv-card").forEach(c => {
+  el.querySelectorAll(".sv-card,.sv2").forEach(c => {
     const lean = e => { const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5; c.style.transform = `perspective(700px) rotateX(${(-y * 5).toFixed(2)}deg) rotateY(${(x * 6).toFixed(2)}deg) scale(.985)`; };
     c.addEventListener("pointermove", lean); c.addEventListener("pointerdown", lean);
     const rest = () => { c.style.transform = ""; }; c.addEventListener("pointerleave", rest); c.addEventListener("pointerup", rest); c.addEventListener("pointercancel", rest);
