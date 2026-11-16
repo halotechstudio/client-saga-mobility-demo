@@ -2195,10 +2195,6 @@ b,strong,.t-h3,.t1,.row .t1,.dv-job b,.tr-head b{font-weight:500}
 [data-theme=light] .bn{background:#fff!important;border-color:rgba(10,14,33,.08)!important}
 .hm3 .hm-search{background:linear-gradient(180deg,rgba(255,255,255,.17),rgba(255,255,255,.09)),rgba(40,44,56,.5)!important;border:1px solid rgba(255,255,255,.16)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 12px 30px -18px rgba(0,0,0,.8)!important}
 [data-theme=light] .hm3 .hm-search{background:#fff!important}
-.tabbar,[data-os] .tabbar{border-radius:34px!important;padding:9px!important}
-.tabbar .tab,[data-os] .tabbar .tab{border-radius:999px!important}
-.tab-ind{border-radius:999px!important}
-.tab-eco{border-radius:28px!important}
 .dk{width:24px;height:24px;overflow:visible}
 .dk .dk-f{fill:currentColor;opacity:0;transition:opacity .3s}
 .dk .dk-s{fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}

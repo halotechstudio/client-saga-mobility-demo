@@ -404,7 +404,7 @@ body.embed,body.bare{background:transparent}
 .upd-sheet{position:absolute;left:12px;right:12px;bottom:24px;padding:22px;border-radius:28px;background:var(--surface);box-shadow:0 20px 60px rgba(0,0,0,.25)}
 </style>
 <link rel="stylesheet" href="system.css?v=9"><link rel="stylesheet" href="system3.css?v=9"><link rel="stylesheet" href="system4.css?v=9"><link rel="stylesheet" href="system6.css?v=11"><link rel="stylesheet" href="system7.css?v=10">
-<link rel="stylesheet" href="ds.css?v=59">
+<link rel="stylesheet" href="ds.css?v=60">
 </head>
 <body>
 <div class="shell">
@@ -1638,7 +1638,7 @@ const DOCK = {
 const TABS = [["home", "home", () => L("Home", "హోమ్", "होम")], ["rides", "cal", () => L("Trips", "ప్రయాణాలు", "यात्राएँ")], ["offers", "tag", () => L("Offers", "ఆఫర్లు", "ऑफ़र")], ["account", "user", () => L("Account", "ఖాతా", "खाता")]];
 function chrome() {
   const sc = SC[cur], t = sc.tab;
-  const tb = TABS.map(([id, ic, lb]) => `<button class="tab ${t === id ? "on" : ""}" data-tab="${id}">${ios() ? (DOCK[id] || I(ic)) : `<span class="ico">${DOCK[id] || I(ic)}</span>`}<span>${lb()}</span></button>`);
+  const tb = TABS.map(([id, ic, lb]) => `<button class="tab ${t === id ? "on" : ""}" data-tab="${id}">${ios() ? I(ic) : `<span class="ico">${I(ic)}</span>`}<span>${lb()}</span></button>`);
   tb.splice(2, 0, ecoVessel("", `data-go="impact" aria-label="${esc(L(`Eco points: ${Math.round(ecoFill() * 100)}% to a free ride`, `ఎకో పాయింట్లు: ఉచిత రైడ్‌కు ${Math.round(ecoFill() * 100)}%`, `इको पॉइंट: मुफ़्त राइड तक ${Math.round(ecoFill() * 100)}%`))}"`));
   $("#tabbar").innerHTML = tb.join("");
   $("#tabbar").classList.toggle("hide", !t);
