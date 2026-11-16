@@ -404,7 +404,7 @@ body.embed,body.bare{background:transparent}
 .upd-sheet{position:absolute;left:12px;right:12px;bottom:24px;padding:22px;border-radius:28px;background:var(--surface);box-shadow:0 20px 60px rgba(0,0,0,.25)}
 </style>
 <link rel="stylesheet" href="system.css?v=9"><link rel="stylesheet" href="system3.css?v=9"><link rel="stylesheet" href="system4.css?v=9"><link rel="stylesheet" href="system6.css?v=11"><link rel="stylesheet" href="system7.css?v=10">
-<link rel="stylesheet" href="ds.css?v=42">
+<link rel="stylesheet" href="ds.css?v=46">
 </head>
 <body>
 <div class="shell">
@@ -664,26 +664,7 @@ def("home", { g: "Ride", n: "Home", tab: "home", what: "A greeting and three qui
     <div class="svcs">
       <button class="svc svc-air" data-go="airport" style="--i:0">
         <span class="svc-scene" aria-hidden="true">
-          <svg viewBox="0 0 320 140" preserveAspectRatio="xMidYMax slice">
-            <defs>
-              <radialGradient id="apG" cx="50%" cy="0%" r="75%"><stop offset="0" stop-color="#7FA2FF" stop-opacity=".55"/><stop offset=".45" stop-color="#3550E8" stop-opacity=".35"/><stop offset="1" stop-color="#0B1350" stop-opacity="0"/></radialGradient>
-              <clipPath id="apC"><circle cx="160" cy="330" r="240"/></clipPath>
-            </defs>
-            <g class="ap-stars"><circle cx="28" cy="22" r="1"/><circle cx="96" cy="14" r="1.2"/><circle cx="214" cy="20" r="1"/><circle cx="288" cy="34" r="1.3"/><circle cx="250" cy="8" r=".8"/><circle cx="60" cy="48" r=".8"/></g>
-            <circle cx="160" cy="330" r="240" fill="url(#apG)"/>
-            <g clip-path="url(#apC)" class="ap-grid">
-              <ellipse cx="160" cy="330" rx="240" ry="200"/><ellipse cx="160" cy="330" rx="240" ry="150"/><ellipse cx="160" cy="330" rx="240" ry="100"/>
-              <ellipse cx="160" cy="330" rx="70" ry="240"/><ellipse cx="160" cy="330" rx="150" ry="240"/><ellipse cx="160" cy="330" rx="210" ry="240"/>
-            </g>
-            <circle cx="160" cy="330" r="240" class="ap-rim"/>
-            <path class="ap-trail0" d="M44.7 103.7A254 254 0 0 1 275.3 103.7"/>
-            <path class="ap-trail" pathLength="1" d="M44.7 103.7A254 254 0 0 1 275.3 103.7"/>
-            <g class="ap-pin"><circle cx="51" cy="116" r="7" class="ap-ring"/><circle cx="51" cy="116" r="3"/></g>
-            <g class="ap-pin b"><circle cx="269" cy="116" r="7" class="ap-ring"/><circle cx="269" cy="116" r="3"/></g>
-            <text x="51" y="134" class="ap-code">VTZ</text><text x="269" y="134" class="ap-code">HYD</text>
-            <g class="ap-car"><rect x="150" y="80.5" width="20" height="7" rx="3.5"/><rect x="155" y="78" width="10" height="4" rx="2"/><circle cx="170.5" cy="84" r="5" class="ap-beam"/></g>
-            <g class="ap-plane"><g class="ap-lift"><path transform="translate(320 0) scale(-1 1)" d="M148 75.2h8l6-7.5h3l-3 7.5h7l2.4-2.6h2l-1.4 3.4 1.4 3.4h-2l-2.4-2.6h-7l3 7.5h-3l-6-7.5h-8a.8.8 0 0 1 0-1.6z"/></g></g>
-          </svg>
+          <video class="svc-vid" poster="assets/video/airport-poster.webp" src="assets/video/airport.mp4?v=1" autoplay muted loop playsinline preload="auto"></video><span class="svc-fade"></span>
         </span>
         <span class="svc-body"><span class="svc-txt"><small>${L("Airport rides", "ఎయిర్‌పోర్ట్ రైడ్‌లు", "एयरपोर्ट राइड")}</small><b>${L("Door to departures, on time", "ఇంటి నుండి డిపార్చర్స్‌కు, సమయానికి", "घर से डिपार्चर तक, समय पर")}</b><span>${L("Pickup timed to your flight, ₹1,140 fixed", "ఫ్లైట్‌కు తగ్గ పికప్, ₹1,140 స్థిరం", "फ़्लाइट के हिसाब से पिकअप, ₹1,140 तय")}</span></span><span class="svc-cta">${L("Book", "బుక్", "बुक")}${I("arrowr", "sm")}</span></span>
       </button>
@@ -691,14 +672,7 @@ def("home", { g: "Ride", n: "Home", tab: "home", what: "A greeting and three qui
       <button class="svc svc-sch" data-go="schedule" style="--i:1">
         <span class="svc-scene" aria-hidden="true">
           <span class="scx-time">9:00<small>AM</small></span>
-          <svg viewBox="0 0 320 96" preserveAspectRatio="xMidYMid meet" class="sc-svg">
-            <path class="sc-road" d="M58 58H262"/>
-            <path class="sc-road-lit" pathLength="1" d="M58 58H262"/>
-            <g class="sc-end"><circle cx="38" cy="58" r="19"/><path class="sc-glyph" d="M30 60l8-7 8 7M32.5 58v8h11v-8"/></g>
-            <g class="sc-end b"><circle cx="282" cy="58" r="19"/><path class="sc-glyph" d="M274 67V50h10v17M284 55h6v12M277 54h2M277 58h2M277 62h2"/></g>
-            <g class="sc-car"><rect x="52" y="51" width="22" height="8" rx="4"/><rect x="57" y="48" width="11" height="4.5" rx="2.2"/><circle cx="74" cy="55" r="5" class="sc-beam"/></g>
-          </svg>
-          <span class="sc-dest"><i style="--k:0">${L("Office", "ఆఫీస్", "ऑफ़िस")}</i><i style="--k:1">${L("College", "కాలేజీ", "कॉलेज")}</i><i style="--k:2">${L("Gym", "జిమ్", "जिम")}</i></span>
+          <video class="svc-vid" poster="assets/video/commute-poster.webp" src="assets/video/commute.mp4?v=1" autoplay muted loop playsinline preload="auto"></video><span class="svc-fade"></span>
           <span class="sc-days">${[1, 2, 3, 4, 5, 6, 0].map((d, k) => `<i class="${k < 5 ? "on" : ""}" style="--k:${k}">${dn[d]}</i>`).join("")}</span>
         </span>
         <span class="svc-body"><span class="svc-txt"><small>${L("Scheduled rides", "షెడ్యూల్ రైడ్‌లు", "शेड्यूल राइड")}</small><b>${L("Same time, every weekday", "ప్రతి వారపు రోజూ, అదే సమయం", "हर कार्यदिवस, वही समय")}</b><span>${L("Office, college, gym: set it once", "ఆఫీస్, కాలేజీ, జిమ్: ఒకసారి సెట్", "ऑफ़िस, कॉलेज, जिम: एक बार सेट")}</span></span><span class="svc-cta">${L("Set up", "సెట్", "सेट")}${I("arrowr", "sm")}</span></span>
@@ -706,11 +680,7 @@ def("home", { g: "Ride", n: "Home", tab: "home", what: "A greeting and three qui
 
       <button class="svc svc-int" data-go="intercity" style="--i:2">
         <span class="svc-scene" aria-hidden="true">
-          <span class="ic-sun"></span>
-          <span class="ic-l ic-far"><svg viewBox="0 0 640 140" preserveAspectRatio="none"><path d="M0 92L40 70 78 84 120 52 168 80 210 60 256 86 290 66 320 92 360 70 398 84 440 52 488 80 530 60 576 86 610 66 640 92V140H0Z"/></svg></span>
-          <span class="ic-l ic-mid"><svg viewBox="0 0 640 140" preserveAspectRatio="none"><g><path d="M0 108C40 96 70 98 110 104S190 112 230 100 290 98 320 108V140H0Z"/><path d="M86 104v-6h4v-6h3v-6h3v-6h2v-5h2v5h2v6h3v6h3v6h4v6z"/><path d="M98 69v-3h2v3z"/><path d="M196 104v-22M196 82c-6-1-10 2-12 5M196 82c5-2 10-1 13 3M196 82c-3-5-8-6-11-5M196 82c3-5 8-6 11-4" class="ic-palm"/><path d="M262 104v-16M262 88c-5 0-8 2-9 4M262 88c4-1 8 0 10 3M262 88c-2-4-6-5-8-4M262 88c2-4 6-4 8-3" class="ic-palm"/></g><g transform="translate(320 0)"><path d="M0 108C40 96 70 98 110 104S190 112 230 100 290 98 320 108V140H0Z"/><path d="M86 104v-6h4v-6h3v-6h3v-6h2v-5h2v5h2v6h3v6h3v6h4v6z"/><path d="M98 69v-3h2v3z"/><path d="M196 104v-22M196 82c-6-1-10 2-12 5M196 82c5-2 10-1 13 3M196 82c-3-5-8-6-11-5M196 82c3-5 8-6 11-4" class="ic-palm"/><path d="M262 104v-16M262 88c-5 0-8 2-9 4M262 88c4-1 8 0 10 3M262 88c-2-4-6-5-8-4M262 88c2-4 6-4 8-3" class="ic-palm"/></g></svg></span>
-          <span class="ic-l ic-road"><i></i></span>
-          <span class="ic-car"><i></i></span>
+          <video class="svc-vid" poster="assets/video/intercity-poster.webp" src="assets/video/intercity.mp4?v=1" autoplay muted loop playsinline preload="auto"></video><span class="svc-fade"></span>
           <span class="ic-dest"><i style="--k:0">${L("Araku Valley", "అరకు వ్యాలీ", "अराकू घाटी")} · 115 km</i><i style="--k:1">${L("Annavaram", "అన్నవరం", "अन्नवरम")} · 125 km</i><i style="--k:2">${L("Srikakulam", "శ్రీకాకుళం", "श्रीकाकुलम")} · 110 km</i><i style="--k:3">${L("Rajahmundry", "రాజమండ్రి", "राजमुंदरी")} · 195 km</i></span>
         </span>
         <span class="svc-body"><span class="svc-txt"><small>${L("Intercity", "ఇంటర్‌సిటీ", "इंटरसिटी")}</small><b>${L("Hills, temples, home town", "కొండలు, గుళ్ళు, సొంత ఊరు", "पहाड़, मंदिर, अपना शहर")}</b><span>${L("Long trips and pilgrimages, one fixed fare", "దూర ప్రయాణాలు, తీర్థయాత్రలు, ఒకే ఛార్జీ", "लंबी यात्राएँ और तीर्थ, एक तय किराया")}</span></span><span class="svc-cta">${L("Plan", "ప్లాన్", "प्लान")}${I("arrowr", "sm")}</span></span>
@@ -1138,6 +1108,119 @@ def("booked", { g: "Airport", n: "Pickup booked", tabs: 0, foot: 1, what: "The r
   ${foot(`<div class="btnrow">${btn(ios() ? L("Add to Apple Wallet", "Apple Walletకి జోడించండి", "Apple Wallet में जोड़ें") : L("Save to Google Wallet", "Google Walletలో సేవ్", "Google Wallet में सेव करें"), { kind: "btn-secondary", toast: L("Pass added. It updates if the flight changes.", "పాస్ జోడించాం. ఫ్లైట్ మారితే అప్‌డేట్ అవుతుంది.", "पास जुड़ गया। फ़्लाइट बदली तो अपडेट होगा।") })}${btn(L("Done", "పూర్తయింది", "हो गया"), { act: "totrips" })}</div>`)}`;
 });
 
+/* ---------- scheduled + intercity: editable places, times and dates; review with payment; confirmation with the transaction ---------- */
+const SPOTS = {
+  home: [I => I("home"), ["Home · MVP Colony", "ఇల్లు · MVP కాలనీ", "घर · MVP कॉलोनी"]],
+  office: [I => I("building"), ["Office · Dwaraka Nagar", "ఆఫీస్ · ద్వారకా నగర్", "ऑफ़िस · द्वारका नगर"]],
+  college: [I => I("flag"), ["College · Andhra University", "కాలేజీ · ఆంధ్ర యూనివర్సిటీ", "कॉलेज · आंध्र यूनिवर्सिटी"]],
+  gym: [I => I("bolt"), ["Gym · Siripuram", "జిమ్ · సిరిపురం", "जिम · सिरिपुरम"]],
+  beach: [I => I("pin"), ["RK Beach", "RK బీచ్", "RK बीच"]],
+  station: [I => I("route"), ["Railway Station", "రైల్వే స్టేషన్", "रेलवे स्टेशन"]]
+};
+const pl = k => L(...SPOTS[k][1]);
+const tfmt = t => hhmm(Math.floor(t / 60), t % 60);
+const DAY0 = new Date(2026, 10, 16);
+const dlabel = off => { const d = new Date(DAY0.getTime() + off * 864e5); const wd = [L("Sun", "ఆది", "रवि"), L("Mon", "సోమ", "सोम"), L("Tue", "మంగళ", "मंगल"), L("Wed", "బుధ", "बुध"), L("Thu", "గురు", "गुरु"), L("Fri", "శుక్ర", "शुक्र"), L("Sat", "శని", "शनि")][d.getDay()]; return `${wd} ${d.getDate()} ${L("Nov", "నవం", "नवं")}`.replace(` ${L("Nov", "నవం", "नवं")}`, d.getMonth() === 10 ? ` ${L("Nov", "నవం", "नवं")}` : ` ${L("Dec", "డిసెం", "दिसं")}`); };
+app.sch = { from: "home", to: "office", t: 540, back: 1110 };
+app.ic = { from: "home", day: 5, t: 420, riders: 2 };
+const PAYS = { upi: ["phone", ["UPI · ananya@okhdfc", "UPI · ananya@okhdfc", "UPI · ananya@okhdfc"]], wallet: ["wallet", ["SAGA wallet", "SAGA వాలెట్", "SAGA वॉलेट"]], card: ["tag", ["Visa ···· 4417", "Visa ···· 4417", "Visa ···· 4417"]] };
+const payRow = () => `<button class="row pay-row" data-act="pickpay"><span class="lead">${I(PAYS[app.pay] ? PAYS[app.pay][0] : "phone")}</span><span class="tx"><span class="t1" style="display:block">${L(...(PAYS[app.pay] || PAYS.upi)[1])}</span><span class="t2" style="display:block">${app.pay === "wallet" ? L(`Balance ${S.inr(app.wallet)}`, `బ్యాలెన్స్ ${S.inr(app.wallet)}`, `बैलेंस ${S.inr(app.wallet)}`) : L("Change payment method", "చెల్లింపు విధానం మార్చండి", "भुगतान का तरीका बदलें")}</span></span>${I("chevr", "sm")}</button>`;
+function openSheet(html) { const m = $("#modal"); if (!m) return; m.innerHTML = `<div class="grabber"></div><div class="pk">${html}</div>`; $("#overlay").classList.add("on"); }
+const placeSheet = (scope, f) => openSheet(`<h3 class="pk-h">${f === "from" ? L("Pick-up", "పికప్", "पिकअप") : L("Drop-off", "డ్రాప్", "ड्रॉप")}</h3>
+  <button class="pk-search" data-act="pkwhere">${I("search", "sm")}${L("Search any address", "ఏ చిరునామా అయినా వెతకండి", "कोई भी पता खोजें")}</button>
+  <div class="pk-list">${Object.keys(SPOTS).map(k => `<button class="pk-row ${app[scope][f] === k ? "on" : ""}" data-act="setplace" data-s="${scope}" data-f="${f}" data-v="${k}"><span class="pk-ic">${SPOTS[k][0](I)}</span><span>${pl(k)}</span>${app[scope][f] === k ? I("check", "sm") : ""}</button>`).join("")}</div>`);
+const timeSheet = (scope, f) => { const cur = app[scope][f]; openSheet(`<h3 class="pk-h">${f === "back" ? L("Return pick-up time", "తిరుగు పికప్ సమయం", "वापसी पिकअप समय") : L("Pick-up time", "పికప్ సమయం", "पिकअप समय")}</h3>
+  <div class="pk-big t-num" id="pkT">${tfmt(cur)}</div>
+  <div class="pk-hours">${Array.from({ length: 18 }, (_, i) => i + 5).map(h => `<button class="${Math.floor(cur / 60) === h ? "on" : ""}" data-act="settime" data-s="${scope}" data-f="${f}" data-h="${h}">${hhmm(h, 0).replace(":00", "")}</button>`).join("")}</div>
+  <div class="seg pk-mins">${[0, 15, 30, 45].map(m => `<button class="${cur % 60 === m ? "on" : ""}" data-act="settime" data-s="${scope}" data-f="${f}" data-m="${m}">:${String(m).padStart(2, "0")}</button>`).join("")}</div>
+  ${btn(L("Done", "పూర్తి", "हो गया"), { act: "closedlg" })}`); };
+const daySheet = () => openSheet(`<h3 class="pk-h">${L("Travel date", "ప్రయాణ తేదీ", "यात्रा की तारीख़")}</h3>
+  <div class="pk-days">${Array.from({ length: 14 }, (_, i) => i + 1).map(o => `<button class="${app.ic.day === o ? "on" : ""}" data-act="setday" data-v="${o}">${dlabel(o).replace(" ", "<b>").replace(" ", "</b>")}</button>`).join("")}</div>
+  ${btn(L("Done", "పూర్తి", "हो गया"), { act: "closedlg" })}`);
+const paySheet = () => openSheet(`<h3 class="pk-h">${L("Pay with", "దీనితో చెల్లించండి", "इससे भुगतान करें")}</h3>
+  <div class="pk-list">${Object.keys(PAYS).map(k => `<button class="pk-row ${app.pay === k ? "on" : ""}" data-act="setpay" data-v="${k}"><span class="pk-ic">${I(PAYS[k][0])}</span><span>${L(...PAYS[k][1])}${k === "wallet" ? `<small>${S.inr(app.wallet)}</small>` : ""}</span>${app.pay === k ? I("check", "sm") : ""}</button>`).join("")}</div>
+  <p class="pk-note">${I("shield", "sm")}${L("Payments are processed by our RBI-licensed partner. SAGA never stores your card or UPI PIN.", "చెల్లింపులు RBI లైసెన్స్ ఉన్న భాగస్వామి ద్వారా. SAGA మీ కార్డ్ లేదా UPI PIN నిల్వ చేయదు.", "भुगतान RBI-लाइसेंस प्राप्त पार्टनर के ज़रिए। SAGA आपका कार्ड या UPI PIN नहीं रखता।")}</p>`);
+
+/* series maths, shared by the schedule screen and its review */
+const seriesCalc = () => {
+  let n = 0; for (let d = 16; d <= 30; d++) { const wd = new Date(2026, 10, d).getDay(); if (app.days.includes(wd) && !app.skips.includes(d)) n++; }
+  let dec = 0; for (let d = 1; d <= 12; d++) if (app.days.includes(new Date(2026, 11, d).getDay())) dec++;
+  const rides = (n + dec) * (app.ret ? 2 : 1), per = 252, full = rides * per, total = Math.round(full * .9);
+  return { rides, per, full, save: full - total, total, week: Math.round(app.days.length * (app.ret ? 2 : 1) * per * .9) };
+};
+const icCalc = () => { const km = KM[app.idest], rt = app.itrip === "round", dist = rt ? km * 2 : km, base = Math.round(dist * 18), wait = rt ? 600 : 0, toll = km > 100 ? 120 : 60; return { km, rt, dist, base, wait, toll, fare: base + wait + toll, adv: Math.round((base + wait + toll) * .2 / 10) * 10 }; };
+
+def("schreview", { g: "Scheduled", n: "Review weekday plan", tabs: 0, nav: 1, foot: 1, what: "The plan in one card (route, times, days, chauffeur), then exactly how money moves: nothing is charged today; a UPI AutoPay mandate is set up once, and each ride is debited after it ends at the plan price. Skipped rides are never charged.", why: "Recurring payments worry people. Saying when and how much is taken, and that skipping is free, is what makes a rider say yes.", fl: "UPI AutoPay mandate via the payment partner (<code>POST /mandates</code>), per-ride debit on <code>trip.completed</code>. Card and wallet fall back to charge-after-ride." }, () => {
+  const c = seriesCalc(), s = app.sch, dn = [L("Sun", "ఆది", "रवि"), L("Mon", "సోమ", "सोम"), L("Tue", "మంగళ", "मंगल"), L("Wed", "బుధ", "बुध"), L("Thu", "గురు", "गुरु"), L("Fri", "శుక్ర", "शुक्र"), L("Sat", "శని", "शनि")];
+  return `${bar(L("Review", "సమీక్ష", "समीक्षा"), { large: true })}
+  <div class="content"><div class="pad">
+    <div class="rv-card">
+      <div class="rv-route"><span><i class="rt-dot p"></i><b>${pl(s.from)}</b><small>${tfmt(s.t)}</small></span><span><i class="rt-dot d"></i><b>${pl(s.to)}</b><small>${app.ret ? L(`Return ${tfmt(s.back)}`, `తిరుగు ${tfmt(s.back)}`, `वापसी ${tfmt(s.back)}`) : L("One way", "ఒక వైపు", "एक तरफ़")}</small></span></div>
+      <div class="rv-days">${[1, 2, 3, 4, 5, 6, 0].map(d => `<i class="${app.days.includes(d) ? "on" : ""}">${dn[d]}</i>`).join("")}</div>
+      <div class="rv-meta"><span>${I("user", "sm")}${app.same ? L("Same chauffeur when possible", "వీలైతే అదే డ్రైవర్", "हो सके तो वही ड्राइवर") : L("Any SAGA chauffeur", "ఏ SAGA డ్రైవర్ అయినా", "कोई भी SAGA ड्राइवर")}</span><span>${I("cal", "sm")}${L("Until Sat 12 Dec", "శని 12 డిసెం వరకు", "शनि 12 दिसं तक")}</span></div>
+    </div>
+  </div>
+  ${sh(L("How you pay", "మీరు ఎలా చెల్లిస్తారు", "आप कैसे भुगतान करेंगे"))}
+  <div class="pad"><div class="tx-steps">
+    <div class="tx-s on"><b>${L("Today", "ఈరోజు", "आज")}</b><span>${L("₹0 charged. You approve one UPI AutoPay mandate (up to ₹300 a ride) in your UPI app.", "₹0 చెల్లింపు. మీ UPI యాప్‌లో ఒక UPI ఆటోపే మ్యాండేట్ (రైడ్‌కు ₹300 వరకు) ఆమోదించండి.", "₹0 कटेगा। अपने UPI ऐप में एक UPI ऑटोपे मैंडेट (हर राइड ₹300 तक) मंज़ूर करें।")}</span></div>
+    <div class="tx-s"><b>${L("After each ride", "ప్రతి రైడ్ తర్వాత", "हर राइड के बाद")}</b><span>${L(`${S.inr(Math.round(c.per * .9))} is debited, with a receipt in the app.`, `${S.inr(Math.round(c.per * .9))} డెబిట్, యాప్‌లో రసీదు.`, `${S.inr(Math.round(c.per * .9))} कटते हैं, ऐप में रसीद।`)}</span></div>
+    <div class="tx-s"><b>${L("Skipped a day?", "రోజు స్కిప్ చేశారా?", "कोई दिन छोड़ा?")}</b><span>${L("Never charged. Cancel the plan any time from Trips.", "ఛార్జ్ ఉండదు. Trips నుండి ఎప్పుడైనా రద్దు చేయండి.", "कोई शुल्क नहीं। Trips से कभी भी प्लान रद्द करें।")}</span></div>
+  </div></div>
+  <div class="pad mt16"><div class="rv-bill">
+    <div><span>${L(`${c.rides} rides × ${S.inr(c.per)}`, `${c.rides} రైడ్‌లు × ${S.inr(c.per)}`, `${c.rides} राइड × ${S.inr(c.per)}`)}</span><span>${S.inr(c.full)}</span></div>
+    <div class="g"><span>${L("Weekday plan −10%", "వీక్‌డే ప్లాన్ −10%", "वीकडे प्लान −10%")}</span><span>−${S.inr(c.save)}</span></div>
+    <div class="t"><span>${L("Plan total, paid ride by ride", "మొత్తం, రైడ్ వారీగా", "कुल, हर राइड पर")}</span><b>${S.inr(c.total)}</b></div>
+    <div class="z"><span>${L("Due today", "ఈరోజు చెల్లించాల్సింది", "आज देय")}</span><b>₹0</b></div>
+  </div></div>
+  ${sh(L("Pay with", "దీనితో చెల్లించండి", "इससे भुगतान करें"))}
+  <div class="pad"><div class="group">${payRow()}</div></div>
+  </div>
+  ${foot(btn(app.pay === "upi" ? L("Approve AutoPay & schedule", "ఆటోపే ఆమోదించి షెడ్యూల్", "ऑटोपे मंज़ूर करें व शेड्यूल") : L(`Schedule ${c.rides} rides`, `${c.rides} రైడ్‌లు షెడ్యూల్`, `${c.rides} राइड शेड्यूल करें`), { act: "bookseries" }))}`;
+});
+
+def("icreview", { g: "Intercity", n: "Review intercity trip", tabs: 0, nav: 1, foot: 1, what: "The trip at a glance, the fixed fare broken down (distance, tolls, waiting on round trips), then the payment: 20% now to hold the car and chauffeur for the day, the rest charged automatically when the trip ends. Free cancellation up to 24 hours before.", why: "A long trip is a bigger spend booked days ahead. A small advance with a clear refund rule is how outstation cabs are trusted in India.", fl: "Advance via <code>POST /payments/intent</code> (UPI collect, card or wallet); balance captured on <code>trip.completed</code>; refunds via the partner's refund API." }, () => {
+  const c = icCalc(), i = app.ic;
+  return `${bar(L("Review trip", "ప్రయాణ సమీక్ష", "यात्रा समीक्षा"), { large: true })}
+  <div class="content"><div class="pad">
+    <div class="rv-card ic">
+      <div class="rv-route"><span><i class="rt-dot p"></i><b>${pl(i.from)}</b><small>${dlabel(i.day)} · ${tfmt(i.t)}</small></span><span><i class="rt-dot d"></i><b>${app.idest}</b><small>${c.km} km · ${c.rt ? L("round trip, same day", "రాను పోను, అదే రోజు", "आना-जाना, उसी दिन") : L("one way", "ఒక వైపు", "एक तरफ़")}</small></span></div>
+      <div class="rv-meta"><span>${I("users", "sm")}${L(`${i.riders} riders`, `${i.riders} మంది`, `${i.riders} यात्री`)}</span><span>${I("bolt", "sm")}${c.km > 150 ? L("1 charging stop", "1 ఛార్జింగ్ స్టాప్", "1 चार्जिंग स्टॉप") : L("No charging stop", "ఛార్జింగ్ స్టాప్ లేదు", "चार्जिंग स्टॉप नहीं")}</span></div>
+    </div>
+  </div>
+  <div class="pad mt16"><div class="rv-bill">
+    <div><span>${L(`${c.dist} km × ₹18`, `${c.dist} కి.మీ × ₹18`, `${c.dist} किमी × ₹18`)}</span><span>${S.inr(c.base)}</span></div>
+    <div><span>${L("Tolls and state permit", "టోల్స్, పర్మిట్", "टोल और परमिट")}</span><span>${S.inr(c.toll)}</span></div>
+    ${c.rt ? `<div><span>${L("Waiting, up to 8 hours", "8 గంటల వరకు వెయిటింగ్", "8 घंटे तक इंतज़ार")}</span><span>${S.inr(c.wait)}</span></div>` : ""}
+    <div class="t"><span>${L("Fixed fare", "స్థిర ఛార్జీ", "तय किराया")}</span><b>${S.inr(c.fare)}</b></div>
+  </div></div>
+  ${sh(L("How you pay", "మీరు ఎలా చెల్లిస్తారు", "आप कैसे भुगतान करेंगे"))}
+  <div class="pad"><div class="tx-steps">
+    <div class="tx-s on"><b>${L(`Now · ${S.inr(c.adv)}`, `ఇప్పుడు · ${S.inr(c.adv)}`, `अभी · ${S.inr(c.adv)}`)}</b><span>${L("20% advance holds the car and your chauffeur for the day.", "20% అడ్వాన్స్ కారు, డ్రైవర్‌ను ఆ రోజుకు రిజర్వ్ చేస్తుంది.", "20% अग्रिम गाड़ी और ड्राइवर को उस दिन के लिए रोकता है।")}</span></div>
+    <div class="tx-s"><b>${L(`After the trip · ${S.inr(c.fare - c.adv)}`, `ప్రయాణం తర్వాత · ${S.inr(c.fare - c.adv)}`, `यात्रा के बाद · ${S.inr(c.fare - c.adv)}`)}</b><span>${L("Charged automatically to the same method, receipt and GST invoice in the app.", "అదే విధానంలో ఆటోమేటిక్‌గా, యాప్‌లో రసీదు మరియు GST ఇన్వాయిస్.", "उसी तरीके से अपने आप, ऐप में रसीद और GST इनवॉइस।")}</span></div>
+    <div class="tx-s"><b>${L("Plans change?", "ప్లాన్ మారిందా?", "योजना बदली?")}</b><span>${L("Free cancellation up to 24 hours before; the advance comes back in 3–5 working days.", "24 గంటల ముందు వరకు ఉచిత రద్దు; అడ్వాన్స్ 3–5 పని దినాల్లో తిరిగి వస్తుంది.", "24 घंटे पहले तक मुफ़्त रद्द; अग्रिम 3–5 कार्यदिवस में वापस।")}</span></div>
+  </div></div>
+  ${sh(L("Pay with", "దీనితో చెల్లించండి", "इससे भुगतान करें"))}
+  <div class="pad"><div class="group">${payRow()}</div></div>
+  </div>
+  ${foot(btn(L(`Pay ${S.inr(c.adv)} & book`, `${S.inr(c.adv)} చెల్లించి బుక్`, `${S.inr(c.adv)} दें और बुक करें`), { act: "bookinter" }))}`;
+});
+
+def("paydone", { g: "Ride", n: "Payment and confirmation", tabs: 0, foot: 1, what: "The payment happens on screen: the UPI app hand-off, a processing ring, then a tick, the amount, the method and a transaction reference, followed by what was booked and what happens next.", why: "Showing the money step plainly (amount, method, reference) is what makes the booking feel real and safe.", fl: "UPI intent / collect via the payment partner SDK; status from <code>GET /payments/{id}</code> with webhook confirmation." }, () => {
+  const d = app._done || {};
+  return `<div class="content pd"><div class="pad">
+    <div class="pd-ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" class="pd-bg"/><circle cx="60" cy="60" r="52" class="pd-arc" pathLength="1"/><path d="M40 62l14 13 27-30" class="pd-tick" pathLength="1"/></svg></div>
+    <div class="pd-stage pd-wait"><b>${d.wait || L("Waiting for your UPI app…", "మీ UPI యాప్ కోసం…", "आपके UPI ऐप का इंतज़ार…")}</b><span>${L("Approve the request to continue", "కొనసాగడానికి ఆమోదించండి", "आगे बढ़ने के लिए मंज़ूर करें")}</span></div>
+    <div class="pd-stage pd-ok"><span class="pd-amt t-num">${d.amt || "₹0"}</span><b>${d.title || ""}</b><span>${d.sub || ""}</span></div>
+    <div class="pd-rcpt">
+      <div><span>${L("Paid with", "చెల్లింపు", "भुगतान")}</span><b>${L(...(PAYS[app.pay] || PAYS.upi)[1])}</b></div>
+      <div><span>${L("Reference", "రిఫరెన్స్", "रेफ़रेंस")}</span><b class="t-num">${d.ref || ""}</b></div>
+      ${(d.rows || []).map(([a, b]) => `<div><span>${a}</span><b>${b}</b></div>`).join("")}
+    </div>
+  </div></div>
+  ${foot(`${btn(L("View in Trips", "Tripsలో చూడండి", "Trips में देखें"), { act: "donetrips" })}<button class="btn btn-text block" data-act="donehome">${L("Back to Home", "హోమ్‌కు", "होम पर")}</button>`)}`;
+});
+SC.paydone.mount = el => { const v = el.querySelector(".pd"); timers.push(setTimeout(() => v && v.classList.add("ok"), 1900)); };
+
 def("schedule", { g: "Scheduled", n: "Scheduled rides", tabs: 0, nav: 1, foot: 1, what: "Home to Office at 9:00 AM. A week strip whose chosen days light up one after another, a glass calendar of every ride (tap a date to skip it), return ride and same-chauffeur switches, and a lit series card: how many rides, the next one, and the weekday-plan price.", why: "Office and school runs are steady revenue for a small fleet, and they're planned days ahead, which helps dispatch. Seeing the whole series at once makes it feel like a plan, not a chore.", fl: "Stored as an RRULE (RFC 5545) + exceptions. Server expands it 14 days ahead into real bookings so dispatch can plan. <code>POST /series</code>." }, () => {
   const base = new Date(2026, 10, 15), Y = 2026, M = 10, first = new Date(Y, M, 1).getDay(), dim = 30;
   const dn = [L("S", "ఆ", "र"), L("M", "సో", "सो"), L("T", "మం", "मं"), L("W", "బు", "बु"), L("T", "గు", "गु"), L("F", "శు", "शु"), L("S", "శ", "श")];
@@ -1157,8 +1240,8 @@ def("schedule", { g: "Scheduled", n: "Scheduled rides", tabs: 0, nav: 1, foot: 1
   return `${bar(L("Scheduled rides", "షెడ్యూల్ రైడ్‌లు", "शेड्यूल राइड"), { large: true })}
   <div class="content">
     <div class="pad"><div class="route sc-rt">
-      <div class="rt-row"><span class="rt-dot p"></span><div class="grow"><div class="t-label">${L("From", "నుండి", "से")}</div><div class="rt-v">${L("Home · MVP Colony", "ఇల్లు · MVP కాలనీ", "घर · MVP कॉलोनी")}</div></div><span class="sc-time">${I("clock", "sm")}9:00 AM</span></div>
-      <div class="rt-row"><span class="rt-dot d"></span><div class="grow"><div class="t-label">${L("To", "కు", "तक")}</div><div class="rt-v">${L("Office · Dwaraka Nagar", "ఆఫీస్ · ద్వారకా నగర్", "ऑफ़िस · द्वारका नगर")}</div></div>${app.ret ? `<span class="sc-time">${I("repeat", "sm")}6:30 PM</span>` : ""}</div>
+      <div class="rt-row"><span class="rt-dot p"></span><button class="grow rt-edit" data-act="pickplace" data-s="sch" data-f="from"><div class="t-label">${L("From", "నుండి", "से")}</div><div class="rt-v">${pl(app.sch.from)}${I("edit", "sm")}</div></button><button class="sc-time" data-act="picktime" data-s="sch" data-f="t">${I("clock", "sm")}${tfmt(app.sch.t)}</button></div>
+      <div class="rt-row"><span class="rt-dot d"></span><button class="grow rt-edit" data-act="pickplace" data-s="sch" data-f="to"><div class="t-label">${L("To", "కు", "तक")}</div><div class="rt-v">${pl(app.sch.to)}${I("edit", "sm")}</div></button>${app.ret ? `<button class="sc-time" data-act="picktime" data-s="sch" data-f="back">${I("repeat", "sm")}${tfmt(app.sch.back)}</button>` : ""}</div>
     </div></div>
     ${sh(L("Repeat on", "ఈ రోజుల్లో", "इन दिनों"))}
     <div class="pad"><div class="wk">${[1, 2, 3, 4, 5, 6, 0].map((d, i) => `<button class="${app.days.includes(d) ? "on" : ""}" style="--d:${120 + i * 90}ms" data-act="day" data-v="${d}" aria-pressed="${app.days.includes(d)}"><b>${dl[d]}</b><small>${app.days.includes(d) ? "9:00" : "—"}</small><i></i></button>`).join("")}</div></div>
@@ -1173,16 +1256,16 @@ def("schedule", { g: "Scheduled", n: "Scheduled rides", tabs: 0, nav: 1, foot: 1
       <div class="legend"><span><i class="lg-on"></i>${L("Ride", "రైడ్", "राइड")}</span><span><i class="lg-today"></i>${L("Today", "ఈ రోజు", "आज")}</span><span style="text-decoration:line-through">${L("Skipped", "దాటవేసినవి", "छोड़ा गया")}</span></div>
     </div></div>
     <div class="group mt12">
-      <div class="row"><span class="lead">${I("repeat")}</span><span class="tx"><span class="t1" style="display:block">${L("Return ride at 6:30 PM", "సా. 6:30కి తిరుగు రైడ్", "शाम 6:30 वापसी राइड")}</span></span>${tgl(app.ret, 'data-act="ret"')}</div>
+      <div class="row"><span class="lead">${I("repeat")}</span><span class="tx"><span class="t1" style="display:block">${L(`Return ride at ${tfmt(app.sch.back)}`, `${tfmt(app.sch.back)}కి తిరుగు రైడ్`, `${tfmt(app.sch.back)} पर वापसी राइड`)}</span></span>${tgl(app.ret, 'data-act="ret"')}</div>
       <div class="row"><span class="lead">${I("user")}</span><span class="tx"><span class="t1" style="display:block">${L("Prefer the same chauffeur", "అదే డ్రైవర్ కావాలి", "वही ड्राइवर चाहिए")}</span><span class="t2" style="display:block">${L("We'll try every day", "ప్రతి రోజు ప్రయత్నిస్తాం", "हर दिन कोशिश करेंगे")}</span></span>${tgl(app.same, 'data-act="same"')}</div>
       ${row({ icon: "cal", t: L("Ends", "ముగింపు", "खत्म"), trail: L("Sat 12 Dec", "శని 12 డిసెం", "शनि 12 दिसं"), toast: L("Pick any end date, or keep it running until you stop it", "ఏ ముగింపు తేదీ అయినా ఎంచుకోండి, లేదా మీరు ఆపే వరకు కొనసాగించండి", "कोई भी आख़िरी तारीख़ चुनें, या रोकने तक चालू रखें") })}
     </div>
   </div>
-  ${foot(btn(L(`Schedule ${rides} rides`, `${rides} రైడ్‌లు షెడ్యూల్ చేయండి`, `${rides} राइड शेड्यूल करें`), { act: "bookseries" }))}`;
+  ${foot(btn(L(`Schedule ${rides} rides`, `${rides} రైడ్‌లు షెడ్యూల్ చేయండి`, `${rides} राइड शेड्यूल करें`), { go: "schreview" }))}`;
 });
 
 def("intercity", { g: "Intercity", n: "Intercity", tabs: 0, nav: 1, foot: 1, what: "The trip drawn as a lit road from Vizag to the town, with the car driving it (the top-down render) and, for longer trips, the charging stop marked on the way. Pick a town, one-way or round trip; the fixed fare counts to the new figure.", why: "Answers range anxiety before it's asked, and makes longer trips a simple fixed-fare booking.", fl: "Fare from <code>POST /quotes</code> with <code>type=intercity</code> (₹18/km, round trip +₹600 for waiting). Charging stop from ops' charger list when one-way distance &gt; 150 km (client to confirm). Road: <code>CustomPainter</code> path + the bundled top-down sprite moved along it." }, () => {
-  const km = KM[app.idest], rt = app.itrip === "round", dist = rt ? km * 2 : km, fare = Math.round(dist * 18 + (rt ? 600 : 0)), charge = km > 150;
+  const km = KM[app.idest], rt = app.itrip === "round", dist = rt ? km * 2 : km, fare = icCalc().fare, charge = km > 150;
   const P = "M24 132 C 90 132, 96 52, 170 62 S 270 118, 330 40";
   const hrs = Math.floor(km / 52), mn = Math.round((km / 52 - hrs) * 60 / 5) * 5;
   return `${bar(L("Intercity", "ఇంటర్‌సిటీ", "इंटरसिटी"), { large: true })}
@@ -1203,13 +1286,15 @@ def("intercity", { g: "Intercity", n: "Intercity", tabs: 0, nav: 1, foot: 1, wha
     <div class="ic-dests">${Object.keys(KM).map(k => `<button class="ic-d ${k === app.idest ? "on" : ""}" data-act="idest" data-v="${k}"><b>${k}</b><small>${KM[k]} km · ${S.inr(KM[k] * 18)}</small></button>`).join("")}</div>
     <div class="pad mt16">${seg([["one", L("One way", "ఒక వైపు", "एक तरफ़")], ["round", L("Round trip", "రాను పోను", "आना-जाना")]], app.itrip, "itrip")}</div>
     <div class="group mt16">
-      ${row({ icon: "cal", t: L("Sat 21 Nov · 7:00 AM", "శని 21 నవం · ఉ. 7:00", "शनि 21 नवं · सुबह 7:00"), s: L("Leave from Home", "ఇంటి నుండి", "घर से"), toast: L("Pick any date up to 30 days ahead", "30 రోజుల్లోపు ఏ తేదీ అయినా", "30 दिन तक कोई भी तारीख़") })}
-      ${row({ icon: "users", t: L(`Up to ${RIDERS} riders · ${V.bags} bags`, `${RIDERS} మంది వరకు · ${V.bags} బ్యాగులు`, `${RIDERS} यात्री तक · ${V.bags} बैग`), chev: false })}
+      <button class="row" data-act="pickplace" data-s="ic" data-f="from"><span class="lead">${I("pin")}</span><span class="tx"><span class="t2" style="display:block">${L("Pick-up", "పికప్", "पिकअप")}</span><span class="t1" style="display:block">${pl(app.ic.from)}</span></span>${I("chevr", "sm")}</button>
+      <button class="row" data-act="pickday"><span class="lead">${I("cal")}</span><span class="tx"><span class="t2" style="display:block">${L("Date", "తేదీ", "तारीख़")}</span><span class="t1" style="display:block">${dlabel(app.ic.day)}</span></span>${I("chevr", "sm")}</button>
+      <button class="row" data-act="picktime" data-s="ic" data-f="t"><span class="lead">${I("clock")}</span><span class="tx"><span class="t2" style="display:block">${L("Leave at", "బయలుదేరే సమయం", "निकलने का समय")}</span><span class="t1" style="display:block">${tfmt(app.ic.t)}</span></span>${I("chevr", "sm")}</button>
+      <div class="row"><span class="lead">${I("users")}</span><span class="tx"><span class="t1" style="display:block">${L(`${app.ic.riders} riders`, `${app.ic.riders} మంది`, `${app.ic.riders} यात्री`)}</span><span class="t2" style="display:block">${L(`Up to ${RIDERS} · ${V.bags} large bags`, `${RIDERS} వరకు · ${V.bags} బ్యాగులు`, `${RIDERS} तक · ${V.bags} बड़े बैग`)}</span></span><span class="stp"><button data-act="riders" data-v="-1" aria-label="−">${I("minus", "sm")}</button><b class="t-num">${app.ic.riders}</b><button data-act="riders" data-v="1" aria-label="+">${I("plus", "sm")}</button></span></div>
     </div>
     <div class="pad mt12"><div class="ic-chgcard ${charge ? "on" : ""}"><span class="pico">${I(charge ? "bolt" : "battery")}</span><div class="grow"><b>${charge ? L("One 25-minute charging stop, planned", "ఒక 25 నిమిషాల ఛార్జింగ్ స్టాప్, ముందే ప్లాన్", "25 मिनट का एक चार्जिंग स्टॉप, पहले से तय") : L("No charging stop needed", "ఛార్జింగ్ స్టాప్ అవసరం లేదు", "चार्जिंग स्टॉप की ज़रूरत नहीं")}</b><p>${charge ? L("At a fast charger on the way. Your chauffeur handles it; you get a coffee break.", "దారిలో ఫాస్ట్ ఛార్జర్ వద్ద. మీ డ్రైవర్ చూసుకుంటారు; మీకు కాఫీ బ్రేక్.", "रास्ते में फ़ास्ट चार्जर पर। ड्राइवर संभाल लेंगे; आपके लिए चाय-कॉफ़ी ब्रेक।") : L("The car leaves fully charged for this distance.", "ఈ దూరానికి కారు పూర్తి ఛార్జ్‌తో బయలుదేరుతుంది.", "इस दूरी के लिए गाड़ी पूरी चार्ज होकर निकलेगी।")}</p>${rt ? `<p>${L("Round trip: your chauffeur stays with you, up to 8 hours of waiting included.", "రాను పోను: డ్రైవర్ మీతోనే ఉంటారు, 8 గంటల వరకు వేచి ఉండటం కలిపే.", "आना-जाना: ड्राइवर आपके साथ रहेंगे, 8 घंटे तक इंतज़ार शामिल।")}</p>` : ""}</div></div></div>
     <div class="pad mt16"><div class="ic-fare"><span class="grow">${L(`${dist} km · fixed fare`, `${dist} కి.మీ · స్థిర ఛార్జీ`, `${dist} किमी · तय किराया`)}${rt ? `<small>${L("includes ₹600 for waiting", "₹600 వెయిటింగ్ కలిపి", "₹600 इंतज़ार शामिल")}</small>` : ""}</span><b>₹<span class="t-num" data-count="${fare}">${fare.toLocaleString("en-IN")}</span></b></div></div>
   </div>
-  ${foot(btn(L("Book intercity ride", "ఇంటర్‌సిటీ రైడ్ బుక్", "इंटरसिटी राइड बुक करें"), { act: "bookinter" }))}`;
+  ${foot(btn(L("Book intercity ride", "ఇంటర్‌సిటీ రైడ్ బుక్", "इंटरसिटी राइड बुक करें"), { go: "icreview" }))}`;
 });
 
 def("vehicle", { g: "Ride", n: "The car", tabs: 0, sb: "light", foot: 1, what: "The SAGA Luxe revealed on a dark expo stage (Cycles renders), with switches for the lights and the showroom light, then a photo-real 360° walk-around, the cabin, seats and bags, and the chauffeur promise.", why: "Every booking is in the same premium car. Showing it builds the value that justifies the fare.", fl: "Static content from CMS (<code>GET /fleet/profile</code>) so the client can update photos and amenities without an app release." }, () => `
@@ -1316,11 +1401,11 @@ def("rides", { g: "Tabs", n: "Trips", tab: "rides", what: "Upcoming: the airport
         <span class="tr-perf"></span><span class="tr-foot">${I("refresh", "sm")}${L(`Tracking ${F().no} · pickup moves if it does`, `${F().no} ట్రాకింగ్ · అది మారితే పికప్ మారుతుంది`, `${F().no} ट्रैक हो रही · बदली तो पिकअप भी बदलेगा`)}</span></button>`
       : `<button class="tr-fly" data-go="airport"><span class="tr-fly-ic">${I("plane")}</span><span class="grow"><b>${L("Flying soon?", "త్వరలో ప్రయాణమా?", "जल्द उड़ान है?")}</b><small>${L("Show us your ticket and we'll plan the pickup", "మీ టికెట్ చూపించండి, పికప్ ప్లాన్ చేస్తాం", "टिकट दिखाइए, हम पिकअप तय करेंगे")}</small></span>${I("chevr")}</button>`}
     <div class="tr-card mt12">
-      <div class="tr-head"><div class="grow"><span class="eyebrow">${L("Weekday series", "వారపు రైడ్‌లు", "वीकडे सीरीज़")}</span><b>${L("Weekdays · 9:00 AM", "వారపు రోజులు · ఉ. 9:00", "सोम–शुक्र · सुबह 9:00")}</b><small>${L("Home → Office · same chauffeur", "ఇల్లు → ఆఫీస్ · అదే డ్రైవర్", "घर → ऑफ़िस · वही ड्राइवर")}</small></div>${car("cut-front")}</div>
+      <div class="tr-head"><div class="grow"><span class="eyebrow">${L("Weekday series", "వారపు రైడ్‌లు", "वीकडे सीरीज़")}</span><b>${L("Weekdays", "వారపు రోజులు", "सोम–शुक्र")} · ${tfmt(app.sch.t)}</b><small>${pl(app.sch.from).split(" · ")[0]} → ${pl(app.sch.to).split(" · ")[0]} · ${L("UPI AutoPay", "UPI ఆటోపే", "UPI ऑटोपे")}</small></div>${car("cut-front")}</div>
       <div class="tr-week">${wd.map((d, i) => `<span class="${i < 5 ? "on" : ""} ${i === 0 ? "next" : ""}">${d}</span>`).join("")}<small>${L("Next: Mon 16 Nov · Ravi Kumar", "తదుపరి: సోమ 16 నవం · రవి కుమార్", "अगली: सोम 16 नवं · रवि कुमार")}</small></div>
       <div class="btnrow mt12">${btn(L("Skip next", "తదుపరి దాటవేయి", "अगली छोड़ें"), { kind: "btn-secondary", cls: "sm", toast: L("Mon 16 Nov skipped. You won't be charged.", "సోమ 16 నవం దాటవేశాం. ఛార్జ్ ఉండదు.", "सोम 16 नवं छोड़ दी। कोई चार्ज नहीं।") })}${btn(L("Manage", "నిర్వహించు", "बदलें"), { kind: "btn-secondary", cls: "sm", go: "schedule" })}</div>
     </div>
-    ${app.inter ? `<div class="tr-card mt12"><div class="tr-head"><div class="grow"><span class="eyebrow">${L("Intercity", "ఇంటర్‌సిటీ", "इंटरसिटी")}</span><b>Vizag → ${app.idest}</b><small>${L("Sat 21 Nov · 7:00 AM", "శని 21 నవం · ఉ. 7:00", "शनि 21 नवं · सुबह 7:00")}</small></div>${car()}</div></div>` : ""}`;
+    ${app.inter ? `<div class="tr-card mt12"><div class="tr-head"><div class="grow"><span class="eyebrow">${L("Intercity", "ఇంటర్‌సిటీ", "इंटरसिटी")}</span><b>Vizag → ${app.idest}</b><small>${dlabel(app.ic.day)} · ${tfmt(app.ic.t)} · ${L(`${S.inr(icCalc().adv)} advance paid`, `${S.inr(icCalc().adv)} అడ్వాన్స్ చెల్లించారు`, `${S.inr(icCalc().adv)} अग्रिम दिया`)}</small></div>${car()}</div></div>` : ""}`;
   const pastTrip = (to, when, fare, ic) => `<button class="tr-past" data-toast="${esc(L("Invoice was emailed to ananya.rao@gmail.com", "ఇన్వాయిస్ ananya.rao@gmail.comకు పంపాం", "इनवॉइस ananya.rao@gmail.com पर भेजा गया"))}">${car()}<span class="grow"><b class="tr-to">${to}</b><small>${when} · ${L("from", "నుండి", "से")} MVP Colony</small></span><span class="tr-fare"><b>${fare}</b><small>${I(ic, "sm")}${L("Invoice", "ఇన్వాయిస్", "इनवॉइस")}</small></span></button>`;
   const past = `
     ${pastTrip("Dwaraka Nagar", L("Today, 7:41 PM", "ఈ రోజు, రా. 7:41", "आज, शाम 7:41"), S.inr(FARE), "mail")}
@@ -1532,10 +1617,16 @@ function statusbar() {
   if (ios()) sb.innerHTML = `<span>9:41</span><div class="island ${live ? "live" : ""}"><span class="il">${I("car", "sm")}</span><span class="ir">6 min</span></div><span class="sb-r">${SB_IOS}</span>`;
   else sb.innerHTML = `<span style="display:flex;align-items:center">9:41${live ? `<span class="liveup">${I("car")}6 min</span>` : ""}</span><span class="punch"></span><span class="sb-r">${SB_AND}</span>`;
 }
+const DOCK = {
+  home: '<svg class="dk" viewBox="0 0 24 24"><path class="dk-f" d="M4.5 10.6 12 4.5l7.5 6.1V19a1.5 1.5 0 0 1-1.5 1.5H6A1.5 1.5 0 0 1 4.5 19z"/><path class="dk-s" d="M4.5 10.6 12 4.5l7.5 6.1V19a1.5 1.5 0 0 1-1.5 1.5H6A1.5 1.5 0 0 1 4.5 19z"/><rect class="dk-a" x="10" y="13.5" width="4" height="7" rx="2"/></svg>',
+  rides: '<svg class="dk" viewBox="0 0 24 24"><rect class="dk-f" x="3.5" y="5" width="17" height="15.5" rx="4"/><rect class="dk-s" x="3.5" y="5" width="17" height="15.5" rx="4"/><path class="dk-s" d="M8 3v4M16 3v4M3.5 10h17"/><circle class="dk-a" cx="9" cy="15" r="1.6"/><path class="dk-s dk-dash" d="M10.8 15h3.6"/><circle class="dk-a" cx="16" cy="15" r="1.6"/></svg>',
+  offers: '<svg class="dk" viewBox="0 0 24 24"><path class="dk-f" d="M3.5 8.5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2v1.8a2 2 0 0 0 0 3.4v1.8a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2v-1.8a2 2 0 0 0 0-3.4z"/><path class="dk-s" d="M3.5 8.5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2v1.8a2 2 0 0 0 0 3.4v1.8a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2v-1.8a2 2 0 0 0 0-3.4z"/><path class="dk-s" d="M14.5 6.5v11" stroke-dasharray="1.6 1.8"/><path class="dk-a2" d="M7.5 14.5l3-5"/><circle class="dk-a" cx="7.8" cy="10" r="1"/><circle class="dk-a" cx="10.2" cy="14" r="1"/></svg>',
+  account: '<svg class="dk" viewBox="0 0 24 24"><circle class="dk-f" cx="12" cy="12" r="8.5"/><circle class="dk-s" cx="12" cy="12" r="8.5"/><circle class="dk-a" cx="12" cy="10" r="3"/><path class="dk-s" d="M6.6 18.2c1.3-2 3.2-3 5.4-3s4.1 1 5.4 3"/></svg>'
+};
 const TABS = [["home", "home", () => L("Home", "హోమ్", "होम")], ["rides", "cal", () => L("Trips", "ప్రయాణాలు", "यात्राएँ")], ["offers", "tag", () => L("Offers", "ఆఫర్లు", "ऑफ़र")], ["account", "user", () => L("Account", "ఖాతా", "खाता")]];
 function chrome() {
   const sc = SC[cur], t = sc.tab;
-  const tb = TABS.map(([id, ic, lb]) => `<button class="tab ${t === id ? "on" : ""}" data-tab="${id}">${ios() ? I(ic) : `<span class="ico">${I(ic)}</span>`}<span>${lb()}</span></button>`);
+  const tb = TABS.map(([id, ic, lb]) => `<button class="tab ${t === id ? "on" : ""}" data-tab="${id}">${ios() ? (DOCK[id] || I(ic)) : `<span class="ico">${DOCK[id] || I(ic)}</span>`}<span>${lb()}</span></button>`);
   tb.splice(2, 0, ecoVessel("", `data-go="impact" aria-label="${esc(L(`Eco points: ${Math.round(ecoFill() * 100)}% to a free ride`, `ఎకో పాయింట్లు: ఉచిత రైడ్‌కు ${Math.round(ecoFill() * 100)}%`, `इको पॉइंट: मुफ़्त राइड तक ${Math.round(ecoFill() * 100)}%`))}"`));
   $("#tabbar").innerHTML = tb.join("");
   $("#tabbar").classList.toggle("hide", !t);
@@ -1804,9 +1895,18 @@ const A = {
   day(e) { const d = +e.dataset.v; app.days = app.days.includes(d) ? app.days.filter(x => x !== d) : [...app.days, d]; rerender(); },
   skip(e) { const d = +e.dataset.v; app.skips = app.skips.includes(d) ? app.skips.filter(x => x !== d) : [...app.skips, d]; rerender(); },
   ret() { app.ret = !app.ret; rerender(); }, same() { app.same = !app.same; rerender(); }, read() { app.read = !app.read; rerender(); },
-  bookseries() { app.series = true; toast(L("Your weekday rides are scheduled. Reminders arrive the evening before.", "మీ వీక్‌డే రైడ్‌లు షెడ్యూల్ అయ్యాయి. ముందు రోజు సాయంత్రం రిమైండర్.", "आपकी वीकडे राइड शेड्यूल हो गईं। एक दिन पहले शाम को रिमाइंडर।"), L("Scheduled", "షెడ్యూల్ అయింది", "शेड्यूल हो गया")); go("rides", { tab: 1 }); },
+  bookseries() { app.series = true; const c = seriesCalc(); app._done = { amt: "₹0", ref: "SAGA" + Date.now().toString().slice(-8), wait: app.pay === "upi" ? L("Approve AutoPay in your UPI app…", "మీ UPI యాప్‌లో ఆటోపే ఆమోదించండి…", "अपने UPI ऐप में ऑटोपे मंज़ूर करें…") : L("Saving your plan…", "మీ ప్లాన్ సేవ్ అవుతోంది…", "आपका प्लान सेव हो रहा है…"), title: L("Your weekdays are set", "మీ వారపు రోజులు సిద్ధం", "आपके कार्यदिवस तय"), sub: app.pay === "upi" ? L("AutoPay approved · ₹0 charged today", "ఆటోపే ఆమోదం · ఈరోజు ₹0", "ऑटोपे मंज़ूर · आज ₹0") : L("₹0 charged today", "ఈరోజు ₹0", "आज ₹0"), rows: [[L("Plan", "ప్లాన్", "प्लान"), `${pl(app.sch.from)} → ${pl(app.sch.to)}`], [L("First ride", "మొదటి రైడ్", "पहली राइड"), `${L("Tue 17 Nov", "మంగళ 17 నవం", "मंगल 17 नवं")} · ${tfmt(app.sch.t)}`], [L("Per ride", "రైడ్‌కు", "हर राइड"), S.inr(Math.round(c.per * .9))]] }; go("paydone"); },
   idest(e) { app.idest = e.dataset.v; rerender(); }, itrip(e) { app.itrip = e.dataset.v; rerender(); },
-  bookinter() { app.inter = true; toast(L(`${app.idest} booked for Sat 21 Nov, 7:00 AM`, `${app.idest} శని 21 నవం ఉ. 7:00కి బుక్ అయింది`, `${app.idest} शनि 21 नवं सुबह 7:00 के लिए बुक`), L("Booked", "బుక్ అయింది", "बुक हो गया")); go("rides", { tab: 1 }); },
+  bookinter() { app.inter = true; const c = icCalc(); if (app.pay === "wallet") app.wallet -= c.adv; app._done = { amt: S.inr(c.adv), ref: "SAGA" + Date.now().toString().slice(-8), wait: app.pay === "upi" ? L("Approve ₹" + c.adv + " in your UPI app…", "మీ UPI యాప్‌లో ₹" + c.adv + " ఆమోదించండి…", "अपने UPI ऐप में ₹" + c.adv + " मंज़ूर करें…") : L("Processing payment…", "చెల్లింపు జరుగుతోంది…", "भुगतान हो रहा है…"), title: L("Advance paid · trip booked", "అడ్వాన్స్ చెల్లించారు · బుక్ అయింది", "अग्रिम भुगतान · यात्रा बुक"), sub: L(`${S.inr(c.fare - c.adv)} after the trip`, `ప్రయాణం తర్వాత ${S.inr(c.fare - c.adv)}`, `यात्रा के बाद ${S.inr(c.fare - c.adv)}`), rows: [[L("Trip", "ప్రయాణం", "यात्रा"), `${pl(app.ic.from)} → ${app.idest}`], [L("Leaves", "బయలుదేరేది", "निकलना"), `${dlabel(app.ic.day)} · ${tfmt(app.ic.t)}`], [L("Fixed fare", "స్థిర ఛార్జీ", "तय किराया"), S.inr(c.fare)]] }; go("paydone"); },
+  pickplace(e) { placeSheet(e.dataset.s, e.dataset.f); },
+  setplace(e) { const { s: sc2, f, v } = e.dataset; const o = app[sc2]; const other = f === "from" ? "to" : "from"; if (o[other] === v) o[other] = o[f]; o[f] = v; A.closedlg(); rerender(); },
+  picktime(e) { timeSheet(e.dataset.s, e.dataset.f); },
+  settime(e) { const { s: sc2, f, h, m } = e.dataset; const o = app[sc2]; let t = o[f]; if (h != null) t = +h * 60 + (t % 60); if (m != null) t = Math.floor(t / 60) * 60 + +m; o[f] = t; timeSheet(sc2, f); rerender(); },
+  pickday() { daySheet(); }, setday(e) { app.ic.day = +e.dataset.v; A.closedlg(); rerender(); },
+  riders(e) { app.ic.riders = Math.max(1, Math.min(RIDERS, app.ic.riders + +e.dataset.v)); rerender(); },
+  pickpay() { paySheet(); }, setpay(e) { app.pay = e.dataset.v; A.closedlg(); rerender(); },
+  pkwhere() { A.closedlg(); toast(L("Type any address in Vizag; we save it to your places.", "వైజాగ్‌లో ఏ చిరునామా అయినా టైప్ చేయండి; మీ ప్రదేశాల్లో సేవ్ చేస్తాం.", "वाइज़ैग का कोई भी पता लिखें; हम उसे आपकी जगहों में सेव करेंगे।")); },
+  donetrips() { stack = []; go("rides", { tab: 1, reset: true }); }, donehome() { stack = []; go("home", { tab: 1, reset: true }); },
   tripseg(e) { app.tripSeg = e.dataset.v; rerender(); },
   theme(e) { S.set({ theme: e.dataset.v }); },
   textsize() { S.set({ text: S.state.text === "large" ? "standard" : "large" }); },
