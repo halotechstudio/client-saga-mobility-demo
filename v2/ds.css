@@ -2349,3 +2349,12 @@ button.sc-time{border:0;font:inherit;cursor:pointer}
 .tab-eco,[data-os] .tab-eco{border-radius:999px!important;overflow:hidden}
 .tab-eco *{border-radius:inherit}
 #tabbar.tabbar,[data-theme][data-os] #tabbar{border-radius:999px!important}
+/* intercity: frosted white glass */
+.svc-int{background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.10))!important;-webkit-backdrop-filter:blur(22px) saturate(1.4);backdrop-filter:blur(22px) saturate(1.4);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 0 0 1px rgba(255,255,255,.22),0 22px 44px -24px rgba(0,0,0,.8)!important}
+.svc-int::after{background:radial-gradient(70% 60% at 85% 0%,rgba(255,255,255,.18),transparent 60%)!important}
+.svc-int .svc-txt small,.svc-int .svc-txt span,.svc-int .eyebrow{color:rgba(255,255,255,.72)!important}
+.svc-int .svc-txt b{color:#fff}
+.svc-int .onb-fare{color:#BFF5D0;background:rgba(59,234,104,.2)}
+.svc-int .it-bg{stroke:rgba(255,255,255,.18)}
+.svc-int .it-lit{stroke:#fff}
+.svc-int .it-a{fill:#fff}
