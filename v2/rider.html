@@ -404,7 +404,7 @@ body.embed,body.bare{background:transparent}
 .upd-sheet{position:absolute;left:12px;right:12px;bottom:24px;padding:22px;border-radius:28px;background:var(--surface);box-shadow:0 20px 60px rgba(0,0,0,.25)}
 </style>
 <link rel="stylesheet" href="system.css?v=9"><link rel="stylesheet" href="system3.css?v=9"><link rel="stylesheet" href="system4.css?v=9"><link rel="stylesheet" href="system6.css?v=11"><link rel="stylesheet" href="system7.css?v=10">
-<link rel="stylesheet" href="ds.css?v=13">
+<link rel="stylesheet" href="ds.css?v=14">
 </head>
 <body>
 <div class="shell">
@@ -442,7 +442,7 @@ const V = S.VEHICLE, RIDERS = S.riders();
 const app = {
   dest: "Dwaraka Nagar", dir: "dep", shift: 0, booked: false, series: false, inter: false, sugg: true,
   days: [1, 2, 3, 4, 5], ret: true, same: true, idest: "Araku Valley", itrip: "one", rating: 0, tripSeg: "up", skips: [],
-  perms: { loc: true, notif: true, cal: true, flight: true }, wallet: 1250, pay: "upi", autopay: true, tipped: 0, stage: 2, driverLive: false, readD: 0, wtx: [["plus", "Added from UPI", "12 Nov", 1000], ["car", "Ride · RK Beach", "2 Nov", -164], ["gift", "Referral · Meera", "28 Oct", 150]], travel: { cal: true, mail: true, notif: true, auto: false }, read: true, noCars: false, stops: [], adding: null, rcpt: false
+  perms: { loc: true, notif: true, cal: true, flight: true }, wallet: 1250, pay: "upi", autopay: true, tipped: 0, stage: 2, driverLive: false, readD: 0, wtx: [["plus", ["Added from UPI", "UPI నుండి జమ", "UPI से जोड़ा"], ["12 Nov", "12 నవం", "12 नवं"], 1000], ["car", ["Ride · RK Beach", "రైడ్ · RK బీచ్", "राइड · RK बीच"], ["2 Nov", "2 నవం", "2 नवं"], -164], ["gift", ["Referral · Meera", "రిఫరల్ · మీరా", "रेफ़रल · मीरा"], ["28 Oct", "28 అక్టో", "28 अक्टू"], 150]], travel: { cal: true, mail: true, notif: true, auto: false }, read: true, noCars: false, stops: [], adding: null, rcpt: false
 };
 const FARE = 287, AIRFARE = 1140;
 const KM = { "Vizianagaram": 60, "Srikakulam": 110, "Araku Valley": 115, "Kakinada": 160, "Rajahmundry": 195 };
@@ -663,42 +663,50 @@ const FARE_STOP = 40;
 const fareNow = () => FARE + app.stops.length * FARE_STOP;
 const stopTxt = s => s.type === "pickup" ? L("Pick up at ", "ఇక్కడ పికప్: ", "यहाँ से पिकअप: ") + s.n : s.n;
 
-def("where", { g: "Ride", n: "Where to", tabs: 0, nav: 1, what: "One route card: pickup, up to three stops, drop. A stop can be a place to wait or a place to pick up another passenger. Typing filters the list; the airport and far towns hand over to the right flow.", why: "Real trips are rarely A to B: collecting a colleague, dropping a parcel, a school run. Stops are priced up front (₹40 each) so the fare stays fixed.", fl: "Google Places Autocomplete (session tokens). <code>POST /quotes</code> takes <code>waypoints[]</code> with <code>type: stop | pickup</code>; max 3. Airport and intercity detection by place type and distance." }, () => {
+def("where", { g: "Ride", n: "Where to", tabs: 0, nav: 1, what: "A live route preview on top (the line redraws as stops are added), then one glass route card: pickup, up to three stops, drop. Saved places are two lit tiles, recent trips and suggestions are glass rows. The airport and far towns hand over to the right flow.", why: "Real trips are rarely A to B: collecting a colleague, dropping a parcel, a school run. Stops are priced up front (₹40 each) so the fare stays fixed, and the preview shows the route before any money is mentioned.", fl: "Google Places Autocomplete (session tokens). <code>POST /quotes</code> takes <code>waypoints[]</code> with <code>type: stop | pickup</code>; max 3. Airport and intercity detection by place type and distance. Recent places from <code>GET /me/places/recent</code>." }, () => {
   if (app.adding) {
     return `
     ${bar(L("Add a stop", "స్టాప్ జోడించండి", "स्टॉप जोड़ें"), { back: false, actions: hbtn("close", 'data-act="canceladd"', "Close") })}
     <div class="content"><div class="pad">
       ${seg([["stop", L("Stop on the way", "దారిలో ఆగడం", "रास्ते में रुकना")], ["pickup", L("Pick up someone", "ఎవరినైనా ఎక్కించుకోవడం", "किसी को लेना")]], app.adding, "addtype")}
-      <p class="t-sub mt12">${app.adding === "pickup" ? L("We'll collect another passenger here. They get a ride code too.", "ఇక్కడ మరొక ప్రయాణికుడిని ఎక్కించుకుంటాం. వారికీ రైడ్ కోడ్ వస్తుంది.", "हम यहाँ दूसरे यात्री को लेंगे। उन्हें भी राइड कोड मिलेगा।") : L("The chauffeur waits up to 5 minutes. Each stop adds ₹40 to the fixed fare.", "డ్రైవర్ 5 నిమిషాల వరకు వేచి ఉంటారు. ప్రతి స్టాప్‌కు ₹40 అదనం.", "ड्राइवर 5 मिनट तक रुकेंगे। हर स्टॉप पर ₹40 अतिरिक्त।")}</p>
+      <div class="wh-note mt12">${I(app.adding === "pickup" ? "users" : "clock", "sm")}<span>${app.adding === "pickup" ? L("We'll collect another passenger here. They get a ride code too.", "ఇక్కడ మరొక ప్రయాణికుడిని ఎక్కించుకుంటాం. వారికీ రైడ్ కోడ్ వస్తుంది.", "हम यहाँ दूसरे यात्री को लेंगे। उन्हें भी राइड कोड मिलेगा।") : L("The chauffeur waits up to 5 minutes. Each stop adds ₹40 to the fixed fare.", "డ్రైవర్ 5 నిమిషాల వరకు వేచి ఉంటారు. ప్రతి స్టాప్‌కు ₹40 అదనం.", "ड्राइवर 5 मिनट तक रुकेंगे। हर स्टॉप पर ₹40 अतिरिक्त।")}</span></div>
     </div>
-    <div class="group mt16">${STOP_LIST.filter(s => !app.stops.some(x => x.n === s[0])).map(([n, km]) => row({ icon: app.adding === "pickup" ? "user" : "pin", lc: "grey", t: n, s: km, act: "addstop2", attr: `data-v="${n}"` })).join("")}</div></div>`;
+    <div class="group mt16">${STOP_LIST.filter(s => !app.stops.some(x => x.n === s[0])).map(([n, km]) => row({ icon: app.adding === "pickup" ? "user" : "pin", t: n, s: `${km} · +₹40`, act: "addstop2", attr: `data-v="${n}"` })).join("")}</div></div>`;
   }
-  const full = app.stops.length >= 3;
+  const full = app.stops.length >= 3, n = app.stops.length;
   return `
   ${bar(L("Plan your ride", "రైడ్ ప్లాన్", "राइड प्लान करें"))}
   <div class="content">
-    <div class="pad"><div class="route">
-      <div class="rt-row"><span class="rt-dot p"></span><div class="grow"><div class="t-label">${L("Pickup", "పికప్", "पिकअप")}</div><div class="rt-v">${L("Current location", "ప్రస్తుత స్థానం", "मौजूदा जगह")} · MVP Colony</div></div></div>
-      ${app.stops.map((s, i) => `<div class="rt-row"><span class="rt-dot s ${s.type === "pickup" ? "pk" : ""}">${i + 1}</span><div class="grow"><div class="t-label">${s.type === "pickup" ? L("Pick up", "పికప్", "पिकअप") : L("Stop", "స్టాప్", "स्टॉप")}</div><div class="rt-v">${s.n}</div></div><button class="rt-x" data-act="delstop" data-v="${i}" aria-label="Remove">${I("close", "sm")}</button></div>`).join("")}
-      <div class="rt-row"><span class="rt-dot d"></span><div class="grow"><div class="t-label">${L("Drop", "డ్రాప్", "ड्रॉप")}</div><input id="destin" class="destin" autocomplete="off" spellcheck="false" placeholder="${L("Search a place", "ప్రదేశం వెతకండి", "जगह खोजें")}" aria-label="Drop"></div>${hbtn("mic", "data-voice", "Voice")}</div>
+    <div class="pad">
+      <div class="wh-map" aria-hidden="true">${rideMap({ route: "trip", view: [-215, 262, 750, 356] })}<span class="wh-fade"></span>
+        <span class="wh-chip">${I("route", "sm")}<b>12.4 km</b> · 18 ${L("min", "నిమి", "मिन")}${n ? ` · ${n} ${L(n > 1 ? "stops" : "stop", "స్టాప్", "स्टॉप")}` : ""}</span>
+        <span class="wh-fare">₹<b data-count="${fareNow()}">${fareNow()}</b><small>${L("fixed", "స్థిరం", "तय")}</small></span>
+      </div>
+      <div class="route wh-route">
+        <div class="rt-row"><span class="rt-dot p"></span><div class="grow"><div class="t-label">${L("Pickup", "పికప్", "पिकअप")}</div><div class="rt-v">${L("Current location", "ప్రస్తుత స్థానం", "मौजूदा जगह")} · MVP Colony</div></div>${I("nav", "sm wh-gps")}</div>
+        ${app.stops.map((s, i) => `<div class="rt-row wh-in"><span class="rt-dot s ${s.type === "pickup" ? "pk" : ""}">${i + 1}</span><div class="grow"><div class="t-label">${s.type === "pickup" ? L("Pick up", "పికప్", "पिकअप") : L("Stop", "స్టాప్", "स्टॉप")} · +₹40</div><div class="rt-v">${s.n}</div></div><button class="rt-x" data-act="delstop" data-v="${i}" aria-label="${L("Remove", "తొలగించు", "हटाएँ")}">${I("close", "sm")}</button></div>`).join("")}
+        <div class="rt-row"><span class="rt-dot d"></span><div class="grow"><div class="t-label">${L("Drop", "డ్రాప్", "ड्रॉप")}</div><input id="destin" class="destin" autocomplete="off" spellcheck="false" placeholder="${L("Search a place", "ప్రదేశం వెతకండి", "जगह खोजें")}" aria-label="${L("Drop", "డ్రాప్", "ड्रॉप")}"></div>${hbtn("mic", "data-voice", "Voice")}</div>
+      </div>
+      <div class="row-flex mt12"><button class="addstop ${full ? "off" : ""}" data-act="addstop" data-v="stop" ${full ? "disabled" : ""}>${I("plus", "sm")}${full ? L("3 stops is the limit", "గరిష్టంగా 3 స్టాప్‌లు", "अधिकतम 3 स्टॉप") : L("Add a stop", "స్టాప్ జోడించండి", "स्टॉप जोड़ें")}</button><div class="grow">${seg([["now", L("Now", "ఇప్పుడే", "अभी")], ["later", L("Later", "తర్వాత", "बाद में")]], "now", "when")}</div></div>
     </div>
-    <div class="row-flex mt12"><button class="addstop ${full ? "off" : ""}" data-act="addstop" data-v="stop" ${full ? "disabled" : ""}>${I("plus", "sm")}${full ? L("3 stops is the limit", "గరిష్టంగా 3 స్టాప్‌లు", "अधिकतम 3 स्टॉप") : L("Add a stop", "స్టాప్ జోడించండి", "स्टॉप जोड़ें")}</button><div class="grow">${seg([["now", L("Now", "ఇప్పుడే", "अभी")], ["later", L("Later", "తర్వాత", "बाद में")]], "now", "when")}</div></div></div>
     <div class="group mt16" id="typedgrp" hidden><button class="row" id="typedrow" data-go="options" data-dest=""><span class="lead">${I("search")}</span><span class="tx"><span class="t1" style="display:block" id="typedtxt"></span><span class="t2" style="display:block">${L("Book a ride here", "ఇక్కడికి రైడ్ బుక్ చేయండి", "यहाँ के लिए राइड बुक करें")}</span></span><span class="trail">${I("chevr")}</span></button></div>
     <div id="sugg">
-    ${sh(L("Saved", "సేవ్ చేసినవి", "सेव की गई"))}
+    <div class="pad"><div class="wh-saved">
+      <button class="wh-tile lg-brand" data-go="options" data-dest="Home"><span class="wh-ti">${I("home")}</span><b>${L("Home", "ఇల్లు", "घर")}</b><small>MVP Colony · 2 ${L("min", "నిమి", "मिन")}</small></button>
+      <button class="wh-tile" data-go="options" data-dest="Office · Dwaraka Nagar"><span class="wh-ti">${I("building")}</span><b>${L("Office", "ఆఫీస్", "ऑफ़िस")}</b><small>Dwaraka Nagar · 18 ${L("min", "నిమి", "मिन")}</small></button>
+    </div></div>
+    ${sh(L("Recent", "ఇటీవలివి", "हाल के"))}
     <div class="group">
-      ${row({ icon: "home", t: L("Home", "ఇల్లు", "घर"), s: "MVP Colony, Sector 4", go: "options", attr: 'data-dest="Home"' })}
-      ${row({ icon: "building", t: L("Office", "ఆఫీస్", "ऑफ़िस"), s: "Dwaraka Nagar", go: "options", attr: 'data-dest="Office · Dwaraka Nagar"' })}
+      ${row({ icon: "clock", t: "Dwaraka Nagar", s: L("Today, 7:41 PM · 4.8 km", "ఈరోజు, రా. 7:41 · 4.8 కి.మీ", "आज, शाम 7:41 · 4.8 किमी"), go: "options", attr: 'data-dest="Dwaraka Nagar"' })}
+      ${row({ icon: "clock", t: "RK Beach", s: L("2 Nov · 3.2 km", "2 నవం · 3.2 కి.మీ", "2 नव · 3.2 किमी"), go: "options", attr: 'data-dest="RK Beach"' })}
     </div>
     ${sh(L("Suggestions", "సూచనలు", "सुझाव"))}
     <div class="group">
-      ${row({ icon: "pin", lc: "grey", t: "Dwaraka Nagar", s: "4.8 km", go: "options", attr: 'data-dest="Dwaraka Nagar"' })}
-      ${row({ icon: "pin", lc: "grey", t: L("Visakhapatnam Railway Station", "విశాఖపట్నం రైల్వే స్టేషన్", "विशाखापत्तनम रेलवे स्टेशन"), s: "6.1 km", go: "options", attr: 'data-dest="Railway Station"' })}
-      ${row({ icon: "pin", lc: "grey", t: "RK Beach", s: "3.2 km", go: "options", attr: 'data-dest="RK Beach"' })}
-      ${row({ icon: "pin", lc: "grey", t: "Rushikonda Beach", s: "9.4 km", go: "options", attr: 'data-dest="Rushikonda"' })}
-      ${row({ icon: "plane", lc: "ink", t: L("Bhogapuram International Airport", "భోగాపురం అంతర్జాతీయ విమానాశ్రయం", "भोगापुरम अंतरराष्ट्रीय हवाई अड्डा"), s: L("41 km · airport ride", "41 కి.మీ · ఎయిర్‌పోర్ట్ రైడ్", "41 किमी · एयरपोर्ट राइड"), go: "airport" })}
-      ${row({ icon: "route", lc: "soft", t: "Araku Valley", s: L("115 km · intercity fare", "115 కి.మీ · ఇంటర్‌సిటీ ఛార్జీ", "115 किमी · इंटरसिटी किराया"), go: "intercity", attr: 'data-idest="Araku Valley"' })}
-      ${row({ icon: "route", lc: "soft", t: "Vizianagaram", s: L("60 km · intercity fare", "60 కి.మీ · ఇంటర్‌సిటీ ఛార్జీ", "60 किमी · इंटरसिटी किराया"), go: "intercity", attr: 'data-idest="Vizianagaram"' })}
+      ${row({ icon: "plane", lc: "ink", t: L("Bhogapuram International Airport", "భోగాపురం అంతర్జాతీయ విమానాశ్రయం", "भोगापुरम अंतरराष्ट्रीय हवाई अड्डा"), s: L("41 km · airport ride, flight tracked", "41 కి.మీ · ఎయిర్‌పోర్ట్ రైడ్, ఫ్లైట్ ట్రాక్", "41 किमी · एयरपोर्ट राइड, फ़्लाइट ट्रैक"), go: "airport" })}
+      ${row({ icon: "pin", t: L("Visakhapatnam Railway Station", "విశాఖపట్నం రైల్వే స్టేషన్", "विशाखापत्तनम रेलवे स्टेशन"), s: "6.1 km", go: "options", attr: 'data-dest="Railway Station"' })}
+      ${row({ icon: "pin", t: "Rushikonda Beach", s: "9.4 km", go: "options", attr: 'data-dest="Rushikonda"' })}
+      ${row({ icon: "route", t: "Araku Valley", s: L("115 km · intercity fare", "115 కి.మీ · ఇంటర్‌సిటీ ఛార్జీ", "115 किमी · इंटरसिटी किराया"), go: "intercity", attr: 'data-idest="Araku Valley"' })}
+      ${row({ icon: "route", t: "Vizianagaram", s: L("60 km · intercity fare", "60 కి.మీ · ఇంటర్‌సిటీ ఛార్జీ", "60 किमी · इंटरसिटी किराया"), go: "intercity", attr: 'data-idest="Vizianagaram"' })}
     </div>
     </div>
   </div>`;
@@ -757,23 +765,37 @@ def("finding", { g: "Ride", n: "Finding a car", tabs: 0, map: 1, what: "A calm s
     <button class="demo" data-act="nocars">${L("Demo: show the no-cars case", "డెమో: కార్లు లేని సందర్భం", "डेमो: गाड़ी न मिलने पर")}</button>
   </div>`, (el) => { const t = setTimeout(() => { if (cur === "finding") go(app.noCars ? "nocars" : "assigned", { replace: true }); app.noCars = false; }, 2800); timers.push(t); });
 
-def("nocars", { g: "Ride", n: "No cars nearby", tabs: 0, nav: 1, foot: 1, what: "An honest, warm message: we're a growing start-up adding cars; here's the real wait, and here's why it's worth it. Wait in line, schedule, or get notified.", why: "Riders forgive a wait they're told about. They don't forgive a spinner. This keeps the booking instead of losing it to another app.", fl: "<code>no_cars</code> response carries <code>next_free_eta</code> and queue position. Joining the line: <code>POST /rides/{id}/waitlist</code>." }, () => `
+def("nocars", { g: "Ride", n: "No cars nearby", tabs: 0, nav: 1, foot: 1, what: "An honest, warm message from a growing start-up. The car cut-out sits in a soft pool of light, ringed by a waitlist clock: sixty ticks that go dark one by one as the next free car gets closer, with the real minutes in the middle and the rider's place in line.", why: "Riders forgive a wait they're told about. They don't forgive a spinner. A real countdown keeps the booking instead of losing it to another app.", fl: "<code>no_cars</code> response carries <code>next_free_eta</code> and queue position. Joining the line: <code>POST /rides/{id}/waitlist</code>. Ring: <code>CustomPainter</code>, 60 ticks, opacity only." }, () => `
   ${bar(L("Your ride", "మీ రైడ్", "आपकी राइड"))}
   <div class="content">
     <div class="pad center">
-      <div style="margin:0 auto;max-width:230px">${S.car({ reflect: false })}</div>
-      ${pill("clock", L("Next car free in about 14 min", "తదుపరి కారు సుమారు 14 నిమిషాల్లో", "अगली गाड़ी लगभग 14 मिनट में"), "accent")}
-      <h1 class="t-title mt16">${L("All our cars are on trips right now", "మా కార్లన్నీ ఇప్పుడు ప్రయాణాల్లో ఉన్నాయి", "हमारी सभी गाड़ियाँ अभी सफ़र पर हैं")}</h1>
+      <div class="nc-stage">
+        <div class="nc-ring" aria-hidden="true">${Array.from({ length: 60 }, (_, i) => `<i style="--a:${i * 6}deg"></i>`).join("")}<span class="nc-orbit"><b></b></span></div>
+        <div class="nc-mid"><span class="eyebrow">${L("Next car", "తదుపరి కారు", "अगली गाड़ी")}</span><b class="nc-t t-num" id="nccd">14:00</b><small>${L("You're 1st in line", "మీరు మొదటి స్థానంలో", "आप पहले नंबर पर")}</small></div>
+        <img class="nc-car" src="${SagaStage.src("cut-side")}" alt="${V.short}">
+      </div>
+      <h1 class="t-title mt8">${L("All our cars are on trips right now", "మా కార్లన్నీ ఇప్పుడు ప్రయాణాల్లో ఉన్నాయి", "हमारी सभी गाड़ियाँ अभी सफ़र पर हैं")}</h1>
       <p class="t-body muted mt12">${L("We're a young company, adding new cars to our fleet month by month. Until then, busy hours can mean a short wait. We make it worth it with exceptional service and a truly premium ride.", "మేము కొత్త సంస్థ, నెల నెలా కొత్త కార్లను చేరుస్తున్నాం. అప్పటివరకు రద్దీ సమయంలో కొంచెం వేచి ఉండాల్సి రావచ్చు. అద్భుతమైన సేవ, ప్రీమియం ప్రయాణంతో ఆ ఎదురుచూపును విలువైనదిగా చేస్తాం.", "हम एक नई कंपनी हैं और हर महीने नई गाड़ियाँ जोड़ रहे हैं। तब तक भीड़ के समय थोड़ा इंतज़ार हो सकता है। बेहतरीन सेवा और प्रीमियम सफ़र से हम इस इंतज़ार को सार्थक बनाते हैं।")}</p>
-      <p class="t-body mt12" style="font-weight:600">${L("Thank you for staying with us.", "మాతో ఉన్నందుకు ధన్యవాదాలు.", "हमारे साथ बने रहने के लिए धन्यवाद।")}</p>
+      <p class="t-body mt12 nc-thanks serif">${L("Thank you for staying with us.", "మాతో ఉన్నందుకు ధన్యవాదాలు.", "हमारे साथ बने रहने के लिए धन्यवाद।")}</p>
     </div>
-    <div class="group mt20">
-      ${row({ icon: "snow", lc: "soft", t: L("Cabin cooled before you get in", "మీరు ఎక్కేలోపే క్యాబిన్ చల్లగా", "बैठने से पहले केबिन ठंडा"), chev: false })}
-      ${row({ icon: "tag", lc: "soft", t: L(`Your fare stays ${S.inr(FARE)}`, `మీ ఛార్జీ ${S.inr(FARE)} గానే`, `आपका किराया ${S.inr(FARE)} ही रहेगा`), chev: false })}
-      ${row({ icon: "gift", lc: "soft", t: L("50 SAGA points for waiting", "వేచి ఉన్నందుకు 50 SAGA పాయింట్లు", "इंतज़ार के लिए 50 SAGA पॉइंट"), chev: false })}
-    </div>
+    <div class="pad mt16"><div class="nc-perks">
+      <div class="nc-perk">${I("snow")}<b>22°</b><small>${L("Cabin cooled before you get in", "మీరు ఎక్కేలోపే క్యాబిన్ చల్లగా", "बैठने से पहले केबिन ठंडा")}</small></div>
+      <div class="nc-perk">${I("tag")}<b>${S.inr(FARE)}</b><small>${L("Your fare stays fixed", "మీ ఛార్జీ మారదు", "आपका किराया तय रहेगा")}</small></div>
+      <div class="nc-perk">${I("gift")}<b>+50</b><small>${L("SAGA points for waiting", "వేచి ఉన్నందుకు SAGA పాయింట్లు", "इंतज़ार के लिए SAGA पॉइंट")}</small></div>
+    </div></div>
   </div>
-  ${foot(`${btn(L("Wait for the next car", "తదుపరి కారు కోసం వేచి ఉంటాను", "अगली गाड़ी का इंतज़ार करूँगा"), { act: "waitline" })}<div class="btnrow mt8">${btn(L("Schedule", "షెడ్యూల్", "शेड्यूल"), { kind: "btn-secondary", go: "schedule" })}${btn(L("Notify me", "నాకు తెలపండి", "मुझे बताएँ"), { kind: "btn-secondary", act: "notifyme" })}</div>`)}`);
+  ${foot(`${btn(L("Wait for the next car", "తదుపరి కారు కోసం వేచి ఉంటాను", "अगली गाड़ी का इंतज़ार करूँगा"), { act: "waitline" })}<div class="btnrow mt8">${btn(L("Schedule", "షెడ్యూల్", "शेड्यूल"), { kind: "btn-secondary", go: "schedule" })}${btn(L("Notify me", "నాకు తెలపండి", "मुझे बताएँ"), { kind: "btn-secondary", act: "notifyme" })}</div>`)}`, el => {
+  /* the waitlist clock: 14 minutes, one tick of the ring goes dark every 14 s; the digits count every second */
+  const t0 = Date.now(), total = 14 * 60, ticks = [...el.querySelectorAll(".nc-ring i")], cd = el.querySelector("#nccd");
+  const tick = () => {
+    if (cur !== "nocars") return;
+    const left = Math.max(0, total - Math.floor((Date.now() - t0) / 1000) - 0), lit = Math.ceil(left / total * 60);
+    cd.textContent = `${Math.floor(left / 60)}:${String(left % 60).padStart(2, "0")}`;
+    ticks.forEach((t, i) => t.classList.toggle("on", i < lit));
+    timers.push(setTimeout(tick, 1000));
+  };
+  tick();
+});
 
 const stopsOf = () => app.stops.map((s, i) => ({ p: STOPPTS[i % 3], n: i + 1, type: s.type }));
 const stopName = s => s.n;
@@ -804,54 +826,76 @@ def("assigned", { g: "Ride", n: "Chauffeur on the way", tabs: 0, live: 1, map: 1
   </div>`;
 });
 
-def("onride", { g: "Ride", n: "On the ride", tabs: 0, live: 1, map: 1, what: "The regular map in SAGA colours: route, stops, car marker. One sheet, no scrolling: minutes left, next stop, plate, three quick requests to the chauffeur, and Share, Chat, Pay, Safety.", why: "Calm and readable, and the rider is never stuck asking out loud.", fl: "Same map widget. Requests are canned message keys over WebSocket. Stops from <code>ride.waypoints[]</code>." }, () => `
-  <div class="mapwrap">${rideMap({ route: "trip", car: [140, 410, 180], view: [-20, 232, 441, 960], labelDrop: app.dest.split(" · ").pop() })}</div>
-  <div class="mapbtns"><span class="toppill static">${I("flag", "sm")}${L("To", "", "")} ${app.dest.split(" · ").pop()}${L("", " వైపు", " की ओर")}</span><div class="mb-r">${sosBtn()}</div></div>
-  <div class="rsheet">
+def("onride", { g: "Ride", n: "On the ride", tabs: 0, live: 1, map: 1, what: "The regular map in SAGA colours with the car marker. One glass sheet: a progress arc with the minutes left in the middle and the car riding the arc, the next stop, cabin controls (temperature and a quiet ride, sent to the chauffeur), Share, Chat, Pay and Safety, and the Live Activity that mirrors the trip on the lock screen.", why: "Calm and readable. The rider controls the cabin without speaking up, and family can follow the trip.", fl: "Same map widget. Cabin requests are canned message keys over WebSocket (<code>cooler</code>, <code>quiet</code>, <code>stop</code>). Stops from <code>ride.waypoints[]</code>. iOS ActivityKit / Android 16 Live Update." }, () => {
+  const to = app.dest.split(" · ").pop(), p = .58, R = 46, C = Math.PI * R, temp = app.temp || 22;
+  return `
+  <div class="mapwrap">${rideMap({ route: "trip", car: [140, 410, 180], view: [-20, 232, 441, 960], labelDrop: to })}</div>
+  <div class="mapbtns"><span class="toppill static">${I("flag", "sm")}${L("To " + to, to + " వైపు", to + " की ओर")}</span><div class="mb-r">${sosBtn()}</div></div>
+  <div class="rsheet or">
     ${app.driverLive ? "" : `<button class="demo rs-demo" data-go="arrived">${L("Demo: arrive", "డెమో: చేరుకున్నాం", "डेमो: पहुँच गए")}</button>`}
     <div class="grabber"></div>
-    <div class="eta"><div class="eta-n"><b>12</b><span>${L("min", "నిమి", "मिन")}</span></div><div class="grow"><div class="eta-h">${app.stops.length ? L(`Next: ${app.stops[0].n}`, `తదుపరి: ${app.stops[0].n}`, `अगला: ${app.stops[0].n}`) : L("Arriving 7:42 PM", "రా. 7:42కి చేరుకుంటారు", "शाम 7:42 पहुँचेंगे")}</div><div class="eta-s">${L("5.1 km left", "ఇంకా 5.1 కి.మీ", "5.1 किमी बाकी")}${app.stops.length ? ` · ${app.stops.length} ${L("stops", "స్టాప్‌లు", "स्टॉप")}` : ""}</div></div>${plateEl("sm")}</div>
-    ${steps4(4)}
-    <div class="t-label mt16">${L("Ask Ravi", "రవిని అడగండి", "रवि से कहें")}</div>
-    <div class="perks mt8">
-      <button class="chip" data-act="req" data-v="cooler">${I("snow")}${L("Cooler", "చల్లగా", "ठंडा")}</button>
-      <button class="chip" data-act="req" data-v="quiet">${I("quiet")}${L("Quiet ride", "నిశ్శబ్దం", "शांति")}</button>
-      <button class="chip" data-act="req" data-v="stop">${I("pin")}${L("Stop here", "ఇక్కడ ఆపండి", "यहाँ रोकें")}</button>
+    <div class="or-top">
+      <div class="or-arc" style="--p:${p}">
+        <svg viewBox="0 0 112 64" aria-hidden="true"><defs><linearGradient id="orG" x1="0" x2="1"><stop offset="0" stop-color="#5B6CFF"/><stop offset="1" stop-color="#2CC8F5"/></linearGradient></defs>
+          <path class="a0" d="M10 58 A46 46 0 0 1 102 58" pathLength="100"/><path class="a1" d="M10 58 A46 46 0 0 1 102 58" pathLength="100" stroke-dasharray="${p * 100} 100"/></svg>
+        <span class="or-car" style="--r:${-90 + p * 180}deg"><i></i></span>
+        <div class="or-min"><b class="t-num" data-count="12">12</b><small>${L("min", "నిమి", "मिन")}</small></div>
+      </div>
+      <div class="grow or-next">
+        <span class="eyebrow"><span class="dotlive"></span> ${app.stops.length ? L("Next stop", "తదుపరి స్టాప్", "अगला स्टॉप") : L("Arriving 7:42 PM", "రా. 7:42కి", "शाम 7:42 पहुँचेंगे")}</span>
+        <b>${app.stops.length ? app.stops[0].n : to}</b>
+        <small>${L("5.1 km left", "ఇంకా 5.1 కి.మీ", "5.1 किमी बाकी")}${app.stops.length ? ` · ${L("then", "తర్వాత", "फिर")} ${to}` : ` · ${L("on Beach Road", "బీచ్ రోడ్‌లో", "बीच रोड पर")}`}</small>
+        ${plateEl("sm")}
+      </div>
     </div>
-    <div class="acts mt16">
+    <div class="or-cabin">
+      <div class="or-ctl"><span class="or-ic">${I("snow")}</span><span class="grow"><small>${L("Cabin", "క్యాబిన్", "केबिन")}</small><b class="t-num">${temp}°</b></span><button class="or-step" data-act="temp" data-v="-1" aria-label="${L("Cooler", "చల్లగా", "ठंडा")}">${I("minus")}</button><button class="or-step" data-act="temp" data-v="1" aria-label="${L("Warmer", "వెచ్చగా", "गर्म")}">${I("plus")}</button></div>
+      <button class="or-ctl ${app.quiet ? "on" : ""}" data-act="quietride"><span class="or-ic">${I("quiet")}</span><span class="grow or-q">${L("Quiet ride", "నిశ్శబ్దం", "शांत सफ़र")}</span>${tgl(app.quiet)}</button>
+    </div>
+    <div class="acts mt12">
       <button class="act" data-toast="${esc(L("Trip link shared", "ట్రిప్ లింక్ షేర్ చేశాం", "ट्रिप लिंक शेयर किया"))}"><span class="c">${I("share")}</span>${L("Share", "షేర్", "शेयर")}</button>
       <button class="act" data-go="chat"><span class="c">${I("chat")}${unreadR() ? `<i>${unreadR()}</i>` : ""}</span>${L("Chat", "చాట్", "चैट")}</button>
-      <button class="act" data-go="wallet"><span class="c">${I("wallet")}</span>${L("Payment", "చెల్లింపు", "भुगतान")}</button>
-      <button class="act sos" data-toast="${esc(L("Safety: call 112 or alert SAGA control room", "భద్రత: 112కి కాల్ లేదా SAGA కంట్రోల్ రూమ్", "सुरक्षा: 112 पर कॉल या SAGA कंट्रोल रूम"))}"><span class="c">${I("shield")}</span>${L("Safety", "భద్రత", "सुरक्षा")}</button>
+      <button class="act" data-act="req" data-v="stop"><span class="c">${I("pin")}</span>${L("Stop here", "ఇక్కడ ఆపండి", "यहाँ रोकें")}</button>
+      <button class="act sos" data-toast="${esc(L("Safety: call 112 or alert SAGA control room", "భద్రత: 112కి కాల్ లేదా SAGA కంట్రోల్ రూమ్", "सुरक्षा: 112 पर कॉल या SAGA कंट्रोल रूम"))}"><span class="c">${I("sos")}</span>${L("SOS", "SOS", "SOS")}</button>
     </div>
-  </div>`);
+    <button class="or-la" data-go="lock"><span class="or-la-i">${S.logoMark()}</span><span class="grow"><b>${L("Live Activity is on", "లైవ్ యాక్టివిటీ ఆన్‌లో ఉంది", "लाइव एक्टिविटी चालू है")}</b><small>${L("Follow the trip from your lock screen", "లాక్ స్క్రీన్ నుండే ట్రిప్ చూడండి", "लॉक स्क्रीन से सफ़र देखें")}</small></span><span class="or-la-bar"><i style="width:${p * 100}%"></i></span></button>
+  </div>`;
+});
 
-def("arrived", { g: "Ride", n: "Arrived", tabs: 0, foot: 1, what: "One calm screen: paid confirmation with the total, CO₂ saved, a five-star rating, quick compliments and a tip. The itemised fare is one tap away.", why: "Ends on a good feeling in a single view, makes the electric choice tangible, and gives ops real feedback per chauffeur.", fl: "<code>GET /rides/{id}/receipt</code>, <code>POST /rides/{id}/rating</code>. GST shown per client's tax setup." }, () => {
+def("arrived", { g: "Ride", n: "Arrived", tabs: 0, foot: 1, what: "The car from behind, tail lights glowing as it settles, over a dark stage. A glass receipt with a perforated edge: the total counts up, CO₂ saved, the itemised fare one tap away and the tax invoice already emailed. Five stars that burst with light when tapped, quick compliments and a tip.", why: "Ends on a good feeling in a single view, makes the electric choice tangible, and gives ops real feedback per chauffeur.", fl: "<code>GET /rides/{id}/receipt</code>, <code>POST /rides/{id}/rating</code>, <code>POST /rides/{id}/tip</code>. Invoice PDF emailed by the backend. Hero is the bundled <code>cut-rear</code> render with additive glow layers." }, () => {
   const total = fareNow(), pays = app.pay === "wallet" ? L("SAGA wallet", "SAGA వాలెట్", "SAGA वॉलेट") : app.pay === "cash" ? L("Cash", "నగదు", "नकद") : app.pay === "card" ? L("Card", "కార్డు", "कार्ड") : "UPI";
   return `
-  <div class="content fit-s"><div class="pad center arr-top">
-    <div class="seal">${I("check")}</div>
-    <h1 class="t-title mt16">${L("You've arrived", "మీరు చేరుకున్నారు", "आप पहुँच गए")}</h1>
-    <p class="t-sub mt4">${app.dest.split(" · ").pop()} · 7:41 PM</p>
-  </div>
-  <div class="pad mt20"><div class="pcard fare"><div class="fare-row"><div><small>${L("Paid with", "చెల్లింపు", "भुगतान")} ${pays}</small><b class="t-num">${S.inr(total)}</b></div><div class="co2">${I("leaf")}<span>${L("1.6 kg CO₂ saved", "1.6 కిలోల CO₂ ఆదా", "1.6 किलो CO₂ बचा")}</span></div></div>
-    <button class="fare-more" data-act="rcpt">${app.rcpt ? L("Hide receipt", "రసీదు దాచండి", "रसीद छिपाएँ") : L("View receipt", "రసీదు చూడండి", "रसीद देखें")}${I(app.rcpt ? "chevd" : "chevr", "sm")}</button>
-    ${app.rcpt ? `<div class="fare-list"><div class="lineitem"><span class="muted">${L("Base fare", "బేస్ ఛార్జీ", "बेस किराया")}</span><span class="t-num">₹50</span></div><div class="lineitem"><span class="muted">${L("12.4 km × ₹18", "12.4 కి.మీ × ₹18", "12.4 किमी × ₹18")}</span><span class="t-num">₹223</span></div>${app.stops.length ? `<div class="lineitem"><span class="muted">${app.stops.length} ${L("stops", "స్టాప్‌లు", "स्टॉप")}</span><span class="t-num">₹${app.stops.length * 40}</span></div>` : ""}<div class="lineitem"><span class="muted">GST 5%</span><span class="t-num">₹14</span></div></div>` : ""}<div class="inv-mail">${I("mail", "sm")}${L("Tax invoice emailed to ananya.rao@gmail.com", "ట్యాక్స్ ఇన్వాయిస్ ananya.rao@gmail.comకు పంపాం", "टैक्स इनवॉइस ananya.rao@gmail.com पर भेजा")}</div></div></div>
-  <div class="pad mt20 center"><div class="t-h3">${L("How was your ride with Ravi?", "రవితో మీ ప్రయాణం ఎలా ఉంది?", "रवि के साथ सफ़र कैसा रहा?")}</div>
-    <div class="stars mt8">${[1, 2, 3, 4, 5].map(n => `<button class="${n <= app.rating ? "on" : ""}" data-act="rate" data-v="${n}" aria-label="${n}">${I("star")}</button>`).join("")}</div></div>
-  <div class="perks mt8 jc">${[L("Smooth driving", "సాఫీ డ్రైవింగ్", "आरामदायक ड्राइविंग"), L("Spotless car", "శుభ్రమైన కారు", "साफ़ गाड़ी"), L("Helped with bags", "బ్యాగులకు సాయం", "बैग में मदद")].map(t => `<button class="chip" data-act="pick">${t}</button>`).join("")}</div>
-  <div class="pad mt20"><div class="tipbar"><span>${L("Tip Ravi", "రవికి టిప్", "रवि को टिप")}</span><div class="perks">${[20, 50, 100].map(a => `<button class="chip ${app.tipped === a ? "on" : ""}" data-act="tip" data-v="${a}">₹${a}</button>`).join("")}</div></div></div>
+  <div class="content fit-s">
+    <div class="ar-hero">
+      <div class="ar-car"><img src="${SagaStage.src("cut-rear")}" alt="${V.short}"><i class="tl t1"></i><i class="tl t2"></i><i class="tl t3"></i><i class="tl t4"></i><i class="tl t5"></i></div>
+      <div class="ar-h"><span class="eyebrow">${app.dest.split(" · ").pop()} · 7:41 PM</span><h1 class="serif">${L("You've <em>arrived.</em>", "మీరు <em>చేరుకున్నారు.</em>", "आप <em>पहुँच गए।</em>")}</h1></div>
+    </div>
+    <div class="pad"><div class="ar-rcpt">
+      <div class="ar-tot"><div><small>${L("Paid with", "చెల్లింపు", "भुगतान")} ${pays}</small><b>₹<span class="t-num" data-count="${total}">${total}</span></b></div><span class="ar-co2">${I("leaf", "sm")}<span><b>1.6 kg</b> ${L("CO₂ saved", "CO₂ ఆదా", "CO₂ बचा")}</span></span></div>
+      <div class="ar-perf" aria-hidden="true"></div>
+      <button class="ar-more" data-act="rcpt">${app.rcpt ? L("Hide fare details", "వివరాలు దాచండి", "विवरण छिपाएँ") : L("Fare details", "ఛార్జీ వివరాలు", "किराये का विवरण")}${I(app.rcpt ? "chevu" : "chevd", "sm")}</button>
+      ${app.rcpt ? `<div class="ar-list"><div><span>${L("Base fare", "బేస్ ఛార్జీ", "बेस किराया")}</span><b class="t-num">₹50</b></div><div><span>${L("12.4 km × ₹18", "12.4 కి.మీ × ₹18", "12.4 किमी × ₹18")}</span><b class="t-num">₹223</b></div>${app.stops.length ? `<div><span>${app.stops.length} ${L("stops", "స్టాప్‌లు", "स्टॉप")} × ₹40</span><b class="t-num">₹${app.stops.length * 40}</b></div>` : ""}<div><span>GST 5%</span><b class="t-num">₹14</b></div></div>` : ""}
+      <div class="ar-mail">${I("mail", "sm")}<span>${L("Tax invoice emailed to ananya.rao@gmail.com", "ట్యాక్స్ ఇన్వాయిస్ ananya.rao@gmail.comకు పంపాం", "टैक्स इनवॉइस ananya.rao@gmail.com पर भेजा")}</span>${I("check", "sm ar-ok")}</div>
+    </div></div>
+    <div class="pad mt20 center"><div class="t-h3">${L("How was your ride with Ravi?", "రవితో మీ ప్రయాణం ఎలా ఉంది?", "रवि के साथ सफ़र कैसा रहा?")}</div>
+      <div class="ar-stars mt8 ${app._burst ? "rated" : ""}">${[1, 2, 3, 4, 5].map(n => `<button class="${n <= app.rating ? "on" : ""}" style="--d:${(n - 1) * 60}ms" data-act="rate" data-v="${n}" aria-label="${n} ${L("stars", "నక్షత్రాలు", "सितारे")}">${I("star")}<i></i></button>`).join("")}</div>
+      ${app.rating ? `<small class="ar-thanks">${app.rating >= 4 ? L("Thank you. Ravi will see this.", "ధన్యవాదాలు. రవికి తెలుస్తుంది.", "धन्यवाद। रवि को दिखेगा।") : L("Thank you. Our team will look into it.", "ధన్యవాదాలు. మా బృందం పరిశీలిస్తుంది.", "धन्यवाद। हमारी टीम देखेगी।")}</small>` : ""}
+    </div>
+    <div class="perks mt12 jc">${[L("Smooth driving", "సాఫీ డ్రైవింగ్", "आरामदायक ड्राइविंग"), L("Spotless car", "శుభ్రమైన కారు", "साफ़ गाड़ी"), L("Helped with bags", "బ్యాగులకు సాయం", "बैग में मदद")].map(t => `<button class="chip" data-act="pick">${t}</button>`).join("")}</div>
+    <div class="pad mt20"><div class="tipbar ar-tip"><span><b>${L("Tip Ravi", "రవికి టిప్", "रवि को टिप")}</b><small>${L("All of it goes to him", "మొత్తం ఆయనకే", "पूरा उन्हीं को")}</small></span><div class="perks">${[20, 50, 100].map(a => `<button class="chip ${app.tipped === a ? "on" : ""}" data-act="tip" data-v="${a}">₹${a}</button>`).join("")}</div></div></div>
   </div>
   ${foot(btn(L("Done", "పూర్తయింది", "हो गया"), { go: "home", attr: 'data-reset="1"' }))}`;
-});
+}, () => { app._burst = false; });
 
 /* ---------- system states: offline, payment failed, updates, loading ---------- */
 const sysScreen = (ic, cls, h, p, extra = "") => `<div class="content"><div class="sys"><div class="sys-ic ${cls}">${I(ic)}</div><h1 class="t-title">${h}</h1><p class="t-sub">${p}</p>${extra}</div></div>`;
-def("offline", { g: "System", n: "No connection", tabs: 0, foot: 1, what: "Shown when the phone has no internet. Booked rides stay visible from the cache.", why: "Never a blank screen or a spinner that never ends.", fl: "<code>connectivity_plus</code> stream; cached upcoming rides." }, () => sysScreen("wifi", "", L("You're offline", "ఇంటర్నెట్ లేదు", "आप ऑफ़लाइन हैं"), L("Check your connection. Your booked rides are safe and still on time.", "కనెక్షన్ చూడండి. మీ బుక్ చేసిన రైడ్‌లు సురక్షితం.", "कनेक्शन जाँचें। आपकी बुक राइड सुरक्षित हैं।"), `<div class="group"><div class="row"><span class="lead soft">${I("plane")}</span><span class="tx"><span class="t1" style="display:block">Fri 20 Nov · 5:20 AM</span><span class="t2" style="display:block">${L("Airport pickup · saved offline", "ఎయిర్‌పోర్ట్ పికప్ · ఆఫ్‌లైన్‌లో", "एयरपोर्ट पिकअप · ऑफ़लाइन")}</span></span></div></div>`) + foot(btn(L("Try again", "మళ్ళీ ప్రయత్నించండి", "फिर कोशिश करें"), { go: "loading" })));
-def("payfail", { g: "System", n: "Payment failed", tabs: 0, foot: 1, what: "UPI or card payment did not go through after the ride. Retry, or switch method.", why: "Calm wording: the money is not lost and the rider is not blocked.", fl: "Payment gateway failure callback; <code>POST /rides/{id}/pay</code> retry with an idempotency key." }, () => sysScreen("alert", "warn", L("Payment didn't go through", "చెల్లింపు జరగలేదు", "भुगतान नहीं हुआ"), L(`${S.inr(FARE)} was not taken. If your bank shows a debit, it is refunded within 3 working days.`, `${S.inr(FARE)} తీసుకోలేదు. డెబిట్ అయితే 3 రోజుల్లో రీఫండ్.`, `${S.inr(FARE)} नहीं कटे। डेबिट दिखे तो 3 दिन में रिफ़ंड।`)) + foot(`<div class="btnrow">${btn(L("Change method", "పద్ధతి మార్చండి", "तरीका बदलें"), { kind: "btn-secondary", go: "wallet" })}${btn(L("Retry UPI", "UPI మళ్ళీ", "UPI फिर से"), { go: "arrived" })}</div>`));
-def("update", { g: "System", n: "Update required", tabs: 0, foot: 1, what: "Force update: shown when the installed version is below the minimum the server allows.", why: "Keeps pricing, safety and payment changes consistent for every rider.", fl: "Firebase Remote Config <code>min_version</code>; opens the App Store / Play Store listing." }, () => sysScreen("download", "acc", L("Time to update", "అప్‌డేట్ చేయండి", "अपडेट करें"), L("This version of SAGA is no longer supported. The update takes under a minute.", "ఈ వెర్షన్‌కు సపోర్ట్ లేదు. అప్‌డేట్‌కు నిమిషం కూడా పట్టదు.", "यह वर्ज़न अब समर्थित नहीं। अपडेट में एक मिनट से कम लगेगा।")) + foot(btn(ios() ? L("Update on the App Store", "App Storeలో అప్‌డేట్", "App Store पर अपडेट") : L("Update on Google Play", "Google Playలో అప్‌డేట్", "Google Play पर अपडेट"), { toast: L("Opening the store", "స్టోర్ తెరుస్తున్నాం", "स्टोर खुल रहा है") })));
-def("softupdate", { g: "System", n: "Update available", tabs: 0, what: "Soft update: a dismissible card when a newer version exists.", why: "Nudges without blocking a ride.", fl: "Remote Config <code>latest_version</code>; Android in-app updates (flexible), iOS store link." }, () => `<div class="content" style="position:relative;min-height:100%"><div class="pad" style="padding-top:64px;opacity:.4"><div class="sk" style="height:220px;border-radius:30px;animation:none"></div><div class="sk mt16" style="height:56px;border-radius:28px;animation:none"></div></div><div class="upd-sheet"><div class="t-h3">${L("A new SAGA is here", "కొత్త SAGA వచ్చింది", "नया SAGA आ गया")}</div><p class="t-sub mt4">${L("Faster booking and live flight updates. 12 MB.", "వేగంగా బుకింగ్, లైవ్ ఫ్లైట్ అప్‌డేట్స్. 12 MB.", "तेज़ बुकिंग और लाइव फ़्लाइट अपडेट। 12 MB।")}</p><div class="btnrow mt16">${btn(L("Later", "తర్వాత", "बाद में"), { kind: "btn-secondary", go: "home" })}${btn(L("Update", "అప్‌డేట్", "अपडेट"), { toast: L("Updating in the background", "బ్యాక్‌గ్రౌండ్‌లో అప్‌డేట్", "बैकग्राउंड में अपडेट") })}</div></div></div>`);
-def("loading", { g: "System", n: "Loading", tabs: 0, what: "Skeleton screen while Home loads: shapes, not spinners.", why: "Feels faster and shows the layout before data arrives.", fl: "Shimmer placeholders; real Home replaces them when <code>GET /home/cards</code> returns." }, () => `<div class="content"><div class="pad" style="padding-top:64px"><div class="sk" style="height:220px;border-radius:30px"></div><div class="sk mt16" style="height:56px;border-radius:28px"></div><div style="display:flex;gap:12px" class="mt16">${[1, 2, 3, 4].map(() => '<div class="sk" style="flex:1;height:64px"></div>').join("")}</div><div class="sk mt16" style="height:120px;border-radius:24px"></div></div></div>`);
+/* v4 system states: a glowing glass orb carries the icon in the state's colour (brand, amber, quiet grey); calm words below. */
+const sys4 = (ic, tone, h, p, extra = "") => `<div class="content"><div class="sy4"><span class="sy-orb ${tone}"><i></i><i></i>${I(ic)}</span><h1 class="t-title">${h}</h1><p class="t-sub">${p}</p>${extra}</div></div>`;
+def("offline", { g: "System", n: "No connection", tabs: 0, foot: 1, what: "Shown when the phone has no internet. A quiet grey orb with slow rings, a calm line, and the booked airport pickup still visible as a pass saved on the phone.", why: "Never a blank screen or a spinner that never ends; the rider sees their 5 AM pickup is safe.", fl: "<code>connectivity_plus</code> stream; cached upcoming rides." }, () => sys4("wifi", "mute", L("You're offline", "ఇంటర్నెట్ లేదు", "आप ऑफ़लाइन हैं"), L("Check your connection. Your booked rides are safe and still on time.", "కనెక్షన్ చూడండి. మీ బుక్ చేసిన రైడ్‌లు సురక్షితం.", "कनेक्शन जाँचें। आपकी बुक राइड सुरक्षित हैं।"), `<div class="sy-pass"><span class="sy-pi">${I("plane")}</span><span class="grow"><small>${L("Airport pickup · saved on this phone", "ఎయిర్‌పోర్ట్ పికప్ · ఈ ఫోన్‌లో సేవ్", "एयरपोर्ट पिकअप · इस फ़ोन पर सेव")}</small><b>${L("Fri 20 Nov", "శుక్ర 20 నవం", "शुक्र 20 नवं")} · <span class="serif">5:20 AM</span></b><small>Home → VTZ · 6E 2134 · ${L("code", "కోడ్", "कोड")} 4827</small></span></div>`) + foot(btn(L("Try again", "మళ్ళీ ప్రయత్నించండి", "फिर कोशिश करें"), { go: "loading" })));
+def("payfail", { g: "System", n: "Payment failed", tabs: 0, foot: 1, what: "UPI or card payment did not go through after the ride. An amber orb, the plain facts (not charged; any debit refunded in 3 working days), and two ways forward.", why: "Calm wording: the money is not lost and the rider is not blocked.", fl: "Payment gateway failure callback; <code>POST /rides/{id}/pay</code> retry with an idempotency key." }, () => sys4("alert", "warm", L("Payment didn't go through", "చెల్లింపు జరగలేదు", "भुगतान नहीं हुआ"), L("Nothing to worry about. Try again, or pick another way to pay.", "కంగారు పడకండి. మళ్ళీ ప్రయత్నించండి లేదా వేరే పద్ధతి ఎంచుకోండి.", "चिंता न करें। फिर कोशिश करें या भुगतान का दूसरा तरीका चुनें।"), `<div class="sy-facts"><div>${I("check", "sm")}<span>${L(`${S.inr(FARE)} was not taken`, `${S.inr(FARE)} తీసుకోలేదు`, `${S.inr(FARE)} नहीं कटे`)}</span></div><div>${I("refresh", "sm")}<span>${L("If your bank shows a debit, it is refunded within 3 working days", "డెబిట్ అయితే 3 పని దినాల్లో రీఫండ్", "डेबिट दिखे तो 3 कार्यदिवस में रिफ़ंड")}</span></div><div>${I("shield", "sm")}<span>${L("Your next ride is not blocked", "మీ తదుపరి రైడ్ ఆగదు", "आपकी अगली राइड नहीं रुकेगी")}</span></div></div>`) + foot(`<div class="btnrow">${btn(L("Change method", "పద్ధతి మార్చండి", "तरीका बदलें"), { kind: "btn-secondary", go: "wallet" })}${btn(L("Retry UPI", "UPI మళ్ళీ", "UPI फिर से"), { go: "arrived" })}</div>`));
+def("update", { g: "System", n: "Update required", tabs: 0, foot: 1, what: "Force update: shown when the installed version is below the minimum the server allows. A brand orb, the version step (4.1 → 4.2) and three short lines on what's new.", why: "Keeps pricing, safety and payment changes consistent for every rider, and says why it's worth the minute.", fl: "Firebase Remote Config <code>min_version</code>; opens the App Store / Play Store listing." }, () => sys4("download", "brand", L("Time to update", "అప్‌డేట్ చేయండి", "अपडेट करें"), L("This version of SAGA is no longer supported. The update takes under a minute.", "ఈ వెర్షన్‌కు సపోర్ట్ లేదు. అప్‌డేట్‌కు నిమిషం కూడా పట్టదు.", "यह वर्ज़न अब समर्थित नहीं। अपडेट में एक मिनट से कम लगेगा।"), `<div class="sy-ver"><span>4.1</span>${I("arrowr", "sm")}<b>4.2</b></div><div class="sy-facts"><div>${I("plane", "sm")}<span>${L("Live flight tracking on the lock screen", "లాక్ స్క్రీన్‌లో లైవ్ ఫ్లైట్ ట్రాకింగ్", "लॉक स्क्रीन पर लाइव फ़्लाइट ट्रैकिंग")}</span></div><div>${I("bolt", "sm")}<span>${L("Faster booking", "వేగవంతమైన బుకింగ్", "तेज़ बुकिंग")}</span></div><div>${I("shield", "sm")}<span>${L("Safety and payment fixes", "భద్రత, చెల్లింపు మెరుగుదలలు", "सुरक्षा और भुगतान सुधार")}</span></div></div>`) + foot(btn(ios() ? L("Update on the App Store", "App Storeలో అప్‌డేట్", "App Store पर अपडेट") : L("Update on Google Play", "Google Playలో అప్‌డేట్", "Google Play पर अपडेट"), { toast: L("Opening the store", "స్టోర్ తెరుస్తున్నాం", "स्टोर खुल रहा है") })));
+def("softupdate", { g: "System", n: "Update available", tabs: 0, what: "Soft update: the home screen waits softly behind while a lit glass card rises with the logo, the size and two choices.", why: "Nudges without blocking a ride.", fl: "Remote Config <code>latest_version</code>; Android in-app updates (flexible), iOS store link." }, () => `<div class="content sy-soft"><div class="pad sk4wrap" aria-hidden="true"><div class="sk4 hero"></div><div class="sk4 bar mt16"></div></div><div class="upd-sheet sy-sheet"><span class="sy-sheet-m">${S.logoMark()}</span><div class="t-h3">${L("A new SAGA is here", "కొత్త SAGA వచ్చింది", "नया SAGA आ गया")}</div><p class="t-sub mt4">${L("Faster booking and live flight updates. 12 MB.", "వేగంగా బుకింగ్, లైవ్ ఫ్లైట్ అప్‌డేట్స్. 12 MB.", "तेज़ बुकिंग और लाइव फ़्लाइट अपडेट। 12 MB।")}</p><div class="btnrow mt16">${btn(L("Later", "తర్వాత", "बाद में"), { kind: "btn-secondary", go: "home" })}${btn(L("Update", "అప్‌డేట్", "अपडेट"), { toast: L("Updating in the background", "బ్యాక్‌గ్రౌండ్‌లో అప్‌డేట్", "बैकग्राउंड में अपडेट") })}</div></div></div>`);
+def("loading", { g: "System", n: "Loading", tabs: 0, what: "Skeleton screen while Home loads, in the shape of Home: the dark showroom hero with a faint car outline, the search bar, four shortcuts and a card. A slow band of light passes over the shapes.", why: "Feels faster and shows the layout before data arrives. Shapes, not spinners.", fl: "Shimmer placeholders (a translating gradient, GPU only); real Home replaces them when <code>GET /home/cards</code> returns." }, () => `<div class="content sy-load" aria-label="${L("Loading", "లోడ్ అవుతోంది", "लोड हो रहा है")}"><div class="sk4 hero"><img src="${SagaStage.src("cut-side")}" alt=""></div><div class="pad"><div class="sk4 bar mt16"></div><div class="sk4row mt16">${[1, 2, 3, 4].map(() => '<div class="sk4 sk-tile"></div>').join("")}</div><div class="sk4 sk-card mt16"></div></div></div>`);
 
 /* ---------- airport: scan the ticket, or pick the flight from Vizag's short daily list ---------- */
 const AL = { "6E": "IndiGo", AI: "Air India", QP: "Akasa Air", IX: "Air India Express" };
@@ -870,48 +914,63 @@ const fDate = f => `${dayName(f.day)} ${f.day} ${L("Nov", "నవం", "नव�
 const pickupMin = f => f.dir === "dep" ? mins(f.t) - 140 + app.shift : mins(f.t) + 10;
 const pickBtn = (no, t, day, city, dir, pnr, inner) => `<button class="row" data-act="pickf" data-no="${no}" data-t="${t}" data-day="${day}" data-city="${city}" data-dir="${dir}" data-pnr="${pnr || ""}">${inner}</button>`;
 
-def("airport", { g: "Airport", n: "Airport rides", tabs: 0, nav: 1, what: "Two simple ways in. Scan or upload the ticket and the app reads the flight; or pick the date and city and tap your flight from Vizag's short daily list. No PNR needed.", why: "No airline lets apps look a PNR up, so SAGA asks for what it can check instantly: the ticket itself, or the flight. Both take seconds and work for every airline.", fl: "Scan: <code>mobile_scanner</code> (boarding-pass barcode, IATA BCBP) + <code>google_mlkit_text_recognition</code>, on device. Pick: <code>GET /flights/board?airport=VTZ&amp;date=</code> from the flight-schedule API." }, () => {
+def("airport", { g: "Airport", n: "Airport rides", tabs: 0, nav: 1, what: "Two simple ways in. A lit glass card to scan or upload the ticket; or Vizag's own departures (or arrivals) board for the chosen day and city, with split-flap times that settle into place. The flight already caught by the Gmail filter sits on top.", why: "No airline lets apps look a PNR up, so SAGA asks for what it can check instantly: the ticket itself, or the flight. Vizag has one airport and a short daily list, so a real board is the fastest picker.", fl: "Scan: <code>mobile_scanner</code> (boarding-pass barcode, IATA BCBP) + <code>google_mlkit_text_recognition</code>, on device. Board: <code>GET /flights/board?airport=VTZ&amp;date=&amp;dir=</code> from the flight-schedule API; flap digits are an <code>AnimatedSwitcher</code> per character." }, () => {
   const dep = app.dir === "dep", list = (dep ? BOARD : ARR)[app.acity] || [];
-  const foundSrc = ios() ? L("Found in your Gmail", "మీ Gmailలో కనిపించింది", "आपके Gmail में मिली") : L("Found in an IndiGo SMS", "IndiGo SMSలో కనిపించింది", "IndiGo SMS में मिली");
+  const st = i => [[L("On time", "సమయానికి", "समय पर"), "ok"], [L("Scheduled", "షెడ్యూల్", "निर्धारित"), ""], [L("On time", "సమయానికి", "समय पर"), "ok"]][i % 3];
+  const bflap = (t, d0 = 0) => `<span class="bf">${String(t).split("").map((c, i) => c === " " || c === ":" ? `<i class="sp">${c.trim()}</i>` : `<i style="--d:${d0 + i * 70}ms">${c}</i>`).join("")}</span>`;
   return `${bar(L("Airport rides", "ఎయిర్‌పోర్ట్ రైడ్‌లు", "एयरपोर्ट राइड"), { large: true })}
   <div class="content">
     <div class="pad">${seg([["dep", L("To the airport", "ఎయిర్‌పోర్ట్‌కి", "एयरपोर्ट जाना")], ["arr", L("From the airport", "ఎయిర్‌పోర్ట్ నుండి", "एयरपोर्ट से आना")]], app.dir, "dir")}</div>
-    <div class="pad mt16"><div class="card stage" style="padding:20px">
-      <div class="row-flex" style="align-items:flex-start"><span class="scico">${I("scan")}</span><div class="grow"><div class="t-h3" style="color:#fff">${L("Scan your ticket", "మీ టికెట్ స్కాన్ చేయండి", "अपना टिकट स्कैन करें")}</div><div class="t-sub mt4">${L("E-ticket, screenshot, PDF or boarding pass. We read the flight in a second.", "ఈ-టికెట్, స్క్రీన్‌షాట్, PDF లేదా బోర్డింగ్ పాస్. ఒక్క క్షణంలో ఫ్లైట్ చదువుతాం.", "ई-टिकट, स्क्रीनशॉट, PDF या बोर्डिंग पास। एक पल में फ़्लाइट पढ़ लेते हैं।")}</div></div></div>
-      <div class="btnrow mt16">${btn(L("Scan", "స్కాన్", "स्कैन"), { kind: "btn-stage", go: "scan", icon: "scan" })}${btn(L("Upload", "అప్‌లోడ్", "अपलोड"), { kind: "btn-stage2", go: "scan", icon: "upload" })}</div>
+    <div class="pad mt16"><div class="ap-scan lg-brand">
+      <span class="ap-scan-ic">${I("scan")}<i></i></span>
+      <div><b>${L("Scan your ticket", "మీ టికెట్ స్కాన్ చేయండి", "अपना टिकट स्कैन करें")}</b><small>${L("E-ticket, screenshot, PDF or boarding pass. We read the flight in a second.", "ఈ-టికెట్, స్క్రీన్‌షాట్, PDF లేదా బోర్డింగ్ పాస్. ఒక్క క్షణంలో ఫ్లైట్ చదువుతాం.", "ई-टिकट, स्क्रीनशॉट, PDF या बोर्डिंग पास। एक पल में फ़्लाइट पढ़ लेते हैं।")}</small></div>
+      <div class="ap-scan-b"><button class="btn sm" data-go="scan">${I("scan", "sm")}<span>${L("Scan", "స్కాన్", "स्कैन")}</span></button><button class="btn sm ghost" data-go="scan">${I("upload", "sm")}<span>${L("Upload", "అప్‌లోడ్", "अपलोड")}</span></button></div>
     </div></div>
-    ${dep && app.travel.cal ? `${sh(L("Found for you", "మీ కోసం కనుగొన్నది", "आपके लिए मिली"))}<div class="group">${pickBtn("6E 2134", "07:40", 20, "HYD", "dep", "K7QX2M", `<span class="lead">${I("spark")}</span><span class="tx"><span class="t1" style="display:block"><b>7:40 AM</b> · 6E 2134 · ${L("Fri 20 Nov", "శుక్ర 20 నవం", "शुक्र 20 नवं")}</span><span class="t2" style="display:block">${foundSrc} · VTZ → HYD</span></span><span class="trail">${I("chevr")}</span>`)}</div>` : ""}
+    ${dep && app.travel.mail ? `${sh(L("Found for you", "మీ కోసం కనుగొన్నది", "आपके लिए मिली"))}<div class="pad"><button class="ap-found lg-live" data-act="pickf" data-no="6E 2134" data-t="07:40" data-day="20" data-city="HYD" data-dir="dep" data-pnr="K7QX2M"><span class="ap-f-ic">${I("mail")}</span><span class="grow"><b><span class="t-num">7:40 AM</span> · 6E 2134</b><small>${L("Fri 20 Nov", "శుక్ర 20 నవం", "शुक्र 20 नवं")} · VTZ → HYD · ${L("from your Gmail filter", "మీ Gmail ఫిల్టర్ నుండి", "आपके Gmail फ़िल्टर से")}</small></span>${I("chevr")}</button></div>` : ""}
     ${sh(L("Or pick your flight", "లేదా మీ ఫ్లైట్ ఎంచుకోండి", "या अपनी फ़्लाइट चुनें"), `<button data-voice class="saybtn">${I("mic", "sm")}${L("Say it", "చెప్పండి", "बोलिए")}</button>`)}
-    <div class="pad"><div class="t-label">${dep ? L("When do you fly?", "ఎప్పుడు ప్రయాణం?", "उड़ान कब है?") : L("When do you land?", "ఎప్పుడు ల్యాండింగ్?", "कब लैंड करेंगे?")}</div></div>
-    <div class="chips mt8">${ADAYS.map(d => `<button class="chip ${app.aday === d ? "on" : ""}" data-act="aday" data-v="${d}">${dayLabel(d)}</button>`).join("")}</div>
-    <div class="pad mt16"><div class="t-label">${dep ? L("Flying to", "ఎక్కడికి", "कहाँ जा रहे हैं") : L("Flying in from", "ఎక్కడి నుండి", "कहाँ से आ रहे हैं")}</div></div>
+    <div class="chips">${ADAYS.map(d => `<button class="chip ${app.aday === d ? "on" : ""}" data-act="aday" data-v="${d}">${dayLabel(d)}</button>`).join("")}</div>
     <div class="chips mt8">${CITIES.map(c => `<button class="chip ${app.acity === c[0] ? "on" : ""}" data-act="acity" data-v="${c[0]}">${L(c[1], c[2], c[3])}</button>`).join("")}</div>
-    <div class="group mt16">${list.map(([no, t]) => pickBtn(no, t, app.aday, app.acity, app.dir, "", `<span class="lead soft">${I(dep ? "takeoff" : "landing")}</span><span class="tx"><span class="t1" style="display:block"><b class="t-num">${t12(mins(t))}</b> · ${no}</span><span class="t2" style="display:block">${AL[no.split(" ")[0]]} · ${dep ? "VTZ → " + app.acity : app.acity + " → VTZ"}</span></span><span class="trail">${I("chevr")}</span>`)).join("")}</div>
-    <p class="t-sub pad mt8">${L("Vizag has one airport, so the day's list is short. Tap yours.", "విశాఖలో ఒకే ఎయిర్‌పోర్ట్, అందుకే రోజు జాబితా చిన్నది. మీ ఫ్లైట్ నొక్కండి.", "विज़ाग में एक ही एयरपोर्ट है, इसलिए दिन की सूची छोटी है। अपनी फ़्लाइट चुनें।")}</p>
-    <div class="pad mt16"><div class="card tint row-flex" style="align-items:flex-start">${I("shield")}<span style="font-size:15.5px;line-height:1.45">${L("No PNR to type. Your ticket, or your flight, is all we need. We track it and move your pickup if it changes.", "PNR టైప్ చేయక్కర్లేదు. మీ టికెట్ లేదా మీ ఫ్లైట్ చాలు. దాన్ని ట్రాక్ చేసి, మారితే పికప్ మారుస్తాం.", "PNR लिखने की ज़रूरत नहीं। आपका टिकट या आपकी फ़्लाइट काफ़ी है। हम उसे ट्रैक करते हैं और बदलने पर पिकअप बदल देते हैं।")}</span></div></div>
+    <div class="pad mt16"><div class="board">
+      <div class="bd-h"><span class="bd-t">${I(dep ? "takeoff" : "landing", "sm")}${dep ? L("Departures", "బయలుదేరేవి", "प्रस्थान") : L("Arrivals", "వచ్చేవి", "आगमन")}</span><span class="bd-m">VTZ · ${dayLabel(app.aday)}</span></div>
+      <div class="bd-cols"><span>${L("Time", "సమయం", "समय")}</span><span>${L("Flight", "ఫ్లైట్", "फ़्लाइट")}</span><span>${dep ? L("To", "కు", "को") : L("From", "నుండి", "से")}</span><span>${L("Status", "స్థితి", "स्थिति")}</span></div>
+      ${list.map(([no, t], i) => `<button class="bd-row" data-act="pickf" data-no="${no}" data-t="${t}" data-day="${app.aday}" data-city="${app.acity}" data-dir="${app.dir}" data-pnr=""><span>${bflap(t, 150 + i * 160)}</span><span><b>${no}</b><small>${AL[no.split(" ")[0]]}</small></span><span>${bflap(app.acity, 300 + i * 160)}</span><span class="bd-st ${st(i)[1]}">${st(i)[0]}</span></button>`).join("") || `<div class="bd-empty">${L("No flights that day", "ఆ రోజు ఫ్లైట్లు లేవు", "उस दिन कोई फ़्लाइट नहीं")}</div>`}
+      <div class="bd-foot">${L("Vizag has one airport, so the day's list is short. Tap yours.", "విశాఖలో ఒకే ఎయిర్‌పోర్ట్, అందుకే రోజు జాబితా చిన్నది. మీ ఫ్లైట్ నొక్కండి.", "विज़ाग में एक ही एयरपोर्ट है, इसलिए दिन की सूची छोटी है। अपनी फ़्लाइट चुनें।")}</div>
+    </div></div>
+    <div class="pad mt16"><div class="wh-note">${I("shield", "sm")}<span>${L("No PNR to type. Your ticket, or your flight, is all we need. We track it and move your pickup if it changes.", "PNR టైప్ చేయక్కర్లేదు. మీ టికెట్ లేదా మీ ఫ్లైట్ చాలు. దాన్ని ట్రాక్ చేసి, మారితే పికప్ మారుస్తాం.", "PNR लिखने की ज़रूरत नहीं। आपका टिकट या आपकी फ़्लाइट काफ़ी है। हम उसे ट्रैक करते हैं और बदलने पर पिकअप बदल देते हैं।")}</span></div></div>
   </div>`;
 });
 
-def("scan", { g: "Airport", n: "Scan ticket", tabs: 0, sb: "light", what: "Camera view (or a picked screenshot or PDF). On-device text recognition reads the PNR, flight, date and names; a boarding-pass barcode is read exactly. The found flight appears for one-tap confirmation.", why: "Works for every airline and travel site, offline, in about a second, with nothing to type.", fl: "<code>mobile_scanner</code> for PDF417 / Aztec boarding-pass barcodes (IATA BCBP); <code>google_mlkit_text_recognition</code> for e-tickets and screenshots; <code>file_picker</code> for PDFs. All on device; only the flight fields go to the server." }, () => `
-  <div class="scanv">
+def("scan", { g: "Airport", n: "Scan ticket", tabs: 0, sb: "light", what: "A camera viewfinder over the ticket. A soft scan light sweeps down; each field it reads (PNR, flight, date, route, time, passengers) locks with a cyan frame and ticks into a list. Then the found flight slides up as a pass, ready to plan the pickup.", why: "Works for every airline and travel site, offline, in about a second, with nothing to type. Seeing each field lock builds trust that the app read the right flight.", fl: "<code>mobile_scanner</code> for PDF417 / Aztec boarding-pass barcodes (IATA BCBP); <code>google_mlkit_text_recognition</code> for e-tickets and screenshots (text blocks give the lock rectangles); <code>file_picker</code> for PDFs. All on device; only the flight fields go to the server." }, () => `
+  <div class="scanv sc4">
+    <div class="sc-feed"></div>
     <div class="tkt">
       <div class="tkt-h"><b>E-TICKET</b><span>${L("Booking confirmed", "బుకింగ్ నిర్ధారించబడింది", "बुकिंग पक्की")}</span></div>
-      <div class="tkt-g"><div><span>PNR</span><b>K7QX2M</b></div><div><span>FLIGHT</span><b>6E 2134</b></div><div><span>DATE</span><b>20 NOV 2026</b></div></div>
-      <div class="tkt-r"><div><b>VTZ</b><span>Visakhapatnam</span></div><div class="tkt-l">07:40 → 08:55</div><div style="text-align:right"><b>HYD</b><span>Hyderabad</span></div></div>
-      <div class="tkt-p"><span>PASSENGERS</span>RAO/ANANYA MS · RAO/SURESH MR</div>
+      <div class="tkt-g"><div data-f="0"><span>PNR</span><b>K7QX2M</b></div><div data-f="1"><span>FLIGHT</span><b>6E 2134</b></div><div data-f="2"><span>DATE</span><b>20 NOV 2026</b></div></div>
+      <div class="tkt-r"><div data-f="3"><b>VTZ</b><span>Visakhapatnam</span></div><div class="tkt-l" data-f="4">07:40 → 08:55</div><div style="text-align:right" data-f="3b"><b>HYD</b><span>Hyderabad</span></div></div>
+      <div class="tkt-p" data-f="5"><span>PASSENGERS</span>RAO/ANANYA MS · RAO/SURESH MR</div>
       <div class="tkt-bc"></div>
     </div>
-    <div class="vf"><i></i><i></i><i></i><i></i><span class="beam"></span></div>
+    <div class="vf"><i></i><i></i><i></i><i></i><span class="sc-beam"></span></div>
     <div class="scan-top">${hbtn("close", "data-back", "Close")}<span class="pill dark scan-hint">${L("Hold your ticket inside the frame", "టికెట్‌ను ఫ్రేమ్‌లో ఉంచండి", "टिकट को फ़्रेम के अंदर रखें")}</span></div>
-    <div class="scan-res">
-      <div class="row-flex">${pill("check", L("Ticket read", "టికెట్ చదివాం", "टिकट पढ़ लिया"), "ok")}<span class="t-sub">${L("2 passengers", "2 ప్రయాణికులు", "2 यात्री")}</span></div>
-      <div class="t-title mt12">6E 2134 · IndiGo</div>
-      <div class="t-body mt4">VTZ → HYD · ${L("Fri 20 Nov", "శుక్ర 20 నవం", "शुक्र 20 नवं")} · 7:40 AM</div>
-      <div class="t-sub mt4">PNR K7QX2M · Ananya Rao, Suresh Rao</div>
-      <div class="mt16"><button class="btn btn-primary block lg" data-act="pickf" data-no="6E 2134" data-t="07:40" data-day="20" data-city="HYD" data-dir="dep" data-pnr="K7QX2M"><span>${L("Plan my pickup", "నా పికప్ ప్లాన్ చేయండి", "मेरा पिकअप प्लान करें")}</span></button></div>
-      <button class="btn btn-text block" data-act="rescan">${L("Scan again", "మళ్ళీ స్కాన్", "फिर से स्कैन करें")}</button>
+    <div class="sc-read" aria-live="polite">${[["PNR", "K7QX2M"], [L("Flight", "ఫ్లైట్", "फ़्लाइट"), "6E 2134"], [L("Date", "తేదీ", "तारीख"), "20 Nov"], [L("Route", "మార్గం", "रूट"), "VTZ → HYD"], [L("Time", "సమయం", "समय"), "07:40"], [L("Passengers", "ప్రయాణికులు", "यात्री"), "2"]].map(([k, v], i) => `<span data-r="${i}">${I("check", "sm")}<small>${k}</small><b>${v}</b></span>`).join("")}</div>
+    <div class="scan-res sc-pass">
+      <div class="sc-ph"><span class="pill ok">${I("check", "sm")}${L("Ticket read", "టికెట్ చదివాం", "टिकट पढ़ लिया")}</span><span class="sc-al">IndiGo</span></div>
+      <div class="sc-route"><div><b>VTZ</b><small>Visakhapatnam</small></div><span class="sc-arc">${I("plane", "sm")}</span><div class="r"><b>HYD</b><small>Hyderabad</small></div></div>
+      <div class="sc-meta"><div><small>${L("Flight", "ఫ్లైట్", "फ़्लाइट")}</small><b>6E 2134</b></div><div><small>${L("Date", "తేదీ", "तारीख")}</small><b>${L("Fri 20 Nov", "శుక్ర 20 నవం", "शुक्र 20 नवं")}</b></div><div><small>${L("Departs", "బయలుదేరేది", "प्रस्थान")}</small><b class="t-num">7:40 AM</b></div></div>
+      <div class="sc-pax">${I("users", "sm")}Ananya Rao, Suresh Rao · PNR K7QX2M</div>
+      <div class="mt16"><button class="btn btn-primary block" data-act="pickf" data-no="6E 2134" data-t="07:40" data-day="20" data-city="HYD" data-dir="dep" data-pnr="K7QX2M"><span>${L("Plan my pickup", "నా పికప్ ప్లాన్ చేయండి", "मेरा पिकअप प्लान करें")}</span></button></div>
+      <button class="btn btn-text block sm" data-act="rescan">${L("Scan again", "మళ్ళీ స్కాన్", "फिर से स्कैन करें")}</button>
     </div>
-  </div>`, (el) => { const t = setTimeout(() => { const v = el.querySelector(".scanv"); if (v) v.classList.add("found"); }, 1900); timers.push(t); });
+  </div>`, (el) => {
+  /* the scan light sweeps; each field locks in turn (frame on the ticket + a tick in the list), then the pass slides up */
+  const v = el.querySelector(".scanv"); if (!v) return; const vf = v.querySelector(".vf"); if (vf) vf.style.setProperty("--vfh", vf.offsetHeight + "px");
+  const order = [["0"], ["1"], ["2"], ["3", "3b"], ["4"], ["5"]];
+  order.forEach((fs, i) => timers.push(setTimeout(() => {
+    fs.forEach(f => el.querySelector(`[data-f="${f}"]`)?.classList.add("lk"));
+    el.querySelector(`[data-r="${i}"]`)?.classList.add("on");
+  }, 700 + i * 260)));
+  timers.push(setTimeout(() => v.classList.add("found"), 700 + order.length * 260 + 350));
+});
 
 def("flight", { g: "Airport", n: "Pickup plan", tabs: 0, nav: 1, foot: 1, what: "The flight as a live journey pass: the car drives from home to the airport while each time lights up, then the plane takes off along the arc. Then the plan as a timeline. Departures: pickup, airport arrival, check-in close, take-off, with the pickup adjustable ±5 min. Arrivals: landing, chauffeur at the kerb, free wait. Flight tracking is on by default.", why: "Shows the working, so riders trust an automatic time. Delays move the pickup without the rider doing anything.", fl: "Pickup = departure − buffer (domestic 90 min, intl 180 min) − drive time (Routes API, traffic for that hour). Stored as a rule, recomputed on every flight-status update." }, () => {
   const f = F(), dep = f.dir === "dep", p = pickupMin(f), dm = mins(f.t), al = AL[f.no.split(" ")[0]] || "";
@@ -1007,64 +1066,79 @@ def("booked", { g: "Airport", n: "Pickup booked", tabs: 0, foot: 1, what: "The r
   ${foot(`<div class="btnrow">${btn(ios() ? L("Add to Apple Wallet", "Apple Walletకి జోడించండి", "Apple Wallet में जोड़ें") : L("Save to Google Wallet", "Google Walletలో సేవ్", "Google Wallet में सेव करें"), { kind: "btn-secondary", toast: L("Pass added. It updates if the flight changes.", "పాస్ జోడించాం. ఫ్లైట్ మారితే అప్‌డేట్ అవుతుంది.", "पास जुड़ गया। फ़्लाइट बदली तो अपडेट होगा।") })}${btn(L("Done", "పూర్తయింది", "हो गया"), { act: "totrips" })}</div>`)}`;
 });
 
-def("schedule", { g: "Scheduled", n: "Scheduled rides", tabs: 0, nav: 1, foot: 1, what: "Pickup and drop, time, repeat days, a calendar that shows every ride (tap a date to skip it), return ride and same-chauffeur preference, and the price with the weekday-plan discount.", why: "Office and school runs are steady revenue for a small fleet, and they're planned days ahead, which helps dispatch.", fl: "Stored as an RRULE (RFC 5545) + exceptions. Server expands it 14 days ahead into real bookings so dispatch can plan." }, () => {
+def("schedule", { g: "Scheduled", n: "Scheduled rides", tabs: 0, nav: 1, foot: 1, what: "Home to Office at 9:00 AM. A week strip whose chosen days light up one after another, a glass calendar of every ride (tap a date to skip it), return ride and same-chauffeur switches, and a lit series card: how many rides, the next one, and the weekday-plan price.", why: "Office and school runs are steady revenue for a small fleet, and they're planned days ahead, which helps dispatch. Seeing the whole series at once makes it feel like a plan, not a chore.", fl: "Stored as an RRULE (RFC 5545) + exceptions. Server expands it 14 days ahead into real bookings so dispatch can plan. <code>POST /series</code>." }, () => {
   const base = new Date(2026, 10, 15), Y = 2026, M = 10, first = new Date(Y, M, 1).getDay(), dim = 30;
-  const end = new Date(2026, 11, 12);
   const dn = [L("S", "ఆ", "र"), L("M", "సో", "सो"), L("T", "మం", "मं"), L("W", "బు", "बु"), L("T", "గు", "गु"), L("F", "శు", "शु"), L("S", "శ", "श")];
+  const dl = [L("Sun", "ఆది", "रवि"), L("Mon", "సోమ", "सोम"), L("Tue", "మంగళ", "मंगल"), L("Wed", "బుధ", "बुध"), L("Thu", "గురు", "गुरु"), L("Fri", "శుక్ర", "शुक्र"), L("Sat", "శని", "शनि")];
   let cells = dn.map(d => `<span class="dn">${d}</span>`).join("");
   for (let i = 0; i < first; i++) cells += "<span></span>";
-  let n = 0;
+  let n = 0, next = 0;
   for (let d = 1; d <= dim; d++) {
     const dt = new Date(Y, M, d), wd = dt.getDay(), past = dt < base, sk = app.skips.includes(d);
     const on = !past && app.days.includes(wd);
-    if (on && !sk) n++;
-    cells += on ? `<button class="cd on ${sk ? "skip" : ""}" data-act="skip" data-v="${d}">${d}</button>` : `<span class="cd ${past ? "past" : ""} ${d === 15 ? "today" : ""}">${d}</span>`;
+    if (on && !sk) { n++; if (!next && d > 15) next = d; }
+    cells += on ? `<button class="cd on ${sk ? "skip" : ""}" data-act="skip" data-v="${d}" style="--d:${(d - 15) * 30}ms" aria-label="${d} ${L("Nov", "నవం", "नवं")}${sk ? " · " + L("skipped", "దాటవేశారు", "छोड़ा") : ""}">${d}</button>` : `<span class="cd ${past ? "past" : ""} ${d === 15 ? "today" : ""}">${d}</span>`;
   }
   let dec = 0; for (let d = 1; d <= 12; d++) if (app.days.includes(new Date(2026, 11, d).getDay())) dec++;
   const rides = (n + dec) * (app.ret ? 2 : 1), per = 252, total = Math.round(rides * per * .9);
+  const nd = next ? `${dl[new Date(Y, M, next).getDay()]} ${next} ${L("Nov", "నవం", "नवं")}` : "—";
   return `${bar(L("Scheduled rides", "షెడ్యూల్ రైడ్‌లు", "शेड्यूल राइड"), { large: true })}
   <div class="content">
-    <div class="pad"><div class="card" style="padding:6px 18px">
-      <div class="row-flex" style="min-height:58px"><span style="width:14px;height:14px;border-radius:7px;border:4px solid var(--accent)"></span><span class="grow t-body">${L("Home · MVP Colony", "ఇల్లు · MVP కాలనీ", "घर · MVP कॉलोनी")}</span></div>
-      <div class="hr" style="margin:0 0 0 28px"></div>
-      <div class="row-flex" style="min-height:58px"><span style="width:14px;height:14px;border-radius:3px;background:var(--fg)"></span><span class="grow t-body">${L("Office · Dwaraka Nagar", "ఆఫీస్ · ద్వారకా నగర్", "ऑफ़िस · द्वारका नगर")}</span><span class="pill">${I("clock")}9:00 AM</span></div>
+    <div class="pad"><div class="route sc-rt">
+      <div class="rt-row"><span class="rt-dot p"></span><div class="grow"><div class="t-label">${L("From", "నుండి", "से")}</div><div class="rt-v">${L("Home · MVP Colony", "ఇల్లు · MVP కాలనీ", "घर · MVP कॉलोनी")}</div></div><span class="sc-time">${I("clock", "sm")}9:00 AM</span></div>
+      <div class="rt-row"><span class="rt-dot d"></span><div class="grow"><div class="t-label">${L("To", "కు", "तक")}</div><div class="rt-v">${L("Office · Dwaraka Nagar", "ఆఫీస్ · ద్వారకా నగర్", "ऑफ़िस · द्वारका नगर")}</div></div>${app.ret ? `<span class="sc-time">${I("repeat", "sm")}6:30 PM</span>` : ""}</div>
     </div></div>
     ${sh(L("Repeat on", "ఈ రోజుల్లో", "इन दिनों"))}
-    <div class="pad"><div class="days">${[1, 2, 3, 4, 5, 6, 0].map(d => `<button class="${app.days.includes(d) ? "on" : ""}" data-act="day" data-v="${d}">${dn[d]}</button>`).join("")}</div></div>
-    <div class="pad mt16"><div class="card">
+    <div class="pad"><div class="wk">${[1, 2, 3, 4, 5, 6, 0].map((d, i) => `<button class="${app.days.includes(d) ? "on" : ""}" style="--d:${120 + i * 90}ms" data-act="day" data-v="${d}" aria-pressed="${app.days.includes(d)}"><b>${dl[d]}</b><small>${app.days.includes(d) ? "9:00" : "—"}</small><i></i></button>`).join("")}</div></div>
+    <div class="pad mt16"><div class="sc-series lg-brand">
+      <div class="sc-s-top"><span class="eyebrow">${L("Weekday plan", "వీక్‌డే ప్లాన్", "वीकडे प्लान")}</span><span class="sc-off">−10%</span></div>
+      <div class="sc-s-mid"><b class="t-num" data-count="${rides}">${rides}</b><span>${L("rides until<br>Sat 12 Dec", "రైడ్‌లు<br>శని 12 డిసెం వరకు", "राइड<br>शनि 12 दिसं तक")}</span></div>
+      <div class="sc-s-bot"><div><small>${L("Next ride", "తదుపరి రైడ్", "अगली राइड")}</small><b>${nd} · 9:00 AM</b></div><div class="r"><small>${L(`₹${per} each`, `ఒక్కొక్కటి ₹${per}`, `₹${per} प्रति राइड`)}</small><b>${S.inr(total)}</b></div></div>
+    </div></div>
+    <div class="pad mt16"><div class="card sc-cal">
       <div class="calhead"><b style="font-size:18px">${L("November 2026", "నవంబర్ 2026", "नवंबर 2026")}</b><span class="t-sub">${L("Tap a date to skip", "దాటవేయడానికి తేదీ నొక్కండి", "छोड़ने के लिए तारीख़ दबाएँ")}</span></div>
       <div class="calg">${cells}</div>
-      <div class="legend"><span><i style="background:var(--accent-soft)"></i>${L("Ride", "రైడ్", "राइड")}</span><span><i style="box-shadow:inset 0 0 0 1.5px var(--fg)"></i>${L("Today", "ఈ రోజు", "आज")}</span><span style="text-decoration:line-through">${L("Skipped", "దాటవేసినవి", "छोड़ा गया")}</span></div>
+      <div class="legend"><span><i class="lg-on"></i>${L("Ride", "రైడ్", "राइड")}</span><span><i class="lg-today"></i>${L("Today", "ఈ రోజు", "आज")}</span><span style="text-decoration:line-through">${L("Skipped", "దాటవేసినవి", "छोड़ा गया")}</span></div>
     </div></div>
     <div class="group mt12">
       <div class="row"><span class="lead">${I("repeat")}</span><span class="tx"><span class="t1" style="display:block">${L("Return ride at 6:30 PM", "సా. 6:30కి తిరుగు రైడ్", "शाम 6:30 वापसी राइड")}</span></span>${tgl(app.ret, 'data-act="ret"')}</div>
       <div class="row"><span class="lead">${I("user")}</span><span class="tx"><span class="t1" style="display:block">${L("Prefer the same chauffeur", "అదే డ్రైవర్ కావాలి", "वही ड्राइवर चाहिए")}</span><span class="t2" style="display:block">${L("We'll try every day", "ప్రతి రోజు ప్రయత్నిస్తాం", "हर दिन कोशिश करेंगे")}</span></span>${tgl(app.same, 'data-act="same"')}</div>
       ${row({ icon: "cal", t: L("Ends", "ముగింపు", "खत्म"), trail: L("Sat 12 Dec", "శని 12 డిసెం", "शनि 12 दिसं"), toast: L("Pick any end date, or keep it running until you stop it", "ఏ ముగింపు తేదీ అయినా ఎంచుకోండి, లేదా మీరు ఆపే వరకు కొనసాగించండి", "कोई भी आख़िरी तारीख़ चुनें, या रोकने तक चालू रखें") })}
     </div>
-    <div class="pad mt12"><div class="card tint">
-      <div class="row-flex"><span class="grow" style="font-weight:600;font-size:17px">${L(`${rides} rides · ₹${per} each`, `${rides} రైడ్‌లు · ఒక్కొక్కటి ₹${per}`, `${rides} राइड · ₹${per} प्रति राइड`)}</span>${pill("percent", "−10%", "")}</div>
-      <p style="font-size:15px;margin-top:4px">${L(`Weekday plan: ${S.inr(total)} until 12 Dec. Pay per ride or monthly.`, `వీక్‌డే ప్లాన్: 12 డిసెం వరకు ${S.inr(total)}. ప్రతి రైడ్‌కు లేదా నెలకు చెల్లించండి.`, `वीकडे प्लान: 12 दिसं तक ${S.inr(total)}। हर राइड या महीने में भुगतान।`)}</p>
-    </div></div>
+    <p class="t-sub pad mt8">${L("Pay per ride or monthly. Reminders arrive the evening before.", "ప్రతి రైడ్‌కు లేదా నెలకు చెల్లించండి. ముందు రోజు సాయంత్రం గుర్తుచేస్తాం.", "हर राइड या महीने में भुगतान। एक शाम पहले याद दिलाएँगे।")}</p>
   </div>
-  ${foot(btn(L(`Schedule ${rides} rides`, `${rides} రైడ్‌లు షెడ్యూల్ చేయండి`, `${rides} राइड शेड्यूल करें`), { act: "bookseries", cls: "lg" }))}`;
+  ${foot(btn(L(`Schedule ${rides} rides`, `${rides} రైడ్‌లు షెడ్యూల్ చేయండి`, `${rides} राइड शेड्यूल करें`), { act: "bookseries" }))}`;
 });
 
-def("intercity", { g: "Intercity", n: "Intercity", tabs: 0, nav: 1, foot: 1, what: "Pick a town, one-way or round trip, date and time. Charging is planned for you when the distance needs it.", why: "Answers range anxiety before it's asked, and makes longer trips a simple fixed-fare booking.", fl: "Fare from <code>POST /quotes</code> with <code>type=intercity</code>. Charging stop from ops' charger list when one-way distance &gt; ~150 km (client to confirm)." }, () => {
-  const km = KM[app.idest], rt = app.itrip === "round", dist = rt ? km * 2 : km, fare = Math.round(dist * 18 + (rt ? 600 : 0)), charge = dist > 300;
+def("intercity", { g: "Intercity", n: "Intercity", tabs: 0, nav: 1, foot: 1, what: "The trip drawn as a lit road from Vizag to the town, with the car driving it (the top-down render) and, for longer trips, the charging stop marked on the way. Pick a town, one-way or round trip; the fixed fare counts to the new figure.", why: "Answers range anxiety before it's asked, and makes longer trips a simple fixed-fare booking.", fl: "Fare from <code>POST /quotes</code> with <code>type=intercity</code> (₹18/km, round trip +₹600 for waiting). Charging stop from ops' charger list when one-way distance &gt; 150 km (client to confirm). Road: <code>CustomPainter</code> path + the bundled top-down sprite moved along it." }, () => {
+  const km = KM[app.idest], rt = app.itrip === "round", dist = rt ? km * 2 : km, fare = Math.round(dist * 18 + (rt ? 600 : 0)), charge = km > 150;
+  const P = "M24 132 C 90 132, 96 52, 170 62 S 270 118, 330 40";
+  const hrs = Math.floor(km / 52), mn = Math.round((km / 52 - hrs) * 60 / 5) * 5;
   return `${bar(L("Intercity", "ఇంటర్‌సిటీ", "इंटरसिटी"), { large: true })}
   <div class="content">
-    <div class="pad"><div class="card pad0" style="height:200px;overflow:hidden">${S.region(app.idest)}</div></div>
+    <div class="pad"><div class="ic-road">
+      <svg viewBox="0 0 354 170" aria-hidden="true">
+        <defs><linearGradient id="icG" x1="0" x2="1"><stop offset="0" stop-color="#5B6CFF"/><stop offset="1" stop-color="#2CC8F5"/></linearGradient></defs>
+        <path d="${P}" class="ic-bed"/><path d="${P}" class="ic-lit" pathLength="100"/><path d="${P}" class="ic-dash"/>
+        <circle cx="24" cy="132" r="6" class="ic-a"/><circle cx="330" cy="40" r="7" class="ic-b"/>
+        ${charge ? `<g class="ic-chg" transform="translate(170 62)"><circle r="15"/><path d="M1.5 -8 L-5 1.5 H0 L-1.5 8 L5 -1.5 H0 Z"/></g>` : ""}
+        <g class="ic-car"><image href="${SagaStage.src("top-down")}" x="-20" y="-20" width="40" height="40" transform="rotate(90)"/><animateMotion dur="${charge ? 6 : 4.5}s" repeatCount="indefinite" rotate="auto" path="${P}" keyPoints="0;${charge ? ".5;.5;" : ""}1" keyTimes="0;${charge ? ".42;.62;" : ""}1" calcMode="linear"/></g>
+      </svg>
+      <span class="ic-l a"><b>Vizag</b><small>${L("7:00 AM", "ఉ. 7:00", "सुबह 7:00")}</small></span>
+      <span class="ic-l b"><b>${app.idest}</b><small>${km} km · ~${hrs}h${mn ? " " + mn + "m" : ""}</small></span>
+      ${charge ? `<span class="ic-l c">${I("bolt", "sm")}${L("25 min charge", "25 ని. ఛార్జ్", "25 मिनट चार्ज")}</span>` : ""}
+    </div></div>
     ${sh(L("Where to?", "ఎక్కడికి?", "कहाँ?"))}
-    <div class="pad"><div class="dests">${Object.keys(KM).map(k => `<button class="chip ${k === app.idest ? "on" : ""}" data-act="idest" data-v="${k}">${k} <span style="opacity:.7">${KM[k]} km</span></button>`).join("")}</div></div>
+    <div class="ic-dests">${Object.keys(KM).map(k => `<button class="ic-d ${k === app.idest ? "on" : ""}" data-act="idest" data-v="${k}"><b>${k}</b><small>${KM[k]} km · ${S.inr(KM[k] * 18)}</small></button>`).join("")}</div>
     <div class="pad mt16">${seg([["one", L("One way", "ఒక వైపు", "एक तरफ़")], ["round", L("Round trip", "రాను పోను", "आना-जाना")]], app.itrip, "itrip")}</div>
     <div class="group mt16">
       ${row({ icon: "cal", t: L("Sat 21 Nov · 7:00 AM", "శని 21 నవం · ఉ. 7:00", "शनि 21 नवं · सुबह 7:00"), s: L("Leave from Home", "ఇంటి నుండి", "घर से"), toast: L("Pick any date up to 30 days ahead", "30 రోజుల్లోపు ఏ తేదీ అయినా", "30 दिन तक कोई भी तारीख़") })}
       ${row({ icon: "users", t: L(`Up to ${RIDERS} riders · ${V.bags} bags`, `${RIDERS} మంది వరకు · ${V.bags} బ్యాగులు`, `${RIDERS} यात्री तक · ${V.bags} बैग`), chev: false })}
     </div>
-    <div class="pad mt12"><div class="card line row-flex" style="align-items:flex-start"><span class="pico">${I("bolt")}</span><div class="grow"><b style="font-size:16.5px">${charge ? L("One 25-minute charging stop, planned", "ఒక 25 నిమిషాల ఛార్జింగ్ స్టాప్, ముందే ప్లాన్", "25 मिनट का एक चार्जिंग स्टॉप, पहले से तय") : L("No charging stop needed", "ఛార్జింగ్ స్టాప్ అవసరం లేదు", "चार्जिंग स्टॉप की ज़रूरत नहीं")}</b><p class="t-sub mt4">${charge ? L("At a fast charger on the way. Your chauffeur handles it; you get a coffee break.", "దారిలో ఫాస్ట్ ఛార్జర్ వద్ద. మీ డ్రైవర్ చూసుకుంటారు; మీకు కాఫీ బ్రేక్.", "रास्ते में फ़ास्ट चार्जर पर। ड्राइवर संभाल लेंगे; आपके लिए चाय-कॉफ़ी ब्रेक।") : L("The car leaves fully charged for this distance.", "ఈ దూరానికి కారు పూర్తి ఛార్జ్‌తో బయలుదేరుతుంది.", "इस दूरी के लिए गाड़ी पूरी चार्ज होकर निकलेगी।")}</p>${rt ? `<p class="t-sub mt8">${L("Round trip: your chauffeur stays with you, up to 8 hours of waiting included.", "రాను పోను: డ్రైవర్ మీతోనే ఉంటారు, 8 గంటల వరకు వేచి ఉండటం కలిపే.", "आना-जाना: ड्राइवर आपके साथ रहेंगे, 8 घंटे तक इंतज़ार शामिल।")}</p>` : ""}</div></div></div>
-    <div class="pad mt16"><div class="row-flex" style="font-size:17px"><span class="grow muted">${L(`${dist} km · fixed fare`, `${dist} కి.మీ · స్థిర ఛార్జీ`, `${dist} किमी · तय किराया`)}</span><b class="t-num" style="font-size:22px">${S.inr(fare)}</b></div></div>
+    <div class="pad mt12"><div class="ic-chgcard ${charge ? "on" : ""}"><span class="pico">${I(charge ? "bolt" : "battery")}</span><div class="grow"><b>${charge ? L("One 25-minute charging stop, planned", "ఒక 25 నిమిషాల ఛార్జింగ్ స్టాప్, ముందే ప్లాన్", "25 मिनट का एक चार्जिंग स्टॉप, पहले से तय") : L("No charging stop needed", "ఛార్జింగ్ స్టాప్ అవసరం లేదు", "चार्जिंग स्टॉप की ज़रूरत नहीं")}</b><p>${charge ? L("At a fast charger on the way. Your chauffeur handles it; you get a coffee break.", "దారిలో ఫాస్ట్ ఛార్జర్ వద్ద. మీ డ్రైవర్ చూసుకుంటారు; మీకు కాఫీ బ్రేక్.", "रास्ते में फ़ास्ट चार्जर पर। ड्राइवर संभाल लेंगे; आपके लिए चाय-कॉफ़ी ब्रेक।") : L("The car leaves fully charged for this distance.", "ఈ దూరానికి కారు పూర్తి ఛార్జ్‌తో బయలుదేరుతుంది.", "इस दूरी के लिए गाड़ी पूरी चार्ज होकर निकलेगी।")}</p>${rt ? `<p>${L("Round trip: your chauffeur stays with you, up to 8 hours of waiting included.", "రాను పోను: డ్రైవర్ మీతోనే ఉంటారు, 8 గంటల వరకు వేచి ఉండటం కలిపే.", "आना-जाना: ड्राइवर आपके साथ रहेंगे, 8 घंटे तक इंतज़ार शामिल।")}</p>` : ""}</div></div></div>
+    <div class="pad mt16"><div class="ic-fare"><span class="grow">${L(`${dist} km · fixed fare`, `${dist} కి.మీ · స్థిర ఛార్జీ`, `${dist} किमी · तय किराया`)}${rt ? `<small>${L("includes ₹600 for waiting", "₹600 వెయిటింగ్ కలిపి", "₹600 इंतज़ार शामिल")}</small>` : ""}</span><b>₹<span class="t-num" data-count="${fare}">${fare.toLocaleString("en-IN")}</span></b></div></div>
   </div>
-  ${foot(btn(L("Book intercity ride", "ఇంటర్‌సిటీ రైడ్ బుక్", "इंटरसिटी राइड बुक करें"), { act: "bookinter", cls: "lg" }))}`;
+  ${foot(btn(L("Book intercity ride", "ఇంటర్‌సిటీ రైడ్ బుక్", "इंटरसिटी राइड बुक करें"), { act: "bookinter" }))}`;
 });
 
 def("vehicle", { g: "Ride", n: "The car", tabs: 0, sb: "light", foot: 1, what: "The SAGA Luxe revealed on a dark expo stage (Cycles renders), with switches for the lights and the showroom light, then a photo-real 360° walk-around, the cabin, seats and bags, and the chauffeur promise.", why: "Every booking is in the same premium car. Showing it builds the value that justifies the fare.", fl: "Static content from CMS (<code>GET /fleet/profile</code>) so the client can update photos and amenities without an app release." }, () => `
@@ -1101,174 +1175,217 @@ def("vehicle", { g: "Ride", n: "The car", tabs: 0, sb: "light", foot: 1, what: "
   <div class="mapbtns" style="z-index:40">${hbtn(ios() ? "chevl" : "arrowl", "data-back", "Back")}</div>
   ${foot(btn(L("Book a ride", "రైడ్ బుక్ చేయండి", "राइड बुक करें"), { go: "where", cls: "lg" }))}`);
 
-def("rides", { g: "Tabs", n: "Trips", tab: "rides", what: "Upcoming (airport pickups with live flight status, repeat series with skip/manage, intercity) and past trips with receipts.", why: "Scheduled and airport rides live here, so riders can check them days ahead.", fl: "<code>GET /rides?status=upcoming|past</code>. Series shown as one card, expanded server-side." }, () => {
+def("rides", { g: "Tabs", n: "Trips", tab: "rides", what: "Upcoming: the airport pickup as a lit pass (time in the serif, live flight tracking), the weekday series with its week dots and the car, and any intercity trip. Past: trip cards with a small render of the car, the route, the fare and the emailed invoice.", why: "Scheduled and airport rides live here, so riders can check them days ahead. The car on every card is a quiet reminder that every ride is the same premium car.", fl: "<code>GET /rides?status=upcoming|past</code>. Series shown as one card, expanded server-side. Car thumbnails are the bundled cut-out renders." }, () => {
+  const car = (k = "cut-side") => `<img class="tr-car" src="${SagaStage.src(k)}" alt="" loading="lazy">`;
+  const wd = [L("M", "సో", "सो"), L("T", "మం", "मं"), L("W", "బు", "बु"), L("T", "గు", "गु"), L("F", "శు", "शु"), L("S", "శ", "श"), L("S", "ఆ", "र")];
   const up = `
-    ${app.booked ? `<div class="card" data-go="booked" role="button"><div class="row-flex"><span class="sq" style="width:46px;height:46px;border-radius:14px;background:var(--accent);color:var(--on-accent);display:flex;align-items:center;justify-content:center">${I("plane")}</span><div class="grow"><div class="t-h3">${L("Airport pickup", "ఎయిర్‌పోర్ట్ పికప్", "एयरपोर्ट पिकअप")}</div><div class="t-sub">${`${fDate(F())} · ${t12(pickupMin(F()))}`}</div></div>${pill("check", L("On time", "సమయానికి", "समय पर"), "ok")}</div><div class="hr"></div><div class="row-flex t-sub">${I("refresh", "sm")}<span>${L(`Tracking ${F().no} · pickup moves if it does`, `${F().no} ట్రాకింగ్ · అది మారితే పికప్ మారుతుంది`, `${F().no} ट्रैक हो रही · बदली तो पिकअप भी बदलेगा`)}</span></div></div>`
-      : `<div class="card line" data-go="airport" role="button"><div class="row-flex"><span class="pico">${I("plane")}</span><div class="grow"><b style="font-size:17px">${L("Flying soon?", "త్వరలో ప్రయాణమా?", "जल्द उड़ान है?")}</b><div class="t-sub">${L("Show us your ticket and we'll plan the pickup", "మీ టికెట్ చూపించండి, పికప్ ప్లాన్ చేస్తాం", "टिकट दिखाइए, हम पिकअप तय करेंगे")}</div></div>${I("chevr")}</div></div>`}
-    <div class="card mt12"><div class="row-flex"><span class="pico">${I("repeat")}</span><div class="grow"><div class="t-h3">${L("Weekdays · 9:00 AM", "వారపు రోజులు · ఉ. 9:00", "सोम–शुक्र · सुबह 9:00")}</div><div class="t-sub">${L("Home → Office · same chauffeur", "ఇల్లు → ఆఫీస్ · అదే డ్రైవర్", "घर → ऑफ़िस · वही ड्राइवर")}</div></div></div>
-      <div class="t-sub mt12">${L("Next: Mon 16 Nov · Ravi Kumar", "తదుపరి: సోమ 16 నవం · రవి కుమార్", "अगली: सोम 16 नवं · रवि कुमार")}</div>
-      <div class="btnrow mt12">${btn(L("Skip next", "తదుపరి దాటవేయి", "अगली छोड़ें"), { kind: "btn-secondary", cls: "sm", toast: L("Mon 16 Nov skipped. You won't be charged.", "సోమ 16 నవం దాటవేశాం. ఛార్జ్ ఉండదు.", "सोम 16 नवं छोड़ दी। कोई चार्ज नहीं।") })}${btn(L("Manage", "నిర్వహించు", "बदलें"), { kind: "btn-secondary", cls: "sm", go: "schedule" })}</div></div>
-    ${app.inter ? `<div class="card mt12 row-flex"><span class="pico">${I("route")}</span><div class="grow"><div class="t-h3">${app.idest}</div><div class="t-sub">${L("Sat 21 Nov · 7:00 AM", "శని 21 నవం · ఉ. 7:00", "शनि 21 नवं · सुबह 7:00")}</div></div></div>` : ""}`;
-  const past = `<div class="group" style="margin:0">
-    ${row({ icon: "receipt", lc: "grey", t: "Dwaraka Nagar", s: L(`Today, 7:41 PM · ${S.inr(FARE)}`, `ఈ రోజు, రా. 7:41 · ${S.inr(FARE)}`, `आज, शाम 7:41 · ${S.inr(FARE)}`), toast: L("Receipt emailed", "రసీదు ఇమెయిల్ చేశాం", "रसीद ईमेल की") })}
-    ${row({ icon: "plane", lc: "grey", t: L("Bhogapuram Airport", "భోగాపురం ఎయిర్‌పోర్ట్", "भोगापुरम एयरपोर्ट"), s: `8 Nov · ${S.inr(AIRFARE)}`, toast: L("Receipt emailed", "రసీదు ఇమెయిల్ చేశాం", "रसीद ईमेल की") })}
-    ${row({ icon: "receipt", lc: "grey", t: "RK Beach", s: "2 Nov · ₹164", toast: L("Receipt emailed", "రసీదు ఇమెయిల్ చేశాం", "रसीद ईमेल की") })}
-  </div>`;
+    ${app.booked ? `<button class="tr-pass lg-brand" data-go="booked"><span class="tr-pt"><span class="eyebrow">${L("Airport pickup", "ఎయిర్‌పోర్ట్ పికప్", "एयरपोर्ट पिकअप")} · ${fDate(F())}</span><span class="tr-live"><i></i>${L("On time", "సమయానికి", "समय पर")}</span></span>
+        <span class="tr-time serif">${t12(pickupMin(F()))}</span>
+        <span class="tr-rt"><b>${L("Home", "ఇల్లు", "घर")}</b>${I("arrowr", "sm")}<b>VTZ</b><small>${F().no} · ${t12(mins(F().t))}</small></span>
+        <span class="tr-perf"></span><span class="tr-foot">${I("refresh", "sm")}${L(`Tracking ${F().no} · pickup moves if it does`, `${F().no} ట్రాకింగ్ · అది మారితే పికప్ మారుతుంది`, `${F().no} ट्रैक हो रही · बदली तो पिकअप भी बदलेगा`)}</span></button>`
+      : `<button class="tr-fly" data-go="airport"><span class="tr-fly-ic">${I("plane")}</span><span class="grow"><b>${L("Flying soon?", "త్వరలో ప్రయాణమా?", "जल्द उड़ान है?")}</b><small>${L("Show us your ticket and we'll plan the pickup", "మీ టికెట్ చూపించండి, పికప్ ప్లాన్ చేస్తాం", "टिकट दिखाइए, हम पिकअप तय करेंगे")}</small></span>${I("chevr")}</button>`}
+    <div class="tr-card mt12">
+      <div class="tr-head"><div class="grow"><span class="eyebrow">${L("Weekday series", "వారపు రైడ్‌లు", "वीकडे सीरीज़")}</span><b>${L("Weekdays · 9:00 AM", "వారపు రోజులు · ఉ. 9:00", "सोम–शुक्र · सुबह 9:00")}</b><small>${L("Home → Office · same chauffeur", "ఇల్లు → ఆఫీస్ · అదే డ్రైవర్", "घर → ऑफ़िस · वही ड्राइवर")}</small></div>${car("cut-front")}</div>
+      <div class="tr-week">${wd.map((d, i) => `<span class="${i < 5 ? "on" : ""} ${i === 0 ? "next" : ""}">${d}</span>`).join("")}<small>${L("Next: Mon 16 Nov · Ravi Kumar", "తదుపరి: సోమ 16 నవం · రవి కుమార్", "अगली: सोम 16 नवं · रवि कुमार")}</small></div>
+      <div class="btnrow mt12">${btn(L("Skip next", "తదుపరి దాటవేయి", "अगली छोड़ें"), { kind: "btn-secondary", cls: "sm", toast: L("Mon 16 Nov skipped. You won't be charged.", "సోమ 16 నవం దాటవేశాం. ఛార్జ్ ఉండదు.", "सोम 16 नवं छोड़ दी। कोई चार्ज नहीं।") })}${btn(L("Manage", "నిర్వహించు", "बदलें"), { kind: "btn-secondary", cls: "sm", go: "schedule" })}</div>
+    </div>
+    ${app.inter ? `<div class="tr-card mt12"><div class="tr-head"><div class="grow"><span class="eyebrow">${L("Intercity", "ఇంటర్‌సిటీ", "इंटरसिटी")}</span><b>Vizag → ${app.idest}</b><small>${L("Sat 21 Nov · 7:00 AM", "శని 21 నవం · ఉ. 7:00", "शनि 21 नवं · सुबह 7:00")}</small></div>${car()}</div></div>` : ""}`;
+  const pastTrip = (to, when, fare, ic) => `<button class="tr-past" data-toast="${esc(L("Invoice was emailed to ananya.rao@gmail.com", "ఇన్వాయిస్ ananya.rao@gmail.comకు పంపాం", "इनवॉइस ananya.rao@gmail.com पर भेजा गया"))}">${car()}<span class="grow"><b class="tr-to">${to}</b><small>${when} · ${L("from", "నుండి", "से")} MVP Colony</small></span><span class="tr-fare"><b>${fare}</b><small>${I(ic, "sm")}${L("Invoice", "ఇన్వాయిస్", "इनवॉइस")}</small></span></button>`;
+  const past = `
+    ${pastTrip("Dwaraka Nagar", L("Today, 7:41 PM", "ఈ రోజు, రా. 7:41", "आज, शाम 7:41"), S.inr(FARE), "mail")}
+    ${pastTrip(L("Bhogapuram Airport", "భోగాపురం ఎయిర్‌పోర్ట్", "भोगापुरम एयरपोर्ट"), "8 Nov, 5:20 AM", S.inr(AIRFARE), "mail")}
+    ${pastTrip("RK Beach", "2 Nov, 6:05 PM", "₹164", "mail")}
+    <div class="tr-impact"><span class="tr-leaf">${I("leaf")}</span><span><b>4.1 kg</b> ${L("CO₂ saved on your SAGA trips this month", "ఈ నెల మీ SAGA ప్రయాణాల్లో CO₂ ఆదా", "इस महीने आपकी SAGA यात्राओं से CO₂ बचा")}</span></div>`;
   return `${bar(L("Trips", "ప్రయాణాలు", "यात्राएँ"), { large: true, back: false })}
-  <div class="content"><div class="pad">${seg([["up", L("Upcoming", "రాబోయేవి", "आने वाली")], ["past", L("Past", "గతం", "पिछली")]], app.tripSeg, "tripseg")}<div class="mt16">${app.tripSeg === "up" ? up : past}</div></div>${promo("electric")}</div>`;
+  <div class="content"><div class="pad">${seg([["up", L("Upcoming", "రాబోయేవి", "आने वाली")], ["past", L("Past", "గతం", "पिछली")]], app.tripSeg, "tripseg")}<div class="mt16 tr-list">${app.tripSeg === "up" ? up : past}</div></div></div>`;
 });
 
-def("offers", { g: "Tabs", n: "Offers", tab: "offers", what: "SAGA points, a promo code field, and offers targeted by trip type: first airport ride, weekday plans, referrals, partner hotels.", why: "Offers drive the behaviour SAGA wants: airport bookings, scheduled series, referrals. Ops run them from the dashboard.", fl: "<code>GET /offers?user=</code> (eligibility computed server-side). Auto-applied at quote time. See brief §8." }, () => `
+def("offers", { g: "Tabs", n: "Offers", tab: "offers", what: "SAGA points in a lit glass card with a ring that fills toward the next free ride, a promo code field, and offers as luminous tickets: a glowing value stub, a perforated edge, and the code ready to copy (FLYSAGA, weekday plans, referrals, partner hotels).", why: "Offers drive the behaviour SAGA wants: airport bookings, scheduled series, referrals. Tickets read as something of value, not as ads. Ops run them from the dashboard.", fl: "<code>GET /offers?user=</code> (eligibility computed server-side). Auto-applied at quote time. See brief §8." }, () => {
+  const tk = (val, unit, tone, title, sub, extra = "") => `<div class="otk ${tone}"><div class="otk-stub"><b>${val}</b><small>${unit}</small></div><div class="otk-body"><b>${title}</b><p>${sub}</p>${extra}</div></div>`;
+  const code = c => `<button class="otk-code" data-toast="${esc(L(`${c} copied`, `${c} కాపీ అయింది`, `${c} कॉपी हुआ`))}"><span>${c}</span>${I("copy", "sm")}</button>`;
+  return `
   ${bar(L("Offers", "ఆఫర్లు", "ऑफ़र"), { large: true, back: false })}
   <div class="content"><div class="pad">
-    <div class="card stage"><div class="t-label" style="color:var(--on-stage2)">${L("SAGA points", "SAGA పాయింట్లు", "SAGA पॉइंट")}</div><div class="row-flex mt8"><span class="pts t-num grow" data-count="1240">1,240</span>${pill("gift", L("Worth ₹124", "₹124 విలువ", "₹124 के बराबर"), "dark")}</div>
-    <div class="progress mt16" style="background:rgba(255,255,255,.14)"><i style="width:62%"></i></div><p class="t-sub mt8">${L("760 more for a free city ride", "ఉచిత సిటీ రైడ్‌కు ఇంకా 760", "मुफ़्त सिटी राइड के लिए 760 और")}</p></div>
-    <div class="field mt16"><input id="promo" autocomplete="off" spellcheck="false" placeholder="${L("Have a code? e.g. FLYSAGA", "కోడ్ ఉందా? ఉదా. FLYSAGA", "कोड है? जैसे FLYSAGA")}" style="text-transform:uppercase"><button class="btn btn-text sm" data-act="promo">${L("Apply", "వర్తించు", "लगाएँ")}</button></div>
+    <div class="of-pts lg-brand">
+      <div class="of-ring" style="--p:.62"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" class="r0"/><circle cx="40" cy="40" r="34" class="r1" pathLength="100" stroke-dasharray="62 100"/></svg>${I("gift")}</div>
+      <div class="grow"><span class="eyebrow">${L("SAGA points", "SAGA పాయింట్లు", "SAGA पॉइंट")}</span><b class="t-num" data-count="1240">1,240</b><small>${L("Worth ₹124 · 760 more for a free city ride", "₹124 విలువ · ఉచిత సిటీ రైడ్‌కు ఇంకా 760", "₹124 के बराबर · मुफ़्त सिटी राइड के लिए 760 और")}</small></div>
+    </div>
+    <div class="field of-field mt16">${I("tag", "sm")}<input id="promo" autocomplete="off" spellcheck="false" placeholder="${L("Have a code? e.g. FLYSAGA", "కోడ్ ఉందా? ఉదా. FLYSAGA", "कोड है? जैसे FLYSAGA")}" style="text-transform:uppercase" aria-label="${L("Promo code", "ప్రోమో కోడ్", "प्रोमो कोड")}"><button class="btn btn-primary sm" data-act="promo">${L("Apply", "వర్తించు", "लगाएँ")}</button></div>
   </div>
   ${sh(L("For you", "మీ కోసం", "आपके लिए"))}
-  <div class="pad">
-    <div class="offer"><span class="oi">${I("plane")}</span><div class="grow"><b style="font-size:17px">${L("20% off your first airport ride", "మొదటి ఎయిర్‌పోర్ట్ రైడ్‌పై 20% తగ్గింపు", "पहली एयरपोर्ट राइड पर 20% छूट")}</b><p class="t-sub mt4">${L("Up to ₹250 · until 31 Dec", "₹250 వరకు · 31 డిసెం వరకు", "₹250 तक · 31 दिसं तक")}</p><span class="code">FLYSAGA</span></div></div>
-    <div class="offer"><span class="oi">${I("repeat")}</span><div class="grow"><b style="font-size:17px">${L("10% off weekday plans", "వీక్‌డే ప్లాన్‌లపై 10% తగ్గింపు", "वीकडे प्लान पर 10% छूट")}</b><p class="t-sub mt4">${L("On 20 or more scheduled rides a month. Applied automatically.", "నెలకు 20 లేదా ఎక్కువ షెడ్యూల్ రైడ్‌లపై. ఆటోమేటిక్‌గా.", "महीने में 20 या ज़्यादा शेड्यूल राइड पर। अपने-आप लगेगा।")}</p></div></div>
-    <div class="offer"><span class="oi">${I("gift")}</span><div class="grow"><b style="font-size:17px">${L("Give ₹150, get ₹150", "₹150 ఇవ్వండి, ₹150 పొందండి", "₹150 दें, ₹150 पाएँ")}</b><p class="t-sub mt4">${L("When a friend takes their first SAGA ride.", "మీ స్నేహితుడు మొదటి SAGA రైడ్ చేసినప్పుడు.", "जब दोस्त पहली SAGA राइड ले।")}</p><button class="btn btn-secondary sm mt12" style="width:auto" data-toast="${esc(L("Invite link copied", "ఆహ్వాన లింక్ కాపీ అయింది", "इनवाइट लिंक कॉपी हुआ"))}">${I("share")}${L("Invite", "ఆహ్వానించు", "बुलाएँ")}</button></div></div>
-    <div class="offer"><span class="oi">${I("hotel")}</span><div class="grow"><b style="font-size:17px">${L("Staying at a partner hotel?", "భాగస్వామి హోటల్‌లో ఉన్నారా?", "पार्टनर होटल में रुके हैं?")}</b><p class="t-sub mt4">${L("Free waiting up to 30 minutes on rides booked by the front desk.", "ఫ్రంట్ డెస్క్ బుక్ చేసిన రైడ్‌లపై 30 నిమిషాల వరకు ఉచిత వెయిటింగ్.", "फ़्रंट डेस्क की बुकिंग पर 30 मिनट तक मुफ़्त इंतज़ार।")}</p></div></div>
+  <div class="pad of-list">
+    ${tk("20%", L("off", "తగ్గింపు", "छूट"), "brand", L("Your first airport ride", "మీ మొదటి ఎయిర్‌పోర్ట్ రైడ్", "आपकी पहली एयरपोर्ट राइड"), L("Up to ₹250 · until 31 Dec", "₹250 వరకు · 31 డిసెం వరకు", "₹250 तक · 31 दिसं तक"), code("FLYSAGA"))}
+    ${tk("10%", L("off", "తగ్గింపు", "छूट"), "live", L("Weekday plans", "వీక్‌డే ప్లాన్‌లు", "वीकडे प्लान"), L("On 20 or more scheduled rides a month. Applied automatically.", "నెలకు 20 లేదా ఎక్కువ షెడ్యూల్ రైడ్‌లపై. ఆటోమేటిక్‌గా.", "महीने में 20 या ज़्यादा शेड्यूल राइड पर। अपने-आप लगेगा।"), `<button class="otk-go" data-go="schedule">${L("Plan rides", "రైడ్‌లు ప్లాన్", "राइड प्लान करें")}${I("arrowr", "sm")}</button>`)}
+    ${tk("₹150", L("each", "ఒక్కొక్కరికి", "दोनों को"), "warm", L("Give ₹150, get ₹150", "₹150 ఇవ్వండి, ₹150 పొందండి", "₹150 दें, ₹150 पाएँ"), L("When a friend takes their first SAGA ride.", "మీ స్నేహితుడు మొదటి SAGA రైడ్ చేసినప్పుడు.", "जब दोस्त पहली SAGA राइड ले।"), `<button class="otk-go" data-toast="${esc(L("Invite link copied", "ఆహ్వాన లింక్ కాపీ అయింది", "इनवाइट लिंक कॉपी हुआ"))}">${I("share", "sm")}${L("Invite a friend", "స్నేహితుడిని ఆహ్వానించండి", "दोस्त को बुलाएँ")}</button>`)}
+    ${tk("30", L("min free", "ని. ఉచితం", "मिनट मुफ़्त"), "go", L("Staying at a partner hotel?", "భాగస్వామి హోటల్‌లో ఉన్నారా?", "पार्टनर होटल में रुके हैं?"), L("Free waiting on rides booked by the front desk.", "ఫ్రంట్ డెస్క్ బుక్ చేసిన రైడ్‌లపై ఉచిత వెయిటింగ్.", "फ़्रंट डेस्क की बुकिंग पर मुफ़्त इंतज़ार।"))}
     <p class="t-sub mt16 center">${L("Eligible offers apply automatically at checkout.", "అర్హత ఉన్న ఆఫర్లు ఆటోమేటిక్‌గా వర్తిస్తాయి.", "योग्य ऑफ़र चेकआउट पर अपने-आप लगते हैं।")}</p>
-  </div>${promo("hotels")}</div>`);
+  </div></div>`;
+});
 
-def("account", { g: "Tabs", n: "Account & settings", tab: "account", what: "Profile, then everything a rider controls: places, payments, flight detection, appearance (light/dark/system), language, voice, text size and notifications.", why: "Appearance and language are one tap away, not buried. Text size helps older riders.", fl: "Theme: <code>ThemeMode</code> + <code>SagaTokens</code> extension. Language: <code>flutter_localizations</code> + ARB files. Text size: <code>MediaQuery.textScaler</code> override." }, () => `
+def("account", { g: "Tabs", n: "Account & settings", tab: "account", what: "A profile card with a softly lit avatar ring and three numbers that count up (trips, CO₂ saved, points), then everything a rider controls: places, wallet, flight detection, appearance (light/dark/auto), language, voice, text size and notifications. Signed off with the client's logo.", why: "Appearance and language are one tap away, not buried. Text size helps older riders. The numbers make the electric choice feel personal.", fl: "Theme: <code>ThemeMode</code> + <code>SagaTokens</code> extension. Language: <code>flutter_localizations</code> + ARB files. Text size: <code>MediaQuery.textScaler</code> override. Stats from <code>GET /me/summary</code>." }, () => `
   ${bar(L("Account", "ఖాతా", "खाता"), { large: true, back: false })}
   <div class="content">
-    <div class="pad"><div class="card row-flex"><span class="avatar xl">AR</span><div class="grow"><div class="t-h3">Ananya Rao</div><div class="t-sub">+91 98480 12345</div></div>${I("chevr")}</div></div>
+    <div class="pad"><div class="ac-card">
+      <div class="ac-top"><span class="ac-av"><i></i><b>AR</b></span><div class="grow"><b class="ac-name">Ananya Rao</b><small>+91 98480 12345 · ${L("Member since Aug 2026", "ఆగ 2026 నుండి సభ్యురాలు", "अग 2026 से सदस्य")}</small></div><button class="ac-edit" data-toast="${esc(L("Edit your name, email and photo", "పేరు, ఇమెయిల్, ఫోటో మార్చండి", "नाम, ईमेल और फ़ोटो बदलें"))}" aria-label="${L("Edit profile", "ప్రొఫైల్ మార్చు", "प्रोफ़ाइल बदलें")}">${I("edit", "sm")}</button></div>
+      <div class="ac-stats"><div><b class="t-num" data-count="23">23</b><small>${L("trips", "ప్రయాణాలు", "यात्राएँ")}</small></div><div><b class="t-num"><span data-count="18.4">18.4</span> kg</b><small>${L("CO₂ saved", "CO₂ ఆదా", "CO₂ बचा")}</small></div><div><b class="t-num" data-count="1240">1,240</b><small>${L("points", "పాయింట్లు", "पॉइंट")}</small></div></div>
+    </div></div>
     <div class="group mt16">
       ${row({ icon: "pin", t: L("Saved places", "సేవ్ చేసిన స్థలాలు", "सेव की गई जगहें"), trail: "2", toast: L("Home and Office saved", "ఇల్లు, ఆఫీస్ సేవ్ అయ్యాయి", "घर और ऑफ़िस सेव हैं") })}
       ${row({ icon: "wallet", t: L("Wallet and payments", "వాలెట్, చెల్లింపులు", "वॉलेट और भुगतान"), trail: S.inr(app.wallet), go: "wallet" })}
-      ${row({ icon: "plane", t: L("Find my flights", "నా ఫ్లైట్లు కనుగొను", "मेरी फ़्लाइट ढूँढें"), trail: L("On", "ఆన్", "चालू"), go: "travel" })}
+      ${row({ icon: "plane", t: L("Find my flights", "నా ఫ్లైట్లు కనుగొను", "मेरी फ़्लाइट ढूँढें"), s: L("Gmail filter, ticket scan", "Gmail ఫిల్టర్, టికెట్ స్కాన్", "Gmail फ़िल्टर, टिकट स्कैन"), trail: `<span class="ac-on">${L("On", "ఆన్", "चालू")}</span>`, go: "travel" })}
     </div>
     ${sh(L("Appearance", "రూపం", "रूप"))}
-    <div class="pad">${seg([["light", L("Light", "లైట్", "लाइट")], ["dark", L("Dark", "డార్క్", "डार्क")], ["system", L("Auto", "ఆటో", "ऑटो")]], S.state.theme, "theme")}</div>
+    <div class="pad"><div class="ac-theme">${[["light", "sun", L("Light", "లైట్", "लाइट")], ["dark", "moon", L("Dark", "డార్క్", "डार्क")], ["system", "device", L("Auto", "ఆటో", "ऑटो")]].map(([v, ic, t]) => `<button class="${S.state.theme === v ? "on" : ""} t-${v}" data-act="theme" data-v="${v}" aria-pressed="${S.state.theme === v}"><span class="ac-sw"><i></i><i></i></span>${I(ic, "sm")}<b>${t}</b></button>`).join("")}</div></div>
     <div class="group mt16">
       ${row({ icon: "globe", t: L("Language", "భాష", "भाषा"), trail: S.LANGS.find(l => l.id === S.state.lang).native, go: "language" })}
       ${row({ icon: "mic", t: L("Voice · Saathi", "వాయిస్ · సాథీ", "आवाज़ · साथी"), trail: ios() ? "Siri" : "Gemini", go: "voicecfg" })}
       <div class="row"><span class="lead">${I("text")}</span><span class="tx"><span class="t1" style="display:block">${L("Larger text", "పెద్ద అక్షరాలు", "बड़े अक्षर")}</span></span>${tgl(S.state.text === "large", 'data-act="textsize"')}</div>
       ${row({ icon: "bell", t: L("Notifications", "నోటిఫికేషన్లు", "नोटिफ़िकेशन"), go: "notifications" })}
+      ${row({ icon: "lock", t: L("Lock screen", "లాక్ స్క్రీన్", "लॉक स्क्रीन"), s: L("Live Activity preview", "లైవ్ యాక్టివిటీ ప్రివ్యూ", "लाइव एक्टिविटी प्रीव्यू"), go: "lock" })}
     </div>
     <div class="group mt16">
       ${row({ icon: "chat", t: L("Help and support", "సహాయం", "मदद"), toast: L("24×7 support on call and WhatsApp", "24×7 కాల్ మరియు WhatsApp సపోర్ట్", "24×7 कॉल और WhatsApp सहायता") })}
-      ${row({ icon: "lock", t: L("Privacy", "గోప్యత", "निजता"), go: "travel" })}
-      ${row({ icon: "logout", lc: "grey", t: L("Sign out", "సైన్ అవుట్", "साइन आउट"), go: "welcome", attr: 'data-reset="1"' })}
+      ${row({ icon: "shield", t: L("Privacy", "గోప్యత", "निजता"), go: "travel" })}
+      ${row({ icon: "logout", t: L("Sign out", "సైన్ అవుట్", "साइन आउट"), go: "welcome", attr: 'data-reset="1"' })}
     </div>
-    ${promo("made")}
+    <div class="ac-sign">${S.logoSvg()}<span class="serif">${L("Made in Vizag. <em>Driven by people.</em>", "విశాఖలో పుట్టింది. <em>మనుషులే నడుపుతారు.</em>", "विज़ाग में बना। <em>इंसान चलाते हैं।</em>")}</span><small>v4.2 · SAGA Mobility Pvt Ltd</small></div>
   </div>`);
 
-def("wallet", { g: "Settings", n: "Wallet", tabs: 0, nav: 1, what: "SAGA wallet: balance, add money in one tap, auto-pay for scheduled rides and plans, points converted to cash, saved methods and every transaction.", why: "One tap to pay, no failed UPI at the kerb at 5 AM, and points that feel like money.", fl: "Wallet ledger on the backend (RBI rules for closed-loop wallets apply); top-up via the payment gateway; UPI Autopay mandate for plans." }, () => `
+def("wallet", { g: "Settings", n: "Wallet", tabs: 0, nav: 1, what: "Payment methods as a stack of glass cards: the lit SAGA wallet card in front with its balance counting up, UPI and the HDFC card fanned behind. Tap a card to bring it forward and make it the default. One-tap top-ups, auto-pay, points to cash, and every transaction.", why: "One tap to pay, no failed UPI at the kerb at 5 AM, and points that feel like money.", fl: "Wallet ledger on the backend (RBI rules for closed-loop wallets apply); top-up via the payment gateway; UPI Autopay mandate for plans. Card stack: <code>AnimatedPositioned</code> + <code>Transform</code>." }, () => {
+  const cards = [["wallet", L("SAGA wallet", "SAGA వాలెట్", "SAGA वॉलेट"), "", "w"], ["upi", "UPI", "ananya@okhdfc", "u"], ["card", "HDFC Visa", "•• 2231", "c"], ["cash", L("Cash", "నగదు", "नकद"), L("Pay the chauffeur", "డ్రైవర్‌కు చెల్లించండి", "ड्राइवर को दें"), "k"]];
+  const order = [app.pay, ...cards.map(c => c[0]).filter(v => v !== app.pay)];
+  return `
   ${bar(L("Wallet", "వాలెట్", "वॉलेट"))}
   <div class="content"><div class="pad">
-    <div class="walletc"><span class="promo-wm" aria-hidden="true">SAGA</span><div class="row-flex"><span class="grow" style="color:var(--on-ink2);font-weight:600">${L("SAGA wallet", "SAGA వాలెట్", "SAGA वॉलेट")}</span>${I("wallet")}</div><div class="wl-big">₹<span data-count="${app.wallet}">${app.wallet.toLocaleString("en-IN")}</span></div><div class="t-sub" style="color:var(--on-ink2)">${L("Used first for every ride", "ప్రతి రైడ్‌కు ముందుగా వాడబడుతుంది", "हर राइड में पहले इसका इस्तेमाल")}</div>
-      <div class="perks mt16">${[500, 1000, 2000].map(a => `<button class="chip wchip" data-act="topup" data-v="${a}">+ ₹${a.toLocaleString("en-IN")}</button>`).join("")}</div></div>
+    <div class="wl-stack" style="--n:${cards.length}">${cards.map(([v, t, s, k]) => { const i = order.indexOf(v); return `<button class="wl-card wl-${k} ${i === 0 ? "front" : ""}" style="--i:${i}" data-act="pay" data-v="${v}" aria-label="${esc(String(t))}${i === 0 ? " · " + L("default", "డిఫాల్ట్", "डिफ़ॉल्ट") : ""}">
+        <span class="wl-top"><b>${t}</b>${v === "wallet" ? S.logoMark() : I(v === "upi" ? "device" : v === "card" ? "card" : "receipt")}</span>
+        ${v === "wallet" ? `<span class="wl-bal">₹<span class="t-num" data-count="${app.wallet}">${app.wallet.toLocaleString("en-IN")}</span></span><span class="wl-sub">${L("Used first for every ride", "ప్రతి రైడ్‌కు ముందుగా వాడబడుతుంది", "हर राइड में पहले इसका इस्तेमाल")}</span>` : `<span class="wl-num">${s}</span>`}
+        ${i === 0 ? `<span class="wl-def">${I("check", "sm")}${L("Default", "డిఫాల్ట్", "डिफ़ॉल्ट")}</span>` : ""}
+      </button>`; }).join("")}</div>
+    <p class="t-sub center mt8">${L("Tap a card to make it your default", "డిఫాల్ట్ చేయడానికి కార్డ్‌ను నొక్కండి", "डिफ़ॉल्ट बनाने के लिए कार्ड दबाएँ")}</p>
+    <div class="wl-top-ups mt16">${[500, 1000, 2000].map(a => `<button data-act="topup" data-v="${a}"><small>${L("Add", "జమ", "जोड़ें")}</small><b>₹${a.toLocaleString("en-IN")}</b></button>`).join("")}</div>
   </div>
   <div class="group mt16">
     <div class="row"><span class="lead">${I("repeat")}</span><span class="tx"><span class="t1" style="display:block">${L("Auto-pay scheduled rides", "షెడ్యూల్ రైడ్‌లకు ఆటో-పే", "शेड्यूल राइड के लिए ऑटो-पे")}</span><span class="t2" style="display:block">${L("UPI Autopay tops up when below ₹300", "₹300 కంటే తక్కువైతే UPI ఆటోపే", "₹300 से कम होने पर UPI ऑटोपे")}</span></span>${tgl(app.autopay, 'data-act="autopay"')}</div>
-    ${row({ icon: "gift", lc: "soft", t: L("Convert 1,240 points to ₹124", "1,240 పాయింట్లు ₹124గా మార్చండి", "1,240 पॉइंट को ₹124 में बदलें"), act: "convert" })}
+    ${row({ icon: "gift", t: L("Convert 1,240 points to ₹124", "1,240 పాయింట్లు ₹124గా మార్చండి", "1,240 पॉइंट को ₹124 में बदलें"), act: "convert" })}
   </div>
-  ${sh(L("Pay with", "చెల్లింపు విధానం", "भुगतान का तरीका"))}
-  <div class="group">${[["wallet", "wallet", L("SAGA wallet", "SAGA వాలెట్", "SAGA वॉलेट")], ["upi", "device", "UPI · ananya@okhdfc"], ["card", "card", "HDFC Visa ••2231"], ["cash", "receipt", L("Cash", "నగదు", "नकद")]].map(([v, ic, t]) => `<button class="row" data-act="pay" data-v="${v}"><span class="lead soft">${I(ic)}</span><span class="tx"><span class="t1" style="display:block">${t}</span></span><span class="trail">${app.pay === v ? `<span style="color:var(--accent-ink)">${I("check")}</span>` : ""}</span></button>`).join("")}</div>
   ${sh(L("Activity", "లావాదేవీలు", "लेन-देन"))}
-  <div class="group">${app.wtx.map(t => `<div class="row"><span class="lead grey">${I(t[0])}</span><span class="tx"><span class="t1" style="display:block">${t[1]}</span><span class="t2" style="display:block">${t[2]}</span></span><span class="trail" style="color:${t[3] > 0 ? "var(--success)" : "var(--fg)"};font-weight:600">${t[3] > 0 ? "+" : "−"}₹${Math.abs(t[3])}</span></div>`).join("")}</div>
-  </div>`);
+  <div class="group">${app.wtx.map(t => `<div class="row"><span class="lead ${t[3] > 0 ? "wl-in" : ""}">${I(t[0])}</span><span class="tx"><span class="t1" style="display:block">${Array.isArray(t[1]) ? L(...t[1]) : t[1]}</span><span class="t2" style="display:block">${Array.isArray(t[2]) ? L(...t[2]) : t[2]}</span></span><span class="trail wl-amt ${t[3] > 0 ? "in" : ""}">${t[3] > 0 ? "+" : "−"}₹${Math.abs(t[3]).toLocaleString("en-IN")}</span></div>`).join("")}</div>
+  </div>`;
+});
 
-def("chat", { g: "Ride", n: "Chat with chauffeur", tabs: 0, nav: 1, what: "In-app chat with quick replies; each side reads in their own language. Live with the chauffeur app in the suite.", why: "No numbers shared, no language barrier, no shouting across a busy kerb.", fl: "Canned message keys over WebSocket, rendered per reader's locale; free text via a translation API." }, () => `
+def("chat", { g: "Ride", n: "Chat with chauffeur", tabs: 0, nav: 1, what: "In-app chat in glass bubbles: Ravi's on the left with his initials, the rider's lit in brand glass on the right. Quick replies float above a composer; each side reads in their own language. Live with the chauffeur app in the suite.", why: "No numbers shared, no language barrier, no shouting across a busy kerb.", fl: "Canned message keys over WebSocket, rendered per reader's locale; free text via a translation API." }, () => `
   ${bar("Ravi Kumar", { actions: hbtn("phone", `data-toast="${esc(L("Calling Ravi (numbers stay private)…", "రవికి కాల్…", "रवि को कॉल…"))}"`, "Call") })}
-  <div class="content" style="padding-bottom:190px"><p class="t-sub center">${L("Messages are translated for each of you", "సందేశాలు ఇద్దరికీ అనువదించబడతాయి", "संदेश दोनों के लिए अनुवाद होते हैं")}</p>
-    <div class="msgs">${S.chat.get().map(m => `<div class="bub ${m.who === "rider" ? "me" : "them"}">${S.msg(m.k)}<small>${m.at}</small></div>`).join("")}</div></div>
-  ${foot(`<div class="perks">${["coming", "atgate", "bags", "cooler"].map(k => `<button class="chip" data-act="send" data-v="${k}">${S.msg(k)}</button>`).join("")}</div>`)}`, () => { app.readD = S.chat.get().filter(m => m.who === "driver").length; const c = $("#views .view:last-child .content"); if (c) c.scrollTop = 9999; });
+  <div class="content ch-c">
+    <div class="ch-who"><span class="lf-ph">RK</span><span><b>Ravi Kumar</b><small>★ 4.9 · ${V.short} · ${V.plate}</small></span></div>
+    <p class="ch-note">${I("globe", "sm")}${L("Messages are translated for each of you", "సందేశాలు ఇద్దరికీ అనువదించబడతాయి", "संदेश दोनों के लिए अनुवाद होते हैं")}</p>
+    <div class="msgs ch-msgs">${S.chat.get().map((m, i, a) => `<div class="bub ${m.who === "rider" ? "me" : "them"}" style="--d:${Math.max(0, i - a.length + 4) * 70}ms">${m.who !== "rider" && (i === 0 || a[i - 1].who === "rider") ? `<i class="ch-av">RK</i>` : ""}<span>${S.msg(m.k)}</span><small>${m.at}${m.who === "rider" ? ` · ${L("Read", "చదివారు", "पढ़ा")}` : ""}</small></div>`).join("")}</div>
+  </div>
+  <div class="ch-dock">
+    <div class="ch-quick">${["coming", "atgate", "bags", "cooler"].map(k => `<button class="chip" data-act="send" data-v="${k}">${S.msg(k)}</button>`).join("")}</div>
+    <div class="ch-compose"><span class="ch-in">${L("Message Ravi…", "రవికి సందేశం…", "रवि को संदेश…")}</span><button class="ch-mic" data-voice aria-label="Saathi">${I("mic")}</button><button class="ch-send" data-toast="${esc(L("Free text is translated before Ravi reads it", "రవి చదివే ముందే అనువదిస్తాం", "रवि के पढ़ने से पहले अनुवाद होता है"))}" aria-label="${L("Send", "పంపు", "भेजें")}">${I("arrowu")}</button></div>
+  </div>`, () => { app.readD = S.chat.get().filter(m => m.who === "driver").length; const c = $("#views .view:last-child .content"); if (c) c.scrollTop = 9999; });
 
-def("language", { g: "Settings", n: "Language", tabs: 0, nav: 1, what: "English, Telugu and Hindi, each written in its own script. Changes the whole app, notifications and Saathi's voice at once.", why: "Vizag riders and many chauffeurs are more comfortable in Telugu; Hindi covers visitors and many airport travellers.", fl: "ARB files per locale; server sends notification templates per user locale. Odia, Tamil, Kannada can be added without code changes." }, () => `
+def("language", { g: "Settings", n: "Language", tabs: 0, nav: 1, what: "English, Telugu and Hindi as large glass cards, each written in its own script with a line of the app in that language. Changes the whole app, notifications and Saathi's voice at once.", why: "Vizag riders and many chauffeurs are more comfortable in Telugu; Hindi covers visitors and many airport travellers.", fl: "ARB files per locale; server sends notification templates per user locale. Odia, Tamil, Kannada can be added without code changes." }, () => {
+  const sample = { en: "Your chauffeur is 6 min away.", te: "మీ డ్రైవర్ 6 నిమిషాల్లో వస్తారు.", hi: "आपके ड्राइवर 6 मिनट में पहुँचेंगे।" };
+  return `
   ${bar(L("Language", "భాష", "भाषा"))}
-  <div class="content">
-    <div class="group">${S.LANGS.map(l => `<button class="row" data-setlang="${l.id}"><span class="tx"><span class="t1" style="display:block;font-size:19px">${l.native}</span><span class="t2" style="display:block">${l.name}</span></span><span class="trail">${S.state.lang === l.id ? `<span style="color:var(--accent-ink)">${I("check")}</span>` : ""}</span></button>`).join("")}</div>
-    <p class="t-sub pad mt12">${L("Saathi listens and replies in the language you choose. Notifications follow it too.", "మీరు ఎంచుకున్న భాషలో సాథీ వింటుంది, జవాబిస్తుంది. నోటిఫికేషన్లు కూడా.", "साथी आपकी चुनी भाषा में सुनता और जवाब देता है। नोटिफ़िकेशन भी।")}</p>
-    ${sh(L("Coming next", "త్వరలో", "जल्द आ रही"))}
-    <div class="group">${[["ଓଡ଼ିଆ", "Odia"], ["தமிழ்", "Tamil"], ["ಕನ್ನಡ", "Kannada"]].map(([n, e]) => `<div class="row" style="opacity:.55"><span class="tx"><span class="t1" style="display:block">${n}</span><span class="t2" style="display:block">${e}</span></span></div>`).join("")}</div>
-  </div>`);
+  <div class="content"><div class="pad">
+    <h1 class="t-title serif">${L("Which language <em>feels like home?</em>", "మీకు ఏ భాష <em>సౌకర్యం?</em>", "कौन सी भाषा <em>अपनी लगती है?</em>")}</h1>
+    <div class="langs mt16">${S.LANGS.map(l => `<button class="lang lg ln4 ${S.state.lang === l.id ? "on" : ""}" data-setlang="${l.id}" aria-pressed="${S.state.lang === l.id}"><span><b>${l.native}</b><small>${l.name} · “${sample[l.id]}”</small></span><span class="ck">${I("check", "sm")}</span></button>`).join("")}</div>
+    <div class="wh-note mt16">${I("mic", "sm")}<span>${L("Saathi listens and replies in the language you choose. Notifications follow it too.", "మీరు ఎంచుకున్న భాషలో సాథీ వింటుంది, జవాబిస్తుంది. నోటిఫికేషన్లు కూడా.", "साथी आपकी चुनी भाषा में सुनता और जवाब देता है। नोटिफ़िकेशन भी।")}</span></div>
+  </div>
+  ${sh(L("Coming next", "త్వరలో", "जल्द आ रही"))}
+  <div class="pad"><div class="ln-next">${[["ଓଡ଼ିଆ", "Odia"], ["தமிழ்", "Tamil"], ["ಕನ್ನಡ", "Kannada"]].map(([n, e]) => `<span><b>${n}</b><small>${e}</small></span>`).join("")}</div></div>
+  </div>`;
+});
 
-def("voicecfg", { g: "Settings", n: "Voice", tabs: 0, nav: 1, what: "Saathi, the in-app voice assistant, in English, Telugu and Hindi. Plus the platform route: Siri shortcuts on iPhone, Gemini on Android.", why: "Voice makes the app usable for riders who don't type comfortably, in their own language.", fl: "In-app: streaming STT (Sarvam / Google) → intent API → TTS. iOS: App Intents + App Shortcuts. Android: App Actions now, AppFunctions where Gemini supports it. See brief §10." }, () => {
+/* Saathi's orb: three soft light lobes turning inside a glass sphere. It breathes while listening and swells when speech arrives. */
+const orb = (cls = "") => `<span class="orb ${cls}" aria-hidden="true"><i class="o1"></i><i class="o2"></i><i class="o3"></i><b></b></span>`;
+def("voicecfg", { g: "Settings", n: "Voice", tabs: 0, nav: 1, what: "Saathi as a luminous orb: three lobes of the brand light turning inside glass, breathing while it listens and swelling with speech. Tap it to talk. Below: phrases to try in the rider's language, then the platform route (Siri on iPhone, Gemini on Android).", why: "Voice makes the app usable for riders who don't type comfortably, in their own language. The orb shows it is listening without words.", fl: "In-app: streaming STT (Sarvam / Google) → intent API → TTS. Orb: a <code>CustomPainter</code> driven by the mic RMS level. iOS: App Intents + App Shortcuts. Android: App Actions now, AppFunctions where Gemini supports it. See brief §10." }, () => {
   const tries = { en: ["Book a ride to RK Beach", "Plan my airport ride for Friday", "Office rides every weekday at 9", "Where is my chauffeur?"], te: ["ఆర్‌కే బీచ్‌కి రైడ్ బుక్ చేయి", "శుక్రవారం ఫ్లైట్‌కి ఎయిర్‌పోర్ట్ రైడ్ ప్లాన్ చేయి", "ప్రతి రోజు 9 గంటలకు ఆఫీస్ రైడ్", "నా డ్రైవర్ ఎక్కడ ఉన్నారు?"], hi: ["आरके बीच के लिए राइड बुक करो", "शुक्रवार की फ़्लाइट के लिए एयरपोर्ट राइड प्लान करो", "हर दिन 9 बजे ऑफिस की राइड", "मेरा ड्राइवर कहाँ है?"] }[S.state.lang];
   const sys = ios()
     ? [["Hey Siri, book a SAGA", L("Opens a booking to your usual place", "మీ సాధారణ స్థలానికి బుకింగ్", "आपकी आम जगह के लिए बुकिंग")], ["Hey Siri, where's my SAGA?", L("Reads your chauffeur's ETA", "డ్రైవర్ ETA చదువుతుంది", "ड्राइवर का ETA बताता है")], ["Hey Siri, SAGA to the airport", L("Starts the airport flow", "ఎయిర్‌పోర్ట్ బుకింగ్ ప్రారంభం", "एयरपोर्ट बुकिंग शुरू")]]
     : [["Hey Google, book a SAGA", L("Gemini opens SAGA with the booking ready", "జెమినీ బుకింగ్‌తో SAGA తెరుస్తుంది", "Gemini बुकिंग के साथ SAGA खोलता है")], ["Hey Google, where's my SAGA?", L("Reads your chauffeur's ETA", "డ్రైవర్ ETA చదువుతుంది", "ड्राइवर का ETA बताता है")], ["Hey Google, SAGA to the airport", L("Starts the airport flow", "ఎయిర్‌పోర్ట్ బుకింగ్ ప్రారంభం", "एयरपोर्ट बुकिंग शुरू")]];
   return `${bar(L("Voice", "వాయిస్", "आवाज़"))}
   <div class="content">
-    <div class="pad"><div class="card stage center" style="padding:28px 20px">
-      <button class="vmic" data-voice style="margin:0 auto;width:84px;height:84px;border-radius:42px">${I("mic", "lg")}</button>
-      <div class="t-h2 mt16">Saathi</div>
-      <p class="t-sub mt8">${L("Use every part of SAGA by voice, in English, Telugu or Hindi.", "SAGAలో ప్రతిదీ మాటతో, ఇంగ్లీష్, తెలుగు లేదా హిందీలో.", "SAGA का हर काम आवाज़ से, अंग्रेज़ी, तेलुगु या हिंदी में।")}</p>
-    </div></div>
+    <div class="vc-hero">
+      <button class="vc-orb" data-voice aria-label="${L("Talk to Saathi", "సాథీతో మాట్లాడండి", "साथी से बात करें")}">${orb("idle")}</button>
+      <h1 class="serif">Saathi</h1>
+      <p>${L("Use every part of SAGA by voice, in English, Telugu or Hindi. Tap the light to talk.", "SAGAలో ప్రతిదీ మాటతో, ఇంగ్లీష్, తెలుగు లేదా హిందీలో. మాట్లాడేందుకు వెలుగును నొక్కండి.", "SAGA का हर काम आवाज़ से, अंग्रेज़ी, तेलुगु या हिंदी में। बात करने के लिए रोशनी दबाएँ।")}</p>
+    </div>
     ${sh(L("Try saying", "ఇలా చెప్పండి", "ऐसे बोलें"))}
-    <div class="group">${tries.map(t => `<button class="row" data-say="${esc(t)}"><span class="lead soft">${I("mic")}</span><span class="tx"><span class="t1" style="display:block">“${t}”</span></span></button>`).join("")}</div>
+    <div class="pad vc-tries">${tries.map((t, i) => `<button data-say="${esc(t)}" style="--d:${i * 60}ms">${I("mic", "sm")}<span>“${t}”</span></button>`).join("")}</div>
     ${sh(ios() ? "Siri" : "Gemini")}
-    <div class="group">${sys.map(([a, b]) => row({ icon: ios() ? "spark" : "spark", lc: "ink", t: `“${a}”`, s: b, chev: false, trail: `<span class="pill ok">${L("Ready", "సిద్ధం", "तैयार")}</span>` })).join("")}</div>
+    <div class="group">${sys.map(([a, b]) => row({ icon: "spark", lc: "ink", t: `“${a}”`, s: b, chev: false, trail: `<span class="pill ok">${L("Ready", "సిద్ధం", "तैयार")}</span>` })).join("")}</div>
     <p class="t-sub pad mt12">${ios() ? L("Siri shortcuts work from the lock screen. Siri understands English and Hindi; for Telugu, use Saathi inside the app.", "సిరి షార్ట్‌కట్‌లు లాక్ స్క్రీన్ నుండి పని చేస్తాయి. సిరి ఇంగ్లీష్, హిందీ అర్థం చేసుకుంటుంది; తెలుగు కోసం యాప్‌లో సాథీ వాడండి.", "Siri शॉर्टकट लॉक स्क्रीन से चलते हैं। Siri अंग्रेज़ी और हिंदी समझता है; तेलुगु के लिए ऐप में साथी चुनें।") : L("On supported Android phones, Gemini can open SAGA and fill in your booking. Saathi works on every phone.", "సపోర్ట్ ఉన్న ఆండ్రాయిడ్ ఫోన్లలో జెమినీ SAGA తెరిచి బుకింగ్ నింపుతుంది. సాథీ అన్ని ఫోన్లలో పని చేస్తుంది.", "समर्थित Android फ़ोन पर Gemini SAGA खोलकर बुकिंग भर सकता है। साथी हर फ़ोन पर चलता है।")}</p>
     <div class="group mt16"><div class="row"><span class="lead">${I("quiet")}</span><span class="tx"><span class="t1" style="display:block">${L("Read updates aloud", "అప్‌డేట్‌లు గట్టిగా చదువు", "अपडेट बोलकर सुनाएँ")}</span><span class="t2" style="display:block">${L("Chauffeur arriving, pickup moved", "డ్రైవర్ వస్తున్నారు, పికప్ మారింది", "ड्राइवर आ रहा है, पिकअप बदला")}</span></span>${tgl(app.read, 'data-act="read"')}</div></div>
   </div>`;
 });
 
-def("travel", { g: "Settings", n: "Find my flights", tabs: 0, nav: 1, what: "Set up once, then flights are caught automatically. Android: flight alerts through notification access. iPhone: a Shortcuts automation on airline messages. Both: a personal travel address with a Gmail forwarding filter, WhatsApp forwarding, share or paste. Optional auto-book.", why: "Neither phone lets a ride app read SMS or email directly. These routes are permitted, need the rider's consent, and still make detection automatic.", fl: "Android: <code>NotificationListenerService</code> with on-device filtering. iOS: App Intent \"Find a flight in this text\" for Shortcuts. Per-rider inbound address on <code>trips.</code> subdomain; WhatsApp Business webhook. Gmail: the rider adds one forwarding filter; no Gmail API scope needed. See brief §4." }, () => {
-  const m = (icon, t, s, extra = "", trail = "") => `<div class="permrow"><span class="pico">${I(icon)}</span><div class="grow"><div class="t1">${t}</div><div class="t2">${s}</div>${extra}</div>${trail}</div>`;
-  const btnS = (label, toast, icon) => `<button class="btn btn-secondary sm mt8" style="width:auto" data-toast="${esc(toast)}">${icon ? I(icon) : ""}${label}</button>`;
-  const device = ios()
-    ? m("spark", L("Shortcut for airline messages", "ఎయిర్‌లైన్ మెసేజ్‌లకు షార్ట్‌కట్", "एयरलाइन मैसेज के लिए शॉर्टकट"), L("A one-time, 1-minute set-up in the Shortcuts app. When a message or email with a PNR arrives, it goes to SAGA by itself.", "Shortcuts యాప్‌లో ఒక్కసారి, 1 నిమిషం సెటప్. PNR ఉన్న మెసేజ్ లేదా మెయిల్ రాగానే దానంతట అదే SAGAకు వెళ్తుంది.", "Shortcuts ऐप में एक बार, 1 मिनट का सेटअप। PNR वाला मैसेज या ईमेल आते ही अपने-आप SAGA को जाता है।"), btnS(L("Set up in 1 minute", "1 నిమిషంలో సెటప్", "1 मिनट में सेट करें"), L("Opening the 3-step Shortcuts guide", "3 దశల Shortcuts గైడ్ తెరుస్తున్నాం", "3 चरणों की Shortcuts गाइड खुल रही है"), "spark"))
-    : m("bell", L("Flight alerts on this phone", "ఈ ఫోన్‌లో ఫ్లైట్ అలర్ట్‌లు", "इस फ़ोन पर फ़्लाइट अलर्ट"), L("Reads only airline and travel notifications: SMS, airline apps and WhatsApp tickets. Only the flight details leave your phone.", "ఎయిర్‌లైన్, ట్రావెల్ నోటిఫికేషన్లు మాత్రమే చదువుతుంది: SMS, ఎయిర్‌లైన్ యాప్‌లు, WhatsApp టికెట్లు. ఫ్లైట్ వివరాలు మాత్రమే మీ ఫోన్ దాటుతాయి.", "सिर्फ़ एयरलाइन और ट्रैवल नोटिफ़िकेशन पढ़ता है: SMS, एयरलाइन ऐप और WhatsApp टिकट। फ़ोन से सिर्फ़ फ़्लाइट की जानकारी बाहर जाती है।"), `<span class="pill ok mt8" style="height:auto;min-height:30px;padding:5px 12px;line-height:1.3">${I("check")}${L("Last found: 6E 2134 in an IndiGo SMS", "చివరిగా: IndiGo SMSలో 6E 2134", "पिछली बार: IndiGo SMS में 6E 2134")}</span>`, tgl(app.travel.notif, 'data-act="tnotif"'));
+def("travel", { g: "Settings", n: "Find my flights", tabs: 0, nav: 1, what: "Set up once: a personal SAGA travel address and a one-minute Gmail forwarding filter, shown as three lit steps with a glass preview of the filter itself. Airline emails then reach SAGA on their own. The two other ways in (scan the ticket, pick from the VTZ board) sit below, plus optional auto-booking and a plain privacy promise.", why: "Neither phone lets a ride app read email directly. A forwarding filter needs no Gmail permission at all, works for every airline and travel site, and still makes detection automatic.", fl: "Per-rider inbound address on the <code>trips.</code> subdomain (inbound mail webhook → flight parser). The rider adds one Gmail filter; no Gmail API scope. Non-flight mail is dropped and deleted. See brief §4." }, () => {
+  const addr = "ananya.7q2@trips.sagamobility.com";
+  const step = (n, t, body) => `<div class="tv-step"><span class="tv-n">${n}</span><div class="grow"><b>${t}</b>${body}</div></div>`;
   return `${bar(L("Find my flights", "నా ఫ్లైట్లు", "मेरी फ़्लाइट"))}
   <div class="content">
-    <div class="pad"><h1 class="t-title">${L("Let SAGA spot your flights", "మీ ఫ్లైట్లను SAGA గుర్తించనివ్వండి", "SAGA को आपकी फ़्लाइट पहचानने दें")}</h1><p class="t-sub mt8">${L("Set this up once. Wherever you book a flight, SAGA finds it and plans your ride.", "ఒక్కసారి సెటప్ చేయండి. మీరు ఎక్కడ ఫ్లైట్ బుక్ చేసినా, SAGA దాన్ని గుర్తించి మీ రైడ్ ప్లాన్ చేస్తుంది.", "एक बार सेट करें। आप कहीं से भी फ़्लाइट बुक करें, SAGA उसे पहचानकर आपकी राइड प्लान करेगा।")}</p></div>
-    <div class="pad mt16"><div class="card tint row-flex"><span class="grow"><b style="font-size:17px;display:block">${L("Book my airport rides automatically", "నా ఎయిర్‌పోర్ట్ రైడ్‌లు ఆటోమేటిక్‌గా బుక్ చేయండి", "मेरी एयरपोर्ट राइड अपने-आप बुक करें")}</b><span style="font-size:14.5px">${L("We book, then tell you. Cancel free until a chauffeur is assigned.", "మేము బుక్ చేసి మీకు తెలుపుతాం. డ్రైవర్‌ను కేటాయించే వరకు ఉచితంగా రద్దు.", "हम बुक करके बताएँगे। ड्राइवर तय होने तक मुफ़्त रद्द।")}</span></span>${tgl(app.travel.auto, 'data-act="tauto"')}</div></div>
-    ${sh(L("Automatic", "ఆటోమేటిక్", "अपने-आप"))}
-    <div class="permcard">
-      ${device}
-      ${m("mail", L("Your SAGA travel address", "మీ SAGA ట్రావెల్ చిరునామా", "आपका SAGA ट्रैवल पता"), L("Add a mail filter once, and every airline or travel-site email reaches SAGA by itself.", "ఒక్కసారి మెయిల్ ఫిల్టర్ పెట్టండి, ప్రతి ఎయిర్‌లైన్ లేదా ట్రావెల్ సైట్ మెయిల్ దానంతట అదే SAGAకు చేరుతుంది.", "एक बार मेल फ़िल्टर लगाएँ, हर एयरलाइन या ट्रैवल साइट का ईमेल अपने-आप SAGA तक पहुँचेगा।"), `<button class="pill accent mt8" data-toast="${esc(L("Address copied", "చిరునామా కాపీ అయింది", "पता कॉपी हुआ"))}">${I("copy")}ananya.7q2@trips.sagamobility.com</button><br>${btnS(L("Gmail filter guide", "Gmail ఫిల్టర్ గైడ్", "Gmail फ़िल्टर गाइड"), L("Opening the 1-minute Gmail filter guide", "1 నిమిషం Gmail ఫిల్టర్ గైడ్ తెరుస్తున్నాం", "1 मिनट की Gmail फ़िल्टर गाइड खुल रही है"))}`)}
-      ${m("mail", L("Gmail forwarding", "Gmail ఫార్వర్డింగ్", "Gmail फ़ॉरवर्डिंग"), L("Ticket emails arrive within a minute. Anything that is not a flight is ignored and deleted.", "టికెట్ మెయిల్స్ నిమిషంలో వస్తాయి. ఫ్లైట్ కానిది తొలగిస్తాం.", "टिकट ईमेल एक मिनट में आते हैं। बाकी सब हटा दिया जाता है।"), "", tgl(app.travel.cal, 'data-act="tcal"'))}
+    <div class="pad"><span class="eyebrow">${L("Gmail filter · 1 minute", "Gmail ఫిల్టర్ · 1 నిమిషం", "Gmail फ़िल्टर · 1 मिनट")}</span><h1 class="t-title serif mt8">${L("Let SAGA <em>spot your flights.</em>", "మీ ఫ్లైట్లను SAGA <em>గుర్తించనివ్వండి.</em>", "SAGA को आपकी <em>फ़्लाइट पहचानने दें।</em>")}</h1><p class="t-sub mt8">${L("Set this up once. Wherever you book, the ticket email reaches SAGA and we plan the ride.", "ఒక్కసారి సెటప్ చేయండి. ఎక్కడ బుక్ చేసినా, టికెట్ మెయిల్ SAGAకు చేరుతుంది, మేము రైడ్ ప్లాన్ చేస్తాం.", "एक बार सेट करें। कहीं से भी बुक करें, टिकट ईमेल SAGA तक पहुँचेगा और हम राइड प्लान करेंगे।")}</p></div>
+    <div class="pad mt16"><div class="tv-steps">
+      ${step(1, L("Copy your travel address", "మీ ట్రావెల్ చిరునామా కాపీ చేయండి", "अपना ट्रैवल पता कॉपी करें"), `<button class="tv-addr" data-toast="${esc(L("Address copied", "చిరునామా కాపీ అయింది", "पता कॉपी हुआ"))}"><span>${addr}</span>${I("copy", "sm")}</button>`)}
+      ${step(2, L("In Gmail, create a filter", "Gmailలో ఫిల్టర్ సృష్టించండి", "Gmail में फ़िल्टर बनाएँ"), `<div class="tv-gm"><div class="tv-gm-h">${I("filter", "sm")}<span>${L("Settings › Filters › Create new filter", "సెట్టింగ్‌లు › ఫిల్టర్లు › కొత్త ఫిల్టర్", "सेटिंग › फ़िल्टर › नया फ़िल्टर")}</span></div><div class="tv-gm-r"><small>${L("From", "నుండి", "से")}</small><code>goindigo.in OR airindia.com OR akasaair.com OR makemytrip.com</code></div><div class="tv-gm-r"><small>${L("Has the words", "పదాలు", "शब्द")}</small><code>PNR OR "e-ticket"</code></div></div>`)}
+      ${step(3, L("Forward to your SAGA address", "SAGA చిరునామాకు ఫార్వర్డ్ చేయండి", "SAGA पते पर फ़ॉरवर्ड करें"), `<p>${L("Tick “Forward it to” and pick the address from step 1. Gmail sends one confirmation code; SAGA confirms it for you.", "“Forward it to” టిక్ చేసి, 1వ దశ చిరునామా ఎంచుకోండి. Gmail ఒక కోడ్ పంపుతుంది; SAGA దాన్ని నిర్ధారిస్తుంది.", "“Forward it to” चुनें और पहले चरण का पता दें। Gmail एक पुष्टि कोड भेजता है; SAGA उसे खुद पुष्ट करता है।")}</p>`)}
+    </div></div>
+    <div class="pad mt12"><button class="btn btn-primary block" data-toast="${esc(L("Opening the Gmail filter guide", "Gmail ఫిల్టర్ గైడ్ తెరుస్తున్నాం", "Gmail फ़िल्टर गाइड खुल रही है"))}">${I("mail", "sm")}<span>${L("Open Gmail with the filter filled in", "ఫిల్టర్ నింపిన Gmail తెరవండి", "भरे हुए फ़िल्टर के साथ Gmail खोलें")}</span></button></div>
+    <div class="group mt16">
+      <div class="row"><span class="lead ${app.travel.mail ? "wl-in" : ""}">${I("mail")}</span><span class="tx"><span class="t1" style="display:block">${L("Gmail forwarding", "Gmail ఫార్వర్డింగ్", "Gmail फ़ॉरवर्डिंग")}</span><span class="t2" style="display:block">${app.travel.mail ? L("Working · last found 6E 2134, 12 Nov", "పని చేస్తోంది · చివరిగా 6E 2134, 12 నవం", "चालू · पिछली बार 6E 2134, 12 नवं") : L("Paused", "ఆపివేశారు", "रुका हुआ")}</span></span>${tgl(app.travel.mail, 'data-act="tmail"')}</div>
+      <div class="row"><span class="lead">${I("spark")}</span><span class="tx"><span class="t1" style="display:block">${L("Book my airport rides automatically", "నా ఎయిర్‌పోర్ట్ రైడ్‌లు ఆటోమేటిక్‌గా బుక్ చేయండి", "मेरी एयरपोर्ट राइड अपने-आप बुक करें")}</span><span class="t2" style="display:block">${L("We book, then tell you. Cancel free until a chauffeur is assigned.", "మేము బుక్ చేసి మీకు తెలుపుతాం. డ్రైవర్‌ను కేటాయించే వరకు ఉచితంగా రద్దు.", "हम बुक करके बताएँगे। ड्राइवर तय होने तक मुफ़्त रद्द।")}</span></span>${tgl(app.travel.auto, 'data-act="tauto"')}</div>
     </div>
-    ${sh(L("One tap", "ఒక్క ట్యాప్", "एक टैप"))}
-    <div class="permcard">
-      ${m("chat", L("Forward it on WhatsApp", "WhatsAppలో ఫార్వర్డ్ చేయండి", "WhatsApp पर फ़ॉरवर्ड करें"), L("Got your ticket on WhatsApp? Forward it to SAGA. We reply with your pickup time and a Book button, right in the chat.", "టికెట్ WhatsAppలో వచ్చిందా? SAGAకు ఫార్వర్డ్ చేయండి. చాట్‌లోనే పికప్ సమయం, బుక్ బటన్‌తో జవాబిస్తాం.", "टिकट WhatsApp पर आया? SAGA को फ़ॉरवर्ड करें। हम चैट में ही पिकअप समय और बुक बटन भेजेंगे।"), btnS(L("Open SAGA on WhatsApp", "WhatsAppలో SAGA తెరవండి", "WhatsApp पर SAGA खोलें"), L("Opening WhatsApp chat with SAGA", "SAGA WhatsApp చాట్ తెరుస్తున్నాం", "SAGA की WhatsApp चैट खुल रही है"), "chat"))}
-      ${m("share", L("Share a ticket", "టికెట్ షేర్ చేయండి", "टिकट शेयर करें"), ios() ? L("In Mail or Files, tap Share, then SAGA.", "Mail లేదా Filesలో Share నొక్కి SAGA ఎంచుకోండి.", "Mail या Files में Share दबाएँ, फिर SAGA।") : L("In Gmail or Files, tap Share, then SAGA.", "Gmail లేదా Filesలో Share నొక్కి SAGA ఎంచుకోండి.", "Gmail या Files में Share दबाएँ, फिर SAGA।"))}
-    </div>
-    <div class="pad mt16"><div class="card tint row-flex" style="align-items:flex-start">${I("lock")}<p style="font-size:15.5px;line-height:1.45">${ios() ? L("We never read your inbox or your messages. Only what your shortcut, mail filter or you send reaches SAGA, and we delete it once the flight is read.", "మీ ఇన్‌బాక్స్ లేదా మెసేజ్‌లు మేము ఎప్పుడూ చదవము. మీ షార్ట్‌కట్, మెయిల్ ఫిల్టర్ లేదా మీరు పంపినవి మాత్రమే SAGAకు వస్తాయి; ఫ్లైట్ చదివాక వాటిని తొలగిస్తాం.", "हम आपका इनबॉक्स या मैसेज कभी नहीं पढ़ते। सिर्फ़ आपका शॉर्टकट, मेल फ़िल्टर या आप जो भेजें वही SAGA तक आता है, और फ़्लाइट पढ़ने के बाद मिटा दिया जाता है।") : L("We never read your inbox. Flight alerts are filtered on your phone: only airline and travel notifications are checked, and only the flight details reach SAGA.", "మీ ఇన్‌బాక్స్ మేము ఎప్పుడూ చదవము. ఫ్లైట్ అలర్ట్‌లు మీ ఫోన్‌లోనే వడపోస్తాం: ఎయిర్‌లైన్, ట్రావెల్ నోటిఫికేషన్లు మాత్రమే, ఫ్లైట్ వివరాలు మాత్రమే SAGAకు వస్తాయి.", "हम आपका इनबॉक्स कभी नहीं पढ़ते। फ़्लाइट अलर्ट आपके फ़ोन पर ही छाँटे जाते हैं: सिर्फ़ एयरलाइन और ट्रैवल नोटिफ़िकेशन, और सिर्फ़ फ़्लाइट की जानकारी SAGA तक आती है।")}</p></div></div>
+    ${sh(L("Or, any time", "లేదా, ఎప్పుడైనా", "या, कभी भी"))}
+    <div class="pad"><div class="wh-saved">
+      <button class="wh-tile" data-go="scan"><span class="wh-ti">${I("scan")}</span><b>${L("Scan the ticket", "టికెట్ స్కాన్", "टिकट स्कैन")}</b><small>${L("E-ticket, PDF, boarding pass", "ఈ-టికెట్, PDF, బోర్డింగ్ పాస్", "ई-टिकट, PDF, बोर्डिंग पास")}</small></button>
+      <button class="wh-tile" data-go="airport"><span class="wh-ti">${I("takeoff")}</span><b>${L("Pick from the board", "బోర్డు నుండి ఎంచుకోండి", "बोर्ड से चुनें")}</b><small>${L("Today's VTZ flights", "ఈరోజు VTZ ఫ్లైట్లు", "आज की VTZ फ़्लाइट")}</small></button>
+    </div></div>
+    <div class="pad mt16"><div class="wh-note">${I("lock", "sm")}<span>${L("We never read your inbox. Only the emails your filter forwards reach SAGA, and anything that is not a flight is deleted straight away.", "మీ ఇన్‌బాక్స్ మేము ఎప్పుడూ చదవము. మీ ఫిల్టర్ ఫార్వర్డ్ చేసిన మెయిల్స్ మాత్రమే SAGAకు వస్తాయి; ఫ్లైట్ కానివి వెంటనే తొలగిస్తాం.", "हम आपका इनबॉक्स कभी नहीं पढ़ते। सिर्फ़ फ़िल्टर से फ़ॉरवर्ड हुए ईमेल SAGA तक आते हैं, और जो फ़्लाइट नहीं है वह तुरंत मिटा दिया जाता है।")}</span></div></div>
   </div>`;
 });
 
-def("notifications", { g: "Settings", n: "Notifications", tabs: 0, nav: 1, what: "The inbox: flight-driven pickup changes, chauffeur status, receipts, reminders for scheduled rides, offers and rating prompts.", why: "Everything that was pushed is still findable. The full catalogue and channels are in the brief.", fl: "FCM for both platforms (APNs via FCM). Categories map to Android notification channels and iOS interruption levels (time-sensitive for pickups)." }, () => {
-  const n = (icon, t, p, time, nw) => `<div class="notif ${nw ? "new" : ""}"><span class="ni">${I(icon)}</span><div class="grow"><b>${t}</b><p>${p}</p><time>${time}</time></div></div>`;
+def("notifications", { g: "Settings", n: "Notifications", tabs: 0, nav: 1, what: "The inbox in glass. The flight-driven pickup change sits on top as a live card with the old time struck through; below, chauffeur status, invoices, series reminders, offers and rating prompts, each with a tinted icon and an unread glow.", why: "Everything that was pushed is still findable, and the one that matters most (a moved pickup) can't be missed.", fl: "FCM for both platforms (APNs via FCM). Categories map to Android notification channels and iOS interruption levels (time-sensitive for pickups)." }, () => {
+  const n = (icon, tone, t, p, time, nw) => `<div class="nf ${nw ? "new" : ""}"><span class="nf-i ${tone}">${I(icon)}</span><div class="grow"><div class="nf-t"><b>${t}</b><time>${time}</time></div><p>${p}</p></div></div>`;
   return `${bar(L("Notifications", "నోటిఫికేషన్లు", "नोटिफ़िकेशन"))}
   <div class="content">
+    <div class="pad"><div class="nf-live lg-live">
+      <div class="nf-lh"><span class="eyebrow"><span class="dotlive"></span> ${L("Flight 6E 2134 · delayed 30 min", "ఫ్లైట్ 6E 2134 · 30 నిమి. ఆలస్యం", "फ़्लाइट 6E 2134 · 30 मिनट देरी")}</span><time>${L("2 min ago", "2 నిమి. క్రితం", "2 मिनट पहले")}</time></div>
+      <div class="nf-move"><s class="t-num">5:20</s>${I("arrowr", "sm")}<b class="serif">5:50 AM</b></div>
+      <p>${L("Ravi will now arrive at 5:50 AM. Nothing to do.", "రవి ఇప్పుడు ఉ. 5:50కి వస్తారు. మీరేమీ చేయనక్కర్లేదు.", "रवि अब सुबह 5:50 आएँगे। आपको कुछ नहीं करना।")}</p>
+    </div></div>
     ${sh(L("Today", "ఈ రోజు", "आज"))}
-    <div class="group flat">
-      ${n("plane", L("Pickup moved to 5:50 AM", "పికప్ ఉ. 5:50కి మారింది", "पिकअप सुबह 5:50 हुआ"), L("6E 2134 is delayed 30 min. Ravi will now arrive at 5:50 AM. Nothing to do.", "6E 2134 30 నిమిషాలు ఆలస్యం. రవి ఇప్పుడు ఉ. 5:50కి వస్తారు. మీరేమీ చేయనక్కర్లేదు.", "6E 2134 में 30 मिनट देरी। रवि अब सुबह 5:50 आएँगे। आपको कुछ नहीं करना।"), L("2 min ago", "2 నిమి. క్రితం", "2 मिनट पहले"), 1)}
-      ${n("car", L("Ravi is 2 min away", "రవి 2 నిమిషాల్లో", "रवि 2 मिनट में"), L(`${V.short} · ${V.plate}. Your code is 4827.`, `${V.short} · ${V.plate}. మీ కోడ్ 4827.`, `${V.short} · ${V.plate}। आपका कोड 4827।`), "7:21 PM", 0)}
-      ${n("receipt", L(`Receipt · ${S.inr(FARE)}`, `రసీదు · ${S.inr(FARE)}`, `रसीद · ${S.inr(FARE)}`), L("MVP Colony → Dwaraka Nagar. Paid with UPI.", "MVP కాలనీ → ద్వారకా నగర్. UPI ద్వారా.", "MVP कॉलोनी → द्वारका नगर। UPI से भुगतान।"), "7:42 PM", 0)}
+    <div class="pad nf-list">
+      ${n("car", "brand", L("Ravi is 2 min away", "రవి 2 నిమిషాల్లో", "रवि 2 मिनट में"), L(`${V.short} · ${V.plate}. Your code is 4827.`, `${V.short} · ${V.plate}. మీ కోడ్ 4827.`, `${V.short} · ${V.plate}। आपका कोड 4827।`), "7:21 PM", 1)}
+      ${n("mail", "go", L(`Invoice emailed · ${S.inr(FARE)}`, `ఇన్వాయిస్ పంపాం · ${S.inr(FARE)}`, `इनवॉइस भेजा · ${S.inr(FARE)}`), L("MVP Colony → Dwaraka Nagar. Paid with UPI. Sent to ananya.rao@gmail.com.", "MVP కాలనీ → ద్వారకా నగర్. UPI ద్వారా. ananya.rao@gmail.comకు పంపాం.", "MVP कॉलोनी → द्वारका नगर। UPI से भुगतान। ananya.rao@gmail.com पर भेजा।"), "7:42 PM", 0)}
     </div>
     ${sh(L("Earlier", "ఇంతకుముందు", "पहले"))}
-    <div class="group flat">
-      ${n("repeat", L("Tomorrow 9:00 AM · Office", "రేపు ఉ. 9:00 · ఆఫీస్", "कल सुबह 9:00 · ऑफ़िस"), L("Skip or change by 8 PM tonight at no charge.", "ఈ రాత్రి 8లోపు ఉచితంగా దాటవేయండి లేదా మార్చండి.", "आज रात 8 बजे तक मुफ़्त में छोड़ें या बदलें।"), L("Yesterday", "నిన్న", "कल"), 0)}
-      ${n("tag", L("20% off your first airport ride", "మొదటి ఎయిర్‌పోర్ట్ రైడ్‌పై 20% తగ్గింపు", "पहली एयरपोर्ट राइड पर 20% छूट"), L("Use FLYSAGA before 31 Dec.", "31 డిసెం లోపు FLYSAGA వాడండి.", "31 दिसं से पहले FLYSAGA लगाएँ।"), "12 Nov", 0)}
-      ${n("star", L("How was your ride with Ravi?", "రవితో ప్రయాణం ఎలా ఉంది?", "रवि के साथ सफ़र कैसा रहा?"), L("Two taps to rate. It helps us train our chauffeurs.", "రెండు ట్యాప్‌లతో రేట్ చేయండి.", "दो टैप में रेटिंग दें।"), "8 Nov", 0)}
+    <div class="pad nf-list">
+      ${n("repeat", "live", L("Tomorrow 9:00 AM · Office", "రేపు ఉ. 9:00 · ఆఫీస్", "कल सुबह 9:00 · ऑफ़िस"), L("Skip or change by 8 PM tonight at no charge.", "ఈ రాత్రి 8లోపు ఉచితంగా దాటవేయండి లేదా మార్చండి.", "आज रात 8 बजे तक मुफ़्त में छोड़ें या बदलें।"), L("Yesterday", "నిన్న", "कल"), 0)}
+      ${n("tag", "warm", L("20% off your first airport ride", "మొదటి ఎయిర్‌పోర్ట్ రైడ్‌పై 20% తగ్గింపు", "पहली एयरपोर्ट राइड पर 20% छूट"), L("Use FLYSAGA before 31 Dec.", "31 డిసెం లోపు FLYSAGA వాడండి.", "31 दिसं से पहले FLYSAGA लगाएँ।"), "12 Nov", 0)}
+      ${n("star", "gold", L("How was your ride with Ravi?", "రవితో ప్రయాణం ఎలా ఉంది?", "रवि के साथ सफ़र कैसा रहा?"), L("Two taps to rate. It helps us train our chauffeurs.", "రెండు ట్యాప్‌లతో రేట్ చేయండి.", "दो टैप में रेटिंग दें।"), "8 Nov", 0)}
     </div>
-    <div class="pad mt16 center"><button class="btn btn-text" data-go="lock">${L("See them on the lock screen", "లాక్ స్క్రీన్‌లో చూడండి", "लॉक स्क्रीन पर देखें")}</button></div>
+    <div class="pad mt8 center"><button class="btn btn-text" data-go="lock">${L("See them on the lock screen", "లాక్ స్క్రీన్‌లో చూడండి", "लॉक स्क्रीन पर देखें")}</button></div>
   </div>`;
 });
 
-def("lock", { g: "Settings", n: "Lock screen", tabs: 0, sb: "light", nohome: 0, what: "What riders see without opening the app. iPhone: a Live Activity with the chauffeur ETA (also in the Dynamic Island). Android 16: a Live Update notification with a progress bar and a status-bar chip.", why: "The most-checked surface during a pickup. This is where the iOS and Android builds differ most.", fl: "iOS: ActivityKit + push-to-update tokens. Android: <code>Notification.ProgressStyle</code>, promoted ongoing (Live Updates). Both fed by the same server event." }, () => `
-  <div class="lock" data-go="assigned">
+def("lock", { g: "Settings", n: "Lock screen", tabs: 0, sb: "light", nohome: 0, what: "What riders see without opening the app, over a wallpaper of the car's front at night. iPhone: a Live Activity in dark glass with the ETA in the serif, a track where the car glides home, the plate and the ride code (also in the Dynamic Island). Android 16: the same as a Live Update with a progress bar and a status-bar chip.", why: "The most-checked surface during a pickup. This is where the iOS and Android builds differ most.", fl: "iOS: ActivityKit + push-to-update tokens. Android: <code>Notification.ProgressStyle</code>, promoted ongoing (Live Updates). Both fed by the same server event." }, () => `
+  <div class="lock lk4" data-go="assigned">
+    <img class="lk-wall" src="${SagaStage.src("still-front-low")}" alt="">
     <div class="lk-date">${L("Sunday 15 November", "ఆదివారం 15 నవంబర్", "रविवार 15 नवंबर")}</div>
     <div class="lk-time">7:15</div>
     <div class="lk-stack">
-      <div class="la">
-        <div class="la-h">${S.logo()}<span>${L("Chauffeur on the way", "డ్రైవర్ వస్తున్నారు", "ड्राइवर आ रहा है")}</span></div>
-        <div class="row-flex"><div class="la-big grow">${L("Ravi arrives in 6 min", "రవి 6 నిమిషాల్లో", "रवि 6 मिनट में")}</div><span class="plate" style="background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.18);color:#fff">${V.plate}</span></div>
-        <div class="trk">${I("car", "sm")}<span class="bar"><i></i><b>${I("car")}</b></span>${I("home", "sm")}</div>
-        <div style="font-size:14px;color:#C9CBD2;margin-top:10px">${L(`Code 4827 · ${V.short}`, `కోడ్ 4827 · ${V.short}`, `कोड 4827 · ${V.short}`)}</div>
+      <div class="la la4">
+        <div class="la-h">${S.logoMark()}<span>${ios() ? L("Chauffeur on the way", "డ్రైవర్ వస్తున్నారు", "ड्राइवर आ रहा है") : "SAGA · " + L("Live update", "లైవ్ అప్‌డేట్", "लाइव अपडेट")}</span><b class="la-code t-num">4827</b></div>
+        <div class="la-row"><div class="la-big serif">${L("Ravi arrives in <em>6 min</em>", "రవి <em>6 నిమిషాల్లో</em>", "रवि <em>6 मिनट</em> में")}</div><span class="la-plate">${V.plate}</span></div>
+        <div class="la-trk"><span class="la-bar"><i></i><b>${I("car", "sm")}</b></span>${I("home", "sm")}</div>
+        <div class="la-sub">${V.short} · ${L("Matte black", "మ్యాట్ బ్లాక్", "मैट ब्लैक")} · ${L("Gate 2", "గేట్ 2", "गेट 2")}</div>
       </div>
-      <div class="nt"><span class="ap">S</span><div class="grow"><time>${L("now", "ఇప్పుడు", "अभी")}</time><b>${L("Pickup moved to 5:50 AM", "పికప్ ఉ. 5:50కి మారింది", "पिकअप सुबह 5:50 हुआ")}</b><p>${L("6E 2134 is delayed 30 min. Nothing to do.", "6E 2134 30 నిమి. ఆలస్యం. మీరేమీ చేయనక్కర్లేదు.", "6E 2134 में 30 मिनट देरी। कुछ नहीं करना।")}</p></div></div>
-      <div class="nt"><span class="ap">S</span><div class="grow"><time>9:02 PM</time><b>${L("Tomorrow 9:00 AM · Office", "రేపు ఉ. 9:00 · ఆఫీస్", "कल सुबह 9:00 · ऑफ़िस")}</b><p>${L("Same chauffeur, Ravi. Skip by 8 PM.", "అదే డ్రైవర్, రవి. రా. 8లోపు దాటవేయండి.", "वही ड्राइवर, रवि। रात 8 तक छोड़ें।")}</p></div></div>
+      <div class="nt nt4"><span class="ap">${S.logoMark()}</span><div class="grow"><time>${L("now", "ఇప్పుడు", "अभी")}</time><b>${L("Pickup moved to 5:50 AM", "పికప్ ఉ. 5:50కి మారింది", "पिकअप सुबह 5:50 हुआ")}</b><p>${L("6E 2134 is delayed 30 min. Nothing to do.", "6E 2134 30 నిమి. ఆలస్యం. మీరేమీ చేయనక్కర్లేదు.", "6E 2134 में 30 मिनट देरी। कुछ नहीं करना।")}</p></div></div>
+      <div class="nt nt4"><span class="ap">${S.logoMark()}</span><div class="grow"><time>9:02 PM</time><b>${L("Tomorrow 9:00 AM · Office", "రేపు ఉ. 9:00 · ఆఫీస్", "कल सुबह 9:00 · ऑफ़िस")}</b><p>${L("Same chauffeur, Ravi. Skip by 8 PM.", "అదే డ్రైవర్, రవి. రా. 8లోపు దాటవేయండి.", "वही ड्राइवर, रवि। रात 8 तक छोड़ें।")}</p></div></div>
     </div>
     <div class="lk-hint">${L("Tap the activity to open the ride", "రైడ్ తెరవడానికి నొక్కండి", "राइड खोलने के लिए दबाएँ")}</div>
   </div>`);
@@ -1389,10 +1506,11 @@ document.addEventListener("click", e => {
   const on = k => document.querySelector(`[data-lux="${k}"]`).classList.contains("on");
   st.set(on("lights"), on("top"));
 });
-SC.nocars.mount = () => timers.push(setTimeout(() => { if (cur === "nocars") A.waitdlg(); }, 700));
 { const fm = SC.finding.mount; SC.finding.mount = el => { fm(el); timers.push(setTimeout(() => { if (cur === "finding" && app.driverLive) A.waitdlg(); }, 8000)); }; }
 /* ---------- actions ---------- */
 const A = {
+  temp(e) { const d = +e.dataset.v; app.temp = Math.max(18, Math.min(26, (app.temp || 22) + d)); if (d < 0) A.req({ dataset: { v: "cooler" } }); else toast(L(`Cabin set to ${app.temp}°`, `క్యాబిన్ ${app.temp}°`, `केबिन ${app.temp}°`)); rerender(); },
+  quietride() { app.quiet = !app.quiet; if (app.quiet) A.req({ dataset: { v: "quiet" } }); rerender(); },
   replayjr() { const v = [...document.querySelectorAll("#views .view")].pop(); const old = v.querySelector(".jpass"); if (!old) return; const f = F(); old.outerHTML = journeyPass(f, pickupMin(f), mins(f.t), f.dir === "dep"); },
   paycycle() { const o = ["upi", "wallet", "card", "cash"]; app.pay = o[(o.indexOf(app.pay) + 1) % o.length]; rerender(); },
   chapnext() { app._chapAdv ? app._chapAdv() : go("intro3"); },
@@ -1421,13 +1539,13 @@ const A = {
   nocars() { app.noCars = true; toast(L("Simulating: every car is busy", "అన్ని కార్లు బిజీ అని చూపిస్తున్నాం", "सभी गाड़ियाँ व्यस्त दिखा रहे हैं")); },
   waitline() { toast(L("You're first in line. We'll alert you the moment a car is free.", "మీరు మొదటి స్థానంలో. కారు ఖాళీ కాగానే తెలుపుతాం.", "आप पहले नंबर पर हैं। गाड़ी खाली होते ही बताएँगे।"), L("In line", "లైన్‌లో", "लाइन में")); setTimeout(() => { if (cur === "nocars") go("assigned", { replace: true }); }, 2400); },
   notifyme() { toast(L("We'll notify you when a car is free nearby.", "దగ్గర కారు ఖాళీ కాగానే తెలుపుతాం.", "पास में गाड़ी खाली होते ही बताएँगे।")); },
-  rate(e) { app.rating = +e.dataset.v; S.live.send("rated", { n: app.rating }); rerender(); },
+  rate(e) { app.rating = +e.dataset.v; S.live.send("rated", { n: app.rating }); app._burst = true; rerender(); app._burst = false; },
   pick(e) { e.classList.toggle("on"); },
   dir(e) { app.dir = e.dataset.v; rerender(); },
   shift(e) { app.shift = Math.max(-30, Math.min(30, app.shift + +e.dataset.v)); rerender(); },
   tg(e) { e.classList.toggle("on"); },
   bookflight() { app.booked = true; go("booked"); },
-  pay(e) { app.pay = e.dataset.v; rerender(); },
+  pay(e) { app.pay = e.dataset.v; const st = e.closest(".wl-stack"); if (st) { const cs = [...st.children], ord = [e, ...cs.filter(c => c !== e)]; ord.forEach((c, i) => { c.style.setProperty("--i", i); c.classList.toggle("front", i === 0); }); timers.push(setTimeout(rerender, 560)); return; } rerender(); },
   topup(e) { const a = +e.dataset.v; app.wallet += a; app.wtx.unshift(["plus", L("Added from UPI", "UPI నుండి జమ", "UPI से जोड़ा"), L("Just now", "ఇప్పుడే", "अभी"), a]); toast(L(`₹${a} added. New balance ${S.inr(app.wallet)}`, `₹${a} జమ. కొత్త బ్యాలెన్స్ ${S.inr(app.wallet)}`, `₹${a} जुड़े। नया बैलेंस ${S.inr(app.wallet)}`), L("Wallet", "వాలెట్", "वॉलेट")); rerender(); S.countUp(views.lastElementChild); },
   autopay() { app.autopay = !app.autopay; rerender(); },
   convert() { app.wallet += 124; app.wtx.unshift(["gift", L("1,240 points converted", "1,240 పాయింట్లు మార్చారు", "1,240 पॉइंट बदले"), L("Just now", "ఇప్పుడే", "अभी"), 124]); toast(L("₹124 added from points", "పాయింట్ల నుండి ₹124 జమ", "पॉइंट से ₹124 जुड़े"), L("Wallet", "వాలెట్", "वॉलेट")); rerender(); },
@@ -1453,6 +1571,7 @@ const A = {
   textsize() { S.set({ text: S.state.text === "large" ? "standard" : "large" }); },
   when(e) { if (e.dataset.v === "later") go("schedule"); },
   tcal() { app.travel.cal = !app.travel.cal; rerender(); },
+  tmail() { app.travel.mail = !app.travel.mail; rerender(); },
   tnotif() { app.travel.notif = !app.travel.notif; rerender(); },
   tauto() { app.travel.auto = !app.travel.auto; rerender(); if (app.travel.auto) toast(L("Found flights will be booked for you. We always tell you first.", "కనిపించిన ఫ్లైట్లకు రైడ్ బుక్ చేస్తాం. ముందే మీకు తెలుపుతాం.", "मिली फ़्लाइट के लिए राइड बुक होगी। हम पहले आपको बताएँगे।")); }
 };
@@ -1467,7 +1586,7 @@ let rec = null;
 const vEl = $("#voice");
 function voiceUI(text, reply, listening) {
   vEl.innerHTML = `<div class="vscrim" data-vclose></div><div class="edge"></div>
-  <div class="vpanel">
+  <div class="vpanel">${orb(text ? "hit" : "")}
     <div class="vhead"><span class="who">Saathi</span><span class="t-sub">· ${S.LANGS.find(l => l.id === S.state.lang).native}</span><span class="wave"><i></i><i></i><i></i><i></i><i></i></span></div>
     <div class="vtext ${text ? "" : "dim"}">${text || L("Listening… say what you need.", "వింటున్నాను… మీకేం కావాలో చెప్పండి.", "सुन रहा हूँ… बताइए क्या चाहिए।")}</div>
     ${reply ? `<div class="vreply">${reply}</div>` : ""}
