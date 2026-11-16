@@ -1,11 +1,12 @@
-/* SAGA · interactive 3D car (rider app only). three.js from a CDN, one GLB (about 98k triangles, 1K textures).
+/* SAGA · interactive 3D car (rider app only). Local three.js, one GLB: the SAGA Luxe in fleet livery (about 150k triangles, no textures),
+   with Tron-style light lines, wheel rings and a light-grid floor.
    Interactions: drag to turn (with inertia), idle turntable, tap the car for lights, paint colours, view presets, pinch or wheel zoom,
    hotspot tags that appear only when that part of the car faces you. */
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
-const URL_GLB = new URL("assets/car.glb", import.meta.url).href;
+const URL_GLB = new URL("assets/car.glb?v=limo2", import.meta.url).href;
 let gltfP = null;
 const loadGLB = () => (gltfP ||= new Promise((res, rej) => new GLTFLoader().load(URL_GLB, res, undefined, rej)));
 let paintHex = "#0A0A0C", paintK = "matte", lightsOn = true;
@@ -52,14 +53,28 @@ function mount(el, opts = {}) {
     const s = 4.2 / size.x; car.scale.setScalar(s); car.position.set(-c.x * s, -box.min.y * s, -c.z * s);
     const pivot = new THREE.Group(); pivot.add(car); turn.add(pivot); api.car = car;
     const h = size.y * s, w = size.z * s, L = 4.2;
+    const TRON = new THREE.Color("#2CC8F5");
     car.traverse(o => {
+      if (/^wheel_/i.test(o.name || "") && !(o.parent && /^wheel_/i.test(o.parent.name || ""))) api.wheels.push(o);
       if (!o.isMesh) return;
       const n = (o.name || "").toLowerCase(), mn = (o.material.name || "").toLowerCase().trim();
-      if (/wheel/.test(n) && !/brake/.test(n)) api.wheels.push(o);
-      if (mn === "car paint" || mn === "plastic") { o.material = o.material.clone(); o.material.map = null; o.material.envMapIntensity = 1.7; api.paintMats.push(o.material); }
-      if (mn === "head light") { o.material = o.material.clone(); api.head.push(o.material); }
-      if (mn === "tail light") { o.material = o.material.clone(); api.tail.push(o.material); }
+      // Tron light lines: the cyan livery strips glow
+      if (/^saga \| (bright cyan|ice cyan|aqua blue)/.test(mn)) { o.material = o.material.clone(); o.material.emissive = o.material.color.clone(); o.material.emissiveIntensity = 1.6; o.material.toneMapped = false; }
+      if (mn === "car paint" || /^obsidian black/.test(mn)) { o.material = o.material.clone(); o.material.map = null; o.material.envMapIntensity = 1.7; api.paintMats.push(o.material); }
+      if (mn === "head light" || /^white led light guide/.test(mn)) { o.material = o.material.clone(); api.head.push(o.material); }
+      if (mn === "tail light" || /^red led light guide/.test(mn)) { o.material = o.material.clone(); api.tail.push(o.material); }
     });
+    // Tron wheel rings: a thin light ring on the outer face of each wheel
+    car.updateMatrixWorld(true);
+    api.rings = [];
+    api.wheels.forEach(w => {
+      const wb = new THREE.Box3().setFromObject(w), ws = wb.getSize(new THREE.Vector3()), wc = wb.getCenter(new THREE.Vector3());
+      const r = ws.y * 0.5 * 0.86, side = Math.sign(wc.z) || 1;
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(r, r * 0.035, 8, 64), new THREE.MeshBasicMaterial({ color: TRON, toneMapped: false, transparent: true, opacity: 0.95 }));
+      pivot.worldToLocal(wc); ring.position.copy(wc); ring.position.z += side * ws.z * 0.5 * 1.02; pivot.add(ring); api.rings.push(ring);
+    });
+    // light-grid floor
+    const grid = new THREE.GridHelper(14, 28, TRON, TRON); grid.material.transparent = true; grid.material.opacity = 0.16; grid.material.depthWrite = false; grid.position.y = 0.002; scene.add(grid);
     api.paint(paintHex, true); api.lights(lightsOn, true);
     // DRL glow: soft additive flares at the lamp signature, visible from the front
     const gc = document.createElement("canvas"); gc.width = gc.height = 64; const gg = gc.getContext("2d"); const gz = gg.createRadialGradient(32, 32, 0, 32, 32, 32); gz.addColorStop(0, "rgba(255,255,255,1)"); gz.addColorStop(.25, "rgba(200,220,255,.6)"); gz.addColorStop(1, "rgba(120,160,255,0)"); gg.fillStyle = gz; gg.fillRect(0, 0, 64, 64);

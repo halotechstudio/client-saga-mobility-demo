@@ -6,7 +6,7 @@
   const S = (window.SAGA = {});
 
   /* ---------- storage (shared across every page and iframe on this origin) ---------- */
-  const KEY = "saga2.";
+  const KEY = "saga3.";
   S.get = (k, d) => { try { const v = localStorage.getItem(KEY + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } };
   S.put = (k, v) => { try { localStorage.setItem(KEY + k, JSON.stringify(v)); } catch (e) {} };
   const qs = (S.qs = new URLSearchParams(location.search));
@@ -24,9 +24,9 @@
 
   /* ---------- state ---------- */
   S.state = {
-    hex: S.get("hex", "#092EC9"),
+    hex: S.get("hex", "#3F51B5"),
     logo: S.get("logo", null),
-    theme: qs.get("theme") || S.get("theme", "light"),
+    theme: qs.get("theme") || S.get("theme", "dark"),
     lang: qs.get("lang") || S.get("lang", "en"),
     text: S.get("text", "standard"),
     os: qs.get("os") || "ios"
@@ -38,7 +38,7 @@
   function hexRgb(h) {
     h = String(h || "").replace("#", "").trim();
     if (h.length === 3) h = h.split("").map(x => x + x).join("");
-    if (!/^[0-9a-f]{6}$/i.test(h)) h = "092EC9";
+    if (!/^[0-9a-f]{6}$/i.test(h)) h = "3F51B5";
     const n = parseInt(h, 16); return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255];
   }
   function oklch(hex) {
@@ -77,12 +77,12 @@
     let t;
     if (os === "android") {
       t = dark
-        ? { bg: "#000000", surface: "#0E0E10", surface2: "#18181B", surface3: "#242428", fg: "#F5F5F7", fg2: "#B4B6BF", fg3: "#72747D", hair: "#232327" }
+        ? { bg: "#05070F", surface: "#0A0E21", surface2: "#121834", surface3: "#1B2244", fg: "#EEF1FF", fg2: "#A9B0D6", fg3: "#6E759E", hair: "#1A2348" }
         : { bg: T(.925, .012), surface: "#FFFFFF", surface2: T(.895, .016), surface3: T(.85, .02), fg: T(.18, .012), fg2: T(.4, .016), fg3: T(.58, .016), hair: T(.83, .012) };
     } else {
       t = dark
-        ? { bg: "#000000", surface: "#0E0E10", surface2: "#18181B", surface3: "#242428", fg: "#F5F5F7", fg2: "#B4B6BF", fg3: "#72747D", hair: "#232327" }
-        : { bg: "#E7E8EE", surface: "#FFFFFF", surface2: "#DFE0E7", surface3: "#D0D2DB", fg: "#0A0A0C", fg2: "#55575F", fg3: "#8E909A", hair: "#C8CAD3" };
+        ? { bg: "#05070F", surface: "#0A0E21", surface2: "#121834", surface3: "#1B2244", fg: "#EEF1FF", fg2: "#A9B0D6", fg3: "#6E759E", hair: "#1A2348" }
+        : { bg: "#E9EBF5", surface: "#FFFFFF", surface2: "#E1E4F2", surface3: "#CFD3E8", fg: "#0A0E21", fg2: "#4A5078", fg3: "#6E759E", hair: "#C9CDE3" };
     }
     const accent = dark ? okHex(Math.min(Math.max(L, .6), .78), C, H) : hex;
     Object.assign(t, {
@@ -91,22 +91,22 @@
       accentSoft: dark ? okHex(.3, Math.min(C, .08), H) : okHex(.945, Math.min(C, .045), H),
       onAccentSoft: dark ? okHex(.9, Math.min(C, .07), H) : okHex(.34, Math.min(C, .16), H),
       success: dark ? "#3DD68C" : "#0F8A4F", warning: dark ? "#F5B53D" : "#A86200", danger: dark ? "#FF6B61" : "#C8261B",
-      stage: "#0B0C0F", stage2: "#17191E", onStage: "#F4F4F6", onStage2: "#A9ABB3",
-      glass: dark ? "rgba(36,36,40,.62)" : "rgba(255,255,255,.66)",
-      glassLine: dark ? "rgba(255,255,255,.12)" : "rgba(255,255,255,.85)",
-      glass2: dark ? "rgba(40,40,46,.52)" : "rgba(255,255,255,.56)", glassHi: dark ? "rgba(255,255,255,.14)" : "rgba(255,255,255,.95)",
-      ink: dark ? "#1A1B20" : "#0B0C0F", onInk: "#F5F5F7", onInk2: "#9A9CA5",
+      stage: "#05070F", stage2: "#0E1430", glow: "#2CC8F5", glowSoft: dark ? "rgba(44,200,245,.18)" : "rgba(44,200,245,.22)", tertiary: dark ? "#FFB37A" : "#8F4700", neon: "#4BE36B", onStage: "#F4F4F6", onStage2: "#A9ABB3",
+      glass: dark ? "rgba(10,14,33,.66)" : "rgba(255,255,255,.66)",
+      glassLine: dark ? "rgba(44,200,245,.22)" : "rgba(255,255,255,.85)",
+      glass2: dark ? "rgba(18,24,52,.56)" : "rgba(255,255,255,.56)", glassHi: dark ? "rgba(255,255,255,.14)" : "rgba(255,255,255,.95)",
+      ink: dark ? "#0E1430" : "#0A0E21", onInk: "#F5F5F7", onInk2: "#9A9CA5",
       shadow: dark ? "0 10px 30px rgba(0,0,0,.5)" : "0 10px 30px rgba(15,18,30,.10)",
-      mapLand: dark ? "#14161A" : (os === "android" ? T(.965, .006) : "#F3F2EF"),
-      mapBlock: dark ? "#191C21" : (os === "android" ? T(.945, .008) : "#ECEAE6"),
-      mapWater: dark ? okHex(.25, .045, H) : okHex(.88, .045, H),
-      mapPark: dark ? "#16241B" : "#DCEAD6",
-      mapRoad: dark ? "#272B32" : "#FFFFFF",
-      mapCase: dark ? "#101215" : "#E1DED8",
-      mapMajor: dark ? "#353A43" : "#FFFFFF",
-      mapMajorCase: dark ? "#0E1013" : "#CFCBC4",
-      mapLabel: dark ? "#9097A3" : "#62666F",
-      mapSand: dark ? "#2A2620" : "#EFE6D2"
+      mapLand: dark ? "#060914" : (os === "android" ? T(.965, .006) : "#F3F2EF"),
+      mapBlock: dark ? "#0A0F22" : (os === "android" ? T(.945, .008) : "#ECEAE6"),
+      mapWater: dark ? "#081634" : okHex(.88, .045, H),
+      mapPark: dark ? "#08161A" : "#DCEAD6",
+      mapRoad: dark ? "#152450" : "#FFFFFF",
+      mapCase: dark ? "#070B18" : "#E1DED8",
+      mapMajor: dark ? "#1F6FA8" : "#FFFFFF",
+      mapMajorCase: dark ? "#0A1A33" : "#CFCBC4",
+      mapLabel: dark ? "#7F8BC0" : "#62666F",
+      mapSand: dark ? "#14131E" : "#EFE6D2"
     });
     return t;
   };
@@ -147,10 +147,12 @@
   window.addEventListener("message", e => { if (e.data && e.data.saga === "set") S.set(e.data.patch, true); });
   matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => { if (S.state.theme === "system") S.set({}, true); });
 
+  /* SAGA mark drawn from the client logo: cyan S-arrow, green square, A G A with blue dots. Letters use currentColor. */
+  S.logoSvg = (cls = "") => `<svg class="wordmark logo-svg ${cls}" viewBox="0 0 236 56" role="img" aria-label="SAGA" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M40 9H22a9.5 9.5 0 0 0 0 19h9a9.5 9.5 0 0 1 0 19H7M14 40l-7 7 7 7" stroke="#2CC8F5" stroke-width="5"/><rect x="44.5" y="2.5" width="8" height="8" rx="1" stroke="#4BE36B" stroke-width="3"/><g stroke="currentColor" stroke-width="7"><path d="M74 50 92 12l18 38"/><path d="M171 18.5a18 18 0 1 0 0 25V33h-12"/><path d="M190 50l18-38 18 38"/></g><circle cx="92" cy="41" r="4.5" fill="#2C8CF5"/><circle cx="208" cy="41" r="4.5" fill="#2C8CF5"/></svg>`;
   /* ---------- logo: the client's file when supplied, otherwise a neutral wordmark ---------- */
   S.logo = (cls = "") => S.state.logo
     ? `<img class="logo-img ${cls}" src="${S.state.logo}" alt="SAGA">`
-    : `<span class="wordmark ${cls}" aria-label="SAGA">SAGA</span>`;
+    : S.logoSvg(cls);
 
   /* ---------- icons (24px, stroke) ---------- */
   const P = {

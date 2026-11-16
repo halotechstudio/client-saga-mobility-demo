@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Manjari:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="core.css">
 <link rel="stylesheet" href="web.css">
+<link rel="stylesheet" href="tron.css?v=6">
 </head>
 <body>
 <div class="app">
@@ -16,7 +17,7 @@
 </div>
 <div class="drawer" id="drawer"></div>
 <div class="toastw" id="toast"></div>
-<script src="core.js"></script>
+<script src="core.js?v=30"></script>
 <script>
 (function () {
 const S = SAGA; S.state.os = "web"; S.apply();
@@ -95,7 +96,7 @@ P.book = () => {
     </div>
     <div class="grid" style="align-content:start">
       <div class="panel"><h2>Quote</h2>
-        <div class="li"><div style="flex:1"><b>SAGA EV · ${S.VEHICLE.model}</b><span class="s">Fixed fare, includes GST</span></div><b style="font-size:22px">${inr(fare)}</b></div>
+        <div class="li"><div style="flex:1"><b>${S.VEHICLE.short}</b><span class="s">Fixed fare, includes GST</span></div><b style="font-size:22px">${inr(fare)}</b></div>
         <div class="li"><div style="flex:1"><b>Your commission (${RATE * 100}%)</b><span class="s">Credited in the monthly statement</span></div><b style="font-size:18px;color:var(--success)">+ ${inr(com)}</b></div>
         <div class="li"><div style="flex:1"><b>Guest sees</b><span class="s">${st.pay === "room" ? "On their room bill" : st.pay === "guest" ? "In the UPI link" : "Nothing to pay"}</span></div><b>${st.pay === "account" ? "Complimentary" : inr(fare)}</b></div>
         <button class="btn btn-primary block" style="margin-top:14px" data-confirm>${I("check")}Book and notify guest</button>

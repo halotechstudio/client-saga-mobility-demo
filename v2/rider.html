@@ -405,7 +405,8 @@ body.embed,body.bare{background:transparent}
 </style>
 <link rel="stylesheet" href="system.css?v=9"><link rel="stylesheet" href="system3.css?v=9"><link rel="stylesheet" href="system4.css?v=9"><link rel="stylesheet" href="system5.css?v=9"><link rel="stylesheet" href="system6.css?v=11"><link rel="stylesheet" href="system7.css?v=10">
 <script type="importmap">{"imports":{"three":"./lib/three/build/three.module.js","three/addons/":"./lib/three/examples/jsm/"}}</script>
-<script type="module" src="car3d.js?v=14"></script>
+<script type="module" src="car3d.js?v=16"></script>
+<link rel="stylesheet" href="tron.css?v=6">
 </head>
 <body>
 <div class="shell">
@@ -429,7 +430,7 @@ body.embed,body.bare{background:transparent}
     </div>
   </main>
 </div>
-<script src="core.js"></script>
+<script src="core.js?v=30"></script>
 <script>
 (function () {
 const S = SAGA, L = S.L, I = S.icon, $ = (q, r = document) => r.querySelector(q), $$ = (q, r = document) => [...r.querySelectorAll(q)];
@@ -680,7 +681,7 @@ def("options", { g: "Ride", n: "Confirm ride", tabs: 0, map: 1, what: "Route and
   ${mapBtns()}
   <div class="rsheet">
     <div class="grabber"></div>
-    <div class="row-flex"><div class="grow"><div class="t-label">${L("To", "", "")} ${to}${L("", " వైపు", " की ओर")} · 18 ${L("min", "నిమి", "मिन")}</div><div class="t-title mt4">SAGA EV</div></div><div class="price"><div class="t-title t-num">${S.inr(fare)}</div><div class="t-label">${L("Fixed fare", "స్థిర ఛార్జీ", "तय किराया")}</div></div></div>
+    <div class="row-flex"><div class="grow"><div class="t-label">${L("To", "", "")} ${to}${L("", " వైపు", " की ओर")} · 18 ${L("min", "నిమి", "मिन")}</div><div class="t-title mt4">${V.short}</div></div><div class="price"><div class="t-title t-num">${S.inr(fare)}</div><div class="t-label">${L("Fixed fare", "స్థిర ఛార్జీ", "तय किराया")}</div></div></div>
     <div class="chain mt12">${n ? app.stops.map((s, i) => `<span class="ch-s"><i>${i + 1}</i>${s.n}</span>`).join("") : ""}<button class="ch-add" data-act="addfromopt">${I("plus", "sm")}${n ? L("Add stop", "స్టాప్", "स्टॉप") : L("Add a stop", "స్టాప్ జోడించండి", "स्टॉप जोड़ें")}</button></div>
     <div class="optcar c3box" data-car3d><div class="c3-fallback">${S.car({ reflect: false })}</div></div>
     <div class="tele"><span>${I("battery", "sm")}<b data-count="86">86</b>%</span><span>${I("route", "sm")}268 km</span><span>${I("snow", "sm")}22°C</span><small>${L("your car, live", "మీ కారు, లైవ్", "आपकी गाड़ी, लाइव")}</small></div>
