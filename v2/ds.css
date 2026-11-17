@@ -2483,3 +2483,9 @@ button.sc-time{border:0;font:inherit;cursor:pointer}
 .si-car img{position:relative;z-index:1;width:100%;max-width:none;margin:0;filter:drop-shadow(0 18px 24px rgba(0,0,0,.6));animation:siIn 1s .1s cubic-bezier(.2,.8,.2,1) both}
 .si-car i{position:absolute;left:12%;right:12%;bottom:30px;height:60px;border-radius:50%;background:radial-gradient(closest-side,rgba(59,234,104,.35),rgba(46,107,255,.25) 55%,transparent);filter:blur(10px)}
 @keyframes siIn{from{opacity:0;transform:translateX(18px) scale(.97)}to{opacity:1;transform:none}}
+/* deeper, higher-contrast renders: the lit stage was washing out on phones */
+.ob .stg .cam img{filter:brightness(.78) contrast(1.32) saturate(1.08)}
+.ob .stg::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(75% 55% at 50% 42%,transparent 40%,rgba(0,0,0,.55) 100%)}
+.rd .rd-cv{filter:contrast(1.25) brightness(.95) saturate(1.1)}
+.rd.title .rd-cv{filter:none}
+.hm-spin canvas,.lux-spin canvas,#luxstg .cam img{filter:contrast(1.14) saturate(1.06)}
