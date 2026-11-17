@@ -88,7 +88,7 @@
     cv.style.cssText = "position:absolute;inset:0;width:100%;height:100%";
     const frames = new Array(n); let got = 0;
     let pos = o.start || 0, vel = 0, drag = false, lx = 0, idle = o.idle !== false, lastTouch = 0, drawnAt = NaN, raf = 0;
-    const src = i => `${R}${set}-${String(i).padStart(2, "0")}.webp`;
+    const src = i => `${R}${set}-${String(i).padStart(2, "0")}.webp${set === "hero" ? "?h2" : ""}`;
     const dpr = Math.min(devicePixelRatio || 1, 2);
     const near = i => { if (frames[i]) return frames[i]; for (let d = 1; d < n; d++) { const a = frames[(i + d) % n] || frames[(i - d + n) % n]; if (a) return a; } return null; };
     const rect = img => {
