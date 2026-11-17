@@ -404,7 +404,7 @@ body.embed,body.bare{background:transparent}
 .upd-sheet{position:absolute;left:12px;right:12px;bottom:24px;padding:22px;border-radius:28px;background:var(--surface);box-shadow:0 20px 60px rgba(0,0,0,.25)}
 </style>
 <link rel="stylesheet" href="system.css?v=9"><link rel="stylesheet" href="system3.css?v=9"><link rel="stylesheet" href="system4.css?v=9"><link rel="stylesheet" href="system6.css?v=11"><link rel="stylesheet" href="system7.css?v=10">
-<link rel="stylesheet" href="ds.css?v=61">
+<link rel="stylesheet" href="ds.css?v=62">
 </head>
 <body>
 <div class="shell">
@@ -487,6 +487,7 @@ const langChips = () => `<div class="ob-langs">${S.LANGS.map(l => `<button class
 def("welcome", { g: "Start", n: "Welcome · the unveil", tabs: 0, sb: "light", what: "Opens on black. The SAGA logo builds itself, then the car is revealed like a launch at an auto expo: the DRLs sweep on, the LED livery runs along the body, and the ceiling light warms up. Then one line and two buttons.", why: "The car is the product. Revealing it the way a launch would makes SAGA feel premium before a single word. Tap anywhere to skip.", fl: "Light layers are Cycles renders (DRL, LED, fully lit) stacked in a <code>Stack</code> with <code>BlendMode.plus</code>; <code>AnimationController</code> drives a <code>ShaderMask</code> sweep per layer. Logo is the client's vector (flutter_svg)." }, () => `
   <div class="ob ${app.unveiled ? "go done" : ""}">
     <div class="stg" id="unv"></div>
+    ${app.unveiled ? "" : `<div class="tr" aria-hidden="true"><i class="tr-grid"></i><i class="tr-veil"></i><i class="tr-hz"></i><span class="tr-scanw"><i class="tr-scan"></i></span><i class="tr-flash"></i></div>`}
     <div class="ob-shade"></div>
     <div class="ob-top ob-in" style="animation-delay:3.95s">${S.logo()}${langChips()}</div>
     <div class="ob-body">
