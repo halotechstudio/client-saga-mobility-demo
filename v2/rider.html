@@ -404,7 +404,7 @@ body.embed,body.bare{background:transparent}
 .upd-sheet{position:absolute;left:12px;right:12px;bottom:24px;padding:22px;border-radius:28px;background:var(--surface);box-shadow:0 20px 60px rgba(0,0,0,.25)}
 </style>
 <link rel="stylesheet" href="system.css?v=9"><link rel="stylesheet" href="system3.css?v=9"><link rel="stylesheet" href="system4.css?v=9"><link rel="stylesheet" href="system6.css?v=11"><link rel="stylesheet" href="system7.css?v=10">
-<link rel="stylesheet" href="ds.css?v=65">
+<link rel="stylesheet" href="ds.css?v=66">
 </head>
 <body>
 <div class="shell">
@@ -428,7 +428,7 @@ body.embed,body.bare{background:transparent}
     </div>
   </main>
 </div>
-<script src="core.js?v=35"></script><script src="stage.js?v=10"></script>
+<script src="core.js?v=35"></script><script src="sfx.js?v=1"></script><script src="stage.js?v=10"></script>
 <script>
 (function () {
 const S = SAGA, L = S.L, I = S.icon, $ = (q, r = document) => r.querySelector(q), $$ = (q, r = document) => [...r.querySelectorAll(q)];
@@ -552,7 +552,7 @@ def("ready", { g: "Start", n: "Ready · the car arrives", tabs: 0, sb: "light", 
       <p class="rd-p">${L("Fixed fares · 100% electric · 20% off your first ride", "స్థిర ఛార్జీలు · 100% ఎలక్ట్రిక్ · మొదటి రైడ్‌పై 20% తగ్గింపు", "तय किराया · 100% इलेक्ट्रिक · पहली राइड पर 20% छूट")}</p>
       <div class="rd-cta">${btn(L("Start my first ride", "నా మొదటి రైడ్ ప్రారంభించు", "पहली राइड शुरू करें"), { act: "launch" })}<button class="btn btn-text block sm" data-go="flysoon">${L("Flying soon? Plan the airport ride", "త్వరలో ఫ్లైట్? ఎయిర్‌పోర్ట్ రైడ్", "जल्द फ़्लाइट? एयरपोर्ट राइड")}</button></div>
     </div>
-    <div class="rd-title" aria-live="polite"><span class="rd-mark"></span><small>${L("Welcome to the", "స్వాగతం", "आपका स्वागत है")}</small><b>${L("SAGA experience", "SAGA అనుభవానికి", "SAGA अनुभव में")}</b><i class="rd-rule"></i>
+    <div class="rd-title" aria-live="polite"><span class="rd-line"><small>${L("Welcome to", "స్వాగతం", "आपका स्वागत है")}</small><span class="rd-mark"></span><b>${L("Experience", "అనుభవానికి", "अनुभव में")}</b></span><i class="rd-rule"></i>
     </div>
   </div>`);
 
@@ -1232,7 +1232,7 @@ def("paydone", { g: "Ride", n: "Payment and confirmation", tabs: 0, foot: 1, wha
   </div></div>
   ${foot(`${btn(L("View in Trips", "Tripsలో చూడండి", "Trips में देखें"), { act: "donetrips" })}<button class="btn btn-text block" data-act="donehome">${L("Back to Home", "హోమ్‌కు", "होम पर")}</button>`)}`;
 });
-SC.paydone.mount = el => { const v = el.querySelector(".pd"); timers.push(setTimeout(() => v && v.classList.add("ok"), 1900)); };
+SC.paydone.mount = el => { const v = el.querySelector(".pd"); timers.push(setTimeout(() => { if (v) v.classList.add("ok"); window.SFX && SFX.success(); }, 1900)); };
 
 def("schedule", { g: "Scheduled", n: "Scheduled rides", tabs: 0, nav: 1, foot: 1, what: "Home to Office at 9:00 AM. A week strip whose chosen days light up one after another, a glass calendar of every ride (tap a date to skip it), return ride and same-chauffeur switches, and a lit series card: how many rides, the next one, and the weekday-plan price.", why: "Office and school runs are steady revenue for a small fleet, and they're planned days ahead, which helps dispatch. Seeing the whole series at once makes it feel like a plan, not a chore.", fl: "Stored as an RRULE (RFC 5545) + exceptions. Server expands it 14 days ahead into real bookings so dispatch can plan. <code>POST /series</code>." }, () => {
   const base = new Date(2026, 10, 15), Y = 2026, M = 10, first = new Date(Y, M, 1).getDay(), dim = 30;
@@ -1461,6 +1461,7 @@ def("account", { g: "Tabs", n: "Account & settings", tab: "account", what: "A pr
     </div></div>
     <div class="group mt16">
       ${row({ icon: "pin", t: L("Saved places", "సేవ్ చేసిన స్థలాలు", "सेव की गई जगहें"), trail: "2", toast: L("Home and Office saved", "ఇల్లు, ఆఫీస్ సేవ్ అయ్యాయి", "घर और ऑफ़िस सेव हैं") })}
+      <div class="row"><span class="lead">${I("bell")}</span><span class="tx"><span class="t1" style="display:block">${L("Sounds", "శబ్దాలు", "आवाज़ें")}</span><span class="t2" style="display:block">${L("Soft taps, the launch, payment chimes", "మెత్తని ట్యాప్‌లు, లాంచ్, చెల్లింపు చైమ్", "हल्के टैप, लॉन्च, भुगतान की ध्वनि")}</span></span>${tgl(window.SFX ? SFX.enabled : true, 'data-act="sfx"')}</div>
       ${row({ icon: "leaf", lc: "eco", t: L("Eco impact", "పర్యావరణ ప్రభావం", "पर्यावरण असर"), trail: `${ECO().pts} ${L("pts", "పా.", "पॉ.")}`, go: "impact" })}
       ${row({ icon: "wallet", t: L("Wallet and payments", "వాలెట్, చెల్లింపులు", "वॉलेट और भुगतान"), trail: S.inr(app.wallet), go: "wallet" })}
       ${row({ icon: "plane", t: L("Find my flights", "నా ఫ్లైట్లు కనుగొను", "मेरी फ़्लाइट ढूँढें"), s: L("Gmail filter, ticket scan", "Gmail ఫిల్టర్, టికెట్ స్కాన్", "Gmail फ़िल्टर, टिकट स्कैन"), trail: `<span class="ac-on">${L("On", "ఆన్", "चालू")}</span>`, go: "travel" })}
@@ -1931,7 +1932,7 @@ const A = {
   tcal() { app.travel.cal = !app.travel.cal; rerender(); },
   launch(btnEl) {
     const v = btnEl.closest(".view"), rd = v && v.querySelector(".rd"), Lr = app._launch; if (!rd || !Lr || rd.classList.contains("go")) return;
-    rd.classList.add("go");
+    rd.classList.add("go"); window.SFX && SFX.launch();
     const fps = 30, N = Lr.N; let last = -1, t0 = 0;
     timers.push(setTimeout(() => {
       t0 = performance.now();
@@ -1943,12 +1944,13 @@ const A = {
         if (i < N - 1) { let fired = false; const next = () => { if (!fired) { fired = true; step(); } }; if (window.requestAnimationFrame) requestAnimationFrame(next); timers.push(setTimeout(next, 34)); return; }
         rd.classList.add("title");
         const mk = rd.querySelector(".rd-mark"); if (mk) mk.innerHTML = S.logoSvg("logo-build");
-        timers.push(setTimeout(() => { if (cur !== "ready") return; rd.classList.add("out"); }, 2300));
-        timers.push(setTimeout(() => { if (cur !== "ready") return; stack = []; app.spinAt = 0; go("home", { tab: 1, reset: true }); }, 2900));
+        timers.push(setTimeout(() => { if (cur !== "ready") return; rd.classList.add("out"); }, 3000));
+        timers.push(setTimeout(() => { if (cur !== "ready") return; stack = []; app.spinAt = 0; go("home", { tab: 1, reset: true }); }, 3600));
       };
       step();
     }, 450));
   },
+  sfx() { if (window.SFX) { SFX.enabled = !SFX.enabled; if (SFX.enabled) SFX.select(); } rerender(); },
   itown(el) { app.idest = el.dataset.v; go("intercity"); },
   guide(el) { showGuide(el.dataset.v, null); },
   guideskip() { closeGuide(true); },
