@@ -404,7 +404,7 @@ body.embed,body.bare{background:transparent}
 .upd-sheet{position:absolute;left:12px;right:12px;bottom:24px;padding:22px;border-radius:28px;background:var(--surface);box-shadow:0 20px 60px rgba(0,0,0,.25)}
 </style>
 <link rel="stylesheet" href="system.css?v=9"><link rel="stylesheet" href="system3.css?v=9"><link rel="stylesheet" href="system4.css?v=9"><link rel="stylesheet" href="system6.css?v=11"><link rel="stylesheet" href="system7.css?v=10">
-<link rel="stylesheet" href="ds.css?v=63">
+<link rel="stylesheet" href="ds.css?v=65">
 </head>
 <body>
 <div class="shell">
@@ -543,10 +543,7 @@ def("intro3", { g: "Start", n: "Welcome · language", tabs: 0, nav: 1, foot: 1, 
   ${foot(btn(L("Continue", "కొనసాగండి", "आगे बढ़ें"), { go: "signin" }))}`);
 def("ready", { g: "Start", n: "Ready · the car arrives", tabs: 0, sb: "light", what: "Set-up ends on a dark stage: the SAGA Luxe waits in the distance with only its daytime-running lights on. Tap Start my first ride and the LED livery wakes, then the headlamps, the car pulls away toward you and passes the camera, and Home opens out of the light.", why: "Ends set-up on a moment, not a form. The first thing the rider does is call the car, and the app shows the car answering.", fl: "Two bundled stills (DRL only, LED livery) and a 40-frame drive-by rendered in Cycles, played on a <code>CustomPainter</code> at 30 fps, then a route transition into Home." }, () => `
   <div class="rd">
-    <img class="rd-l rd-drl" src="${SagaStage.src("drive-drl")}" alt="">
-    <img class="rd-l rd-led" src="${SagaStage.src("drive-led")}" alt="">
     <canvas class="rd-cv"></canvas>
-    <div class="tr rtr" aria-hidden="true"><i class="tr-grid"></i><i class="tr-hz"></i><span class="tr-scanw"><i class="tr-scan"></i></span><i class="rd-streaks"><b></b><b></b><b></b><b></b><b></b><b></b></i><i class="tr-flash"></i></div>
     <div class="rd-shade"></div>
     <div class="rd-top">${S.logo()}</div>
     <div class="rd-body">
@@ -555,11 +552,13 @@ def("ready", { g: "Start", n: "Ready · the car arrives", tabs: 0, sb: "light", 
       <p class="rd-p">${L("Fixed fares · 100% electric · 20% off your first ride", "స్థిర ఛార్జీలు · 100% ఎలక్ట్రిక్ · మొదటి రైడ్‌పై 20% తగ్గింపు", "तय किराया · 100% इलेक्ट्रिक · पहली राइड पर 20% छूट")}</p>
       <div class="rd-cta">${btn(L("Start my first ride", "నా మొదటి రైడ్ ప్రారంభించు", "पहली राइड शुरू करें"), { act: "launch" })}<button class="btn btn-text block sm" data-go="flysoon">${L("Flying soon? Plan the airport ride", "త్వరలో ఫ్లైట్? ఎయిర్‌పోర్ట్ రైడ్", "जल्द फ़्लाइट? एयरपोर्ट राइड")}</button></div>
     </div>
+    <div class="rd-title" aria-live="polite"><span class="rd-mark"></span><small>${L("Welcome to the", "స్వాగతం", "आपका स्वागत है")}</small><b>${L("SAGA experience", "SAGA అనుభవానికి", "SAGA अनुभव में")}</b><i class="rd-rule"></i>
+    </div>
   </div>`);
 
 def("signin", { g: "Start", n: "Sign in", tabs: 0, nav: 1, foot: 1, what: "Type a mobile number, tap Send code, and the 6-digit code fills itself in from the SMS.", why: "No passwords. Matches how the existing app signs people in.", fl: "Android: SMS Retriever API (no SMS permission). iOS: <code>oneTimeCode</code> autofill. Backend OTP endpoint from the client." }, () => `
   ${bar("")}
-  <div class="content" style="padding-top:0"><div class="si-hero"><img src="${SagaStage.src("still-rear")}" alt=""></div><div class="pad si-body">
+  <div class="content" style="padding-top:0"><div class="si-pass" aria-hidden="true"><div class="sp-card"><div class="sp-top">${S.logo()}<span class="sp-chip"><i></i><i></i><i></i></span></div><div class="sp-num t-num" id="spNum">+91 ${(app.phone || "").replace(/\D/g, "").replace(/^(\d{5})(\d)/, "$1 $2") || "••••• •••••"}</div><div class="sp-bot"><span><small>${L("SAGA rider", "SAGA రైడర్", "SAGA राइडर")}</small><b>${L("Visakhapatnam", "విశాఖపట్నం", "विशाखापत्तनम")}</b></span><span class="sp-eco">${I("leaf", "sm")}${L("100% electric", "100% ఎలక్ట్రిక్", "100% इलेक्ट्रिक")}</span></div><i class="sp-sheen"></i></div></div><div class="pad si-body">
     <span class="eyebrow" style="color:var(--live)">${L("Welcome aboard", "స్వాగతం", "स्वागत है")}</span>
     <h1 class="t-title mt8">${L("Your mobile <em>number</em>", "మీ మొబైల్ <em>నంబర్</em>", "आपका मोबाइल <em>नंबर</em>")}</h1>
     <p class="t-sub mt8">${L("We'll send a 6-digit code by SMS.", "SMS ద్వారా 6 అంకెల కోడ్ పంపుతాం.", "हम SMS से 6 अंकों का कोड भेजेंगे।")}</p>
@@ -602,6 +601,7 @@ const c3mount = (el, mode, extra = {}) => {
   const box = el && el.querySelector("[data-car3d]"); if (!box || mode !== "hero") return;
   SagaStage.spin(box, { set: spinSet(), start: app.spinAt || 0, hint: false, fit: "contain", zoom: 1.12, oy: .17, ...extra });
 };
+document.addEventListener("input", e => { if (e.target.id !== "phone") return; const n = document.getElementById("spNum"); if (!n) return; const d = e.target.value.replace(/\D/g, "").slice(0, 10); n.textContent = "+91 " + (d ? d.replace(/^(\d{5})(\d)/, "$1 $2") : "••••• •••••"); n.classList.remove("tick"); void n.offsetWidth; n.classList.add("tick"); });
 document.addEventListener("click", e => {
   const root = e.target.closest(".c3root"); if (!root) return; const box = root.querySelector("[data-car3d]"), api = box && box.__c3;
   const p = e.target.closest("[data-c3paint]"); if (p) { if (api) api.paint(p.dataset.c3paint, false, p.dataset.kind); root.querySelectorAll(".c3-sw").forEach(b => b.classList.toggle("on", b === p)); return; }
@@ -1836,8 +1836,11 @@ SC.intro2.mount = el => {
   show(app.chap || 0);
 };
 SC.ready.mount = el => {
-  const N = 40; app._drive = [];
-  for (let i = 0; i < N; i++) { const k = i; fetch(SagaStage.src("drive-" + String(i).padStart(2, "0"))).then(r => r.blob()).then(createImageBitmap).then(b => { app._drive[k] = b; }).catch(() => {}); }
+  const N = 105, rd = el.querySelector(".rd"), cv = el.querySelector(".rd-cv"); app._launch = { f: [], N };
+  const fit = () => { const W = rd.clientWidth, H = rd.clientHeight, dpr = Math.min(devicePixelRatio || 1, 2); cv.width = W * dpr; cv.height = H * dpr; app._launch.W = W; app._launch.H = H; app._launch.g = cv.getContext("2d"); app._launch.dpr = dpr; };
+  fit();
+  app._launch.paint = img => { const { g, W, H, dpr } = app._launch, ir = img.width / img.height, er = W / H; let w, h; if (ir > er) { h = H; w = H * ir; } else { w = W; h = W / ir; } g.setTransform(dpr, 0, 0, dpr, 0, 0); g.drawImage(img, (W - w) / 2, (H - h) / 2, w, h); };
+  for (let i = 0; i < N; i++) { const k = i; fetch(SagaStage.src("launch-" + String(i).padStart(3, "0"))).then(r => r.blob()).then(createImageBitmap).then(b => { app._launch.f[k] = b; if (k === 0 && !rd.classList.contains("go")) app._launch.paint(b); }).catch(() => {}); }
 };
 SC.vehicle.mount = el => {
   SagaStage.unveil(el.querySelector("#luxstg"), { set: "p5" });
@@ -1902,6 +1905,7 @@ const A = {
   pickf(e) { const d = e.dataset; app.flight = { no: d.no, t: d.t, code: d.city, day: +d.day, dir: d.dir, pnr: d.pnr || app.pnrIn || "" }; app.dir = d.dir; app.shift = 0; go("flight"); },
   aday(e) { app.aday = +e.dataset.v; rerender(); }, acity(e) { app.acity = e.dataset.v; rerender(); },
   rescan() { rerender(); SC.scan.mount(views.lastElementChild); },
+  _spnum() {},
   sendotp() { const v = ($("#phone")?.value || "").replace(/\D/g, ""); if (v.length !== 10) { toast(L("Enter a 10-digit mobile number", "10 అంకెల మొబైల్ నంబర్ ఇవ్వండి", "10 अंकों का मोबाइल नंबर डालें")); return; } app.phone = v.slice(0, 5) + " " + v.slice(5); app.otp = 1; rerender(); },
   promo() { const v = ($("#promo")?.value || "").trim().toUpperCase(); if (!v) { toast(L("Type a code first", "ముందు కోడ్ టైప్ చేయండి", "पहले कोड लिखें")); return; } if (["FLYSAGA", "REFER150", "WEEKDAY10"].includes(v)) toast(L(`${v} applied to your next ride`, `${v} తదుపరి రైడ్‌కు వర్తించింది`, `${v} अगली राइड पर लग गया`), L("Offer applied", "ఆఫర్ వర్తించింది", "ऑफ़र लग गया")); else toast(L(`${v} isn't a valid code`, `${v} సరైన కోడ్ కాదు`, `${v} सही कोड नहीं है`)); },
   totrips() { app.tripSeg = "up"; go("rides", { tab: 1 }); },
@@ -1926,23 +1930,24 @@ const A = {
   when(e) { if (e.dataset.v === "later") go("schedule"); },
   tcal() { app.travel.cal = !app.travel.cal; rerender(); },
   launch(btnEl) {
-    const v = btnEl.closest(".view"), rd = v && v.querySelector(".rd"); if (!rd || rd.classList.contains("go")) return;
-    rd.classList.add("go");                                    // LED livery wakes, text steps back
-    const cv = rd.querySelector(".rd-cv"), g = cv.getContext("2d"), W = rd.clientWidth, H = rd.clientHeight, dpr = Math.min(devicePixelRatio || 1, 2);
-    cv.width = W * dpr; cv.height = H * dpr;
-    const paint = img => { const ir = img.width / img.height, er = W / H; let w, h; if (ir > er) { h = H; w = H * ir; } else { w = W; h = W / ir; } g.setTransform(dpr, 0, 0, dpr, 0, 0); g.drawImage(img, (W - w) / 2, (H - h) / 2, w, h); };
-    const frames = app._drive || [], N = 40, fps = 30;
+    const v = btnEl.closest(".view"), rd = v && v.querySelector(".rd"), Lr = app._launch; if (!rd || !Lr || rd.classList.contains("go")) return;
+    rd.classList.add("go");
+    const fps = 30, N = Lr.N; let last = -1, t0 = 0;
     timers.push(setTimeout(() => {
-      rd.classList.add("drive"); let i = 0;
+      t0 = performance.now();
       const step = () => {
         if (cur !== "ready") return;
-        const f = frames[i] || frames[i - 1]; if (f) paint(f);
-        if (i === N - 7) { const sc2 = document.querySelector(".screen"); if (sc2) { const fx = document.createElement("div"); fx.className = "fx-flash"; sc2.appendChild(fx); setTimeout(() => fx.remove(), 1400); } }
-        if (++i < N) timers.push(setTimeout(step, 1000 / fps));
-        else { stack = []; app.spinAt = 0; go("home", { tab: 1, reset: true }); }
+        const i = Math.min(N - 1, Math.floor((performance.now() - t0) / 1000 * fps));   // time-based: never drifts, drops a frame rather than slowing down
+        if (i !== last) { const f = Lr.f[i] || Lr.f[i - 1] || Lr.f[i - 2]; if (f) Lr.paint(f); last = i; }
+        if (i >= 52) rd.classList.add("drive");
+        if (i < N - 1) { let fired = false; const next = () => { if (!fired) { fired = true; step(); } }; if (window.requestAnimationFrame) requestAnimationFrame(next); timers.push(setTimeout(next, 34)); return; }
+        rd.classList.add("title");
+        const mk = rd.querySelector(".rd-mark"); if (mk) mk.innerHTML = S.logoSvg("logo-build");
+        timers.push(setTimeout(() => { if (cur !== "ready") return; rd.classList.add("out"); }, 2300));
+        timers.push(setTimeout(() => { if (cur !== "ready") return; stack = []; app.spinAt = 0; go("home", { tab: 1, reset: true }); }, 2900));
       };
       step();
-    }, 1300));
+    }, 450));
   },
   itown(el) { app.idest = el.dataset.v; go("intercity"); },
   guide(el) { showGuide(el.dataset.v, null); },

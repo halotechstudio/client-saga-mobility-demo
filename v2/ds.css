@@ -2416,3 +2416,46 @@ button.sc-time{border:0;font:inherit;cursor:pointer}
 .rd.go .tr-flash{animation:rFlash .9s 1.1s ease-out both}
 @keyframes rFlash{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
 @media (prefers-reduced-motion:reduce){.rd .tr{display:none}}
+
+/* ---------- v9 ready: one continuous cinematic shot, then the title card ---------- */
+.rd{background:#000}
+.rd .rd-cv{opacity:1!important;transition:filter 1s ease}
+.rd.title .rd-cv{filter:brightness(.35) blur(2px)}
+.rd .rd-shade{transition:opacity .6s}
+.rd.go .rd-shade{opacity:.35}
+.rd-title{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;pointer-events:none;opacity:0}
+.rd.title .rd-title{opacity:1}
+.rd-mark{display:block;height:44px;margin-bottom:18px}
+.rd-mark svg{height:44px;width:auto}
+.rd-title small{font-size:12px;letter-spacing:.42em;text-transform:uppercase;color:rgba(255,255,255,.6);opacity:0}
+.rd-title b{font-size:30px;font-weight:300;letter-spacing:.02em;background:linear-gradient(90deg,#7FDBFF,#fff 45%,#B9F5CC);-webkit-background-clip:text;background-clip:text;color:transparent;opacity:0}
+.rd-rule{display:block;width:140px;height:1px;margin-top:14px;background:linear-gradient(90deg,transparent,#00E5FF,transparent);box-shadow:0 0 12px #00A3FF;transform:scaleX(0)}
+.rd.title .rd-title small{animation:rdIn .8s .55s cubic-bezier(.2,.8,.2,1) forwards}
+.rd.title .rd-title b{animation:rdTrack 1.2s .75s cubic-bezier(.2,.8,.2,1) forwards}
+.rd.title .rd-rule{animation:rdRule 1s 1.1s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes rdIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes rdTrack{from{opacity:0;letter-spacing:.3em;filter:blur(6px)}to{opacity:1;letter-spacing:.02em;filter:none}}
+@keyframes rdRule{to{transform:scaleX(1)}}
+.rd.out{opacity:0;transform:scale(1.04);transition:opacity .55s ease,transform .6s ease}
+
+/* ---------- sign in: a glass SAGA rider pass that fills in as you type ---------- */
+.si-pass{position:relative;padding:62px 22px 6px;perspective:900px}
+.si-pass::before{content:"";position:absolute;left:10%;right:10%;top:40px;height:220px;border-radius:50%;background:radial-gradient(closest-side,rgba(46,107,255,.45),rgba(0,229,255,.12) 60%,transparent);filter:blur(18px);z-index:0}
+.sp-card{position:relative;z-index:1;height:196px;border-radius:24px;padding:18px 20px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;color:#fff;background:radial-gradient(120% 120% at 100% 0%,#4F6DFF 0%,#2541E0 40%,#152294 75%,#0B1257 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 0 0 1px rgba(255,255,255,.12),0 30px 60px -24px rgba(36,73,240,.9);transform:rotateX(8deg) rotateY(-6deg);animation:spFloat 6s ease-in-out infinite}
+@keyframes spFloat{50%{transform:rotateX(4deg) rotateY(5deg) translateY(-4px)}}
+.sp-card::after{content:"";position:absolute;right:-40px;bottom:-60px;width:220px;height:220px;border-radius:50%;border:1px solid rgba(255,255,255,.14);box-shadow:0 0 0 26px rgba(255,255,255,.03),0 0 0 54px rgba(255,255,255,.02)}
+.sp-top{display:flex;align-items:center;justify-content:space-between}
+.sp-top .logo-svg{height:16px;width:auto}
+.sp-chip{width:36px;height:28px;border-radius:7px;background:linear-gradient(135deg,#E8F7FF,#9FD8F5);display:grid;grid-template-rows:repeat(3,1fr);padding:5px 6px;gap:3px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.sp-chip i{border-radius:2px;background:rgba(11,18,87,.25)}
+.sp-num{font-size:23px;font-weight:400;letter-spacing:.08em;text-shadow:0 2px 10px rgba(0,0,0,.25)}
+.sp-num.tick{animation:spTick .25s ease-out}
+@keyframes spTick{40%{text-shadow:0 0 14px rgba(160,230,255,.9)}}
+.sp-bot{display:flex;align-items:flex-end;justify-content:space-between}
+.sp-bot small{display:block;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;opacity:.65}
+.sp-bot b{font-size:14px;font-weight:500}
+.sp-eco{display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 10px;border-radius:999px;font-size:11.5px;font-weight:600;color:#BFF5D0;background:rgba(59,234,104,.18)}
+.sp-eco .ic{width:13px;height:13px}
+.sp-sheen{position:absolute;inset:-50%;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.22) 50%,transparent 60%);transform:translateX(-60%);animation:spSheen 5s 1s ease-in-out infinite;pointer-events:none}
+@keyframes spSheen{0%{transform:translateX(-60%)}35%,100%{transform:translateX(60%)}}
+.si-body{position:relative;z-index:1;padding-top:22px!important}
