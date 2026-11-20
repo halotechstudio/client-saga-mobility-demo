@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>SAGA</title>
+<meta name="description" content="SAGA Mobility · rider app (interactive demo)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SAGA">
+<meta name="application-name" content="SAGA">
+<meta name="theme-color" content="#000000">
+<meta name="format-detection" content="telephone=no">
+<link rel="apple-touch-icon" id="ati">
+<link rel="icon" id="fav">
+<style>
+  html,body{margin:0;height:100%;background:#000;overflow:hidden;overscroll-behavior:none;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,system-ui,sans-serif;color:#fff;touch-action:manipulation}
+  #app{position:fixed;border:0;display:block;background:#000;opacity:0;transition:opacity .6s ease}
+  #app.on{opacity:1}
+  #probe{position:fixed;top:0;left:0;width:0;height:0;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);visibility:hidden;pointer-events:none}
+  /* splash: the SAGA logo while the app loads */
+  #splash{position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;background:radial-gradient(70% 40% at 50% 100%,rgba(63,81,181,.35),transparent 70%),#000;transition:opacity .6s ease,visibility .6s}
+  #splash.out{opacity:0;visibility:hidden}
+  #splash svg{width:min(52vw,260px);height:auto;color:#fff}
+  #splash .bar{width:120px;height:3px;border-radius:2px;background:rgba(255,255,255,.12);overflow:hidden}
+  #splash .bar i{display:block;height:100%;width:40%;border-radius:2px;background:linear-gradient(90deg,#3F51B5,#18D2F5);animation:run 1.2s ease-in-out infinite}
+  @keyframes run{from{transform:translateX(-100%)}to{transform:translateX(260%)}}
+  /* laptop / tablet presentation controls */
+  #ctl{position:fixed;top:18px;right:18px;z-index:6;display:none;gap:4px;padding:4px;border-radius:22px;background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+  #ctl button{height:34px;padding:0 14px;border:0;border-radius:17px;background:none;color:rgba(255,255,255,.75);font:600 13px/1 inherit;font-family:inherit;cursor:pointer}
+  #ctl button.on{background:#fff;color:#000}
+  #ctl button:hover:not(.on){color:#fff}
+  #cap{position:fixed;left:22px;bottom:18px;z-index:6;display:none;align-items:center;gap:12px;color:rgba(255,255,255,.6);font-size:13px}
+  #cap svg{height:16px;width:auto;color:#fff}
+  body.desk #ctl,body.desk #cap{display:flex}
+  /* "add to home screen" hint, phones in a normal browser tab only */
+  #hint{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:7;display:none;align-items:center;gap:12px;padding:14px 14px 14px 16px;border-radius:20px;background:rgba(20,21,30,.92);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1),0 20px 40px rgba(0,0,0,.6);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);font-size:14px;line-height:1.35;animation:up .5s ease both}
+  #hint.on{display:flex}
+  #hint b{display:block;font-size:15px;margin-bottom:2px}
+  #hint .ic{width:40px;height:40px;border-radius:10px;flex:none;background-size:cover}
+  #hint .grow{flex:1;color:rgba(255,255,255,.75)}
+  #hint button{border:0;border-radius:14px;height:36px;padding:0 14px;font:700 13px/1 inherit;font-family:inherit;cursor:pointer}
+  #hint .go{background:#fff;color:#000}
+  #hint .x{background:rgba(255,255,255,.1);color:#fff;width:36px;padding:0}
+  @keyframes up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+</style>
+</head>
+<body>
+<div id="probe"></div>
+<iframe id="app" title="SAGA rider app" allow="microphone; camera; geolocation; clipboard-write; fullscreen; autoplay" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+<div id="splash"><span id="slogo"></span><div class="bar"><i></i></div></div>
+
+<div id="ctl" role="group" aria-label="Demo controls">
+  <button data-os="ios">iPhone</button><button data-os="android">Android</button><button id="restart">Restart</button>
+</div>
+<div id="cap"><span id="clogo"></span><span>Rider app · interactive demo</span></div>
+
+<div id="hint" role="dialog" aria-label="Add SAGA to your home screen">
+  <span class="ic" id="hic"></span>
+  <span class="grow" id="htext"></span>
+  <button class="go" id="hinstall" hidden>Install</button>
+  <button class="x" id="hclose" aria-label="Close">✕</button>
+</div>
+
+<script>
+/* SAGA rider app wrapper.
+   Loads the live simulation and presents it like an installed app:
+   - Phone: the demo's phone bezel and fake status bar are cropped away, so the app fills the screen
+     under the phone's real status bar. Screen transitions stay on.
+   - Laptop / tablet: the phone is shown on a dark stage, with iPhone / Android and Restart controls.
+   Add-to-home-screen needs this file to be opened from a web address (https), not as a downloaded file. */
+(function () {
+  const APP = "https://halotechstudio.github.io/client-saga-mobility-demo/v2/rider.html";
+  // demo frame geometry in the live app (design px): device size, bezel inset, screen size, status-bar height
+  const DEV = {
+    ios:     { dw: 430, dh: 902, inset: 14, sw: 402, sh: 874, sb: 54 },
+    android: { dw: 432, dh: 912, inset: 10, sw: 412, sh: 892, sb: 42 }
+  };
+  const LOGO = '<svg viewBox="6 8 1216 238" role="img" aria-label="SAGA"><path fill="#18D2F5" d="M86.6 23.8Q90.1 23 95.1 22.7Q100 22.4 132.5 22.4Q165 22.4 167 22.5Q169 22.6 170.2 23.3L171.5 24L171.9 26.5Q172.4 29 172.2 36Q172 43 171.6 44.5L171.2 46L170.1 46.6Q169 47.3 166 47.9Q163 48.5 152.5 48.1Q142 47.8 134.5 48.1Q127 48.5 110 48.5Q93 48.5 91 48.8Q89 49.1 86 50.3Q83 51.5 80.1 53.3Q77.2 55 74.6 57.6Q72 60.2 70.3 63.1Q68.5 66 67.3 69Q66.1 72 65.9 78.5Q65.8 85 67.2 89.5Q68.5 94 70.8 97.4Q73 100.9 77 104Q81 107.2 84.5 108.9Q88 110.5 95 111.4Q102 112.3 110 112.1Q118 111.9 119.5 112.2Q121 112.4 136 112.5L151 112.6L151.5 113Q152 113.4 156.5 114.1Q161 114.7 162.5 115.5Q164 116.3 165 116.4Q166 116.5 167.5 117.5Q169 118.4 170 118.5Q171 118.6 176.5 122.1Q182 125.7 185.2 128.8Q188.4 132 190.4 134.5Q192.4 137 193.9 139.5Q195.4 142 197.5 146.5Q199.5 151 200.4 154Q201.2 157 201.7 160.5Q202.1 164 202.2 168.5Q202.3 173 201.9 177.5Q201.5 182 200.8 183Q200.2 184 199.8 186.5Q199.4 189 197.5 193Q195.5 197 192.4 201.5Q189.3 206 185.6 209.7Q182 213.4 177.5 216.3Q173 219.1 169.5 220.8Q166 222.5 161 223.9Q156 225.3 151.5 225.9Q147 226.4 101.5 226.5Q56 226.6 54.5 227.5Q53 228.3 52 229.7L51 231L51.2 235Q51.5 239 50.9 240.5L50.3 242L49.6 242.4Q49 242.7 47.5 242.6Q46 242.4 29 230.3Q12 218.2 11.1 217.1Q10.3 216 10 215Q9.7 214 10 213Q10.3 212 11.7 210.5Q13 209 29 197.4Q45 185.7 47 185.4L49 185.1L50.2 186.1L51.3 187L51.4 192.5Q51.5 198 52.3 199.2Q53 200.3 55 201.2Q57 202.1 95.5 202.1Q134 202.1 142 201.7Q150 201.3 155 199.8Q160 198.2 163.5 195.7Q167 193.2 170.2 189.1Q173.4 185 174.3 183Q175.3 181 175.4 179.5Q175.6 178 176 177Q176.5 176 176.9 171.5Q177.4 167 175.9 161.5Q174.4 156 173.1 153.5Q171.7 151 169.4 148.3Q167 145.7 165 144.2Q163 142.7 158.5 140.6Q154 138.5 151.5 138.1Q149 137.7 120.5 137.1Q92 136.5 89 135.6Q86 134.8 83.5 134.6Q81 134.4 76 132.4Q71 130.4 66.5 127.4Q62 124.4 56.9 119.2Q51.7 114 49.2 110Q46.6 106 45.6 104Q44.5 102 43 97Q41.5 92 41 88.5Q40.5 85 40.5 80.5Q40.5 76 41 71.5Q41.5 67 43.5 61.5Q45.5 56 46.5 54Q47.6 52 51.6 46.5Q55.7 41 59.9 37.5Q64 33.9 66.5 32.2Q69 30.6 73 28.6Q77 26.7 80 25.7Q83 24.6 86.6 23.8Z"/><path fill="#3BEA68" fill-rule="evenodd" d="M186.5 12.3Q188 12 190.5 11.7Q193 11.4 205 11.2Q217 11.1 219 11.7Q221 12.4 222.8 13.7Q224.6 15 225.6 17Q226.6 19 227 21.5Q227.5 24 227.4 35Q227.3 46 226.6 50L226 54L223.5 55.8Q221 57.6 218 58Q215 58.4 203.5 58.4Q192 58.4 188.5 58.2L185 58L184.4 57.5Q183.9 57 183.6 56Q183.3 55 182.2 54L181.1 53L180.7 51Q180.2 49 180 36Q179.8 23 180.4 20.5Q181 18 182.3 16Q183.5 14 184.3 13.3Q185 12.6 186.5 12.3ZM197.5 22.2Q202 22 208 22Q214 22.1 215.2 22.5L216.3 23L216.6 23.5Q216.8 24 217 31Q217.3 38 216.9 41.5Q216.5 45 215.7 46.5L215 48L205.5 48.1Q196 48.3 194.5 47.9Q193 47.5 192.1 46.8L191.2 46L190.9 41.5Q190.6 37 190.8 30.5Q191 24 191.3 23.5L191.6 23L192.3 22.7Q193 22.5 197.5 22.2Z"/><g fill="currentColor"><path d="M430 43.8Q433.9 43 438 42.8Q442 42.6 445 43Q448 43.5 451 44.5Q454 45.5 457 47.8Q460 50 462.3 52.5Q464.5 55 489.5 96.5Q514.5 138 519.9 146.5Q525.3 155 526 156.5Q526.6 158 537 175Q547.5 192 547.5 192.5Q547.5 193 550 196.5Q552.5 200 553.5 202.5L554.5 205L553.8 206.2Q553 207.5 552 207.9Q551 208.3 547 207.9Q543 207.6 539.5 207.9Q536 208.1 532 207.9Q528 207.7 525.5 208Q523 208.4 521 207.9Q519 207.5 517.3 206.3Q515.7 205 510.6 197Q505.5 189 504 186Q502.5 183 501.6 182Q500.8 181 496.1 173Q491.5 165 490 163Q488.5 161 488.5 160.5Q488.5 160 482.5 150.5Q476.5 141 476.4 140.5Q476.4 140 472.5 134Q468.5 128 459.5 112.5Q450.4 97 446.4 91Q442.4 85 440.7 84L439 82.9L437.5 83.4Q436 83.9 434 85.3Q432 86.8 430.4 88.9Q428.7 91 422.1 102.5Q415.5 114 405 130.5Q394.6 147 378 174.5Q361.4 202 359.8 204Q358.3 206 357.1 206.7Q356 207.3 353.5 207.9Q351 208.4 347 208Q343 207.6 334 207.9Q325 208.2 323.5 207.9Q322 207.5 320.8 206.8L319.6 206L320.1 204.5Q320.5 203 323 198.5Q325.6 194 355.5 146.5Q385.4 99 398.5 77.5Q411.6 56 414.1 53Q416.6 50 418.3 48.8Q420 47.6 423 46.1Q426 44.7 430 43.8Z"/><path d="M734.9 45.3Q740.8 45 799.9 44.8Q859 44.5 861 45Q863 45.5 864.2 46.8L865.4 48L865.4 60L865.5 72L864.3 73.8L863 75.5L861.5 75.9Q860 76.4 797.5 76.4Q735 76.5 728.5 78.1Q722 79.7 717 82.6Q712 85.6 709.3 88.3Q706.5 91 705 93Q703.5 95 701.5 99Q699.5 103 697.5 111Q695.5 119 695.5 128Q695.5 137 696 140Q696.6 143 698.1 148Q699.7 153 701.2 156Q702.7 159 704.1 161Q705.5 163 708.8 166.3Q712 169.5 714.5 171Q717 172.5 719.5 173.5Q722 174.5 726 175.5Q730 176.5 735 176.9Q740 177.3 773.5 177.4Q807 177.4 813 176.9Q819 176.5 821 176Q823 175.5 823.5 175.1Q824 174.7 825 174.5Q826 174.4 827.5 173.1Q829 171.9 830.2 170.5Q831.5 169 832.5 167Q833.4 165 833.9 162Q834.4 159 834.4 152.5L834.4 146L832.7 144.4L831 142.7L830 142.6Q829 142.5 802.5 142.5Q776 142.5 771.5 142.9Q767 143.3 765 142.9Q763 142.5 761.8 141.2L760.5 140L760.5 128.5Q760.5 117 761 116Q761.5 115 762.8 114.3Q764 113.5 766 113.4Q768 113.2 809 113.4Q850 113.5 854.5 113.2Q859 112.9 862 113.2Q865 113.6 866 114.3Q867.1 115 867.8 116.5Q868.5 118 868.4 138Q868.3 158 867.9 162.5Q867.4 167 866.5 171.5Q865.5 176 863.5 180.5Q861.5 185 860 187.5Q858.4 190 854.2 194.1Q850 198.3 847.5 199.9Q845 201.5 841.5 203Q838 204.5 834.5 205.5Q831 206.5 827 206.9Q823 207.3 781.5 207.4Q740 207.5 731 207Q722 206.5 715 205Q708 203.5 702 200.9Q696 198.4 690 193.9Q684 189.5 679.9 184.7Q675.7 180 672.8 175Q669.8 170 667.8 165Q665.7 160 663.7 152Q661.7 144 661.2 139Q660.7 134 660.6 129Q660.5 124 661.1 117.5Q661.7 111 662.1 110.5Q662.4 110 662.5 108.5Q662.6 107 663.6 103Q664.7 99 666.6 94Q668.5 89 671.1 84Q673.7 79 676.6 75Q679.5 71 683.8 66.8Q688 62.6 691.5 60Q695 57.5 700.5 54.6Q706 51.6 712 49.6Q718 47.6 723.5 46.6Q729 45.6 734.9 45.3Z"/><path d="M1094.2 43.8Q1098.3 43 1102.2 42.9Q1106 42.7 1109 43.1Q1112 43.5 1115 44.5Q1118 45.5 1121 47.6Q1124 49.7 1126.3 52.4Q1128.5 55 1172.4 128Q1216.3 201 1216.9 202.5Q1217.5 204 1217.3 205.3L1217 206.5L1214 207.5Q1211 208.5 1205 208Q1199 207.5 1192.5 208Q1186 208.5 1184 207.9Q1182 207.4 1180.5 206Q1179 204.6 1177.9 203.3Q1176.7 202 1176.1 200.5Q1175.4 199 1170 190.5Q1164.6 182 1158.1 170.5Q1151.5 159 1150 157Q1148.5 155 1148.5 154.5Q1148.4 154 1137.9 136.5Q1127.3 119 1117.9 104Q1108.5 89 1108.5 88.5Q1108.4 88 1107.2 86.4Q1106 84.7 1104 83.8L1102 82.8L1100.5 83.3Q1099 83.7 1096.3 86.4Q1093.6 89 1083.1 107Q1072.5 125 1063 139.5Q1053.5 154 1048 163.5Q1042.4 173 1040 176.5Q1037.6 180 1037.5 180.5Q1037.5 181 1035.1 184.5Q1032.6 188 1030 193Q1027.4 198 1024.9 201.5Q1022.4 205 1020.7 206.3Q1019 207.5 1017 207.8Q1015 208 1002 208.2Q989 208.3 987 207.9Q985 207.4 984.3 206.7L983.5 206L983.6 205Q983.6 204 984.1 203Q984.6 202 996.1 184Q1007.5 166 1011.6 159Q1015.7 152 1019.1 147Q1022.5 142 1024 139Q1025.6 136 1026.5 135Q1027.4 134 1027.4 133.5Q1027.5 133 1051.1 95Q1074.6 57 1077.8 53.3Q1081 49.5 1083 48.1Q1085 46.7 1087.5 45.7Q1090 44.6 1094.2 43.8Z"/></g><g fill="#18B8F3"><path d="M434 155.8Q438 155 440.9 155.5Q443.8 156 446.9 157.4Q450 158.7 451.5 159.9Q453 161.1 455.2 164.1Q457.4 167 458.4 171Q459.4 175 458.9 179Q458.3 183 456.9 186Q455.4 189 451.7 192Q448 195.1 445.5 196.1Q443 197.1 441 197.4Q439 197.6 434.5 196.9Q430 196.2 427.1 194.6Q424.2 193 421.5 189.5Q418.8 186 417.8 183Q416.8 180 416.7 178.5Q416.7 177 417.2 173Q417.6 169 418.7 167Q419.7 165 421.3 163Q422.9 161 426.4 158.8Q430 156.6 434 155.8Z"/><path d="M1094.3 156.4Q1095.6 156 1099.3 155.6Q1103 155.3 1106.5 155.9Q1110 156.5 1112.7 158.2Q1115.4 160 1118.3 163.5Q1121.3 167 1122.2 171Q1123.2 175 1122.7 178.5Q1122.2 182 1120 186Q1117.7 190 1113.8 193.1Q1110 196.3 1106 196.9Q1102 197.6 1099.5 197.4Q1097 197.1 1094.5 196.3Q1092 195.4 1091 194.8Q1090 194.3 1087 191.4Q1084 188.5 1082.5 185.2Q1081 182 1080.8 177.5Q1080.6 173 1081.1 170.5Q1081.6 168 1082.2 167Q1082.8 166 1084.9 163.3Q1087 160.6 1090 158.7Q1093 156.9 1094.3 156.4Z"/></g></svg>';
+  const $ = id => document.getElementById(id);
+  const qs = new URLSearchParams(location.search);
+  const ua = navigator.userAgent;
+  const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+  const isPhone = () => Math.min(innerWidth, innerHeight) < 600 && matchMedia("(pointer: coarse)").matches;
+  let os = qs.get("os") || (/android/i.test(ua) ? "android" : "ios");
+  try { if (!qs.get("os") && !isPhone()) os = localStorage.getItem("saga.wrap.os") || os; } catch (e) {}
+
+  $("slogo").innerHTML = LOGO; $("clogo").innerHTML = LOGO;
+
+  /* app icon + manifest, drawn from the SAGA mark so the home-screen icon is the brand */
+  const mark = LOGO.replace(/<g fill="currentColor">[\s\S]*?<\/g><g fill="#18B8F3">[\s\S]*?<\/g>/, "").replace('viewBox="6 8 1216 238"', 'viewBox="6 8 224 238" width="224" height="238"').replace("<svg ", '<svg xmlns="http://www.w3.org/2000/svg" ');
+  const icon = size => new Promise(res => {
+    const img = new Image();
+    img.onload = () => {
+      const c = document.createElement("canvas"); c.width = c.height = size; const g = c.getContext("2d");
+      g.fillStyle = "#05060A"; g.fillRect(0, 0, size, size);
+      const rg = g.createRadialGradient(size / 2, size * .95, size * .05, size / 2, size * .95, size * .85);
+      rg.addColorStop(0, "rgba(63,81,181,.55)"); rg.addColorStop(1, "rgba(63,81,181,0)"); g.fillStyle = rg; g.fillRect(0, 0, size, size);
+      const h = size * .56, w = h * 224 / 238; g.drawImage(img, (size - w) / 2, (size - h) / 2, w, h);
+      res(c.toDataURL("image/png"));
+    };
+    img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(mark);
+  });
+  Promise.all([icon(180), icon(512)]).then(([i180, i512]) => {
+    $("ati").href = i180; $("fav").href = i180; $("hic").style.backgroundImage = `url(${i180})`;
+    try {
+      const start = location.href.split("#")[0];
+      const m = { name: "SAGA", short_name: "SAGA", description: "SAGA Mobility rider app (demo)", start_url: start, scope: start.replace(/[^/]*$/, ""), display: "standalone", orientation: "portrait", background_color: "#000000", theme_color: "#000000",
+        icons: [{ src: i180, sizes: "180x180", type: "image/png" }, { src: i512, sizes: "512x512", type: "image/png", purpose: "any maskable" }] };
+      const l = document.createElement("link"); l.rel = "manifest"; l.href = URL.createObjectURL(new Blob([JSON.stringify(m)], { type: "application/manifest+json" })); document.head.appendChild(l);
+    } catch (e) {}
+  });
+
+  /* layout */
+  const frame = $("app");
+  const safe = () => { const s = getComputedStyle($("probe")); return { top: parseFloat(s.paddingTop) || 0, bottom: parseFloat(s.paddingBottom) || 0 }; };
+  function layout() {
+    const W = innerWidth, H = innerHeight, st = frame.style;
+    const phone = isPhone();
+    document.body.classList.toggle("desk", !phone);
+    if (phone) {
+      // fit the demo screen (minus its fake status bar) to the real screen, cropping the bezel off-screen
+      const d = DEV[os], top = safe().top;
+      const k = Math.max(W / d.sw, (H - top) / (d.sh - d.sb));
+      st.width = d.dw * k + "px"; st.height = d.dh * k + "px";
+      st.left = ((W - d.sw * k) / 2 - d.inset * k) + "px";
+      st.top = (top - (d.inset + d.sb) * k) + "px";
+    } else {
+      st.left = "0px"; st.top = "0px"; st.width = W + "px"; st.height = H + "px";
+    }
+    document.querySelectorAll("#ctl [data-os]").forEach(b => b.classList.toggle("on", b.dataset.os === os));
+  }
+  function load() {
+    $("splash").classList.remove("out"); frame.classList.remove("on");
+    frame.src = `${APP}?embed=1&os=${os}&screen=welcome&w=${Date.now().toString(36)}`;
+    layout();
+  }
+  frame.addEventListener("load", () => setTimeout(() => { frame.classList.add("on"); $("splash").classList.add("out"); }, 350));
+  addEventListener("resize", layout);
+  addEventListener("orientationchange", () => setTimeout(layout, 250));
+  document.querySelectorAll("#ctl [data-os]").forEach(b => b.onclick = () => { if (os === b.dataset.os) return; os = b.dataset.os; try { localStorage.setItem("saga.wrap.os", os); } catch (e) {} load(); });
+  $("restart").onclick = load;
+  load();
+
+  /* add-to-home-screen hint (phone, opened in a normal browser tab) */
+  let deferred = null;
+  addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferred = e; $("hinstall").hidden = false; });
+  const dismissed = () => { try { return localStorage.getItem("saga.wrap.hint") === "1"; } catch (e) { return false; } };
+  if (isPhone() && !standalone && !dismissed() && location.protocol.startsWith("http")) {
+    const ios = /iphone|ipad|ipod/i.test(ua);
+    $("htext").innerHTML = ios
+      ? "<b>Open SAGA like an app</b>Tap Share <span aria-hidden=\"true\">⬆︎</span>, then “Add to Home Screen”."
+      : "<b>Open SAGA like an app</b>Tap ⋮, then “Add to Home screen” or “Install app”.";
+    setTimeout(() => $("hint").classList.add("on"), 4500);
+  }
+  $("hclose").onclick = () => { $("hint").classList.remove("on"); try { localStorage.setItem("saga.wrap.hint", "1"); } catch (e) {} };
+  $("hinstall").onclick = async () => { if (!deferred) return; deferred.prompt(); await deferred.userChoice; deferred = null; $("hint").classList.remove("on"); };
+})();
+</script>
+</body>
+</html>
