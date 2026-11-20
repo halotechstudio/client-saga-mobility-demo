@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover,shrink-to-fit=no">
 <title>SAGA</title>
 <meta name="description" content="SAGA Mobility · rider app (interactive demo)">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,7 +17,11 @@
 <style>
   html,body{margin:0;height:100%;background:#000;overflow:hidden;overscroll-behavior:none;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
   body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,system-ui,sans-serif;color:#fff;touch-action:manipulation}
-  #app{position:fixed;border:0;display:block;background:#000;opacity:0;transition:opacity .6s ease}
+  /* the stage clips the oversized frame, so the page itself never grows wider than the screen (iOS would zoom out) */
+  #stage{position:fixed;left:0;top:0;width:100vw;height:100vh;height:100dvh;overflow:hidden;contain:strict;background:#000}
+  #app{position:absolute;border:0;display:block;background:#000;opacity:0;transition:opacity .6s ease}
+  /* covers the demo's own "9:41" bar where the phone's real status bar sits */
+  #sbar{position:fixed;left:0;right:0;top:0;height:env(safe-area-inset-top);background:#000;z-index:4;pointer-events:none}
   #app.on{opacity:1}
   #probe{position:fixed;top:0;left:0;width:0;height:0;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);visibility:hidden;pointer-events:none}
   /* splash: the SAGA logo while the app loads */
@@ -49,7 +53,8 @@
 </head>
 <body>
 <div id="probe"></div>
-<iframe id="app" title="SAGA rider app" allow="microphone; camera; geolocation; clipboard-write; fullscreen; autoplay" referrerpolicy="no-referrer-when-downgrade"></iframe>
+<div id="stage"><iframe id="app" title="SAGA rider app" scrolling="no" allow="microphone; camera; geolocation; clipboard-write; fullscreen; autoplay" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+<div id="sbar"></div>
 
 <div id="splash"><span id="slogo"></span><div class="bar"><i></i></div></div>
 
@@ -84,7 +89,8 @@
   const qs = new URLSearchParams(location.search);
   const ua = navigator.userAgent;
   const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
-  const isPhone = () => Math.min(innerWidth, innerHeight) < 600 && matchMedia("(pointer: coarse)").matches;
+  const vw = () => document.documentElement.clientWidth || innerWidth, vh = () => (window.visualViewport ? Math.max(visualViewport.height, innerHeight) : innerHeight);
+  const isPhone = () => /iPhone|iPod|Android.+Mobile/i.test(ua) || standalone || (Math.min(vw(), vh()) < 600 && matchMedia("(pointer: coarse)").matches);
   let os = qs.get("os") || (/android/i.test(ua) ? "android" : "ios");
   try { if (!qs.get("os") && !isPhone()) os = localStorage.getItem("saga.wrap.os") || os; } catch (e) {}
 
@@ -118,7 +124,7 @@
   const frame = $("app");
   const safe = () => { const s = getComputedStyle($("probe")); return { top: parseFloat(s.paddingTop) || 0, bottom: parseFloat(s.paddingBottom) || 0 }; };
   function layout() {
-    const W = innerWidth, H = innerHeight, st = frame.style;
+    const W = vw(), H = vh(), st = frame.style;
     const phone = isPhone();
     document.body.classList.toggle("desk", !phone);
     if (phone) {
@@ -138,8 +144,11 @@
     frame.src = `${APP}?embed=1&os=${os}&screen=welcome&w=${Date.now().toString(36)}`;
     layout();
   }
-  frame.addEventListener("load", () => setTimeout(() => { frame.classList.add("on"); $("splash").classList.add("out"); }, 350));
+  frame.addEventListener("load", () => { layout(); setTimeout(() => { layout(); frame.classList.add("on"); $("splash").classList.add("out"); }, 350); });
   addEventListener("resize", layout);
+  addEventListener("pageshow", layout);
+  if (window.visualViewport) visualViewport.addEventListener("resize", layout);
+  [100, 500, 1500].forEach(t => setTimeout(layout, t)); // iOS settles the home-screen viewport a moment after launch
   addEventListener("orientationchange", () => setTimeout(layout, 250));
   document.querySelectorAll("#ctl [data-os]").forEach(b => b.onclick = () => { if (os === b.dataset.os) return; os = b.dataset.os; try { localStorage.setItem("saga.wrap.os", os); } catch (e) {} load(); });
   $("restart").onclick = load;
